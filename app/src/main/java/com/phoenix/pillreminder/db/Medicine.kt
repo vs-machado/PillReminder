@@ -5,7 +5,7 @@ import androidx.room.Entity
 import androidx.room.PrimaryKey
 
 @Entity(tableName = "medicines_data_table")
-data class Medicines(
+data class Medicine(
 
     @PrimaryKey(autoGenerate = true)
     @ColumnInfo(name = "medicine_id")

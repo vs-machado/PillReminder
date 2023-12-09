@@ -8,7 +8,7 @@ import androidx.room.Query
 import androidx.room.Update
 
 @Dao
-interface MedicinesDAO {
+interface MedicineDao {
     @Insert
     suspend fun insertMedicine(medicine: Medicine)
 

@@ -3,11 +3,16 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/nav_graph"
-    app:startDestination="@id/homeFragment">
+    app:startDestination="@id/addMedicinesFragment">
 
     <fragment
         android:id="@+id/homeFragment"
         android:name="com.phoenix.pillreminder.fragments.HomeFragment"
         android:label="fragment_home"
         tools:layout="@layout/fragment_home" />
+    <fragment
+        android:id="@+id/addMedicinesFragment"
+        android:name="com.phoenix.pillreminder.fragments.AddMedicinesFragment"
+        android:label="fragment_add_medicines"
+        tools:layout="@layout/fragment_add_medicines" />
 </navigation>

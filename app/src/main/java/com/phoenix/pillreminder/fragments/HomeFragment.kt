@@ -5,7 +5,7 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.appcompat.widget.Toolbar
+import androidx.navigation.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.phoenix.pillreminder.R
 import com.phoenix.pillreminder.adapter.RvMedicinesListAdapter
@@ -23,6 +23,10 @@ class HomeFragment : Fragment() {
         binding.apply {
             rvMedicinesList.layoutManager = LinearLayoutManager(activity)
             rvMedicinesList.adapter = RvMedicinesListAdapter()
+
+            fabAddMedicine.setOnClickListener {
+                it.findNavController().navigate(R.id.action_homeFragment_to_addMedicinesFragment)
+            }
         }
         // Inflate the layout for this fragment
         return binding.root

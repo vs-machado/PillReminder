@@ -36,8 +36,6 @@ class AddMedicinesFragment : Fragment() {
             })
         }
 
-        TODO("Make the back toolbar button clickable, write the navigation between fragments using FAB, check deprecated onCLick reason on XML")
-
         // Inflate the layout for this fragment
         return binding.root
     }

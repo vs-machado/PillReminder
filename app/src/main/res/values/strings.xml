@@ -6,4 +6,5 @@
     <string name="strength">Strength</string>
     <string name="take_2_pill_s">Take 2 pills</string>
     <string name="name_of_the_medicine">Name of the medicine</string>
+    <string name="setup_alarm">Setup a medicine alarm</string>
 </resources>

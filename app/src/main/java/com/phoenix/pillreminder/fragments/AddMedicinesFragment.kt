@@ -8,6 +8,7 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.appcompat.widget.Toolbar
 import androidx.fragment.app.Fragment
+import androidx.navigation.fragment.findNavController
 import com.google.android.material.floatingactionbutton.FloatingActionButton
 import com.phoenix.pillreminder.databinding.FragmentAddMedicinesBinding
 
@@ -34,7 +35,13 @@ class AddMedicinesFragment : Fragment() {
 
                 override fun afterTextChanged(s: Editable?) {}
             })
+
+            // Go back to the app home fragment
+            ivBackToHome.setOnClickListener {
+                findNavController().navigateUp()
+            }
         }
+
 
         // Inflate the layout for this fragment
         return binding.root

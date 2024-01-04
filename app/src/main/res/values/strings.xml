@@ -7,4 +7,5 @@
     <string name="take_2_pill_s">Take 2 pills</string>
     <string name="name_of_the_medicine">Name of the medicine</string>
     <string name="setup_alarm">Setup a medicine alarm</string>
+    <string name="go_back_to_previous_page">Go back to previous page</string>
 </resources>

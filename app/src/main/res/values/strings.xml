@@ -8,4 +8,8 @@
     <string name="name_of_the_medicine">Name of the medicine</string>
     <string name="setup_alarm">Setup a medicine alarm</string>
     <string name="go_back_to_previous_page">Go back to previous page</string>
+    <string name="medicine">Medicine</string>
+    <string name="what_medicine_would_you_like_to_add">What medicine would you like to add?</string>
+    <string name="goes_back_to_previous_page">Goes back to previous page</string>
+    <string name="goes_to_the_next_page">Goes to the next page</string>
 </resources>

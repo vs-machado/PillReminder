@@ -12,4 +12,5 @@
     <string name="what_medicine_would_you_like_to_add">What medicine would you like to add?</string>
     <string name="goes_back_to_previous_page">Goes back to previous page</string>
     <string name="goes_to_the_next_page">Goes to the next page</string>
+    <string name="what_form_is_the_med">What form is the med?</string>
 </resources>

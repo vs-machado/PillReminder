@@ -5,6 +5,8 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.AdapterView
+import android.widget.AdapterView.OnItemClickListener
 import android.widget.ArrayAdapter
 import androidx.navigation.fragment.findNavController
 import com.phoenix.pillreminder.R
@@ -19,12 +21,19 @@ class MedicineFormFragment : Fragment() {
         binding = FragmentMedicineFormBinding.inflate(layoutInflater)
 
         binding.apply{
-            // Med Forms. User must select the desired type of med
+            // Med forms list. User must select the desired type of med
             val list: MutableList<String> = mutableListOf("Pill", "Injection", "Liquid", "Drops", "Inhaler",
                 "Powder", "Other")
-            // Sets the listView
             val arrayAdapter = ArrayAdapter(requireContext(), android.R.layout.simple_list_item_1, list)
             lvMedForm.adapter = arrayAdapter
+
+            // Check the user selected option and navigate to the next fragment
+            lvMedForm.setOnItemClickListener { _, _, position, _ ->
+                val selectedItem = list[position]
+                checkSelectedOption(position)
+
+            }
+
 
             // Go back to addMedicinesFragment
             ivBackToAddMedicines.setOnClickListener {
@@ -32,7 +41,39 @@ class MedicineFormFragment : Fragment() {
             }
         }
 
-        // Inflate the layout for this fragment
         return binding.root
+    }
+
+    private fun checkSelectedOption(position: Int){
+        when (position){
+            0 -> {
+                // Should pass the user option to the database in the future
+
+            }
+
+            1 -> {
+                // Should pass the user option to the database in the future
+            }
+
+            2 -> {
+                // Should pass the user option to the database in the future
+            }
+
+            3 -> {
+                // Should pass the user option to the database in the future
+            }
+
+            4 -> {
+                // Should pass the user option to the database in the future
+            }
+
+            5 -> {
+                // Should pass the user option to the database in the future
+            }
+
+            6 -> {
+                // Should pass the user option to the database in the future
+            }
+        }
     }
 }

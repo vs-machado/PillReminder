@@ -53,7 +53,7 @@ class AddMedicinesFragment : Fragment() {
         return binding.root
     }
 
-    fun setFabVisibility(inputIsEmpty: Boolean, fabNext: FloatingActionButton){
+    private fun setFabVisibility(inputIsEmpty: Boolean, fabNext: FloatingActionButton){
         if (inputIsEmpty){
             fabNext.visibility = View.INVISIBLE
             return

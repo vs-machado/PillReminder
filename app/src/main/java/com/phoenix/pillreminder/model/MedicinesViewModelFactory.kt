@@ -2,7 +2,6 @@ package com.phoenix.pillreminder.model
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
-import com.phoenix.pillreminder.MedicinesViewModel
 import com.phoenix.pillreminder.db.MedicineDao
 import java.lang.IllegalArgumentException
 

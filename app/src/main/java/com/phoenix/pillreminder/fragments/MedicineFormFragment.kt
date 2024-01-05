@@ -1,24 +1,27 @@
 package com.phoenix.pillreminder.fragments
 
 import android.os.Bundle
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.AdapterView
-import android.widget.AdapterView.OnItemClickListener
 import android.widget.ArrayAdapter
+import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
-import com.phoenix.pillreminder.R
 import com.phoenix.pillreminder.databinding.FragmentMedicineFormBinding
 
 class MedicineFormFragment : Fragment() {
     private lateinit var binding: FragmentMedicineFormBinding
+
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
         binding = FragmentMedicineFormBinding.inflate(layoutInflater)
+        return binding.root
+    }
+
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
 
         binding.apply{
             // Med forms list. User must select the desired type of med
@@ -29,9 +32,7 @@ class MedicineFormFragment : Fragment() {
 
             // Check the user selected option and navigate to the next fragment
             lvMedForm.setOnItemClickListener { _, _, position, _ ->
-                val selectedItem = list[position]
                 checkSelectedOption(position)
-
             }
 
 
@@ -41,7 +42,6 @@ class MedicineFormFragment : Fragment() {
             }
         }
 
-        return binding.root
     }
 
     private fun checkSelectedOption(position: Int){

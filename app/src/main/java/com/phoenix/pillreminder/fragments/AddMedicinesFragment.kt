@@ -22,7 +22,14 @@ class AddMedicinesFragment : Fragment() {
     ): View? {
         binding = FragmentAddMedicinesBinding.inflate(layoutInflater)
 
-        binding.apply{
+        // Inflate the layout for this fragment
+        return binding.root
+    }
+
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+
+        binding.apply {
             tietMedicineName.addTextChangedListener(object: TextWatcher{
                 override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {}
 
@@ -46,11 +53,9 @@ class AddMedicinesFragment : Fragment() {
             fabNext.setOnClickListener {
                 it.findNavController().navigate(R.id.action_addMedicinesFragment_to_medicineFormFragment)
             }
+
         }
 
-
-        // Inflate the layout for this fragment
-        return binding.root
     }
 
     private fun setFabVisibility(inputIsEmpty: Boolean, fabNext: FloatingActionButton){

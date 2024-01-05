@@ -25,7 +25,11 @@
         tools:layout="@layout/fragment_add_medicines" >
         <action
             android:id="@+id/action_addMedicinesFragment_to_medicineFormFragment"
-            app:destination="@id/medicineFormFragment" />
+            app:destination="@id/medicineFormFragment"
+            app:enterAnim="@anim/slide_out_left"
+            app:exitAnim="@anim/slide_in_right"
+            app:popEnterAnim="@anim/slide_out_right"
+            app:popExitAnim="@anim/slide_in_left" />
     </fragment>
     <fragment
         android:id="@+id/medicineFormFragment"

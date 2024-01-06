@@ -7,6 +7,8 @@ import android.view.ViewGroup
 import android.widget.ArrayAdapter
 import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
+import androidx.navigation.ui.AppBarConfiguration
+import androidx.navigation.ui.setupWithNavController
 import com.phoenix.pillreminder.databinding.FragmentMedicineFormBinding
 
 class MedicineFormFragment : Fragment() {
@@ -23,7 +25,12 @@ class MedicineFormFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
+        val navController = findNavController()
+        val appBarConfiguration = AppBarConfiguration(navController.graph)
+
         binding.apply{
+            toolbarMedicineForm.setupWithNavController(navController, appBarConfiguration)
+
             // Med forms list. User must select the desired type of med
             val list: MutableList<String> = mutableListOf("Pill", "Injection", "Liquid", "Drops", "Inhaler",
                 "Powder", "Other")

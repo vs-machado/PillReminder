@@ -8,11 +8,37 @@
     android:fitsSystemWindows="true"
     tools:context=".fragments.AddMedicinesFragment">
 
-    <include
-        android:id="@+id/navigation_toolbar"
-        layout="@layout/navigation_toolbar"
-        tools:layout_editor_absoluteX="0dp"
-        tools:layout_editor_absoluteY="0dp" />
+    <LinearLayout
+        android:id="@+id/llAddMedicines"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <com.google.android.material.appbar.AppBarLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <androidx.appcompat.widget.Toolbar
+                android:id="@+id/toolbarAddMedicines"
+                android:layout_width="match_parent"
+                android:layout_height="50dp"
+                android:background="@color/colorPrimary"
+                android:elevation="4dp" />
+
+            <com.google.android.material.tabs.TabLayout
+                android:id="@+id/clSecondaryToolbar"
+                android:layout_width="match_parent"
+                android:layout_height="110dp"
+                android:background="@color/colorPrimary"
+                android:contentDescription="." />
+
+        </com.google.android.material.appbar.AppBarLayout>
+
+
+    </LinearLayout>
 
     <ImageView
         android:id="@+id/ivPill2"
@@ -54,7 +80,7 @@
         app:endIconMode="clear_text"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/navigation_toolbar"
+        app:layout_constraintTop_toBottomOf="@+id/llAddMedicines"
         app:startIconDrawable="@drawable/baseline_medication_24">
 
         <com.google.android.material.textfield.TextInputEditText
@@ -84,17 +110,4 @@
 
     </com.google.android.material.floatingactionbutton.FloatingActionButton>
 
-    <ImageView
-        android:id="@+id/ivBackToHome"
-        android:layout_width="30dp"
-        android:layout_height="30dp"
-        android:layout_marginStart="16dp"
-        android:layout_marginTop="16dp"
-        android:clickable="true"
-        android:contentDescription="@string/goes_back_to_previous_page"
-        android:focusable="true"
-        android:src="@drawable/arrow_left_white"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        tools:ignore="TouchTargetSizeCheck" />
 </androidx.constraintlayout.widget.ConstraintLayout>

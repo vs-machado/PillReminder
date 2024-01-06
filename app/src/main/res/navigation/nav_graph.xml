@@ -8,7 +8,7 @@
     <fragment
         android:id="@+id/homeFragment"
         android:name="com.phoenix.pillreminder.fragments.HomeFragment"
-        android:label="fragment_home"
+        android:label=""
         tools:layout="@layout/fragment_home" >
         <action
             android:id="@+id/action_homeFragment_to_addMedicinesFragment"
@@ -21,7 +21,7 @@
     <fragment
         android:id="@+id/addMedicinesFragment"
         android:name="com.phoenix.pillreminder.fragments.AddMedicinesFragment"
-        android:label="fragment_add_medicines"
+        android:label=""
         tools:layout="@layout/fragment_add_medicines" >
         <action
             android:id="@+id/action_addMedicinesFragment_to_medicineFormFragment"
@@ -34,6 +34,6 @@
     <fragment
         android:id="@+id/medicineFormFragment"
         android:name="com.phoenix.pillreminder.fragments.MedicineFormFragment"
-        android:label="fragment_medicine_form"
+        android:label=""
         tools:layout="@layout/fragment_medicine_form" />
 </navigation>

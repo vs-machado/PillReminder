@@ -35,11 +35,6 @@ class MedicineFormFragment : Fragment() {
                 checkSelectedOption(position)
             }
 
-
-            // Go back to addMedicinesFragment
-            ivBackToAddMedicines.setOnClickListener {
-                findNavController().navigateUp()
-            }
         }
 
     }

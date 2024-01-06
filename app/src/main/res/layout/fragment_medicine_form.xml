@@ -7,25 +7,29 @@
     android:layout_height="match_parent"
     tools:context=".fragments.MedicineFormFragment">
 
-    <include
-        android:id="@+id/navigation_toolbar"
-        layout="@layout/navigation_toolbar"
-        tools:layout_editor_absoluteX="0dp"
-        tools:layout_editor_absoluteY="0dp" />
-
-    <ImageView
-        android:id="@+id/ivBackToAddMedicines"
-        android:layout_width="30dp"
-        android:layout_height="30dp"
-        android:layout_marginStart="16dp"
-        android:layout_marginTop="16dp"
-        android:clickable="true"
-        android:contentDescription="@string/goes_back_to_previous_page"
-        android:focusable="true"
-        android:src="@drawable/arrow_left_white"
+    <com.google.android.material.appbar.AppBarLayout
+        android:id="@+id/appBarLayout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        tools:ignore="TouchTargetSizeCheck" />
+        app:layout_constraintTop_toTopOf="parent">
+
+        <androidx.appcompat.widget.Toolbar
+            android:id="@+id/secondaryToolbar"
+            android:layout_width="match_parent"
+            android:layout_height="50dp"
+            android:background="@color/colorPrimary"
+            android:elevation="4dp" />
+
+        <com.google.android.material.tabs.TabLayout
+            android:id="@+id/clSecondaryToolbar"
+            android:layout_width="match_parent"
+            android:layout_height="110dp"
+            android:background="@color/colorPrimary"
+            android:contentDescription="." />
+
+    </com.google.android.material.appbar.AppBarLayout>
 
     <ImageView
         android:id="@+id/ivPill2"
@@ -57,13 +61,13 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/navigation_toolbar">
+        app:layout_constraintTop_toBottomOf="@+id/appBarLayout">
 
         <ListView
             android:id="@+id/lvMedForm"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:padding="32dp" />
+            android:padding="32dp"/>
     </androidx.appcompat.widget.LinearLayoutCompat>
 </androidx.constraintlayout.widget.ConstraintLayout>
 

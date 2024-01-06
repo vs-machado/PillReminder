@@ -10,6 +10,8 @@ import androidx.appcompat.widget.Toolbar
 import androidx.fragment.app.Fragment
 import androidx.navigation.findNavController
 import androidx.navigation.fragment.findNavController
+import androidx.navigation.ui.AppBarConfiguration
+import androidx.navigation.ui.setupWithNavController
 import com.google.android.material.floatingactionbutton.FloatingActionButton
 import com.phoenix.pillreminder.R
 import com.phoenix.pillreminder.databinding.FragmentAddMedicinesBinding
@@ -29,7 +31,12 @@ class AddMedicinesFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
+        val navController = findNavController()
+        val appBarConfiguration = AppBarConfiguration(navController.graph)
+
         binding.apply {
+            toolbarAddMedicines.setupWithNavController(navController, appBarConfiguration)
+
             tietMedicineName.addTextChangedListener(object: TextWatcher{
                 override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {}
 
@@ -44,11 +51,6 @@ class AddMedicinesFragment : Fragment() {
 
                 override fun afterTextChanged(s: Editable?) {}
             })
-
-            // Go back to the app home fragment
-            ivBackToHome.setOnClickListener {
-                findNavController().navigateUp()
-            }
 
             fabNext.setOnClickListener {
                 it.findNavController().navigate(R.id.action_addMedicinesFragment_to_medicineFormFragment)

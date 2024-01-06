@@ -3,10 +3,12 @@
     <style name="Base.Theme.PillReminder" parent="Theme.Material3.DayNight.NoActionBar">
         <!-- Customize your light theme here. -->
         <item name="colorPrimary">@color/colorPrimary</item>
+        <item name="android:textColorSecondary">@color/white</item>
     </style>
     <style name="Theme.PillReminder" parent="Base.Theme.PillReminder" />
 
     <style name = "FabShapeStyle" parent = "ShapeAppearance.MaterialComponents.SmallComponent">
         <item name="cornerSize">50%</item>
     </style>
+
 </resources>

@@ -8,6 +8,7 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.appcompat.widget.Toolbar
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.viewModels
 import androidx.navigation.findNavController
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.ui.AppBarConfiguration
@@ -15,6 +16,7 @@ import androidx.navigation.ui.setupWithNavController
 import com.google.android.material.floatingactionbutton.FloatingActionButton
 import com.phoenix.pillreminder.R
 import com.phoenix.pillreminder.databinding.FragmentAddMedicinesBinding
+import com.phoenix.pillreminder.model.AddMedicinesViewModel
 
 class AddMedicinesFragment : Fragment() {
     private lateinit var binding: FragmentAddMedicinesBinding
@@ -33,6 +35,7 @@ class AddMedicinesFragment : Fragment() {
 
         val navController = findNavController()
         val appBarConfiguration = AppBarConfiguration(navController.graph)
+        val viewModel: AddMedicinesViewModel by viewModels()
 
         binding.apply {
             toolbarAddMedicines.setupWithNavController(navController, appBarConfiguration)
@@ -46,7 +49,7 @@ class AddMedicinesFragment : Fragment() {
                     val inputIsFilled = medicineName?.isNotBlank() ?: false
                     val inputIsEmpty = !inputIsFilled
 
-                    setFabVisibility(inputIsEmpty, fabNext)
+                    viewModel.setFabVisibility(inputIsEmpty, fabNext)
                 }
 
                 override fun afterTextChanged(s: Editable?) {}
@@ -60,11 +63,5 @@ class AddMedicinesFragment : Fragment() {
 
     }
 
-    private fun setFabVisibility(inputIsEmpty: Boolean, fabNext: FloatingActionButton){
-        if (inputIsEmpty){
-            fabNext.visibility = View.INVISIBLE
-            return
-        }
-        fabNext.visibility = View.VISIBLE
-    }
+
 }

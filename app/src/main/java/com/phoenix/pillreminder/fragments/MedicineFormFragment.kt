@@ -6,10 +6,12 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.ArrayAdapter
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.ui.AppBarConfiguration
 import androidx.navigation.ui.setupWithNavController
 import com.phoenix.pillreminder.databinding.FragmentMedicineFormBinding
+import com.phoenix.pillreminder.model.MedicineFormViewModel
 
 class MedicineFormFragment : Fragment() {
     private lateinit var binding: FragmentMedicineFormBinding
@@ -27,6 +29,7 @@ class MedicineFormFragment : Fragment() {
 
         val navController = findNavController()
         val appBarConfiguration = AppBarConfiguration(navController.graph)
+        val viewModel: MedicineFormViewModel by viewModels()
 
         binding.apply{
             toolbarMedicineForm.setupWithNavController(navController, appBarConfiguration)
@@ -39,43 +42,10 @@ class MedicineFormFragment : Fragment() {
 
             // Check the user selected option and navigate to the next fragment
             lvMedForm.setOnItemClickListener { _, _, position, _ ->
-                checkSelectedOption(position)
+                viewModel.checkSelectedOption(position)
             }
 
         }
 
-    }
-
-    private fun checkSelectedOption(position: Int){
-        when (position){
-            0 -> {
-                // Should pass the user option to the database in the future
-
-            }
-
-            1 -> {
-                // Should pass the user option to the database in the future
-            }
-
-            2 -> {
-                // Should pass the user option to the database in the future
-            }
-
-            3 -> {
-                // Should pass the user option to the database in the future
-            }
-
-            4 -> {
-                // Should pass the user option to the database in the future
-            }
-
-            5 -> {
-                // Should pass the user option to the database in the future
-            }
-
-            6 -> {
-                // Should pass the user option to the database in the future
-            }
-        }
     }
 }

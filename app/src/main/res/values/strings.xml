@@ -13,4 +13,6 @@
     <string name="goes_back_to_previous_page">Goes back to previous page</string>
     <string name="goes_to_the_next_page">Goes to the next page</string>
     <string name="what_form_is_the_med">What form is the med?</string>
+    <string name="how_often_do_you_take_it">How often do you take it?</string>
+    <string name="clock_icon">Clock icon</string>
 </resources>

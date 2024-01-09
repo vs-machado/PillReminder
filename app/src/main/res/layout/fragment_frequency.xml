@@ -2,13 +2,13 @@
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/frameLayout2"
+    android:id="@+id/frameLayout"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".fragments.MedicineFormFragment">
+    tools:context=".fragments.FrequencyFragment">
 
     <com.google.android.material.appbar.AppBarLayout
-        android:id="@+id/appBarMedForm"
+        android:id="@+id/appBarFrequency"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         app:layout_constraintEnd_toEndOf="parent"
@@ -16,7 +16,7 @@
         app:layout_constraintTop_toTopOf="parent">
 
         <androidx.appcompat.widget.Toolbar
-            android:id="@+id/toolbarMedicineForm"
+            android:id="@+id/toolbarFrequency"
             android:layout_width="match_parent"
             android:layout_height="50dp"
             android:background="@color/colorPrimary"
@@ -28,46 +28,46 @@
             android:layout_height="110dp"
             android:background="@color/colorPrimary"
             android:contentDescription="." />
-
     </com.google.android.material.appbar.AppBarLayout>
 
     <ImageView
-        android:id="@+id/ivPill2"
+        android:id="@+id/ivClock"
         android:layout_width="30dp"
         android:layout_height="30dp"
         android:layout_marginStart="32dp"
         android:layout_marginTop="60dp"
-        android:src="@drawable/pill_add_colored"
+        android:contentDescription="@string/clock_icon"
+        android:src="@drawable/ic_alarm_24"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        android:importantForAccessibility="no" />
+        app:layout_constraintTop_toTopOf="parent" />
 
     <TextView
-        android:id="@+id/tvMedForm"
+        android:id="@+id/tvFrequency"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="32dp"
         android:layout_marginTop="16dp"
-        android:contentDescription="@string/what_form_is_the_med"
-        android:text="@string/what_form_is_the_med"
+        android:contentDescription="@string/how_often_do_you_take_it"
+        android:text="@string/how_often_do_you_take_it"
         android:textColor="@color/white"
         android:textSize="20sp"
         android:textStyle="bold"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/ivPill2" />
+        app:layout_constraintTop_toBottomOf="@+id/ivClock" />
 
     <androidx.appcompat.widget.LinearLayoutCompat
-        android:id="@+id/llMedForm"
+        android:id="@+id/llFrequency"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/appBarMedForm">
+        app:layout_constraintTop_toBottomOf="@+id/appBarFrequency"
+        tools:ignore="VisualLintBounds">
 
         <ListView
-            android:id="@+id/lvMedForm"
+            android:id="@+id/lvFrequency"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:padding="32dp"/>
+            android:padding="32dp" />
     </androidx.appcompat.widget.LinearLayoutCompat>
-</androidx.constraintlayout.widget.ConstraintLayout>
 
+</androidx.constraintlayout.widget.ConstraintLayout>

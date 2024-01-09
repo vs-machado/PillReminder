@@ -35,5 +35,18 @@
         android:id="@+id/medicineFormFragment"
         android:name="com.phoenix.pillreminder.fragments.MedicineFormFragment"
         android:label=""
-        tools:layout="@layout/fragment_medicine_form" />
+        tools:layout="@layout/fragment_medicine_form" >
+        <action
+            android:id="@+id/action_medicineFormFragment_to_frequencyFragment"
+            app:destination="@id/frequencyFragment"
+            app:enterAnim="@anim/slide_out_left"
+            app:exitAnim="@anim/slide_in_right"
+            app:popEnterAnim="@anim/slide_out_right"
+            app:popExitAnim="@anim/slide_in_left" />
+    </fragment>
+    <fragment
+        android:id="@+id/frequencyFragment"
+        android:name="com.phoenix.pillreminder.fragments.FrequencyFragment"
+        android:label="fragment_frequency"
+        tools:layout="@layout/fragment_frequency" />
 </navigation>

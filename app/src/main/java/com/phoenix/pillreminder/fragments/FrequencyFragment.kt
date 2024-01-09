@@ -7,46 +7,47 @@ import android.view.ViewGroup
 import android.widget.ArrayAdapter
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
-import androidx.navigation.findNavController
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.ui.AppBarConfiguration
 import androidx.navigation.ui.setupWithNavController
-import com.phoenix.pillreminder.R
-import com.phoenix.pillreminder.databinding.FragmentMedicineFormBinding
-import com.phoenix.pillreminder.model.MedicineFormViewModel
+import com.phoenix.pillreminder.databinding.FragmentFrequencyBinding
+import com.phoenix.pillreminder.model.FrequencyViewModel
 
-class MedicineFormFragment : Fragment() {
-    private lateinit var binding: FragmentMedicineFormBinding
+class FrequencyFragment : Fragment() {
+    private lateinit var binding:FragmentFrequencyBinding
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? {
-        binding = FragmentMedicineFormBinding.inflate(layoutInflater)
+    ): View {
+        binding = FragmentFrequencyBinding.inflate(layoutInflater)
+
+        // Inflate the layout for this fragment
         return binding.root
     }
+
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
         val navController = findNavController()
         val appBarConfiguration = AppBarConfiguration(navController.graph)
-        val viewModel: MedicineFormViewModel by viewModels()
+        val viewModel: FrequencyViewModel by viewModels()
 
         binding.apply{
-            toolbarMedicineForm.setupWithNavController(navController, appBarConfiguration)
+            toolbarFrequency.setupWithNavController(navController, appBarConfiguration)
 
             // Med forms list. User must select the desired type of med
-            val list: MutableList<String> = mutableListOf("Pill", "Injection", "Liquid", "Drops", "Inhaler",
-                "Powder", "Other")
+            val list: MutableList<String> = mutableListOf("Every day", "Every other day", "Specific days of the week", "On a recurring cycle", "Every X days",
+                "Every X weeks", "Every X months")
             val arrayAdapter = ArrayAdapter(requireContext(), android.R.layout.simple_list_item_1, list)
-            lvMedForm.adapter = arrayAdapter
+            lvFrequency.adapter = arrayAdapter
 
             // Check the user selected option and navigate to the next fragment
-            lvMedForm.setOnItemClickListener { _, it, position, _ ->
+            lvFrequency.setOnItemClickListener { _, it, position, _ ->
                 viewModel.checkSelectedOption(position)
-                it.findNavController().navigate(R.id.action_medicineFormFragment_to_frequencyFragment)
-
+                // Change destination fragment
+                // it.findNavController().navigate(R.id.action_homeFragment_to_addMedicinesFragment)
             }
 
         }

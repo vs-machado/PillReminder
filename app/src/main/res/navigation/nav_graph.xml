@@ -47,6 +47,15 @@
     <fragment
         android:id="@+id/frequencyFragment"
         android:name="com.phoenix.pillreminder.fragments.FrequencyFragment"
-        android:label="fragment_frequency"
-        tools:layout="@layout/fragment_frequency" />
+        android:label=""
+        tools:layout="@layout/fragment_frequency" >
+        <action
+            android:id="@+id/action_frequencyFragment_to_howManyPerDayFragment"
+            app:destination="@id/howManyPerDayFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/howManyPerDayFragment"
+        android:name="com.phoenix.pillreminder.fragments.HowManyPerDayFragment"
+        android:label=""
+        tools:layout="@layout/fragment_how_many_per_day" />
 </navigation>

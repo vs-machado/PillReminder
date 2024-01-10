@@ -10,6 +10,7 @@ import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.ui.AppBarConfiguration
 import androidx.navigation.ui.setupWithNavController
+import com.phoenix.pillreminder.R
 import com.phoenix.pillreminder.databinding.FragmentFrequencyBinding
 import com.phoenix.pillreminder.model.FrequencyViewModel
 
@@ -30,14 +31,14 @@ class FrequencyFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        val navController = findNavController()
-        val appBarConfiguration = AppBarConfiguration(navController.graph)
-        val viewModel: FrequencyViewModel by viewModels()
-
         binding.apply{
+            val navController = findNavController()
+            val appBarConfiguration = AppBarConfiguration(navController.graph)
+            val viewModel: FrequencyViewModel by viewModels()
+
             toolbarFrequency.setupWithNavController(navController, appBarConfiguration)
 
-            // Med forms list. User must select the desired type of med
+            // Frequency of med usage list. User must select the desired usage interval
             val list: MutableList<String> = mutableListOf("Every day", "Every other day", "Specific days of the week", "On a recurring cycle", "Every X days",
                 "Every X weeks", "Every X months")
             val arrayAdapter = ArrayAdapter(requireContext(), android.R.layout.simple_list_item_1, list)
@@ -45,12 +46,41 @@ class FrequencyFragment : Fragment() {
 
             // Check the user selected option and navigate to the next fragment
             lvFrequency.setOnItemClickListener { _, it, position, _ ->
-                viewModel.checkSelectedOption(position)
-                // Change destination fragment
-                // it.findNavController().navigate(R.id.action_homeFragment_to_addMedicinesFragment)
+                checkSelectedOption(position)
             }
 
         }
 
+    }
+    private fun checkSelectedOption(position: Int){
+        when (position){
+            0 -> {
+                 findNavController().navigate(R.id.action_frequencyFragment_to_howManyPerDayFragment)
+            }
+
+            1 -> {
+                // Should pass the user option to the database in the future
+            }
+
+            2 -> {
+                // Should pass the user option to the database in the future
+            }
+
+            3 -> {
+                // Should pass the user option to the database in the future
+            }
+
+            4 -> {
+                // Should pass the user option to the database in the future
+            }
+
+            5 -> {
+                // Should pass the user option to the database in the future
+            }
+
+            6 -> {
+                // Should pass the user option to the database in the future
+            }
+        }
     }
 }

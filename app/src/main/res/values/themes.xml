@@ -11,4 +11,7 @@
         <item name="cornerSize">50%</item>
     </style>
 
+    <style name = "DefaultNumberPickerTheme" parent= "Base.Theme.PillReminder">
+        <item name="colorControlNormal">@color/black</item>
+    </style>
 </resources>

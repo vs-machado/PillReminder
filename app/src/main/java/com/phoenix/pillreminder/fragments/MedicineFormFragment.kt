@@ -1,5 +1,6 @@
 package com.phoenix.pillreminder.fragments
 
+import android.content.Context
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -38,13 +39,13 @@ class MedicineFormFragment : Fragment() {
 
             // Med forms list. User must select the desired type of med
             val list: MutableList<String> = mutableListOf("Pill", "Injection", "Liquid", "Drops", "Inhaler",
-                "Powder", "Other")
+            "Powder", "Other")
             val arrayAdapter = ArrayAdapter(requireContext(), android.R.layout.simple_list_item_1, list)
             lvMedForm.adapter = arrayAdapter
 
             // Check the user selected option and navigate to the next fragment
             lvMedForm.setOnItemClickListener { _, it, position, _ ->
-                viewModel.checkSelectedOption(position)
+                //viewModel.checkSelectedOption(position)
                 it.findNavController().navigate(R.id.action_medicineFormFragment_to_frequencyFragment)
 
             }

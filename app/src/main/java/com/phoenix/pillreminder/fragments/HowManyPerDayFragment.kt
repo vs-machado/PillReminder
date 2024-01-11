@@ -5,12 +5,17 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.NumberPicker.OnValueChangeListener
 import androidx.annotation.RequiresApi
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.viewModels
+import androidx.navigation.findNavController
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.ui.AppBarConfiguration
 import androidx.navigation.ui.setupWithNavController
+import com.phoenix.pillreminder.R
 import com.phoenix.pillreminder.databinding.FragmentHowManyPerDayBinding
+import com.phoenix.pillreminder.model.HowManyPerDayViewModel
 
 class HowManyPerDayFragment : Fragment() {
     private lateinit var binding: FragmentHowManyPerDayBinding
@@ -29,10 +34,19 @@ class HowManyPerDayFragment : Fragment() {
 
         val navController = findNavController()
         val appBarConfiguration = AppBarConfiguration(navController.graph)
+        val viewModel: HowManyPerDayViewModel by viewModels()
 
         binding.apply{
             toolbarHowMany.setupWithNavController(navController, appBarConfiguration)
             setNumberPicker()
+
+            npHowOften.setOnValueChangedListener { _, _, newVal ->
+                viewModel.setNumberOfAlarms(newVal)
+            }
+
+            fabNext.setOnClickListener {
+                it.findNavController().navigate(R.id.action_howManyPerDayFragment_to_alarmHourFragment)
+            }
         }
 
     }
@@ -40,6 +54,7 @@ class HowManyPerDayFragment : Fragment() {
     @RequiresApi(Build.VERSION_CODES.Q)
     private fun setNumberPicker(){
         binding.apply{
+            // Sets doses options
             npHowOften.minValue = 0
             npHowOften.maxValue = 9
             npHowOften.textSize = 100F

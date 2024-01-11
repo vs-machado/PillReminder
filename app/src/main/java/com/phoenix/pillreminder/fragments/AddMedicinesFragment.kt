@@ -20,6 +20,7 @@ import com.phoenix.pillreminder.model.AddMedicinesViewModel
 
 class AddMedicinesFragment : Fragment() {
     private lateinit var binding: FragmentAddMedicinesBinding
+
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?

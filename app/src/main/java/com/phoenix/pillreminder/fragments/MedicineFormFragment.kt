@@ -1,12 +1,10 @@
 package com.phoenix.pillreminder.fragments
 
-import android.content.Context
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ArrayAdapter
-import androidx.appcompat.widget.Toolbar
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.navigation.findNavController
@@ -15,7 +13,6 @@ import androidx.navigation.ui.AppBarConfiguration
 import androidx.navigation.ui.setupWithNavController
 import com.phoenix.pillreminder.R
 import com.phoenix.pillreminder.databinding.FragmentMedicineFormBinding
-import com.phoenix.pillreminder.model.MedicineFormViewModel
 
 class MedicineFormFragment : Fragment() {
     private lateinit var binding: FragmentMedicineFormBinding
@@ -33,7 +30,6 @@ class MedicineFormFragment : Fragment() {
 
         val navController = findNavController()
         val appBarConfiguration = AppBarConfiguration(navController.graph)
-        val viewModel: MedicineFormViewModel by viewModels()
 
         binding.apply{
             toolbarMedicineForm.setupWithNavController(navController, appBarConfiguration)

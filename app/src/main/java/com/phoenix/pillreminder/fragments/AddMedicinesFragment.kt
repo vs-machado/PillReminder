@@ -6,7 +6,6 @@ import android.text.TextWatcher
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.appcompat.widget.Toolbar
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.navigation.findNavController
@@ -14,9 +13,10 @@ import androidx.navigation.fragment.findNavController
 import androidx.navigation.ui.AppBarConfiguration
 import androidx.navigation.ui.setupWithNavController
 import com.google.android.material.floatingactionbutton.FloatingActionButton
+import com.google.android.material.textfield.TextInputLayout
 import com.phoenix.pillreminder.R
 import com.phoenix.pillreminder.databinding.FragmentAddMedicinesBinding
-import com.phoenix.pillreminder.model.AddMedicinesViewModel
+import com.phoenix.pillreminder.model.AlarmSettingsSharedViewModel
 
 class AddMedicinesFragment : Fragment() {
     private lateinit var binding: FragmentAddMedicinesBinding
@@ -36,7 +36,7 @@ class AddMedicinesFragment : Fragment() {
 
         val navController = findNavController()
         val appBarConfiguration = AppBarConfiguration(navController.graph)
-        val viewModel: AddMedicinesViewModel by viewModels()
+        val sharedViewModel: AlarmSettingsSharedViewModel by viewModels()
 
         binding.apply {
             toolbarAddMedicines.setupWithNavController(navController, appBarConfiguration)
@@ -50,13 +50,15 @@ class AddMedicinesFragment : Fragment() {
                     val inputIsFilled = medicineName?.isNotBlank() ?: false
                     val inputIsEmpty = !inputIsFilled
 
-                    viewModel.setFabVisibility(inputIsEmpty, fabNext)
+                    setFabVisibility(inputIsEmpty, fabNext, tilMedicineName)
                 }
 
                 override fun afterTextChanged(s: Editable?) {}
             })
 
             fabNext.setOnClickListener {
+                // Save medicine name input by user
+                sharedViewModel.setMedicineName(binding.tietMedicineName.text.toString())
                 it.findNavController().navigate(R.id.action_addMedicinesFragment_to_medicineFormFragment)
             }
 
@@ -64,5 +66,15 @@ class AddMedicinesFragment : Fragment() {
 
     }
 
-
+    /*Checks if the medicine name is filled. If so, displays the FAB to navigate
+    to the next fragment*/
+    fun setFabVisibility(inputIsEmpty: Boolean, fabNext: FloatingActionButton, tilMedicineName: TextInputLayout){
+        if (inputIsEmpty){
+            fabNext.visibility = View.INVISIBLE
+            tilMedicineName.helperText = "*Required"
+            return
+        }
+        fabNext.visibility = View.VISIBLE
+        tilMedicineName.helperText = ""
+    }
 }

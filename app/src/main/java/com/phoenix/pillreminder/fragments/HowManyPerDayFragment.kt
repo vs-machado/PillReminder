@@ -5,9 +5,9 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.NumberPicker.OnValueChangeListener
 import androidx.annotation.RequiresApi
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.viewModels
 import androidx.navigation.findNavController
 import androidx.navigation.fragment.findNavController
@@ -15,7 +15,7 @@ import androidx.navigation.ui.AppBarConfiguration
 import androidx.navigation.ui.setupWithNavController
 import com.phoenix.pillreminder.R
 import com.phoenix.pillreminder.databinding.FragmentHowManyPerDayBinding
-import com.phoenix.pillreminder.model.HowManyPerDayViewModel
+import com.phoenix.pillreminder.model.AlarmSettingsSharedViewModel
 
 class HowManyPerDayFragment : Fragment() {
     private lateinit var binding: FragmentHowManyPerDayBinding
@@ -34,14 +34,15 @@ class HowManyPerDayFragment : Fragment() {
 
         val navController = findNavController()
         val appBarConfiguration = AppBarConfiguration(navController.graph)
-        val viewModel: HowManyPerDayViewModel by viewModels()
+        val sharedViewModel: AlarmSettingsSharedViewModel by activityViewModels()
 
         binding.apply{
             toolbarHowMany.setupWithNavController(navController, appBarConfiguration)
             setNumberPicker()
 
             npHowOften.setOnValueChangedListener { _, _, newVal ->
-                viewModel.setNumberOfAlarms(newVal)
+                //Fixes position values
+                sharedViewModel.setNumberOfAlarms(newVal + 1)
             }
 
             fabNext.setOnClickListener {
@@ -65,4 +66,5 @@ class HowManyPerDayFragment : Fragment() {
             npHowOften.displayedValues = stringPickerVals
         }
     }
+
 }

@@ -73,6 +73,6 @@
     <fragment
         android:id="@+id/alarmHourFragment"
         android:name="com.phoenix.pillreminder.fragments.AlarmHourFragment"
-        android:label="fragment_alarm_hour"
+        android:label=""
         tools:layout="@layout/fragment_alarm_hour" />
 </navigation>

@@ -44,18 +44,30 @@
     app:layout_constraintTop_toTopOf="parent" />
 
     <TextView
-    android:id="@+id/tvAlarmHour"
-    android:layout_width="wrap_content"
-    android:layout_height="wrap_content"
-    android:layout_marginStart="32dp"
-    android:layout_marginTop="16dp"
-    android:contentDescription=""
-    android:text=""
-    android:textColor="@color/white"
-    android:textSize="20sp"
-    android:textStyle="bold"
-    app:layout_constraintStart_toStartOf="parent"
-    app:layout_constraintTop_toBottomOf="@+id/ivClock3" />
+        android:id="@+id/tvAlarmHour"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="32dp"
+        android:layout_marginTop="16dp"
+        android:contentDescription=""
+        android:text="Please, insert the medicine alarm hour:"
+        android:textColor="@color/white"
+        android:textSize="20sp"
+        android:textStyle="bold"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/ivClock3" />
+
+    <TimePicker
+        android:id="@+id/tpAlarm"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="96dp"
+        android:timePickerMode="spinner"
+        android:theme="@style/TimePickerTheme"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.496"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/appBarAlarmHour" />
 
     <androidx.constraintlayout.widget.Guideline
     android:id="@+id/guideline2"
@@ -79,4 +91,5 @@
     app:tint="@color/white">
 
     </com.google.android.material.floatingactionbutton.FloatingActionButton>
+
 </androidx.constraintlayout.widget.ConstraintLayout>

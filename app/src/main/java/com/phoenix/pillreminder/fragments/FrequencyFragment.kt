@@ -12,7 +12,6 @@ import androidx.navigation.ui.AppBarConfiguration
 import androidx.navigation.ui.setupWithNavController
 import com.phoenix.pillreminder.R
 import com.phoenix.pillreminder.databinding.FragmentFrequencyBinding
-import com.phoenix.pillreminder.model.FrequencyViewModel
 
 class FrequencyFragment : Fragment() {
     private lateinit var binding:FragmentFrequencyBinding
@@ -34,7 +33,6 @@ class FrequencyFragment : Fragment() {
         binding.apply{
             val navController = findNavController()
             val appBarConfiguration = AppBarConfiguration(navController.graph)
-            val viewModel: FrequencyViewModel by viewModels()
 
             toolbarFrequency.setupWithNavController(navController, appBarConfiguration)
 

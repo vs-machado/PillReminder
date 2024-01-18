@@ -6,7 +6,6 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.ArrayAdapter
 import androidx.fragment.app.Fragment
-import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.ui.AppBarConfiguration
 import androidx.navigation.ui.setupWithNavController
@@ -43,7 +42,7 @@ class FrequencyFragment : Fragment() {
             lvFrequency.adapter = arrayAdapter
 
             // Check the user selected option and navigate to the next fragment
-            lvFrequency.setOnItemClickListener { _, it, position, _ ->
+            lvFrequency.setOnItemClickListener { _, _, position, _ ->
                 checkSelectedOption(position)
             }
 

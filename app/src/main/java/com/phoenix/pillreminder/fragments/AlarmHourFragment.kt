@@ -1,26 +1,42 @@
 package com.phoenix.pillreminder.fragments
 
-import android.app.DatePickerDialog
-import android.app.TimePickerDialog
 import android.os.Bundle
 import android.text.format.DateFormat.is24HourFormat
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.EditText
-import android.widget.LinearLayout
 import android.widget.TimePicker
+import androidx.activity.addCallback
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
-import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
-import com.google.android.material.timepicker.MaterialTimePicker
-import com.google.android.material.timepicker.TimeFormat
+import androidx.navigation.fragment.findNavController
+import androidx.navigation.ui.AppBarConfiguration
+import androidx.navigation.ui.setupWithNavController
+import com.phoenix.pillreminder.R
 import com.phoenix.pillreminder.databinding.FragmentAlarmHourBinding
 import com.phoenix.pillreminder.model.AlarmSettingsSharedViewModel
+import java.util.Calendar
 
 class AlarmHourFragment : Fragment() {
     private lateinit var binding: FragmentAlarmHourBinding
+    val sharedViewModel: AlarmSettingsSharedViewModel by activityViewModels()
+    private val currentHour = Calendar.getInstance().get(Calendar.HOUR_OF_DAY)
+    private val currentMinute = Calendar.getInstance().get(Calendar.MINUTE)
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+
+        requireActivity().onBackPressedDispatcher.addCallback(this) {
+            if (sharedViewModel.currentAlarmNumber.value == 1) {
+                findNavController().navigate(R.id.action_alarmHourFragment_to_howManyPerDayFragment)
+            } else {
+                sharedViewModel.position--
+                sharedViewModel.decreaseCurrentAlarmNumber()
+            }
+        }
+    }
+
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -30,53 +46,98 @@ class AlarmHourFragment : Fragment() {
         return binding.root
     }
 
+
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        val sharedViewModel: AlarmSettingsSharedViewModel by activityViewModels()
-        var currentAlarmNumber = sharedViewModel.currentAlarmNumber.value
-        val numberOfAlarms = sharedViewModel.numberOfAlarms
+        val navController = findNavController()
+        val appBarConfiguration = AppBarConfiguration(navController.graph)
+        val hourFormat = is24HourFormat(requireContext())
 
-        sharedViewModel.currentAlarmNumber.observe(viewLifecycleOwner, Observer{
+        sharedViewModel.currentAlarmNumber.observe(viewLifecycleOwner, Observer {
             setTvAlarmHour(it)
         })
 
-        //Asks the user the next alarm hour
-        binding.fabNext.setOnClickListener {
-            sharedViewModel.updateCurrentAlarmNumber()
+
+        binding.apply {
+            sharedViewModel.apply {
+                toolbar.setupWithNavController(navController, appBarConfiguration)
+
+                tpAlarm.setIs24HourView(hourFormat)
+
+                tpAlarm.setOnTimeChangedListener { _, hourOfDay, minute ->
+                    saveAlarmHour(position, hourOfDay, minute)
+                }
+
+                //Asks the user the next alarm hour
+                fabNext.setOnClickListener {
+                    updateCurrentAlarmNumber()
+                    position++
+
+                    if (currentAlarmNumber.value!! > numberOfAlarms.value!!) {
+                        findNavController().navigate(R.id.action_alarmHourFragment_to_treatmentDurationFragment)
+                    }
+                }
+            }
         }
     }
 
-    private fun setTvAlarmHour(currentAlarmNumber: Int){
-        when(currentAlarmNumber){
+
+    private fun setTvAlarmHour(currentAlarmNumber: Int) {
+        when (currentAlarmNumber) {
+            1 -> {
+                binding.tvAlarmHour.text = "Please, set the medicine alarm hour:"
+            }
+
             2 -> {
                 binding.tvAlarmHour.text = "Please, set the second medicine alarm:"
+                resetTimePicker(binding.tpAlarm)
             }
+
             3 -> {
                 binding.tvAlarmHour.text = "Please, set the third medicine alarm:"
+                resetTimePicker(binding.tpAlarm)
             }
+
             4 -> {
                 binding.tvAlarmHour.text = "Please, set the fourth medicine alarm:"
+                resetTimePicker(binding.tpAlarm)
             }
+
             5 -> {
                 binding.tvAlarmHour.text = "Please, set the fifth medicine alarm:"
+                resetTimePicker(binding.tpAlarm)
             }
+
             6 -> {
                 binding.tvAlarmHour.text = "Please, set the sixth medicine alarm:"
+                resetTimePicker(binding.tpAlarm)
             }
+
             7 -> {
                 binding.tvAlarmHour.text = "Please, set the seventh medicine alarm:"
+                resetTimePicker(binding.tpAlarm)
             }
+
             8 -> {
                 binding.tvAlarmHour.text = "Please, set the eighth medicine alarm:"
+                resetTimePicker(binding.tpAlarm)
             }
+
             9 -> {
                 binding.tvAlarmHour.text = "Please, set the ninth medicine alarm:"
+                resetTimePicker(binding.tpAlarm)
             }
+
             10 -> {
                 binding.tvAlarmHour.text = "Please, set the tenth medicine alarm:"
+                resetTimePicker(binding.tpAlarm)
             }
-        }
     }
+}
 
+    private fun resetTimePicker(timePicker: TimePicker) {
+        timePicker.hour = currentHour
+        timePicker.minute = currentMinute
+    }
 }

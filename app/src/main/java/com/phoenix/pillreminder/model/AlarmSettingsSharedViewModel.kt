@@ -14,8 +14,16 @@ class AlarmSettingsSharedViewModel : ViewModel() {
     private var _currentAlarmNumber = MutableLiveData<Int>()
     val currentAlarmNumber: LiveData<Int> = _currentAlarmNumber
 
+
+    private var alarmHour = IntArray(10)
+    private var alarmMinute = IntArray(10)
+
+
+    var position = 0
+
     init{
         _currentAlarmNumber.value = 1
+        _numberOfAlarms.value = 1
     }
 
     fun setMedicineName(userInput: String){
@@ -26,8 +34,17 @@ class AlarmSettingsSharedViewModel : ViewModel() {
         _currentAlarmNumber.value = (_currentAlarmNumber.value)?.plus(1)
     }
 
+    fun decreaseCurrentAlarmNumber(){
+        _currentAlarmNumber.value = (_currentAlarmNumber.value)?.minus(1)
+    }
+
     fun setNumberOfAlarms(newNumberOfAlarms: Int){
         _numberOfAlarms.value = newNumberOfAlarms
+    }
+
+    fun saveAlarmHour(position: Int, hourOfDay: Int, minute :Int){
+        alarmHour[position] = hourOfDay
+        alarmMinute[position] = minute
     }
 
 

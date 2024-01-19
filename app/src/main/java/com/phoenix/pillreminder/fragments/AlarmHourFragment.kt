@@ -20,7 +20,7 @@ import java.util.Calendar
 
 class AlarmHourFragment : Fragment() {
     private lateinit var binding: FragmentAlarmHourBinding
-    val sharedViewModel: AlarmSettingsSharedViewModel by activityViewModels()
+    private val sharedViewModel: AlarmSettingsSharedViewModel by activityViewModels()
     private val currentHour = Calendar.getInstance().get(Calendar.HOUR_OF_DAY)
     private val currentMinute = Calendar.getInstance().get(Calendar.MINUTE)
 
@@ -29,7 +29,7 @@ class AlarmHourFragment : Fragment() {
 
         requireActivity().onBackPressedDispatcher.addCallback(this) {
             if (sharedViewModel.currentAlarmNumber.value == 1) {
-                findNavController().navigate(R.id.action_alarmHourFragment_to_howManyPerDayFragment)
+                findNavController().popBackStack()
             } else {
                 sharedViewModel.position--
                 sharedViewModel.decreaseCurrentAlarmNumber()
@@ -74,7 +74,11 @@ class AlarmHourFragment : Fragment() {
                     updateCurrentAlarmNumber()
                     position++
 
+
+
                     if (currentAlarmNumber.value!! > numberOfAlarms.value!!) {
+                        //Clear the remaining positions of the array
+                        clearAlarmArray()
                         findNavController().navigate(R.id.action_alarmHourFragment_to_treatmentDurationFragment)
                     }
                 }

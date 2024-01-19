@@ -8,21 +8,21 @@
     tools:context=".fragments.TreatmentDurationFragment">
 
     <com.google.android.material.appbar.AppBarLayout
-    android:id="@+id/appBarAlarmHour"
+    android:id="@+id/appBar"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     app:layout_constraintEnd_toEndOf="parent"
     app:layout_constraintStart_toStartOf="parent"
     app:layout_constraintTop_toTopOf="parent">
 
-    <androidx.appcompat.widget.Toolbar
-        android:id="@+id/toolbar"
-        android:layout_width="match_parent"
-        android:layout_height="50dp"
-        android:background="@color/colorPrimary"
-        android:elevation="4dp" />
+        <androidx.appcompat.widget.Toolbar
+            android:id="@+id/toolbar"
+            android:layout_width="match_parent"
+            android:layout_height="50dp"
+            android:background="@color/colorPrimary"
+            android:elevation="4dp" />
 
-    <com.google.android.material.tabs.TabLayout
+        <com.google.android.material.tabs.TabLayout
         android:id="@+id/tlAlarmHour2"
         android:layout_width="match_parent"
         android:layout_height="110dp"
@@ -32,14 +32,49 @@
 
     </com.google.android.material.appbar.AppBarLayout>
 
+    <ImageView
+        android:id="@+id/ivCalendar"
+        android:layout_width="30dp"
+        android:layout_height="30dp"
+        android:layout_marginStart="32dp"
+        android:layout_marginTop="60dp"
+        android:src="@drawable/ic_calendar_month_24"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        android:importantForAccessibility="no" />
+
     <TextView
-        android:id="@+id/textView"
+        android:id="@+id/tvTreatmentDuration"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="32dp"
-        android:layout_marginTop="32dp"
-        android:text="Teste"
+        android:layout_marginTop="16dp"
+        android:text="@string/do_you_want_to_set_a_treatment_duration"
+        android:textColor="#FFFFFF"
+        android:textSize="20sp"
+        android:textStyle="bold"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/appBarAlarmHour" />
+        app:layout_constraintTop_toBottomOf="@+id/ivCalendar" />
+
+    <androidx.appcompat.widget.LinearLayoutCompat
+        android:id="@+id/llFrequency"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/appBar"
+        tools:ignore="VisualLintBounds">
+
+        <ListView
+            android:id="@+id/lvTreatmentDuration"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_marginBottom="2dp"
+            android:padding="32dp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/appBar" />
+
+    </androidx.appcompat.widget.LinearLayoutCompat>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

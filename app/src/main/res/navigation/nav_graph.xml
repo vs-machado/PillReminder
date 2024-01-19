@@ -82,21 +82,18 @@
             app:exitAnim="@anim/slide_out_left"
             app:popEnterAnim="@anim/slide_in_left"
             app:popExitAnim="@anim/slide_out_right" />
-        <action
-            android:id="@+id/action_alarmHourFragment_to_howManyPerDayFragment"
-            app:destination="@id/howManyPerDayFragment"
-            app:enterAnim="@anim/slide_in_left"
-            app:exitAnim="@anim/slide_out_right" />
     </fragment>
     <fragment
         android:id="@+id/treatmentDurationFragment"
         android:name="com.phoenix.pillreminder.fragments.TreatmentDurationFragment"
-        android:label="fragment_treatment_duration"
+        android:label=""
         tools:layout="@layout/fragment_treatment_duration" >
         <action
-            android:id="@+id/action_treatmentDurationFragment_to_alarmHourFragment"
-            app:destination="@id/alarmHourFragment"
-            app:enterAnim="@anim/slide_in_left"
-            app:exitAnim="@anim/slide_out_right" />
+            android:id="@+id/action_treatmentDurationFragment_to_homeFragment"
+            app:destination="@id/homeFragment"
+            app:enterAnim="@anim/slide_in_down"
+            app:exitAnim="@anim/slide_out_down"
+            app:popEnterAnim="@anim/slide_in_up"
+            app:popExitAnim="@anim/slide_out_up" />
     </fragment>
 </navigation>

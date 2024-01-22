@@ -46,6 +46,7 @@ class HowManyPerDayFragment : Fragment() {
             }
 
             fabNext.setOnClickListener {
+                sharedViewModel.position = 0
                 it.findNavController().navigate(R.id.action_howManyPerDayFragment_to_alarmHourFragment)
             }
         }

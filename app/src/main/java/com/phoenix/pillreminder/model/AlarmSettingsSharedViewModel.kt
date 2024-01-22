@@ -62,7 +62,6 @@ class AlarmSettingsSharedViewModel : ViewModel() {
         val startDate = SimpleDateFormat("dd-MM-yyyy", Locale.getDefault()).parse(startDateString)
         val endDate = SimpleDateFormat("dd-MM-yyyy", Locale.getDefault()).parse(endDateString)
 
-        // AI generated code
         // Use a Calendar instance to extract day, month, and year
         val startCalendar = Calendar.getInstance()
         startCalendar.time = startDate!!

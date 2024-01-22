@@ -31,6 +31,7 @@ class AlarmHourFragment : Fragment() {
             if (sharedViewModel.currentAlarmNumber.value == 1) {
                 findNavController().popBackStack()
             } else {
+                //If the user goes back to the previous alarm, the position is decreased by 1
                 sharedViewModel.position--
                 sharedViewModel.decreaseCurrentAlarmNumber()
             }
@@ -55,7 +56,8 @@ class AlarmHourFragment : Fragment() {
         val hourFormat = is24HourFormat(requireContext())
 
         sharedViewModel.currentAlarmNumber.observe(viewLifecycleOwner, Observer {
-            setTvAlarmHour(it)
+            //Sets the text of the tvAlarmHour according to the current alarm number and goes to the next position of the alarm array.
+            setTvAlarmHourAndPosition(it)
         })
 
 
@@ -72,12 +74,9 @@ class AlarmHourFragment : Fragment() {
                 //Asks the user the next alarm hour
                 fabNext.setOnClickListener {
                     updateCurrentAlarmNumber()
-                    position++
-
-
 
                     if (currentAlarmNumber.value!! > numberOfAlarms.value!!) {
-                        //Clear the remaining positions of the array
+                        //Clear the remaining positions of the alarm array
                         clearAlarmArray()
                         findNavController().navigate(R.id.action_alarmHourFragment_to_treatmentDurationFragment)
                     }
@@ -87,7 +86,7 @@ class AlarmHourFragment : Fragment() {
     }
 
 
-    private fun setTvAlarmHour(currentAlarmNumber: Int) {
+    private fun setTvAlarmHourAndPosition(currentAlarmNumber: Int) {
         when (currentAlarmNumber) {
             1 -> {
                 binding.tvAlarmHour.text = "Please, set the medicine alarm hour:"
@@ -95,46 +94,55 @@ class AlarmHourFragment : Fragment() {
 
             2 -> {
                 binding.tvAlarmHour.text = "Please, set the second medicine alarm:"
+                sharedViewModel.position++
                 resetTimePicker(binding.tpAlarm)
             }
 
             3 -> {
                 binding.tvAlarmHour.text = "Please, set the third medicine alarm:"
+                sharedViewModel.position++
                 resetTimePicker(binding.tpAlarm)
             }
 
             4 -> {
                 binding.tvAlarmHour.text = "Please, set the fourth medicine alarm:"
+                sharedViewModel.position++
                 resetTimePicker(binding.tpAlarm)
             }
 
             5 -> {
                 binding.tvAlarmHour.text = "Please, set the fifth medicine alarm:"
+                sharedViewModel.position++
                 resetTimePicker(binding.tpAlarm)
             }
 
             6 -> {
                 binding.tvAlarmHour.text = "Please, set the sixth medicine alarm:"
+                sharedViewModel.position++
                 resetTimePicker(binding.tpAlarm)
             }
 
             7 -> {
                 binding.tvAlarmHour.text = "Please, set the seventh medicine alarm:"
+                sharedViewModel.position++
                 resetTimePicker(binding.tpAlarm)
             }
 
             8 -> {
                 binding.tvAlarmHour.text = "Please, set the eighth medicine alarm:"
+                sharedViewModel.position++
                 resetTimePicker(binding.tpAlarm)
             }
 
             9 -> {
                 binding.tvAlarmHour.text = "Please, set the ninth medicine alarm:"
+                sharedViewModel.position++
                 resetTimePicker(binding.tpAlarm)
             }
 
             10 -> {
                 binding.tvAlarmHour.text = "Please, set the tenth medicine alarm:"
+                sharedViewModel.position++
                 resetTimePicker(binding.tpAlarm)
             }
     }

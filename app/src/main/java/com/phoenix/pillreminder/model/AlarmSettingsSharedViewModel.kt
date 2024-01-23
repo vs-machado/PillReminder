@@ -7,10 +7,14 @@ import java.text.SimpleDateFormat
 import java.util.Calendar
 import java.util.Date
 import java.util.Locale
+import java.util.TimeZone
 
 class AlarmSettingsSharedViewModel : ViewModel() {
     private val _medicineName = MutableLiveData("")
     val medicineName: LiveData<String> = _medicineName
+
+    private val _medicineType = MutableLiveData("")
+    val medicineType: LiveData<String> = _medicineType
 
     private val _numberOfAlarms = MutableLiveData<Int>()
     val numberOfAlarms: LiveData<Int> = _numberOfAlarms
@@ -18,10 +22,17 @@ class AlarmSettingsSharedViewModel : ViewModel() {
     private var _currentAlarmNumber = MutableLiveData<Int>()
     val currentAlarmNumber: LiveData<Int> = _currentAlarmNumber
 
-
+    //Variables to store as many alarms as the user wants
     private var alarmHour = Array<Int?>(10){null}
     private var alarmMinute = Array<Int?>(10){null}
 
+    //Variables to set treatment period
+    private var beginDay = 1
+    private var beginMonth = 1
+    private var beginYear = 1
+    private var endDay = 1
+    private var endMonth = 1
+    private var endYear = 1
 
     var position = 0
 
@@ -32,6 +43,10 @@ class AlarmSettingsSharedViewModel : ViewModel() {
 
     fun setMedicineName(userInput: String){
         _medicineName.value = userInput
+    }
+
+    fun setMedicineType(type: String){
+        _medicineType.value = type
     }
 
     fun updateCurrentAlarmNumber(){
@@ -58,58 +73,48 @@ class AlarmSettingsSharedViewModel : ViewModel() {
         }
     }
 
-    fun saveTreatmentPeriod(startDateString: String, endDateString: String){
-        val startDate = SimpleDateFormat("dd-MM-yyyy", Locale.getDefault()).parse(startDateString)
-        val endDate = SimpleDateFormat("dd-MM-yyyy", Locale.getDefault()).parse(endDateString)
+    fun extractDateComponents(firstDate: Long, secondDate: Long){
+        val timeZone = TimeZone.getTimeZone("GMT")
 
-        // Use a Calendar instance to extract day, month, and year
-        val startCalendar = Calendar.getInstance()
-        startCalendar.time = startDate!!
+        val startDate = Calendar.getInstance(timeZone).apply { timeInMillis = firstDate }
+        val endDate = Calendar.getInstance(timeZone).apply { timeInMillis = secondDate }
 
-        val endCalendar = Calendar.getInstance()
-        endCalendar.time = endDate!!
+        beginDay = startDate.get(Calendar.DAY_OF_MONTH)
+        beginMonth = startDate.get(Calendar.MONTH) + 1 // Calendar.MONTH is zero-based
+        beginYear = startDate.get(Calendar.YEAR)
 
-        // Extract individual components
-        val startDay = startCalendar.get(Calendar.DAY_OF_MONTH)
-        val startMonth = startCalendar.get(Calendar.MONTH) + 1 // Months are zero-based
-        val startYear = startCalendar.get(Calendar.YEAR)
-
-        val endDay = endCalendar.get(Calendar.DAY_OF_MONTH)
-        val endMonth = endCalendar.get(Calendar.MONTH) + 1 // Months are zero-based
-        val endYear = endCalendar.get(Calendar.YEAR)
-
+        endDay = endDate.get(Calendar.DAY_OF_MONTH)
+        endMonth = endDate.get(Calendar.MONTH) + 1 // Calendar.MONTH is zero-based
+        endYear = endDate.get(Calendar.YEAR)
     }
+
+
 
 
     fun checkSelectedOption(position: Int){
         when (position){
             0 -> {
-                // Should pass the user option to the database in the future
-
+                setMedicineType("Pill")
             }
 
             1 -> {
-                // Should pass the user option to the database in the future
+                setMedicineType("Injection")
             }
 
             2 -> {
-                // Should pass the user option to the database in the future
+                setMedicineType("Liquid")
             }
 
             3 -> {
-                // Should pass the user option to the database in the future
+                setMedicineType("Drops")
             }
 
             4 -> {
-                // Should pass the user option to the database in the future
+                setMedicineType("Inhaler")
             }
 
             5 -> {
-                // Should pass the user option to the database in the future
-            }
-
-            6 -> {
-                // Should pass the user option to the database in the future
+                setMedicineType("Powder")
             }
         }
     }

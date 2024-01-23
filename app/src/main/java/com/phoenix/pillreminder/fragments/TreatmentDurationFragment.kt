@@ -1,13 +1,11 @@
 package com.phoenix.pillreminder.fragments
 
-import android.app.DatePickerDialog
 import android.os.Bundle
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ArrayAdapter
-import android.widget.DatePicker
 import android.widget.Toast
 import androidx.activity.addCallback
 import androidx.fragment.app.activityViewModels
@@ -19,8 +17,7 @@ import com.google.android.material.datepicker.MaterialDatePicker
 import com.phoenix.pillreminder.R
 import com.phoenix.pillreminder.databinding.FragmentTreatmentDurationBinding
 import com.phoenix.pillreminder.model.AlarmSettingsSharedViewModel
-import java.text.SimpleDateFormat
-import java.util.Locale
+
 
 class TreatmentDurationFragment : Fragment() {
     private lateinit var binding: FragmentTreatmentDurationBinding
@@ -61,11 +58,6 @@ class TreatmentDurationFragment : Fragment() {
                 when (position){
                     0 -> {
                         showDateRangePicker()
-
-                        /*Toast.makeText(requireContext(),
-                            "Alarms successfully created!",
-                            Toast.LENGTH_LONG).show()
-                        it.findNavController().navigate(R.id.action_treatmentDurationFragment_to_homeFragment)*/
                     }
                     1 -> {
                         //setAlarms for an indefinite period
@@ -86,16 +78,18 @@ class TreatmentDurationFragment : Fragment() {
             .setTitleText("Select the treatment duration:")
             .build()
 
-        dateRangePicker.addOnPositiveButtonClickListener {
-            @Override
-            fun onPositiveButtonClick(selection: Pair<Long, Long>){
-                val startDateString = SimpleDateFormat("dd-MM-yyyy", Locale.getDefault()).format(selection.first)
-                val endDateString = SimpleDateFormat("dd-MM-yyyy", Locale.getDefault()).format(selection.second)
+        dateRangePicker.addOnPositiveButtonClickListener() { selection ->
+            // Handle the selected date range
+            val startDateMillis = selection.first
+            val endDateMillis = selection.second
 
-            }
+            sharedViewModel.extractDateComponents(startDateMillis, endDateMillis)
+
+            Toast.makeText(requireContext(),
+                "Alarms successfully created!",
+                Toast.LENGTH_LONG).show()
+            findNavController().navigate(R.id.action_treatmentDurationFragment_to_homeFragment)
         }
-
         dateRangePicker.show(childFragmentManager, "DATE_RANGE_PICKER")
-
     }
 }

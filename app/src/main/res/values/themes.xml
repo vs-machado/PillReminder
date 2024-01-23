@@ -18,4 +18,5 @@
     <style name = "TimePickerTheme" parent= "Base.Theme.PillReminder">
         <item name="colorControlNormal">@color/black</item>
     </style>
+
 </resources>

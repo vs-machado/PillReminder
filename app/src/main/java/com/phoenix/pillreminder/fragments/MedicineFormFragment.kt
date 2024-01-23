@@ -13,6 +13,7 @@ import androidx.navigation.ui.AppBarConfiguration
 import androidx.navigation.ui.setupWithNavController
 import com.phoenix.pillreminder.R
 import com.phoenix.pillreminder.databinding.FragmentMedicineFormBinding
+import com.phoenix.pillreminder.model.AlarmSettingsSharedViewModel
 
 class MedicineFormFragment : Fragment() {
     private lateinit var binding: FragmentMedicineFormBinding
@@ -30,19 +31,20 @@ class MedicineFormFragment : Fragment() {
 
         val navController = findNavController()
         val appBarConfiguration = AppBarConfiguration(navController.graph)
+        val sharedViewModel: AlarmSettingsSharedViewModel by viewModels()
 
         binding.apply{
             toolbarMedicineForm.setupWithNavController(navController, appBarConfiguration)
 
             // Med forms list. User must select the desired type of med
             val list: MutableList<String> = mutableListOf("Pill", "Injection", "Liquid", "Drops", "Inhaler",
-            "Powder", "Other")
+            "Powder")
             val arrayAdapter = ArrayAdapter(requireContext(), android.R.layout.simple_list_item_1, list)
             lvMedForm.adapter = arrayAdapter
 
             // Check the user selected option and navigate to the next fragment
             lvMedForm.setOnItemClickListener { _, it, position, _ ->
-                //viewModel.checkSelectedOption(position)
+                sharedViewModel.checkSelectedOption(position)
                 it.findNavController().navigate(R.id.action_medicineFormFragment_to_frequencyFragment)
 
             }

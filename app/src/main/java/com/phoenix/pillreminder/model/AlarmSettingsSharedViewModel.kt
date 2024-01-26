@@ -3,24 +3,24 @@ package com.phoenix.pillreminder.model
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
-import java.text.SimpleDateFormat
+import com.phoenix.pillreminder.db.Medicine
 import java.util.Calendar
-import java.util.Date
-import java.util.Locale
 import java.util.TimeZone
 
 class AlarmSettingsSharedViewModel : ViewModel() {
     private val _medicineName = MutableLiveData("")
     val medicineName: LiveData<String> = _medicineName
 
-    private val _medicineType = MutableLiveData("")
-    val medicineType: LiveData<String> = _medicineType
-
     private val _numberOfAlarms = MutableLiveData<Int>()
     val numberOfAlarms: LiveData<Int> = _numberOfAlarms
 
     private var _currentAlarmNumber = MutableLiveData<Int>()
     val currentAlarmNumber: LiveData<Int> = _currentAlarmNumber
+
+    private var medicineQuantity = ""
+    private var medicineStrength = ""
+    private var medicineForm = ""
+    private var medicineFrequency = ""
 
     //Variables to store as many alarms as the user wants
     private var alarmHour = Array<Int?>(10){null}
@@ -41,12 +41,15 @@ class AlarmSettingsSharedViewModel : ViewModel() {
         _numberOfAlarms.value = 1
     }
 
-    fun setMedicineName(userInput: String){
-        _medicineName.value = userInput
-    }
+    fun saveMedicineData(){
+        val name = _medicineName.value.toString()
+        val quantity = getMedicineQuantity()
+        val strength = getMedicineStrength()
+        val form = getMedicineForm()
+        val alarmHour = getAlarmHour()
+        val alarmMinute = getAlarmMinute()
 
-    fun setMedicineType(type: String){
-        _medicineType.value = type
+        val medicine = Medicine(0, name, quantity, strength, form, alarmHour, alarmMinute)
     }
 
     fun updateCurrentAlarmNumber(){
@@ -55,10 +58,6 @@ class AlarmSettingsSharedViewModel : ViewModel() {
 
     fun decreaseCurrentAlarmNumber(){
         _currentAlarmNumber.value = (_currentAlarmNumber.value)?.minus(1)
-    }
-
-    fun setNumberOfAlarms(newNumberOfAlarms: Int){
-        _numberOfAlarms.value = newNumberOfAlarms
     }
 
     fun saveAlarmHour(position: Int, hourOfDay: Int, minute :Int){
@@ -88,35 +87,81 @@ class AlarmSettingsSharedViewModel : ViewModel() {
         endYear = endDate.get(Calendar.YEAR)
     }
 
-
-
-
-    fun checkSelectedOption(position: Int){
+    fun saveMedicineForm(position: Int){
         when (position){
             0 -> {
-                setMedicineType("Pill")
+                setMedicineForm("Pill")
             }
 
             1 -> {
-                setMedicineType("Injection")
+                setMedicineForm("Injection")
             }
 
             2 -> {
-                setMedicineType("Liquid")
+                setMedicineForm("Liquid")
             }
 
             3 -> {
-                setMedicineType("Drops")
+                setMedicineForm("Drops")
             }
 
             4 -> {
-                setMedicineType("Inhaler")
+                setMedicineForm("Inhaler")
             }
 
             5 -> {
-                setMedicineType("Powder")
+                setMedicineForm("Powder")
             }
         }
+    }
+
+    //Getters and setters
+    fun setMedicineName(userInput: String){
+        _medicineName.value = userInput
+    }
+
+    fun setMedicineQuantity(quantity: String){
+        medicineQuantity = quantity
+    }
+
+    fun setMedicineStrength(strength: String){
+        medicineStrength = strength
+    }
+
+    private fun setMedicineForm(type: String){
+        medicineForm = type
+    }
+
+    fun setMedicineFrequency(frequency: String){
+        medicineFrequency = frequency
+    }
+
+    fun setNumberOfAlarms(newNumberOfAlarms: Int){
+        _numberOfAlarms.value = newNumberOfAlarms
+    }
+
+    fun getMedicineQuantity(): String {
+        return medicineQuantity
+    }
+
+    fun getMedicineStrength(): String{
+        return medicineStrength
+    }
+
+    fun getMedicineForm(): String{
+        return medicineForm
+    }
+
+    fun getMedicineFrequency(): String{
+        return medicineFrequency
+    }
+
+    fun getAlarmHour(): Int{
+        return alarmHour[1]!!
+    }
+
+    fun getAlarmMinute(): Int{
+        return alarmMinute[1]!!
     }
 
 }

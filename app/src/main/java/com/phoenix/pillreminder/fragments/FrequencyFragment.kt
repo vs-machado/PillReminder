@@ -6,14 +6,17 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.ArrayAdapter
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.ui.AppBarConfiguration
 import androidx.navigation.ui.setupWithNavController
 import com.phoenix.pillreminder.R
 import com.phoenix.pillreminder.databinding.FragmentFrequencyBinding
+import com.phoenix.pillreminder.model.AlarmSettingsSharedViewModel
 
 class FrequencyFragment : Fragment() {
     private lateinit var binding:FragmentFrequencyBinding
+    private val sharedViewModel:AlarmSettingsSharedViewModel by viewModels()
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -44,6 +47,7 @@ class FrequencyFragment : Fragment() {
             // Check the user selected option and navigate to the next fragment
             lvFrequency.setOnItemClickListener { _, _, position, _ ->
                 checkSelectedOption(position)
+                findNavController().navigate(R.id.action_frequencyFragment_to_howManyPerDayFragment)
             }
 
         }
@@ -52,31 +56,31 @@ class FrequencyFragment : Fragment() {
     private fun checkSelectedOption(position: Int){
         when (position){
             0 -> {
-                 findNavController().navigate(R.id.action_frequencyFragment_to_howManyPerDayFragment)
+                sharedViewModel.setMedicineFrequency("Every day")
             }
 
             1 -> {
-                // Should pass the user option to the database in the future
+                sharedViewModel.setMedicineFrequency("Every other day")
             }
 
             2 -> {
-                // Should pass the user option to the database in the future
+                sharedViewModel.setMedicineFrequency("Specific days of the week")
             }
 
             3 -> {
-                // Should pass the user option to the database in the future
+                sharedViewModel.setMedicineFrequency("On a recurring cycle")
             }
 
             4 -> {
-                // Should pass the user option to the database in the future
+                sharedViewModel.setMedicineFrequency("Every X days")
             }
 
             5 -> {
-                // Should pass the user option to the database in the future
+                sharedViewModel.setMedicineFrequency("Every X weeks")
             }
 
             6 -> {
-                // Should pass the user option to the database in the future
+                sharedViewModel.setMedicineFrequency("Every X months")
             }
         }
     }

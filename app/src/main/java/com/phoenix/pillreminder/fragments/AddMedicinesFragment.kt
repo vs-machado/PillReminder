@@ -37,6 +37,7 @@ class AddMedicinesFragment : Fragment() {
         val navController = findNavController()
         val appBarConfiguration = AppBarConfiguration(navController.graph)
         val sharedViewModel: AlarmSettingsSharedViewModel by viewModels()
+        val medicineName = binding.tietMedicineName.text
 
         binding.apply {
             toolbarAddMedicines.setupWithNavController(navController, appBarConfiguration)
@@ -58,7 +59,7 @@ class AddMedicinesFragment : Fragment() {
 
             fabNext.setOnClickListener {
                 // Save medicine name input by user
-                sharedViewModel.setMedicineName(binding.tietMedicineName.text.toString())
+                sharedViewModel.setMedicineName(medicineName.toString())
                 it.findNavController().navigate(R.id.action_addMedicinesFragment_to_medicineFormFragment)
             }
 

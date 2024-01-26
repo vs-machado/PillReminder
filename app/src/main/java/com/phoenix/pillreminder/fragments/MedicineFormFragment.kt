@@ -44,9 +44,8 @@ class MedicineFormFragment : Fragment() {
 
             // Check the user selected option and navigate to the next fragment
             lvMedForm.setOnItemClickListener { _, it, position, _ ->
-                sharedViewModel.checkSelectedOption(position)
+                sharedViewModel.saveMedicineForm(position)
                 it.findNavController().navigate(R.id.action_medicineFormFragment_to_frequencyFragment)
-
             }
 
         }

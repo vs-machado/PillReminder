@@ -6,4 +6,17 @@
     <string name="strength">Strength</string>
     <string name="take_2_pill_s">Take 2 pills</string>
     <string name="name_of_the_medicine">Name of the medicine</string>
+    <string name="setup_alarm">Setup a medicine alarm</string>
+    <string name="go_back_to_previous_page">Go back to previous page</string>
+    <string name="medicine">Medicine</string>
+    <string name="what_medicine_would_you_like_to_add">What medicine would you like to add?</string>
+    <string name="goes_back_to_previous_page">Goes back to previous page</string>
+    <string name="goes_to_the_next_page">Goes to the next page</string>
+    <string name="what_form_is_the_med">What form is the med?</string>
+    <string name="how_often_do_you_take_it">How often do you take it?</string>
+    <string name="clock_icon">Clock icon</string>
+    <string name="how_many_do_you_take_per_day">How many times do you take it per day?</string>
+    <string name="time">time(s)</string>
+    <string name="do_you_want_to_set_a_treatment_duration">Do you want to set a treatment duration?</string>
+    <string name="please_insert_the_medicine_alarm_hour">Please, insert the medicine alarm hour:</string>
 </resources>

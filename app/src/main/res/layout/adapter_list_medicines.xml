@@ -42,7 +42,7 @@
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
                 app:layout_constraintVertical_bias="0.0"
-                app:srcCompat="@drawable/pill" />
+                app:srcCompat="@drawable/pill_black_and_white" />
 
             <TextView
                 android:id="@+id/tvStrength"
@@ -61,7 +61,7 @@
                 app:layout_constraintVertical_chainStyle="packed" />
 
             <TextView
-                android:id="@+id/tvMedicine"
+                android:id="@+id/tvMedicineName"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="16dp"

@@ -1,4 +1,4 @@
-package com.phoenix.pillreminder
+package com.phoenix.pillreminder.model
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope

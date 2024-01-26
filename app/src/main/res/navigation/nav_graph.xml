@@ -8,6 +8,92 @@
     <fragment
         android:id="@+id/homeFragment"
         android:name="com.phoenix.pillreminder.fragments.HomeFragment"
-        android:label="fragment_home"
-        tools:layout="@layout/fragment_home" />
+        android:label=""
+        tools:layout="@layout/fragment_home" >
+        <action
+            android:id="@+id/action_homeFragment_to_addMedicinesFragment"
+            app:destination="@id/addMedicinesFragment"
+            app:enterAnim="@anim/slide_in_up"
+            app:exitAnim="@anim/slide_out_up"
+            app:popEnterAnim="@anim/slide_in_down"
+            app:popExitAnim="@anim/slide_out_down" />
+    </fragment>
+    <fragment
+        android:id="@+id/addMedicinesFragment"
+        android:name="com.phoenix.pillreminder.fragments.AddMedicinesFragment"
+        android:label=""
+        tools:layout="@layout/fragment_add_medicines" >
+        <action
+            android:id="@+id/action_addMedicinesFragment_to_medicineFormFragment"
+            app:destination="@id/medicineFormFragment"
+            app:enterAnim="@anim/slide_in_right"
+            app:exitAnim="@anim/slide_out_left"
+            app:popEnterAnim="@anim/slide_in_left"
+            app:popExitAnim="@anim/slide_out_right" />
+    </fragment>
+    <fragment
+        android:id="@+id/medicineFormFragment"
+        android:name="com.phoenix.pillreminder.fragments.MedicineFormFragment"
+        android:label=""
+        tools:layout="@layout/fragment_medicine_form" >
+        <action
+            android:id="@+id/action_medicineFormFragment_to_frequencyFragment"
+            app:destination="@id/frequencyFragment"
+            app:enterAnim="@anim/slide_in_right"
+            app:exitAnim="@anim/slide_out_left"
+            app:popEnterAnim="@anim/slide_in_left"
+            app:popExitAnim="@anim/slide_out_right" />
+    </fragment>
+    <fragment
+        android:id="@+id/frequencyFragment"
+        android:name="com.phoenix.pillreminder.fragments.FrequencyFragment"
+        android:label=""
+        tools:layout="@layout/fragment_frequency" >
+        <action
+            android:id="@+id/action_frequencyFragment_to_howManyPerDayFragment"
+            app:destination="@id/howManyPerDayFragment"
+            app:enterAnim="@anim/slide_in_right"
+            app:exitAnim="@anim/slide_out_left"
+            app:popEnterAnim="@anim/slide_in_left"
+            app:popExitAnim="@anim/slide_out_right" />
+    </fragment>
+    <fragment
+        android:id="@+id/howManyPerDayFragment"
+        android:name="com.phoenix.pillreminder.fragments.HowManyPerDayFragment"
+        android:label=""
+        tools:layout="@layout/fragment_how_many_per_day" >
+        <action
+            android:id="@+id/action_howManyPerDayFragment_to_alarmHourFragment"
+            app:destination="@id/alarmHourFragment"
+            app:enterAnim="@anim/slide_in_right"
+            app:exitAnim="@anim/slide_out_left"
+            app:popEnterAnim="@anim/slide_in_left"
+            app:popExitAnim="@anim/slide_out_right" />
+    </fragment>
+    <fragment
+        android:id="@+id/alarmHourFragment"
+        android:name="com.phoenix.pillreminder.fragments.AlarmHourFragment"
+        android:label=""
+        tools:layout="@layout/fragment_alarm_hour" >
+        <action
+            android:id="@+id/action_alarmHourFragment_to_treatmentDurationFragment"
+            app:destination="@id/treatmentDurationFragment"
+            app:enterAnim="@anim/slide_in_right"
+            app:exitAnim="@anim/slide_out_left"
+            app:popEnterAnim="@anim/slide_in_left"
+            app:popExitAnim="@anim/slide_out_right" />
+    </fragment>
+    <fragment
+        android:id="@+id/treatmentDurationFragment"
+        android:name="com.phoenix.pillreminder.fragments.TreatmentDurationFragment"
+        android:label=""
+        tools:layout="@layout/fragment_treatment_duration" >
+        <action
+            android:id="@+id/action_treatmentDurationFragment_to_homeFragment"
+            app:destination="@id/homeFragment"
+            app:enterAnim="@anim/slide_in_down"
+            app:exitAnim="@anim/slide_out_down"
+            app:popEnterAnim="@anim/slide_in_up"
+            app:popExitAnim="@anim/slide_out_up" />
+    </fragment>
 </navigation>

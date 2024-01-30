@@ -13,15 +13,11 @@ data class Medicine(
     @ColumnInfo(name = "medicine_name")
     var name:String,
     @ColumnInfo(name = "medicine_quantity")
-    var quantity:String,
-    @ColumnInfo(name = "medicine_strength")
-    var strength:String,
+    var quantity:Int,
     @ColumnInfo(name = "medicine_form")
     var form:String,
     @ColumnInfo(name = "medicine_alarm_hour")
     var alarmHour :Int,
     @ColumnInfo(name = "medicine_alarm_minute")
     var alarmMinute:Int
-
-
 )

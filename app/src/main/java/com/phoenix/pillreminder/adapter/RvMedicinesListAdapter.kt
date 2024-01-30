@@ -50,7 +50,6 @@ class MyViewHolder(private val medicinesBinding: AdapterListMedicinesBinding):Re
         medicinesBinding.apply{
             tvHour.text = "${medicine.alarmHour} +:+ ${medicine.alarmMinute}"
             tvMedicineName.text = medicine.name
-            tvStrength.text = medicine.strength
             tvQuantity.text = "Take + ${medicine.quantity} + ${medicine.form}s"
 
            // Needs to set the imageView depending on medicine form

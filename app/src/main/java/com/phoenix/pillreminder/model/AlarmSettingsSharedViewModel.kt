@@ -17,9 +17,10 @@ class AlarmSettingsSharedViewModel : ViewModel() {
     private var _currentAlarmNumber = MutableLiveData<Int>()
     val currentAlarmNumber: LiveData<Int> = _currentAlarmNumber
 
-    private var medicineQuantity = ""
-    private var medicineStrength = ""
-    private var medicineForm = ""
+    private var _medicineForm = MutableLiveData("")
+    val medicineForm: LiveData<String> = _medicineForm
+
+    private var medicineQuantity = 0
     private var medicineFrequency = ""
 
     //Variables to store as many alarms as the user wants
@@ -44,12 +45,11 @@ class AlarmSettingsSharedViewModel : ViewModel() {
     fun saveMedicineData(){
         val name = _medicineName.value.toString()
         val quantity = getMedicineQuantity()
-        val strength = getMedicineStrength()
         val form = getMedicineForm()
         val alarmHour = getAlarmHour()
         val alarmMinute = getAlarmMinute()
 
-        val medicine = Medicine(0, name, quantity, strength, form, alarmHour, alarmMinute)
+        val medicine = Medicine(0, name, quantity, form!!, alarmHour, alarmMinute)
     }
 
     fun updateCurrentAlarmNumber(){
@@ -90,27 +90,27 @@ class AlarmSettingsSharedViewModel : ViewModel() {
     fun saveMedicineForm(position: Int){
         when (position){
             0 -> {
-                setMedicineForm("Pill")
+                _medicineForm.value = "Pill"
             }
 
             1 -> {
-                setMedicineForm("Injection")
+                _medicineForm.value = "Injection"
             }
 
             2 -> {
-                setMedicineForm("Liquid")
+                _medicineForm.value = "Liquid"
             }
 
             3 -> {
-                setMedicineForm("Drops")
+                _medicineForm.value = "Drops"
             }
 
             4 -> {
-                setMedicineForm("Inhaler")
+                _medicineForm.value = "Inhaler"
             }
 
             5 -> {
-                setMedicineForm("Powder")
+                _medicineForm.value = "Powder"
             }
         }
     }
@@ -120,16 +120,8 @@ class AlarmSettingsSharedViewModel : ViewModel() {
         _medicineName.value = userInput
     }
 
-    fun setMedicineQuantity(quantity: String){
+    fun setMedicineQuantity(quantity: Int){
         medicineQuantity = quantity
-    }
-
-    fun setMedicineStrength(strength: String){
-        medicineStrength = strength
-    }
-
-    private fun setMedicineForm(type: String){
-        medicineForm = type
     }
 
     fun setMedicineFrequency(frequency: String){
@@ -140,16 +132,12 @@ class AlarmSettingsSharedViewModel : ViewModel() {
         _numberOfAlarms.value = newNumberOfAlarms
     }
 
-    fun getMedicineQuantity(): String {
+    fun getMedicineQuantity(): Int {
         return medicineQuantity
     }
 
-    fun getMedicineStrength(): String{
-        return medicineStrength
-    }
-
-    fun getMedicineForm(): String{
-        return medicineForm
+    fun getMedicineForm(): String? {
+        return medicineForm.value
     }
 
     fun getMedicineFrequency(): String{

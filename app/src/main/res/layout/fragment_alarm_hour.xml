@@ -23,7 +23,7 @@
             android:elevation="4dp" />
 
         <com.google.android.material.tabs.TabLayout
-            android:id="@+id/tlAlarmHour2"
+            android:id="@+id/tlAlarmHour"
             android:layout_width="match_parent"
             android:layout_height="110dp"
             android:background="@color/colorPrimary"
@@ -97,6 +97,6 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
-        app:layout_constraintGuide_begin="373dp" />
+        app:layout_constraintGuide_percent="0.5116279" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

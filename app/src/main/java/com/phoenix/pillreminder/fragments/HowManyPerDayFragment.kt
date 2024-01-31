@@ -40,6 +40,8 @@ class HowManyPerDayFragment : Fragment() {
             toolbarHowMany.setupWithNavController(navController, appBarConfiguration)
             setNumberPicker()
 
+            sharedViewModel.resetCurrentAlarmNumber()
+
             npHowOften.setOnValueChangedListener { _, _, newVal ->
                 //Fixes position values
                 sharedViewModel.setNumberOfAlarms(newVal + 1)

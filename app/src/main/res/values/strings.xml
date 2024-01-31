@@ -24,7 +24,7 @@
     <string name="tv_hour">%1$s:%2$s</string>
 
     <string name="take_pill">Take %1$s %2$s(s)</string>
-    <string name="take_injection">Take %1$s %2$s(s)</string>
+    <string name="take_injection">Take %1$s mL(s)</string>
     <string name="take_liquid">Take %1$s mL</string>
     <string name="take_drops">Take %1$s %2$s(s)</string>
     <string name="inhale">Take %1$s mg</string>

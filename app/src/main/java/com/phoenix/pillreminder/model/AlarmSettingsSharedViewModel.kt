@@ -52,6 +52,9 @@ class AlarmSettingsSharedViewModel : ViewModel() {
         return Medicine(0, name, quantity, form!!, alarmHour, alarmMinute)
     }
 
+    fun resetCurrentAlarmNumber(){
+        _currentAlarmNumber.value = 1
+    }
     fun updateCurrentAlarmNumber(){
         _currentAlarmNumber.value = (_currentAlarmNumber.value)?.plus(1)
     }

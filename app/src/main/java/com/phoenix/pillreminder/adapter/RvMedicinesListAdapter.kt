@@ -57,12 +57,21 @@ class MyViewHolder(private val medicinesBinding: AdapterListMedicinesBinding):Re
                 tvHour.text = context.getString(R.string.tv_hour, medicine.alarmHour.toString(), medicine.alarmMinute.toString())
             }
 
+            when(medicine.form){
+                "pill" -> ivMedicineType.setImageResource(R.drawable.ic_pill_coloured)
+                "pomade" -> ivMedicineType.setImageResource(R.drawable.ic_ointment)
+                "injection" -> ivMedicineType.setImageResource(R.drawable.ic_injection)
+                "drop" -> ivMedicineType.setImageResource(R.drawable.ic_dropper)
+                "inhaler" -> ivMedicineType.setImageResource(R.drawable.ic_inhalator)
+                //Download tomorrow "liquid" -> ivMedicineType.setImageResource(R.drawable.ic_liquid)
+            }
+
             tvMedicineName.text = medicine.name
 
 
             when(medicine.form){
                 "pill" -> tvQuantity.text = context.getString(R.string.take_pill, medicine.quantity.toString(), medicine.form)
-                "injection" -> tvQuantity.text = context.getString(R.string.take_injection, medicine.quantity.toString(), medicine.form)
+                "injection" -> tvQuantity.text = context.getString(R.string.take_injection, medicine.quantity.toString())
                 "liquid" -> tvQuantity.text = context.getString(R.string.take_liquid, medicine.quantity.toString())
                 "drop" -> tvQuantity.text = context.getString(R.string.take_drops, medicine.quantity.toString(), medicine.form)
                 "inhaler" -> tvQuantity.text = context.getString(R.string.inhale, medicine.quantity.toString())

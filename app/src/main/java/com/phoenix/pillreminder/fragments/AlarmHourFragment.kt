@@ -3,6 +3,7 @@ package com.phoenix.pillreminder.fragments
 import android.os.Bundle
 import android.text.format.DateFormat.is24HourFormat
 import android.view.LayoutInflater
+import android.view.MenuItem
 import android.view.View
 import android.view.ViewGroup
 import android.widget.TimePicker
@@ -28,14 +29,8 @@ class AlarmHourFragment : Fragment() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        requireActivity().onBackPressedDispatcher.addCallback(this) {
-            if (sharedViewModel.currentAlarmNumber.value == 1) {
-                findNavController().popBackStack()
-            } else {
-                //If the user goes back to the previous alarm, the position is decreased by 1
-                sharedViewModel.position--
-                sharedViewModel.decreaseCurrentAlarmNumber()
-            }
+        requireActivity().onBackPressedDispatcher.addCallback(this, true) {
+            handleBackPressed()
         }
     }
 
@@ -86,6 +81,15 @@ class AlarmHourFragment : Fragment() {
         }
     }
 
+    private fun handleBackPressed() {
+        if (sharedViewModel.currentAlarmNumber.value == 1) {
+            findNavController().popBackStack()
+        } else {
+            //If the user goes back to the previous alarm, the position is decreased by 1
+            sharedViewModel.position--
+            sharedViewModel.decreaseCurrentAlarmNumber()
+        }
+    }
 
     private fun setTvAlarmHourAndPosition(currentAlarmNumber: Int) {
         when (currentAlarmNumber) {

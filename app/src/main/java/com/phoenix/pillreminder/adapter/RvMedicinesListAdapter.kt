@@ -30,9 +30,13 @@ class RvMedicinesListAdapter : RecyclerView.Adapter<MyViewHolder>() {
     fun setList(medicines: List<Medicine>){
         medicineList.clear()
         medicineList.addAll(medicines)
+        sortList()
         notifyDataSetChanged()
     }
 
+    private fun sortList(){
+        medicineList.sortWith(compareBy({it.alarmHour}, {it.alarmMinute}))
+    }
 
 }
 

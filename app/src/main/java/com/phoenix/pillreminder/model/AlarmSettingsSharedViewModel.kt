@@ -42,14 +42,14 @@ class AlarmSettingsSharedViewModel : ViewModel() {
         _numberOfAlarms.value = 1
     }
 
-    fun saveMedicineData(){
-        val name = _medicineName.value.toString()
+    fun createMedicineAlarm(): Medicine {
+        val name = _medicineName.value!!
         val quantity = getMedicineQuantity()
         val form = getMedicineForm()
         val alarmHour = getAlarmHour()
         val alarmMinute = getAlarmMinute()
 
-        val medicine = Medicine(0, name, quantity, form!!, alarmHour, alarmMinute)
+        return Medicine(0, name, quantity, form!!, alarmHour, alarmMinute)
     }
 
     fun updateCurrentAlarmNumber(){
@@ -90,27 +90,27 @@ class AlarmSettingsSharedViewModel : ViewModel() {
     fun saveMedicineForm(position: Int){
         when (position){
             0 -> {
-                _medicineForm.value = "Pill"
+                _medicineForm.value = "pill"
             }
 
             1 -> {
-                _medicineForm.value = "Injection"
+                _medicineForm.value = "injection"
             }
 
             2 -> {
-                _medicineForm.value = "Liquid"
+                _medicineForm.value = "liquid"
             }
 
             3 -> {
-                _medicineForm.value = "Drops"
+                _medicineForm.value = "drop"
             }
 
             4 -> {
-                _medicineForm.value = "Inhaler"
+                _medicineForm.value = "inhaler"
             }
 
             5 -> {
-                _medicineForm.value = "Powder"
+                _medicineForm.value = "powder"
             }
         }
     }
@@ -145,11 +145,11 @@ class AlarmSettingsSharedViewModel : ViewModel() {
     }
 
     fun getAlarmHour(): Int{
-        return alarmHour[1]!!
+        return alarmHour[0]!!
     }
 
     fun getAlarmMinute(): Int{
-        return alarmMinute[1]!!
+        return alarmMinute[0]!!
     }
 
 }

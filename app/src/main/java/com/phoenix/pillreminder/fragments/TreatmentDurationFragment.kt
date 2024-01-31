@@ -9,19 +9,25 @@ import android.widget.ArrayAdapter
 import android.widget.Toast
 import androidx.activity.addCallback
 import androidx.fragment.app.activityViewModels
+import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.findNavController
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.ui.AppBarConfiguration
 import androidx.navigation.ui.setupWithNavController
 import com.google.android.material.datepicker.MaterialDatePicker
 import com.phoenix.pillreminder.R
+import com.phoenix.pillreminder.activity.MainActivity
 import com.phoenix.pillreminder.databinding.FragmentTreatmentDurationBinding
+import com.phoenix.pillreminder.db.MedicineDatabase
 import com.phoenix.pillreminder.model.AlarmSettingsSharedViewModel
+import com.phoenix.pillreminder.model.MedicinesViewModel
+import com.phoenix.pillreminder.model.MedicinesViewModelFactory
 
 
 class TreatmentDurationFragment : Fragment() {
     private lateinit var binding: FragmentTreatmentDurationBinding
     private val sharedViewModel: AlarmSettingsSharedViewModel by activityViewModels()
+    private lateinit var medicinesViewModel: MedicinesViewModel
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -45,6 +51,8 @@ class TreatmentDurationFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         val navController = findNavController()
         val appBarConfiguration = AppBarConfiguration(navController.graph)
+
+        medicinesViewModel = ViewModelProvider(requireActivity(), (requireActivity() as MainActivity).factory)[MedicinesViewModel::class.java]
 
         binding.apply{
             toolbar.setupWithNavController(navController, appBarConfiguration)
@@ -84,6 +92,7 @@ class TreatmentDurationFragment : Fragment() {
             val endDateMillis = selection.second
 
             sharedViewModel.extractDateComponents(startDateMillis, endDateMillis)
+            medicinesViewModel.insertMedicines(sharedViewModel.createMedicineAlarm())
 
             Toast.makeText(requireContext(),
                 "Alarms successfully created!",
@@ -91,5 +100,9 @@ class TreatmentDurationFragment : Fragment() {
             findNavController().navigate(R.id.action_treatmentDurationFragment_to_homeFragment)
         }
         dateRangePicker.show(childFragmentManager, "DATE_RANGE_PICKER")
+    }
+
+    private fun createMedicineAlarm(){
+
     }
 }

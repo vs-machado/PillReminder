@@ -12,20 +12,19 @@ import androidx.navigation.fragment.findNavController
 import androidx.navigation.ui.AppBarConfiguration
 import androidx.navigation.ui.setupWithNavController
 import androidx.recyclerview.widget.LinearLayoutManager
-import androidx.recyclerview.widget.RecyclerView
 import com.phoenix.pillreminder.R
+import com.phoenix.pillreminder.activity.MainActivity
 import com.phoenix.pillreminder.adapter.RvMedicinesListAdapter
 import com.phoenix.pillreminder.databinding.FragmentHomeBinding
-import com.phoenix.pillreminder.db.MedicineDatabase
 import com.phoenix.pillreminder.model.AlarmSettingsSharedViewModel
 import com.phoenix.pillreminder.model.MedicinesViewModel
-import com.phoenix.pillreminder.model.MedicinesViewModelFactory
 
 class HomeFragment : Fragment() {
     private lateinit var binding: FragmentHomeBinding
     private lateinit var adapter: RvMedicinesListAdapter
     private lateinit var medicinesViewModel: MedicinesViewModel
     private val sharedViewModel: AlarmSettingsSharedViewModel by viewModels()
+
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -42,10 +41,10 @@ class HomeFragment : Fragment() {
 
         val navController = findNavController()
         val appBarConfiguration = AppBarConfiguration(navController.graph)
-        val dao = MedicineDatabase.getInstance(requireContext()).medicineDao()
-        val factory = MedicinesViewModelFactory(dao)
 
-        medicinesViewModel = ViewModelProvider(this, factory)[MedicinesViewModel::class.java]
+
+        medicinesViewModel = ViewModelProvider(requireActivity(), (requireActivity() as MainActivity).factory)[MedicinesViewModel::class.java]
+
 
         binding.apply {
             toolbarHome.setupWithNavController(navController, appBarConfiguration)
@@ -60,7 +59,7 @@ class HomeFragment : Fragment() {
 
     private fun initRecyclerView(){
         binding.rvMedicinesList.layoutManager = LinearLayoutManager(activity)
-        adapter = RvMedicinesListAdapter(sharedViewModel)
+        adapter = RvMedicinesListAdapter()
         binding.rvMedicinesList.adapter = adapter
 
         displayMedicinesList()
@@ -69,7 +68,6 @@ class HomeFragment : Fragment() {
     private fun displayMedicinesList(){
         medicinesViewModel.medicines.observe(viewLifecycleOwner) {
             adapter.setList(it)
-            adapter.notifyDataSetChanged()
         }
     }
 }

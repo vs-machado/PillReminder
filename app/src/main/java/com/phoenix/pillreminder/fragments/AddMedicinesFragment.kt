@@ -7,6 +7,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.viewModels
 import androidx.navigation.findNavController
 import androidx.navigation.fragment.findNavController
@@ -36,7 +37,7 @@ class AddMedicinesFragment : Fragment() {
 
         val navController = findNavController()
         val appBarConfiguration = AppBarConfiguration(navController.graph)
-        val sharedViewModel: AlarmSettingsSharedViewModel by viewModels()
+        val sharedViewModel: AlarmSettingsSharedViewModel by activityViewModels()
         val medicineName = binding.tietMedicineName.text
 
         binding.apply {

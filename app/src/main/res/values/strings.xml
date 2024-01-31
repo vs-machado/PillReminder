@@ -19,4 +19,14 @@
     <string name="time">time(s)</string>
     <string name="do_you_want_to_set_a_treatment_duration">Do you want to set a treatment duration?</string>
     <string name="please_insert_the_medicine_alarm_hour">Please, insert the medicine alarm hour:</string>
+
+    <string name="hour_minute_format">0%1$s</string>
+    <string name="tv_hour">%1$s:%2$s</string>
+
+    <string name="take_pill">Take %1$s %2$s(s)</string>
+    <string name="take_injection">Take %1$s %2$s(s)</string>
+    <string name="take_liquid">Take %1$s mL</string>
+    <string name="take_drops">Take %1$s %2$s(s)</string>
+    <string name="inhale">Take %1$s mg</string>
+    <string name="apply_powder">Apply %1$s g</string>
 </resources>

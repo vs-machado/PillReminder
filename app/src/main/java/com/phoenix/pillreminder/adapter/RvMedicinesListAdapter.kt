@@ -66,7 +66,7 @@ class MyViewHolder(private val medicinesBinding: AdapterListMedicinesBinding):Re
                 "liquid" -> tvQuantity.text = context.getString(R.string.take_liquid, medicine.quantity.toString())
                 "drop" -> tvQuantity.text = context.getString(R.string.take_drops, medicine.quantity.toString(), medicine.form)
                 "inhaler" -> tvQuantity.text = context.getString(R.string.inhale, medicine.quantity.toString())
-                "powder" -> tvQuantity.text = context.getString(R.string.apply_powder, medicine.quantity.toString())
+                "pomade" -> tvQuantity.text = context.getString(R.string.apply_pomade, medicine.quantity.toString())
             }
 
            // Needs to set the imageView depending on medicine form

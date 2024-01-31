@@ -110,7 +110,7 @@ class AlarmSettingsSharedViewModel : ViewModel() {
             }
 
             5 -> {
-                _medicineForm.value = "powder"
+                _medicineForm.value = "pomade"
             }
         }
     }

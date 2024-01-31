@@ -39,7 +39,7 @@ class MedicineFormFragment : Fragment() {
 
             // Med forms list. User must select the desired type of med
             val list: MutableList<String> = mutableListOf("Pill", "Injection", "Liquid", "Drops", "Inhaler",
-            "Powder")
+            "Pomade")
             val arrayAdapter = ArrayAdapter(requireContext(), android.R.layout.simple_list_item_1, list)
             lvMedForm.adapter = arrayAdapter
 

@@ -22,6 +22,7 @@
 
     <string name="hour_minute_format">0%1$s</string>
     <string name="tv_hour">%1$s:%2$s</string>
+    <string name="tv_alarm_and_hour">%1$s\n%2$s</string>
 
     <string name="take_pill">Take %1$s %2$s(s)</string>
     <string name="take_injection">Inject %1$s mL(s)</string>

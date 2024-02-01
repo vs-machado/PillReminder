@@ -4,6 +4,7 @@ import android.app.Dialog
 import android.graphics.Color
 import android.graphics.drawable.ColorDrawable
 import android.os.Bundle
+import android.text.format.DateFormat
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -11,7 +12,6 @@ import android.widget.Button
 import android.widget.TextView
 import android.widget.Toast
 import androidx.fragment.app.Fragment
-import androidx.fragment.app.viewModels
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.findNavController
 import androidx.navigation.fragment.findNavController
@@ -23,23 +23,22 @@ import com.phoenix.pillreminder.activity.MainActivity
 import com.phoenix.pillreminder.adapter.RvMedicinesListAdapter
 import com.phoenix.pillreminder.databinding.FragmentHomeBinding
 import com.phoenix.pillreminder.db.Medicine
-import com.phoenix.pillreminder.model.AlarmSettingsSharedViewModel
 import com.phoenix.pillreminder.model.MedicinesViewModel
+import java.text.SimpleDateFormat
+import java.util.Calendar
+import java.util.Locale
 
 class HomeFragment : Fragment() {
     private lateinit var binding: FragmentHomeBinding
     private lateinit var adapter: RvMedicinesListAdapter
     private lateinit var medicinesViewModel: MedicinesViewModel
     private var toast: Toast? = null
-    private val sharedViewModel: AlarmSettingsSharedViewModel by viewModels()
-
-    private lateinit var selectedMedicine: Medicine
 
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? {
+    ): View {
         binding = FragmentHomeBinding.inflate(layoutInflater)
 
         // Inflate the layout for this fragment
@@ -98,12 +97,12 @@ class HomeFragment : Fragment() {
         val btnDelete: Button = dialog.findViewById(R.id.btnDelete)
         val btnCancel: Button = dialog.findViewById(R.id.btnCancel)
 
-        tvMedicine.text = "${medicine.name}\n${showTvAlarm(medicine.alarmHour, medicine.alarmMinute)}"
+        tvMedicine.text = context?.getString(R.string.tv_alarm_and_hour, medicine.name, showTvAlarm(medicine.alarmHour, medicine.alarmMinute))
 
         btnDelete.setOnClickListener {
             medicinesViewModel.deleteMedicines(medicine)
             dialog.dismiss()
-            showToast("Alarm successfully deleted!")
+            showToast()
         }
 
         btnCancel.setOnClickListener {
@@ -113,38 +112,34 @@ class HomeFragment : Fragment() {
         dialog.show()
     }
 
-    private fun showToast( message: String){
+    private fun showToast(){
         //Checks if a Toast is currently being displayed
         if (toast != null){
             toast?.cancel()
         }
-        toast = Toast.makeText(context, message, Toast.LENGTH_LONG)
+        toast = Toast.makeText(context, "Alarm successfully deleted!", Toast.LENGTH_LONG)
         toast?.show()
     }
 
     private fun showTvAlarm(alarmHour: Int, alarmMinute: Int): String{
         val context = requireContext()
-        return when {
-            alarmHour < 10 && alarmMinute < 10 -> {
-                // Format 3:8 (for instance) to 03:08
-                val hour = context.getString(R.string.hour_minute_format, alarmHour.toString())
-                val minute = context.getString(R.string.hour_minute_format, alarmMinute.toString())
-                context.getString(R.string.tv_hour, hour, minute)
+        when {
+            DateFormat.is24HourFormat(context) -> {
+                return formatHour(alarmHour, alarmMinute, "HH:mm")
             }
-            alarmHour < 10 && alarmMinute >= 10 -> {
-                // Format 3:18 (for instance) to 03:18
-                val hour = context.getString(R.string.hour_minute_format, alarmHour.toString())
-                context.getString(R.string.tv_hour, hour, alarmMinute.toString())
-            }
-            alarmHour >= 10 && alarmMinute < 10 -> {
-                // Format 13:8 (for instance) to 13:08
-                val minute = context.getString(R.string.hour_minute_format, alarmMinute.toString())
-                context.getString(R.string.tv_hour, alarmHour.toString(), minute)
-            }
-            else -> {
-                // Format 13:18 (for instance) to 13:18
-                context.getString(R.string.tv_hour, alarmHour.toString(), alarmMinute.toString())
+            !DateFormat.is24HourFormat(context) -> {
+                return formatHour(alarmHour, alarmMinute, "hh:mm a")
             }
         }
+        return ""
+    }
+
+    private fun formatHour(hour: Int, minute: Int, pattern: String): String{
+        val calendar = Calendar.getInstance().apply {
+            set(Calendar.HOUR_OF_DAY, hour)
+            set(Calendar.MINUTE, minute)
+        }
+        val sdf = SimpleDateFormat(pattern, Locale.getDefault())
+        return sdf.format(calendar.time)
     }
 }

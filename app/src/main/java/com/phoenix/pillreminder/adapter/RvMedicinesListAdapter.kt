@@ -2,13 +2,17 @@ package com.phoenix.pillreminder.adapter
 
 import android.text.format.DateFormat
 import android.view.LayoutInflater
-import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.phoenix.pillreminder.R
 import com.phoenix.pillreminder.databinding.AdapterListMedicinesBinding
 import com.phoenix.pillreminder.db.Medicine
+import java.text.SimpleDateFormat
+import java.util.Calendar
+import java.util.Locale
 
+private const val HOUR_24_FORMAT = "HH:mm"
+private const val HOUR_12_FORMAT = "hh:mm a"
 
 class RvMedicinesListAdapter (private val clickListener: (Medicine) -> Unit) : RecyclerView.Adapter<MyViewHolder>() {
 
@@ -43,30 +47,24 @@ class RvMedicinesListAdapter (private val clickListener: (Medicine) -> Unit) : R
 }
 
 class MyViewHolder(private val medicinesBinding: AdapterListMedicinesBinding):RecyclerView.ViewHolder(medicinesBinding.root){
+
+
     fun bind(medicine: Medicine, holder: MyViewHolder, clickListener: (Medicine) -> Unit){
         val context = holder.itemView.context
 
         //Formats the textview to show the hour in format HH:MM
         medicinesBinding.apply{
             when {
-                medicine.alarmHour < 10 && medicine.alarmMinute < 10 -> {
-                    // Format 3:8 (for instance) to 03:08
-                    val hour = context.getString(R.string.hour_minute_format, medicine.alarmHour.toString())
-                    val minute = context.getString(R.string.hour_minute_format, medicine.alarmMinute.toString())
-                    tvHour.text = context.getString(R.string.tv_hour, hour, minute)
+                DateFormat.is24HourFormat(context) -> {
+                    formatHour(medicine.alarmHour, medicine.alarmMinute, HOUR_24_FORMAT).let{
+                        tvHour.text = it
+                    }
                 }
-                medicine.alarmHour < 10 && medicine.alarmMinute >= 10 -> {
-                    // Format 3:18 (for instance) to 03:18
-                    val hour = context.getString(R.string.hour_minute_format, medicine.alarmHour.toString())
-                    tvHour.text = context.getString(R.string.tv_hour, hour, medicine.alarmMinute.toString())
-                }
-                medicine.alarmHour >= 10 && medicine.alarmMinute < 10 -> {
-                    // Format 13:8 (for instance) to 13:08
-                    val minute = context.getString(R.string.hour_minute_format, medicine.alarmMinute.toString())
-                    tvHour.text = context.getString(R.string.tv_hour, medicine.alarmHour.toString(), minute)
-                }
-                medicine.alarmHour >=10 && medicine.alarmMinute >= 10 -> {
-                    tvHour.text = context.getString(R.string.tv_hour, medicine.alarmHour.toString(), medicine.alarmMinute.toString())
+
+                !DateFormat.is24HourFormat(context) -> {
+                    formatHour(medicine.alarmHour, medicine.alarmMinute, HOUR_12_FORMAT).let{
+                        tvHour.text = it
+                    }
                 }
             }
 
@@ -76,7 +74,7 @@ class MyViewHolder(private val medicinesBinding: AdapterListMedicinesBinding):Re
                 "injection" -> ivMedicineType.setImageResource(R.drawable.ic_injection)
                 "drop" -> ivMedicineType.setImageResource(R.drawable.ic_dropper)
                 "inhaler" -> ivMedicineType.setImageResource(R.drawable.ic_inhalator)
-                //Download tomorrow "liquid" -> ivMedicineType.setImageResource(R.drawable.ic_liquid)
+                "liquid" -> ivMedicineType.setImageResource(R.drawable.ic_liquid)
             }
 
             tvMedicineName.text = medicine.name
@@ -97,4 +95,12 @@ class MyViewHolder(private val medicinesBinding: AdapterListMedicinesBinding):Re
         }
     }
 
+     private fun formatHour(hour: Int, minute: Int, pattern: String): String{
+        val calendar = Calendar.getInstance().apply {
+            set(Calendar.HOUR_OF_DAY, hour)
+            set(Calendar.MINUTE, minute)
+        }
+        val sdf = SimpleDateFormat(pattern, Locale.getDefault())
+        return sdf.format(calendar.time)
+    }
 }

@@ -1,13 +1,13 @@
 package com.phoenix.pillreminder.fragments
 
 import android.os.Bundle
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ArrayAdapter
 import android.widget.Toast
 import androidx.activity.addCallback
+import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.findNavController
@@ -18,10 +18,8 @@ import com.google.android.material.datepicker.MaterialDatePicker
 import com.phoenix.pillreminder.R
 import com.phoenix.pillreminder.activity.MainActivity
 import com.phoenix.pillreminder.databinding.FragmentTreatmentDurationBinding
-import com.phoenix.pillreminder.db.MedicineDatabase
 import com.phoenix.pillreminder.model.AlarmSettingsSharedViewModel
 import com.phoenix.pillreminder.model.MedicinesViewModel
-import com.phoenix.pillreminder.model.MedicinesViewModelFactory
 
 
 class TreatmentDurationFragment : Fragment() {
@@ -42,7 +40,7 @@ class TreatmentDurationFragment : Fragment() {
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? {
+    ): View {
         binding = FragmentTreatmentDurationBinding.inflate(layoutInflater)
         // Inflate the layout for this fragment
         return binding.root
@@ -86,7 +84,7 @@ class TreatmentDurationFragment : Fragment() {
             .setTitleText("Select the treatment duration:")
             .build()
 
-        dateRangePicker.addOnPositiveButtonClickListener() { selection ->
+        dateRangePicker.addOnPositiveButtonClickListener { selection ->
             // Handle the selected date range
             val startDateMillis = selection.first
             val endDateMillis = selection.second

@@ -20,7 +20,7 @@ class AlarmSettingsSharedViewModel : ViewModel() {
     private var _medicineForm = MutableLiveData("")
     val medicineForm: LiveData<String> = _medicineForm
 
-    private var medicineQuantity = 0
+    private var medicineQuantity = 0F
     private var medicineFrequency = ""
 
     //Variables to store as many alarms as the user wants
@@ -123,7 +123,7 @@ class AlarmSettingsSharedViewModel : ViewModel() {
         _medicineName.value = userInput
     }
 
-    fun setMedicineQuantity(quantity: Int){
+    fun setMedicineQuantity(quantity: Float){
         medicineQuantity = quantity
     }
 
@@ -135,7 +135,7 @@ class AlarmSettingsSharedViewModel : ViewModel() {
         _numberOfAlarms.value = newNumberOfAlarms
     }
 
-    fun getMedicineQuantity(): Int {
+    fun getMedicineQuantity(): Float {
         return medicineQuantity
     }
 

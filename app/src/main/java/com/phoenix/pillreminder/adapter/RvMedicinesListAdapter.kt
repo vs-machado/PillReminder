@@ -1,5 +1,6 @@
 package com.phoenix.pillreminder.adapter
 
+import android.text.format.DateFormat
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -82,10 +83,10 @@ class MyViewHolder(private val medicinesBinding: AdapterListMedicinesBinding):Re
 
 
             when(medicine.form){
-                "pill" -> tvQuantity.text = context.getString(R.string.take_pill, medicine.quantity.toString(), medicine.form)
+                "pill" -> tvQuantity.text = context.getString(R.string.take_pill, medicine.quantity.toInt().toString(), medicine.form)
                 "injection" -> tvQuantity.text = context.getString(R.string.take_injection, medicine.quantity.toString())
                 "liquid" -> tvQuantity.text = context.getString(R.string.take_liquid, medicine.quantity.toString())
-                "drop" -> tvQuantity.text = context.getString(R.string.take_drops, medicine.quantity.toString(), medicine.form)
+                "drop" -> tvQuantity.text = context.getString(R.string.take_drops, medicine.quantity.toInt().toString(), medicine.form)
                 "inhaler" -> tvQuantity.text = context.getString(R.string.inhale, medicine.quantity.toString())
                 "pomade" -> tvQuantity.text = context.getString(R.string.apply_pomade, medicine.quantity.toString())
             }

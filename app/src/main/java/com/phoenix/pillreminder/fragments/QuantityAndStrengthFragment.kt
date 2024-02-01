@@ -50,16 +50,15 @@ class QuantityAndStrengthFragment : Fragment() {
                 override fun onTextChanged(quantity: CharSequence?, start: Int, before: Int, count: Int) {
                     val inputIsFilled = quantity?.isNotBlank() ?: false
                     val inputIsEmpty = !inputIsFilled
-                    val inputIsNumeric = quantity?.isDigitsOnly() ?: false
 
-                    setFabVisibility(inputIsEmpty, inputIsNumeric, fabNext)
+                    setFabVisibility(inputIsEmpty, fabNext)
                 }
 
                 override fun afterTextChanged(s: Editable?) {}
             })
 
             fabNext.setOnClickListener {
-                sharedViewModel.setMedicineQuantity(etQuantity.text.toString().toInt())
+                sharedViewModel.setMedicineQuantity(etQuantity.text.toString().toFloat())
                 it.findNavController().navigate(R.id.action_quantityAndStrengthFragment_to_frequencyFragment)
             }
 
@@ -67,8 +66,8 @@ class QuantityAndStrengthFragment : Fragment() {
         }
     }
 
-    private fun setFabVisibility(inputIsEmpty: Boolean, inputIsNumeric: Boolean, fabNext: FloatingActionButton){
-        if (inputIsEmpty || !inputIsNumeric){
+    private fun setFabVisibility(inputIsEmpty: Boolean, fabNext: FloatingActionButton){
+        if (inputIsEmpty){
             fabNext.visibility = View.INVISIBLE
             return
         }

@@ -101,8 +101,4 @@ class TreatmentDurationFragment : Fragment() {
         }
         dateRangePicker.show(childFragmentManager, "DATE_RANGE_PICKER")
     }
-
-    private fun createMedicineAlarm(){
-
-    }
 }

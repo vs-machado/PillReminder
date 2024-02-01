@@ -65,7 +65,7 @@
         android:backgroundTint="@color/black"
         android:ems="10"
         android:hint="Quantity"
-        android:inputType="number"
+        android:inputType="numberDecimal"
         android:minHeight="48dp"
         app:layout_constraintEnd_toStartOf="@+id/guideline5"
         app:layout_constraintHorizontal_bias="0.791"

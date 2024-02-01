@@ -29,4 +29,9 @@
     <string name="take_drops">Take %1$s %2$s(s)</string>
     <string name="inhale">Take %1$s mg</string>
     <string name="apply_pomade">Apply %1$s g</string>
+    <string name="delete_alarm">Delete alarm?</string>
+    <string name="medicine_name_n_hh_mm">[Medicine name] \n [HH:MM]</string>
+    <string name="are_you_sure_you_want_to_delete_n_the_following_alarm">Are you sure you want to delete\n the following alarm?</string>
+    <string name="delete">Delete</string>
+    <string name="cancel">Cancel</string>
 </resources>

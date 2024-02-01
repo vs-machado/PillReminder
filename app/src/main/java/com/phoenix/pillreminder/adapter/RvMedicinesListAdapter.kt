@@ -1,6 +1,7 @@
 package com.phoenix.pillreminder.adapter
 
 import android.view.LayoutInflater
+import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.phoenix.pillreminder.R
@@ -8,7 +9,7 @@ import com.phoenix.pillreminder.databinding.AdapterListMedicinesBinding
 import com.phoenix.pillreminder.db.Medicine
 
 
-class RvMedicinesListAdapter : RecyclerView.Adapter<MyViewHolder>() {
+class RvMedicinesListAdapter (private val clickListener: (Medicine) -> Unit) : RecyclerView.Adapter<MyViewHolder>() {
 
     private val medicineList = ArrayList<Medicine>()
 
@@ -24,7 +25,7 @@ class RvMedicinesListAdapter : RecyclerView.Adapter<MyViewHolder>() {
     }
 
     override fun onBindViewHolder(holder: MyViewHolder, position: Int) {
-        holder.bind(medicineList[position], holder)
+        holder.bind(medicineList[position], holder, clickListener)
     }
 
     fun setList(medicines: List<Medicine>){
@@ -41,24 +42,31 @@ class RvMedicinesListAdapter : RecyclerView.Adapter<MyViewHolder>() {
 }
 
 class MyViewHolder(private val medicinesBinding: AdapterListMedicinesBinding):RecyclerView.ViewHolder(medicinesBinding.root){
-    fun bind(medicine: Medicine, holder: MyViewHolder){
+    fun bind(medicine: Medicine, holder: MyViewHolder, clickListener: (Medicine) -> Unit){
         val context = holder.itemView.context
 
         //Formats the textview to show the hour in format HH:MM
         medicinesBinding.apply{
-            if(medicine.alarmHour < 10){
-                val hour = context.getString(R.string.hour_minute_format, medicine.alarmHour.toString())
-                if(medicine.alarmMinute < 10){
+            when {
+                medicine.alarmHour < 10 && medicine.alarmMinute < 10 -> {
+                    // Format 3:8 (for instance) to 03:08
+                    val hour = context.getString(R.string.hour_minute_format, medicine.alarmHour.toString())
                     val minute = context.getString(R.string.hour_minute_format, medicine.alarmMinute.toString())
-                    //Format 3:8 (for instance) as 03:08
                     tvHour.text = context.getString(R.string.tv_hour, hour, minute)
-                    return
                 }
-                //Format 3:08 (for instance) as 03:08
-                tvHour.text = context.getString(R.string.tv_hour, hour, medicine.alarmMinute.toString())
-            }
-            else{
-                tvHour.text = context.getString(R.string.tv_hour, medicine.alarmHour.toString(), medicine.alarmMinute.toString())
+                medicine.alarmHour < 10 && medicine.alarmMinute >= 10 -> {
+                    // Format 3:18 (for instance) to 03:18
+                    val hour = context.getString(R.string.hour_minute_format, medicine.alarmHour.toString())
+                    tvHour.text = context.getString(R.string.tv_hour, hour, medicine.alarmMinute.toString())
+                }
+                medicine.alarmHour >= 10 && medicine.alarmMinute < 10 -> {
+                    // Format 13:8 (for instance) to 13:08
+                    val minute = context.getString(R.string.hour_minute_format, medicine.alarmMinute.toString())
+                    tvHour.text = context.getString(R.string.tv_hour, medicine.alarmHour.toString(), minute)
+                }
+                medicine.alarmHour >=10 && medicine.alarmMinute >= 10 -> {
+                    tvHour.text = context.getString(R.string.tv_hour, medicine.alarmHour.toString(), medicine.alarmMinute.toString())
+                }
             }
 
             when(medicine.form){
@@ -82,7 +90,10 @@ class MyViewHolder(private val medicinesBinding: AdapterListMedicinesBinding):Re
                 "pomade" -> tvQuantity.text = context.getString(R.string.apply_pomade, medicine.quantity.toString())
             }
 
-           // Needs to set the imageView depending on medicine form
+           ivDelete.setOnClickListener {
+                clickListener(medicine)
+           }
         }
     }
+
 }

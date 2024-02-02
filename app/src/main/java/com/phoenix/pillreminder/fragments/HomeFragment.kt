@@ -11,6 +11,7 @@ import android.view.ViewGroup
 import android.widget.Button
 import android.widget.TextView
 import android.widget.Toast
+import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.findNavController
@@ -79,6 +80,7 @@ class HomeFragment : Fragment() {
     private fun displayMedicinesList(){
         medicinesViewModel.medicines.observe(viewLifecycleOwner) {
             adapter.setList(it)
+            setCreditsVisibility()
         }
     }
 
@@ -141,5 +143,13 @@ class HomeFragment : Fragment() {
         }
         val sdf = SimpleDateFormat(pattern, Locale.getDefault())
         return sdf.format(calendar.time)
+    }
+
+    private fun setCreditsVisibility(){
+        if(binding.rvMedicinesList.adapter?.itemCount!! > 0){
+            binding.tvCredits.isVisible = true
+            return
+        }
+        binding.tvCredits.isVisible = false
     }
 }

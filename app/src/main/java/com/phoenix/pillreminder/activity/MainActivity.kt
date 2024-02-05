@@ -1,7 +1,6 @@
 package com.phoenix.pillreminder.activity
 
 import android.os.Bundle
-import android.view.MenuItem
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.app.AppCompatDelegate
 import com.phoenix.pillreminder.R

@@ -1,16 +1,22 @@
 package com.phoenix.pillreminder.fragments
 
+import android.Manifest
 import android.app.Dialog
+import android.content.pm.PackageManager
 import android.graphics.Color
 import android.graphics.drawable.ColorDrawable
 import android.os.Bundle
 import android.text.format.DateFormat
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
 import android.widget.TextView
 import android.widget.Toast
+import androidx.activity.result.contract.ActivityResultContracts
+import androidx.core.app.ActivityCompat
+import androidx.core.content.ContextCompat
 import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
@@ -35,7 +41,6 @@ class HomeFragment : Fragment() {
     private lateinit var medicinesViewModel: MedicinesViewModel
     private var toast: Toast? = null
 
-
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -48,26 +53,22 @@ class HomeFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-
+        medicinesViewModel = ViewModelProvider(requireActivity(), (requireActivity() as MainActivity).factory)[MedicinesViewModel::class.java]
         val navController = findNavController()
         val appBarConfiguration = AppBarConfiguration(navController.graph)
 
+        binding.toolbarHome.setupWithNavController(navController, appBarConfiguration)
 
-        medicinesViewModel = ViewModelProvider(requireActivity(), (requireActivity() as MainActivity).factory)[MedicinesViewModel::class.java]
+        initRecyclerView()
 
-
-        binding.apply {
-            toolbarHome.setupWithNavController(navController, appBarConfiguration)
-
-            initRecyclerView()
-
+        binding.apply{
             fabAddMedicine.setOnClickListener {
                 it.findNavController().navigate(R.id.action_homeFragment_to_addMedicinesFragment)
             }
         }
     }
 
-    private fun initRecyclerView(){
+     private fun initRecyclerView(){
         binding.rvMedicinesList.layoutManager = LinearLayoutManager(activity)
         adapter = RvMedicinesListAdapter{
             selectedMedicine: Medicine -> listItemClicked(selectedMedicine)

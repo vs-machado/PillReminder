@@ -47,7 +47,14 @@ dependencies {
     val coreVersion = "1.12.0"
     val roomVersion = "2.6.1"
     val lifecycleVersion = "2.5.0-alpha02"
+    val activityVersion = "1.8.2"
+    val fragmentVersion = "1.6.2"
 
+    //Activity
+    implementation("androidx.activity:activity-ktx:$activityVersion")
+
+    //Fragment
+    implementation("androidx.fragment:fragment-ktx:$fragmentVersion")
 
     //Navigation dependencies
     implementation("androidx.navigation:navigation-fragment-ktx:$navVersion")

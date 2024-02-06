@@ -19,5 +19,9 @@ data class Medicine(
     @ColumnInfo(name = "medicine_alarm_hour")
     var alarmHour :Int,
     @ColumnInfo(name = "medicine_alarm_minute")
-    var alarmMinute:Int
+    var alarmMinute:Int,
+    @ColumnInfo(name = "medicine_start_date")
+    var startDate: Long,
+    @ColumnInfo(name = "medicine_end_date")
+    var endDate: Long
 )

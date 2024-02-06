@@ -28,12 +28,8 @@ class AlarmSettingsSharedViewModel : ViewModel() {
     private var alarmMinute = Array<Int?>(10){null}
 
     //Variables to set treatment period
-    private var beginDay = 1
-    private var beginMonth = 1
-    private var beginYear = 1
-    private var endDay = 1
-    private var endMonth = 1
-    private var endYear = 1
+    private var treatmentStartDate: Long = 0L
+    private var treatmentEndDate: Long = 0L
 
     var position = 0
 
@@ -48,8 +44,10 @@ class AlarmSettingsSharedViewModel : ViewModel() {
         val form = getMedicineForm()
         val alarmHour = getAlarmHour()
         val alarmMinute = getAlarmMinute()
+        val startDate = treatmentStartDate
+        val endDate = treatmentEndDate
 
-        return Medicine(0, name, quantity, form!!, alarmHour, alarmMinute)
+        return Medicine(0, name, quantity, form!!, alarmHour, alarmMinute, startDate, endDate)
     }
 
     fun resetCurrentAlarmNumber(){
@@ -81,13 +79,7 @@ class AlarmSettingsSharedViewModel : ViewModel() {
         val startDate = Calendar.getInstance(timeZone).apply { timeInMillis = firstDate }
         val endDate = Calendar.getInstance(timeZone).apply { timeInMillis = secondDate }
 
-        beginDay = startDate.get(Calendar.DAY_OF_MONTH)
-        beginMonth = startDate.get(Calendar.MONTH) + 1 // Calendar.MONTH is zero-based
-        beginYear = startDate.get(Calendar.YEAR)
-
-        endDay = endDate.get(Calendar.DAY_OF_MONTH)
-        endMonth = endDate.get(Calendar.MONTH) + 1 // Calendar.MONTH is zero-based
-        endYear = endDate.get(Calendar.YEAR)
+        setTreatmentPeriod(startDate.timeInMillis, endDate.timeInMillis)
     }
 
     fun saveMedicineForm(position: Int){
@@ -119,6 +111,10 @@ class AlarmSettingsSharedViewModel : ViewModel() {
     }
 
     //Getters and setters
+    private fun setTreatmentPeriod(startDate: Long, endDate: Long){
+        treatmentStartDate = startDate
+        treatmentEndDate = endDate
+    }
     fun setMedicineName(userInput: String){
         _medicineName.value = userInput
     }

@@ -1,9 +1,13 @@
 package com.phoenix.pillreminder.model
 
+import android.content.Context
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import com.phoenix.pillreminder.alarmscheduler.AlarmItem
+import com.phoenix.pillreminder.alarmscheduler.AndroidAlarmScheduler
 import com.phoenix.pillreminder.db.Medicine
+import java.time.LocalDateTime
 import java.util.Calendar
 import java.util.TimeZone
 
@@ -31,6 +35,8 @@ class AlarmSettingsSharedViewModel : ViewModel() {
     private var treatmentStartDate: Long = 0L
     private var treatmentEndDate: Long = 0L
 
+    private var alarmItem: AlarmItem? = null
+
     var position = 0
 
     init{
@@ -48,6 +54,17 @@ class AlarmSettingsSharedViewModel : ViewModel() {
         val endDate = treatmentEndDate
 
         return Medicine(0, name, quantity, form!!, alarmHour, alarmMinute, startDate, endDate)
+    }
+
+    //Test
+    fun scheduleAlarm(context: Context){
+        val scheduler = AndroidAlarmScheduler(context)
+
+        alarmItem = AlarmItem(
+            time = LocalDateTime.now().plusSeconds(10),
+            message = "${getMedicineName()}"
+        )
+        alarmItem?.let(scheduler::scheduleAlarm)
     }
 
     fun resetCurrentAlarmNumber(){
@@ -111,9 +128,39 @@ class AlarmSettingsSharedViewModel : ViewModel() {
     }
 
     //Getters and setters
+    private fun getMedicineName(): String? {
+        return _medicineName.value
+    }
     private fun setTreatmentPeriod(startDate: Long, endDate: Long){
-        treatmentStartDate = startDate
-        treatmentEndDate = endDate
+        var endAlarmHour: Int = 0
+        var endAlarmMinute: Int = 0
+
+        //Sets the treatment start date
+        val calendarStart = Calendar.getInstance()
+        calendarStart.timeInMillis = startDate
+        calendarStart.set(Calendar.HOUR_OF_DAY, alarmHour[0]!!)
+        calendarStart.set(Calendar.MINUTE, alarmMinute[0]!!)
+        calendarStart.set(Calendar.SECOND, 0)
+        calendarStart.set(Calendar.MILLISECOND, 0)
+
+        //The for loop will search for the last value of the array. This is necessary to set the end treatment date (last alarm).
+        for(i in alarmHour.indices){
+            if(alarmHour[i] != null && alarmMinute[i] != null){
+                endAlarmHour = alarmHour[i]!!
+                endAlarmMinute = alarmMinute[i]!!
+            }
+        }
+
+        //Sets the treatment end date
+        val calendarEnd = Calendar.getInstance()
+        calendarEnd.timeInMillis = endDate
+        calendarEnd.set(Calendar.HOUR_OF_DAY, endAlarmHour)
+        calendarEnd.set(Calendar.MINUTE, endAlarmMinute)
+        calendarEnd.set(Calendar.SECOND, 0)
+        calendarEnd.set(Calendar.MILLISECOND, 0)
+
+        treatmentStartDate = calendarStart.timeInMillis
+        treatmentEndDate = calendarEnd.timeInMillis
     }
     fun setMedicineName(userInput: String){
         _medicineName.value = userInput

@@ -20,4 +20,9 @@ interface MedicineDao {
 
     @Query("SELECT * FROM medicines_data_table")
     fun getAllMedicines():LiveData<List<Medicine>>
+
+    @Query("SELECT * "+
+            "FROM medicines_data_table " +
+            "WHERE medicine_alarm_hour = :alarmHour")
+    fun getCurrentAlarmData(alarmHour: Long): Medicine?
 }

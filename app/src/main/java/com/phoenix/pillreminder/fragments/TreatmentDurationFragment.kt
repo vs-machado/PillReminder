@@ -27,6 +27,7 @@ class TreatmentDurationFragment : Fragment() {
     private val sharedViewModel: AlarmSettingsSharedViewModel by activityViewModels()
     private lateinit var medicinesViewModel: MedicinesViewModel
 
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
@@ -66,7 +67,10 @@ class TreatmentDurationFragment : Fragment() {
                         showDateRangePicker()
                     }
                     1 -> {
-                        //setAlarms for an indefinite period
+                        //Insert into database
+                        medicinesViewModel.insertMedicines(sharedViewModel.createMedicineAlarm())
+                        //Schedule alarm
+                        sharedViewModel.scheduleAlarm(requireActivity())
                         Toast.makeText(requireContext(),
                             "Alarms successfully created!",
                             Toast.LENGTH_LONG).show()
@@ -98,5 +102,9 @@ class TreatmentDurationFragment : Fragment() {
             findNavController().navigate(R.id.action_treatmentDurationFragment_to_homeFragment)
         }
         dateRangePicker.show(childFragmentManager, "DATE_RANGE_PICKER")
+
+        sharedViewModel.scheduleAlarm(requireActivity())
     }
+
+
 }

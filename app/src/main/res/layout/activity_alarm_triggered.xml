@@ -2,11 +2,10 @@
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/clAlarmTriggered"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/colorPrimary"
-    tools:context=".fragments.AlarmTriggeredFragment">
+    tools:context=".activity.AlarmTriggeredActivity">
 
     <androidx.cardview.widget.CardView
         android:id="@+id/cardView"
@@ -106,6 +105,8 @@
                 android:layout_marginBottom="24dp"
                 android:backgroundTint="#747272"
                 android:text="DISMISS"
+                android:textColor="@color/white"
+                app:cornerRadius="20dp"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent" />
@@ -118,6 +119,8 @@
                 android:layout_marginEnd="16dp"
                 android:backgroundTint="#0C7FE4"
                 android:text="MARK AS TAKEN"
+                android:textColor="@color/white"
+                app:cornerRadius="20dp"
                 app:layout_constraintBottom_toTopOf="@+id/btnDismiss"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent" />
@@ -129,10 +132,11 @@
                 android:backgroundTint="#747272"
                 android:paddingLeft="16dp"
                 android:text="Mute sound"
-                app:cornerRadius="8dp"
+                app:cornerRadius="10dp"
                 app:icon="@drawable/baseline_volume_off_24"
                 app:iconPadding="8dp"
                 app:iconSize="32dp"
+                app:iconTint="@color/white"
                 app:layout_constraintBottom_toTopOf="@+id/btnTaken"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"

@@ -101,9 +101,4 @@
             android:id="@+id/action_quantityAndStrengthFragment_to_frequencyFragment"
             app:destination="@id/frequencyFragment" />
     </fragment>
-    <fragment
-        android:id="@+id/alarmTriggeredFragment"
-        android:name="com.phoenix.pillreminder.fragments.AlarmTriggeredFragment"
-        android:label="fragment_alarm_triggered"
-        tools:layout="@layout/fragment_alarm_triggered" />
 </navigation>

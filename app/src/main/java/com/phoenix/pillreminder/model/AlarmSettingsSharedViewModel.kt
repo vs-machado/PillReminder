@@ -96,11 +96,7 @@ class AlarmSettingsSharedViewModel : ViewModel() {
         val startDate = Calendar.getInstance(timeZone).apply { timeInMillis = firstDate }
         val endDate = Calendar.getInstance(timeZone).apply { timeInMillis = secondDate }
 
-        val startDateOffset = Calendar.getInstance(TimeZone.getDefault()).apply{timeInMillis = firstDate}
-        Log.i("OFFSET", "$startDateOffset")
-        val endDateOffset = Calendar.getInstance(TimeZone.getDefault()).apply{timeInMillis = secondDate}
-
-        setTreatmentPeriod(startDate.timeInMillis, endDate.timeInMillis, startDateOffset.timeInMillis, endDateOffset.timeInMillis)
+        setTreatmentPeriod(startDate.timeInMillis, endDate.timeInMillis)
     }
 
     fun saveMedicineForm(position: Int){
@@ -136,8 +132,7 @@ class AlarmSettingsSharedViewModel : ViewModel() {
         return _medicineName.value
     }
 
-
-    private fun setTreatmentPeriod(startDate: Long, endDate: Long, startDateOffset: Long, endDateOffset: Long){
+    private fun setTreatmentPeriod(startDate: Long, endDate: Long){
         val timeZone = TimeZone.getTimeZone("UTC")
         val timeZoneDefault = TimeZone.getDefault()
 
@@ -174,6 +169,20 @@ class AlarmSettingsSharedViewModel : ViewModel() {
         
         setTreatmentStartDate(calendarStart.timeInMillis)
         setTreatmentEndDate(calendarEnd.timeInMillis)
+    }
+
+    fun getUserDate(): Long{
+        val timeZone = TimeZone.getTimeZone("UTC")
+        val timeZoneDefault = TimeZone.getDefault()
+        val userDate = Calendar.getInstance(timeZone)
+        userDate.set(Calendar.HOUR_OF_DAY, alarmHour[0]!!)
+        userDate.set(Calendar.MINUTE, alarmMinute[0]!!)
+        userDate.set(Calendar.SECOND, 0)
+        userDate.set(Calendar.MILLISECOND, 0)
+        userDate.timeInMillis = (userDate.timeInMillis - timeZoneDefault.getOffset(userDate.timeInMillis))
+        Log.i("ALARM", "${userDate.timeInMillis}")
+
+        return userDate.timeInMillis
     }
 
     private fun setTreatmentStartDate(date: Long){

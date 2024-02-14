@@ -96,13 +96,13 @@
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/tvAlarmMedicineName" />
 
-            <Button
+            <com.google.android.material.button.MaterialButton
                 android:id="@+id/btnDismiss"
-                android:layout_width="0dp"
+                android:layout_width="320dp"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="16dp"
                 android:layout_marginEnd="16dp"
-                android:layout_marginBottom="24dp"
+                android:layout_marginBottom="16dp"
                 android:backgroundTint="#747272"
                 android:text="DISMISS"
                 android:textColor="@color/white"
@@ -111,9 +111,9 @@
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent" />
 
-            <Button
+            <com.google.android.material.button.MaterialButton
                 android:id="@+id/btnTaken"
-                android:layout_width="0dp"
+                android:layout_width="320dp"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="16dp"
                 android:layout_marginEnd="16dp"
@@ -125,11 +125,11 @@
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent" />
 
-            <Button
+            <com.google.android.material.button.MaterialButton
                 android:id="@+id/btnPause"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:backgroundTint="#747272"
+                android:backgroundTint="@color/button_gray"
                 android:paddingLeft="16dp"
                 android:text="Mute sound"
                 app:cornerRadius="10dp"

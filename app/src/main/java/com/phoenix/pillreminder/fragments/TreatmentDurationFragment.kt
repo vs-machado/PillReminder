@@ -8,7 +8,6 @@ import android.content.Context
 import android.content.Intent
 import android.os.Build
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -17,7 +16,6 @@ import android.widget.Toast
 import androidx.activity.addCallback
 import androidx.annotation.RequiresApi
 import androidx.core.app.ActivityCompat
-import androidx.core.content.ContextCompat.getSystemService
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.ViewModelProvider
@@ -27,12 +25,13 @@ import androidx.navigation.ui.AppBarConfiguration
 import androidx.navigation.ui.setupWithNavController
 import com.google.android.material.datepicker.MaterialDatePicker
 import com.phoenix.pillreminder.R
-import com.phoenix.pillreminder.activity.AlarmTriggeredActivity
 import com.phoenix.pillreminder.activity.MainActivity
 import com.phoenix.pillreminder.alarmscheduler.AlarmReceiver
 import com.phoenix.pillreminder.databinding.FragmentTreatmentDurationBinding
 import com.phoenix.pillreminder.model.AlarmSettingsSharedViewModel
 import com.phoenix.pillreminder.model.MedicinesViewModel
+import java.util.Calendar
+import java.util.TimeZone
 
 
 class TreatmentDurationFragment : Fragment(), ActivityCompat.OnRequestPermissionsResultCallback {
@@ -84,8 +83,8 @@ class TreatmentDurationFragment : Fragment(), ActivityCompat.OnRequestPermission
                     1 -> {
                         //Insert into database
                         medicinesViewModel.insertMedicines(sharedViewModel.createMedicineAlarm())
-                        //Schedule alarm
-                        setTimer()
+                        //Schedule alarm (if user does not define a treatment period, it uses the same day to start to trigger alarms)
+                        setTimer(sharedViewModel.getUserDate())
                         notification()
                         Toast.makeText(requireContext(),
                             "Alarms successfully created!",
@@ -114,7 +113,7 @@ class TreatmentDurationFragment : Fragment(), ActivityCompat.OnRequestPermission
             sharedViewModel.extractDateComponents(startDateMillis, endDateMillis)
             medicinesViewModel.insertMedicines(sharedViewModel.createMedicineAlarm())
 
-            setTimer()
+            setTimer(sharedViewModel.getTreatmentStartDate())
             notification()
 
             Toast.makeText(requireContext(),
@@ -126,7 +125,7 @@ class TreatmentDurationFragment : Fragment(), ActivityCompat.OnRequestPermission
     }
 
     @RequiresApi(Build.VERSION_CODES.S)
-    private fun setTimer(){
+    private fun setTimer(startDate: Long){
         val alarmManager = requireActivity().getSystemService(Context.ALARM_SERVICE) as AlarmManager
 
         val intent = Intent(requireActivity(), AlarmReceiver::class.java)
@@ -134,32 +133,22 @@ class TreatmentDurationFragment : Fragment(), ActivityCompat.OnRequestPermission
         pendingIntent = PendingIntent.getBroadcast(requireActivity(), 0, intent, PendingIntent.FLAG_IMMUTABLE)
 
         if(!alarmManager.canScheduleExactAlarms()){
+            //Needs to explain to user why he can't use the app
             return
         }
-        alarmManager.setExactAndAllowWhileIdle(AlarmManager.RTC_WAKEUP, sharedViewModel.getTreatmentStartDate(), pendingIntent)
+        alarmManager.setExactAndAllowWhileIdle(AlarmManager.RTC_WAKEUP, startDate, pendingIntent)
     }
 
     private fun notification(){
-        if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.O){
-            val name = "Time to take your medicine!"
-            val description = "Do not forget to mark the medicine as taken."
-            val importance = NotificationManager.IMPORTANCE_HIGH
+        val name = "Time to take your medicine!"
+        val description = "Do not forget to mark the medicine as taken."
+        val importance = NotificationManager.IMPORTANCE_HIGH
 
-            val channel = NotificationChannel("Notify", name, importance)
-            channel.description = description
+        val channel = NotificationChannel("Notify", name, importance)
+        channel.description = description
 
-            val notificationManager = requireActivity().getSystemService(NotificationManager::class.java)
-            notificationManager.createNotificationChannel(channel)
-
-        }
-    }
-
-    override fun onRequestPermissionsResult(
-        requestCode: Int,
-        permissions: Array<out String>,
-        grantResults: IntArray
-    ) {
-        super.onRequestPermissionsResult(requestCode, permissions, grantResults)
+        val notificationManager = requireActivity().getSystemService(NotificationManager::class.java)
+        notificationManager.createNotificationChannel(channel)
 
     }
 }

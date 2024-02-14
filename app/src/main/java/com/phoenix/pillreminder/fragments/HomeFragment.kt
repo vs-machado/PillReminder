@@ -2,10 +2,14 @@ package com.phoenix.pillreminder.fragments
 
 import android.Manifest
 import android.app.Dialog
+import android.content.Intent
 import android.content.pm.PackageManager
 import android.graphics.Color
 import android.graphics.drawable.ColorDrawable
+import android.media.audiofx.BassBoost
+import android.net.Uri
 import android.os.Bundle
+import android.provider.Settings
 import android.text.format.DateFormat
 import android.util.Log
 import android.view.LayoutInflater
@@ -58,6 +62,15 @@ class HomeFragment : Fragment() {
         val appBarConfiguration = AppBarConfiguration(navController.graph)
 
         binding.toolbarHome.setupWithNavController(navController, appBarConfiguration)
+
+        /*test*/
+        val hasOverlayPermission = Settings.canDrawOverlays(context)
+        if (!hasOverlayPermission) {
+            // Request the permission from the user
+            val intent = Intent(Settings.ACTION_MANAGE_OVERLAY_PERMISSION, Uri.parse("package:" + context?.packageName))
+            context?.startActivity(intent)
+        }
+        /*test*/
 
         initRecyclerView()
 

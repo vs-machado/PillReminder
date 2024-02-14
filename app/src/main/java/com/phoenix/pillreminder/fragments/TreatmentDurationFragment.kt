@@ -1,12 +1,23 @@
 package com.phoenix.pillreminder.fragments
 
+import android.app.AlarmManager
+import android.app.NotificationChannel
+import android.app.NotificationManager
+import android.app.PendingIntent
+import android.content.Context
+import android.content.Intent
+import android.os.Build
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ArrayAdapter
 import android.widget.Toast
 import androidx.activity.addCallback
+import androidx.annotation.RequiresApi
+import androidx.core.app.ActivityCompat
+import androidx.core.content.ContextCompat.getSystemService
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.ViewModelProvider
@@ -16,16 +27,19 @@ import androidx.navigation.ui.AppBarConfiguration
 import androidx.navigation.ui.setupWithNavController
 import com.google.android.material.datepicker.MaterialDatePicker
 import com.phoenix.pillreminder.R
+import com.phoenix.pillreminder.activity.AlarmTriggeredActivity
 import com.phoenix.pillreminder.activity.MainActivity
+import com.phoenix.pillreminder.alarmscheduler.AlarmReceiver
 import com.phoenix.pillreminder.databinding.FragmentTreatmentDurationBinding
 import com.phoenix.pillreminder.model.AlarmSettingsSharedViewModel
 import com.phoenix.pillreminder.model.MedicinesViewModel
 
 
-class TreatmentDurationFragment : Fragment() {
+class TreatmentDurationFragment : Fragment(), ActivityCompat.OnRequestPermissionsResultCallback {
     private lateinit var binding: FragmentTreatmentDurationBinding
     private val sharedViewModel: AlarmSettingsSharedViewModel by activityViewModels()
     private lateinit var medicinesViewModel: MedicinesViewModel
+    private lateinit var pendingIntent: PendingIntent
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -47,6 +61,7 @@ class TreatmentDurationFragment : Fragment() {
         return binding.root
     }
 
+    @RequiresApi(Build.VERSION_CODES.S)
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         val navController = findNavController()
         val appBarConfiguration = AppBarConfiguration(navController.graph)
@@ -70,7 +85,8 @@ class TreatmentDurationFragment : Fragment() {
                         //Insert into database
                         medicinesViewModel.insertMedicines(sharedViewModel.createMedicineAlarm())
                         //Schedule alarm
-                        sharedViewModel.scheduleAlarm(requireActivity())
+                        setTimer()
+                        notification()
                         Toast.makeText(requireContext(),
                             "Alarms successfully created!",
                             Toast.LENGTH_LONG).show()
@@ -83,6 +99,7 @@ class TreatmentDurationFragment : Fragment() {
         }
     }
 
+    @RequiresApi(Build.VERSION_CODES.S)
     private fun showDateRangePicker(){
         val dateRangePicker = MaterialDatePicker.Builder.dateRangePicker()
             .setTitleText("Select the treatment duration:")
@@ -93,8 +110,12 @@ class TreatmentDurationFragment : Fragment() {
             val startDateMillis = selection.first
             val endDateMillis = selection.second
 
+            //Extracts the treatment period and adds the alarm hour to it in milliseconds
             sharedViewModel.extractDateComponents(startDateMillis, endDateMillis)
             medicinesViewModel.insertMedicines(sharedViewModel.createMedicineAlarm())
+
+            setTimer()
+            notification()
 
             Toast.makeText(requireContext(),
                 "Alarms successfully created!",
@@ -102,9 +123,43 @@ class TreatmentDurationFragment : Fragment() {
             findNavController().navigate(R.id.action_treatmentDurationFragment_to_homeFragment)
         }
         dateRangePicker.show(childFragmentManager, "DATE_RANGE_PICKER")
-
-        sharedViewModel.scheduleAlarm(requireActivity())
     }
 
+    @RequiresApi(Build.VERSION_CODES.S)
+    private fun setTimer(){
+        val alarmManager = requireActivity().getSystemService(Context.ALARM_SERVICE) as AlarmManager
 
+        val intent = Intent(requireActivity(), AlarmReceiver::class.java)
+
+        pendingIntent = PendingIntent.getBroadcast(requireActivity(), 0, intent, PendingIntent.FLAG_IMMUTABLE)
+
+        if(!alarmManager.canScheduleExactAlarms()){
+            return
+        }
+        alarmManager.setExactAndAllowWhileIdle(AlarmManager.RTC_WAKEUP, sharedViewModel.getTreatmentStartDate(), pendingIntent)
+    }
+
+    private fun notification(){
+        if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.O){
+            val name = "Time to take your medicine!"
+            val description = "Do not forget to mark the medicine as taken."
+            val importance = NotificationManager.IMPORTANCE_HIGH
+
+            val channel = NotificationChannel("Notify", name, importance)
+            channel.description = description
+
+            val notificationManager = requireActivity().getSystemService(NotificationManager::class.java)
+            notificationManager.createNotificationChannel(channel)
+
+        }
+    }
+
+    override fun onRequestPermissionsResult(
+        requestCode: Int,
+        permissions: Array<out String>,
+        grantResults: IntArray
+    ) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults)
+
+    }
 }

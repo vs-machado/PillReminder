@@ -12,7 +12,7 @@ class AlarmService: Service() {
 
     override fun onStartCommand(intent: Intent?, flags: Int, startId: Int): Int{
         val activityIntent = Intent(this, AlarmTriggeredActivity::class.java)
-        activityIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK)
+        activityIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
         startActivity(activityIntent)
 
         return START_NOT_STICKY

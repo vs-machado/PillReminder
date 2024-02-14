@@ -1,6 +1,7 @@
 package com.phoenix.pillreminder.model
 
 import android.content.Context
+import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
@@ -30,6 +31,7 @@ class AlarmSettingsSharedViewModel : ViewModel() {
     //Variables to store as many alarms as the user wants
     private var alarmHour = Array<Int?>(10){null}
     private var alarmMinute = Array<Int?>(10){null}
+    private var alarmInMillis = Array<Long?>(10){null}
 
     //Variables to set treatment period
     private var treatmentStartDate: Long = 0L
@@ -82,7 +84,6 @@ class AlarmSettingsSharedViewModel : ViewModel() {
         alarmHour[position] = hourOfDay
         alarmMinute[position] = minute
     }
-
     fun clearAlarmArray(){
         for(i in currentAlarmNumber.value!! - 1 until alarmHour.indices.last){
             alarmHour[i] = null
@@ -91,12 +92,15 @@ class AlarmSettingsSharedViewModel : ViewModel() {
     }
 
     fun extractDateComponents(firstDate: Long, secondDate: Long){
-        val timeZone = TimeZone.getTimeZone("GMT")
-
+        val timeZone = TimeZone.getTimeZone("UTC")
         val startDate = Calendar.getInstance(timeZone).apply { timeInMillis = firstDate }
         val endDate = Calendar.getInstance(timeZone).apply { timeInMillis = secondDate }
 
-        setTreatmentPeriod(startDate.timeInMillis, endDate.timeInMillis)
+        val startDateOffset = Calendar.getInstance(TimeZone.getDefault()).apply{timeInMillis = firstDate}
+        Log.i("OFFSET", "$startDateOffset")
+        val endDateOffset = Calendar.getInstance(TimeZone.getDefault()).apply{timeInMillis = secondDate}
+
+        setTreatmentPeriod(startDate.timeInMillis, endDate.timeInMillis, startDateOffset.timeInMillis, endDateOffset.timeInMillis)
     }
 
     fun saveMedicineForm(position: Int){
@@ -131,17 +135,24 @@ class AlarmSettingsSharedViewModel : ViewModel() {
     private fun getMedicineName(): String? {
         return _medicineName.value
     }
-    private fun setTreatmentPeriod(startDate: Long, endDate: Long){
+
+
+    private fun setTreatmentPeriod(startDate: Long, endDate: Long, startDateOffset: Long, endDateOffset: Long){
+        val timeZone = TimeZone.getTimeZone("UTC")
+        val timeZoneDefault = TimeZone.getDefault()
+
         var endAlarmHour: Int = 0
         var endAlarmMinute: Int = 0
 
         //Sets the treatment start date
-        val calendarStart = Calendar.getInstance()
+        val calendarStart = Calendar.getInstance(timeZone)
         calendarStart.timeInMillis = startDate
         calendarStart.set(Calendar.HOUR_OF_DAY, alarmHour[0]!!)
         calendarStart.set(Calendar.MINUTE, alarmMinute[0]!!)
         calendarStart.set(Calendar.SECOND, 0)
         calendarStart.set(Calendar.MILLISECOND, 0)
+        calendarStart.timeInMillis = (calendarStart.timeInMillis - timeZoneDefault.getOffset(startDate))
+
 
         //The for loop will search for the last value of the array. This is necessary to set the end treatment date (last alarm).
         for(i in alarmHour.indices){
@@ -152,15 +163,24 @@ class AlarmSettingsSharedViewModel : ViewModel() {
         }
 
         //Sets the treatment end date
-        val calendarEnd = Calendar.getInstance()
+        val calendarEnd = Calendar.getInstance(timeZone)
         calendarEnd.timeInMillis = endDate
         calendarEnd.set(Calendar.HOUR_OF_DAY, endAlarmHour)
         calendarEnd.set(Calendar.MINUTE, endAlarmMinute)
         calendarEnd.set(Calendar.SECOND, 0)
         calendarEnd.set(Calendar.MILLISECOND, 0)
+        calendarEnd.timeInMillis = (calendarEnd.timeInMillis - timeZoneDefault.getOffset(startDate))
 
-        treatmentStartDate = calendarStart.timeInMillis
-        treatmentEndDate = calendarEnd.timeInMillis
+        
+        setTreatmentStartDate(calendarStart.timeInMillis)
+        setTreatmentEndDate(calendarEnd.timeInMillis)
+    }
+
+    private fun setTreatmentStartDate(date: Long){
+        treatmentStartDate = date
+    }
+    private fun setTreatmentEndDate(date: Long){
+        treatmentEndDate = date
     }
     fun setMedicineName(userInput: String){
         _medicineName.value = userInput
@@ -180,6 +200,10 @@ class AlarmSettingsSharedViewModel : ViewModel() {
 
     fun getMedicineQuantity(): Float {
         return medicineQuantity
+    }
+
+    fun getTreatmentStartDate(): Long{
+        return treatmentStartDate
     }
 
     fun getMedicineForm(): String? {

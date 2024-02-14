@@ -7,6 +7,7 @@ import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.Gravity
 import android.view.WindowManager
+import androidx.appcompat.app.AppCompatDelegate
 import com.phoenix.pillreminder.R
 import com.phoenix.pillreminder.databinding.ActivityAlarmTriggeredBinding
 
@@ -15,6 +16,7 @@ class AlarmTriggeredActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         binding = ActivityAlarmTriggeredBinding.inflate(layoutInflater)
         super.onCreate(savedInstanceState)
+        AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO)
 
         // Check if the SDK version is Oreo or higher
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
@@ -32,12 +34,6 @@ class AlarmTriggeredActivity : AppCompatActivity() {
                         WindowManager.LayoutParams.FLAG_WATCH_OUTSIDE_TOUCH,
                 PixelFormat.TRANSLUCENT
             )
-
-            /*// Set other attributes as needed
-            params.gravity = Gravity.CENTER
-
-            // Set the layout parameters to the window
-            window.attributes = params*/
         }
 
         setContentView(binding.root)

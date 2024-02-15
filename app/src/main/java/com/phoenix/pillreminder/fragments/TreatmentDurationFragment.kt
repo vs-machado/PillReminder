@@ -30,8 +30,7 @@ import com.phoenix.pillreminder.alarmscheduler.AlarmReceiver
 import com.phoenix.pillreminder.databinding.FragmentTreatmentDurationBinding
 import com.phoenix.pillreminder.model.AlarmSettingsSharedViewModel
 import com.phoenix.pillreminder.model.MedicinesViewModel
-import java.util.Calendar
-import java.util.TimeZone
+
 
 
 class TreatmentDurationFragment : Fragment(), ActivityCompat.OnRequestPermissionsResultCallback {
@@ -78,12 +77,12 @@ class TreatmentDurationFragment : Fragment(), ActivityCompat.OnRequestPermission
             lvTreatmentDuration.setOnItemClickListener { _, it, position, _ ->
                 when (position){
                     0 -> {
-                        showDateRangePicker()
+                        showDateRangePickerAndCreateAlarm()
                     }
                     1 -> {
                         //Insert into database
                         medicinesViewModel.insertMedicines(sharedViewModel.createMedicineAlarm())
-                        //Schedule alarm (if user does not define a treatment period, it uses the same day to start to trigger alarms)
+                        //Schedule alarm (if the user does not define a treatment period, it uses the same day to start to trigger alarms)
                         setTimer(sharedViewModel.getUserDate())
                         notification()
                         Toast.makeText(requireContext(),
@@ -99,7 +98,7 @@ class TreatmentDurationFragment : Fragment(), ActivityCompat.OnRequestPermission
     }
 
     @RequiresApi(Build.VERSION_CODES.S)
-    private fun showDateRangePicker(){
+    private fun showDateRangePickerAndCreateAlarm(){
         val dateRangePicker = MaterialDatePicker.Builder.dateRangePicker()
             .setTitleText("Select the treatment duration:")
             .build()

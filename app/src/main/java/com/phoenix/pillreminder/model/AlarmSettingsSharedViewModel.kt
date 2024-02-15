@@ -13,10 +13,10 @@ import java.util.Calendar
 import java.util.TimeZone
 
 class AlarmSettingsSharedViewModel : ViewModel() {
-    private val _medicineName = MutableLiveData("")
+    private var _medicineName = MutableLiveData("")
     val medicineName: LiveData<String> = _medicineName
 
-    private val _numberOfAlarms = MutableLiveData<Int>()
+    private var _numberOfAlarms = MutableLiveData<Int>()
     val numberOfAlarms: LiveData<Int> = _numberOfAlarms
 
     private var _currentAlarmNumber = MutableLiveData<Int>()

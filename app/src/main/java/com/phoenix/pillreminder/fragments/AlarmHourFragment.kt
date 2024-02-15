@@ -83,6 +83,7 @@ class AlarmHourFragment : Fragment() {
 
     private fun handleBackPressed() {
         if (sharedViewModel.currentAlarmNumber.value == 1) {
+            sharedViewModel.setNumberOfAlarms(1)
             findNavController().popBackStack()
         } else {
             //If the user goes back to the previous alarm, the position is decreased by 1

@@ -10,8 +10,8 @@ class MedicinesViewModel(private val dao: MedicineDao): ViewModel() {
 
     val medicines = dao.getAllMedicines()
 
-    fun insertMedicines(medicine: Medicine) = viewModelScope.launch{
-        dao.insertMedicine(medicine)
+    fun insertMedicines(medicine: List<Medicine>) = viewModelScope.launch{
+        dao.insertMedicines(medicine)
     }
 
     fun updateMedicines(medicine: Medicine) = viewModelScope.launch{

@@ -9,8 +9,9 @@ import androidx.room.Update
 
 @Dao
 interface MedicineDao {
+
     @Insert
-    suspend fun insertMedicine(medicine: Medicine)
+    suspend fun insertMedicines(medicines: List<Medicine>)
 
     @Update
     suspend fun updateMedicine(medicine: Medicine)

@@ -4,6 +4,7 @@ import android.app.NotificationChannel
 import android.app.NotificationManager
 import android.os.Build
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -22,17 +23,21 @@ import androidx.navigation.ui.setupWithNavController
 import com.google.android.material.datepicker.MaterialDatePicker
 import com.phoenix.pillreminder.R
 import com.phoenix.pillreminder.activity.MainActivity
+import com.phoenix.pillreminder.alarmscheduler.AlarmItem
+import com.phoenix.pillreminder.alarmscheduler.AlarmScheduler
+import com.phoenix.pillreminder.alarmscheduler.AndroidAlarmScheduler
 import com.phoenix.pillreminder.databinding.FragmentTreatmentDurationBinding
 import com.phoenix.pillreminder.model.AlarmSettingsSharedViewModel
 import com.phoenix.pillreminder.model.MedicinesViewModel
+import java.time.Instant
+import java.time.ZoneId
 
 
 class TreatmentDurationFragment : Fragment(), ActivityCompat.OnRequestPermissionsResultCallback {
     private lateinit var binding: FragmentTreatmentDurationBinding
     private val sharedViewModel: AlarmSettingsSharedViewModel by activityViewModels()
     private lateinit var medicinesViewModel: MedicinesViewModel
-
-
+    var alarmItem : AlarmItem? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -78,9 +83,16 @@ class TreatmentDurationFragment : Fragment(), ActivityCompat.OnRequestPermission
                         1 -> {
                             //Insert into database
                             medicinesViewModel.insertMedicines(createMedicineAlarm())
-                            //Schedule alarm (if the user does not define a treatment period, it uses the same day to start to trigger alarms)
-                            setTimer(getUserDate(), requireActivity())
-                            notification()
+                            /*Schedule alarm (if the user does not define a treatment period, it uses the same day to start to trigger alarms)
+                            The -1 passed to the method indicates that there is no need to sum the alarm hours and minutes in millis
+                            to the calendar instance*/
+                            for(i in 0 until getAlarmHoursList().size){
+                                setTimer(getUserDate(i), requireActivity(), i)
+                            } //Extrair para um método
+
+                            //notification()
+                            clearTreatmentPeriod()
+
                             Toast.makeText(requireContext(),
                                 "Alarms successfully created!",
                                 Toast.LENGTH_LONG).show()
@@ -94,6 +106,8 @@ class TreatmentDurationFragment : Fragment(), ActivityCompat.OnRequestPermission
 
     @RequiresApi(Build.VERSION_CODES.S)
     private fun showDateRangePickerAndCreateAlarm(){
+        val alarmScheduler : AlarmScheduler = AndroidAlarmScheduler(requireActivity())
+
         sharedViewModel.apply{
             val dateRangePicker = MaterialDatePicker.Builder.dateRangePicker()
                 .setTitleText("Select the treatment duration:")
@@ -108,8 +122,25 @@ class TreatmentDurationFragment : Fragment(), ActivityCompat.OnRequestPermission
                 extractDateComponents(startDateMillis, endDateMillis)
                 medicinesViewModel.insertMedicines(createMedicineAlarm())
 
-                setTimer(getTreatmentStartDate(), requireActivity())
-                notification()
+                /*for(i in 0 until getAlarmHoursList().size){
+                    setTimer(getUserDate(i), requireActivity(), i)
+                }*/
+                for(i in 0 until getAlarmHoursList().size){
+                    alarmItem = AlarmItem(
+                        time = Instant.ofEpochMilli(getUserDate(i)).atZone(ZoneId.systemDefault()).toLocalDateTime(),
+                        message = "test",
+                        medicineName = "${getMedicineName()}",
+                        medicineForm = "${getMedicineForm()}",
+                        medicineQuantity = "${getMedicineQuantity()}",
+                        alarmHour = "${getAlarmHour(i)}",
+                        alarmMinute = "${getAlarmMinute(i)}"
+                    )
+                    alarmItem?.let(alarmScheduler::scheduleAlarm)
+                }
+
+
+                //notification()
+                clearTreatmentPeriod()
 
                 Toast.makeText(requireContext(),
                     "Alarms successfully created!",
@@ -118,18 +149,5 @@ class TreatmentDurationFragment : Fragment(), ActivityCompat.OnRequestPermission
             }
             dateRangePicker.show(childFragmentManager, "DATE_RANGE_PICKER")
         }
-    }
-
-    private fun notification(){
-        val name = "Time to take your medicine!"
-        val description = "Do not forget to mark the medicine as taken."
-        val importance = NotificationManager.IMPORTANCE_HIGH
-
-        val channel = NotificationChannel("Notify", name, importance)
-        channel.description = description
-
-        val notificationManager = requireActivity().getSystemService(NotificationManager::class.java)
-        notificationManager.createNotificationChannel(channel)
-
     }
 }

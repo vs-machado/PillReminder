@@ -36,7 +36,7 @@ class AlarmReceiver: BroadcastReceiver(), ActivityCompat.OnRequestPermissionsRes
             Log.e("broadcast", "Can't schedule alarm")
             return
         }
-        notificationManagerCompat.notify(200, builder.build())
+        notificationManagerCompat.notify(1, builder.build())
     }
 
     override fun onRequestPermissionsResult(
@@ -46,4 +46,5 @@ class AlarmReceiver: BroadcastReceiver(), ActivityCompat.OnRequestPermissionsRes
     ) {
         return
     }
+
 }

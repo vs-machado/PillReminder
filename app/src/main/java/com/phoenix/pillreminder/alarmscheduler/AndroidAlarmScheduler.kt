@@ -24,9 +24,11 @@ class AndroidAlarmScheduler(private val context: Context): AlarmScheduler {
             }
         }
 
+        val alarmTime = item.time.atZone(ZoneId.systemDefault()).toEpochSecond() * 1000
+        Log.i("ALARMTIME", "$alarmTime")
         alarmManager.setExactAndAllowWhileIdle(
             AlarmManager.RTC_WAKEUP,
-            item.time.atZone(ZoneId.systemDefault()).toEpochSecond() * 1000,
+            alarmTime,
             PendingIntent.getBroadcast(
                 context,
                 item.hashCode(),
@@ -34,6 +36,7 @@ class AndroidAlarmScheduler(private val context: Context): AlarmScheduler {
                 PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE
             )
         )
+        Log.i("Alarm", "Alarm set at $alarmTime")
     }
 
     override fun cancelAlarm(item: AlarmItem) {

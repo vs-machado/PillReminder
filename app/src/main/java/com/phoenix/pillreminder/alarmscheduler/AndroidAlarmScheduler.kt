@@ -13,7 +13,7 @@ class AndroidAlarmScheduler(private val context: Context): AlarmScheduler {
 
     override fun scheduleAlarm(item: AlarmItem) {
         val intent = Intent(context, AlarmReceiver::class.java).apply {
-            putExtra("EXTRA_MESSAGE", item.message)
+            putExtra("ALARM_ITEM", item)
         }
 
         // Checks if is possible to schedule exact alarms before calling the schedule method
@@ -25,7 +25,7 @@ class AndroidAlarmScheduler(private val context: Context): AlarmScheduler {
         }
 
         val alarmTime = item.time.atZone(ZoneId.systemDefault()).toEpochSecond() * 1000
-        Log.i("ALARMTIME", "$alarmTime")
+
         alarmManager.setExactAndAllowWhileIdle(
             AlarmManager.RTC_WAKEUP,
             alarmTime,

@@ -35,12 +35,18 @@ class AlarmTriggeredActivity : AppCompatActivity() {
                 intent?.getParcelableExtra<AlarmItem>("ALARM_ITEM")
             }
 
-            if (alarmItem != null) {
-                    tvAlarmMedicineName.text = "${alarmItem.medicineName}"
-                    tvAlarmHourMedicine.text = viewModel.checkDateFormat(alarmItem.alarmHour.toInt(), alarmItem.alarmMinute.toInt(), context = applicationContext)
-                    tvAlarmQuantity.text = "Take ${alarmItem.medicineQuantity} ${alarmItem.medicineForm}"
-            }
+            viewModel.apply{
+                alarmItem?.apply{
+                    if (alarmItem != null) {
+                        tvAlarmMedicineName.text = "$medicineName"
+                        tvAlarmHourMedicine.text = checkDateFormat(alarmHour.toInt(), alarmMinute.toInt(), context = applicationContext)
+                        tvAlarmQuantity.text = checkMedicineForm(medicineForm, medicineQuantity, context = applicationContext)
 
+                        ivAlarmMedicineIcon.setImageResource(setMedicineImageView(medicineForm))
+                    }
+
+                }
+            }
             btnPause.setOnClickListener {
                 mediaPlayer?.stop()
                 mediaPlayer?.release()

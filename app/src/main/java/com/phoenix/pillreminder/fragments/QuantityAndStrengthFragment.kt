@@ -1,60 +1,100 @@
 package com.phoenix.pillreminder.fragments
 
 import android.os.Bundle
-import androidx.fragment.app.Fragment
+import android.text.Editable
+import android.text.TextWatcher
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.EditText
+import androidx.core.text.isDigitsOnly
+import androidx.fragment.app.Fragment
+import androidx.fragment.app.activityViewModels
+import androidx.fragment.app.viewModels
+import androidx.navigation.findNavController
+import androidx.navigation.fragment.findNavController
+import androidx.navigation.ui.AppBarConfiguration
+import androidx.navigation.ui.setupWithNavController
+import com.google.android.material.floatingactionbutton.FloatingActionButton
 import com.phoenix.pillreminder.R
+import com.phoenix.pillreminder.databinding.FragmentQuantityAndStrengthBinding
+import com.phoenix.pillreminder.model.AlarmSettingsSharedViewModel
 
-// TODO: Rename parameter arguments, choose names that match
-// the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
-private const val ARG_PARAM1 = "param1"
-private const val ARG_PARAM2 = "param2"
-
-/**
- * A simple [Fragment] subclass.
- * Use the [QuantityAndStrengthFragment.newInstance] factory method to
- * create an instance of this fragment.
- */
 class QuantityAndStrengthFragment : Fragment() {
-    // TODO: Rename and change types of parameters
-    private var param1: String? = null
-    private var param2: String? = null
-
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        arguments?.let {
-            param1 = it.getString(ARG_PARAM1)
-            param2 = it.getString(ARG_PARAM2)
-        }
-    }
-
+    private lateinit var binding: FragmentQuantityAndStrengthBinding
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? {
+    ): View {
+        binding = FragmentQuantityAndStrengthBinding.inflate(layoutInflater)
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_quantity_and_strength, container, false)
+        return binding.root
     }
 
-    companion object {
-        /**
-         * Use this factory method to create a new instance of
-         * this fragment using the provided parameters.
-         *
-         * @param param1 Parameter 1.
-         * @param param2 Parameter 2.
-         * @return A new instance of fragment QuantityAndStrengthFragment.
-         */
-        // TODO: Rename and change types and number of parameters
-        @JvmStatic
-        fun newInstance(param1: String, param2: String) =
-            QuantityAndStrengthFragment().apply {
-                arguments = Bundle().apply {
-                    putString(ARG_PARAM1, param1)
-                    putString(ARG_PARAM2, param2)
-                }
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+        val navController = findNavController()
+        val appBarConfiguration = AppBarConfiguration(navController.graph)
+        val sharedViewModel: AlarmSettingsSharedViewModel by activityViewModels()
+
+        binding.apply{
+            toolbar.setupWithNavController(navController, appBarConfiguration)
+
+            sharedViewModel.medicineForm.observe(viewLifecycleOwner) {
+                setEditTextMedicineForm(it)
             }
+
+            etQuantity.addTextChangedListener(object: TextWatcher{
+                override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {}
+
+                override fun onTextChanged(quantity: CharSequence?, start: Int, before: Int, count: Int) {
+                    val inputIsFilled = quantity?.isNotBlank() ?: false
+                    val inputIsEmpty = !inputIsFilled
+
+                    setFabVisibility(inputIsEmpty, fabNext)
+                }
+
+                override fun afterTextChanged(s: Editable?) {}
+            })
+
+            fabNext.setOnClickListener {
+                sharedViewModel.setMedicineQuantity(etQuantity.text.toString().toFloat())
+                it.findNavController().navigate(R.id.action_quantityAndStrengthFragment_to_frequencyFragment)
+            }
+
+
+        }
     }
+
+    private fun setFabVisibility(inputIsEmpty: Boolean, fabNext: FloatingActionButton){
+        if (inputIsEmpty){
+            fabNext.visibility = View.INVISIBLE
+            return
+        }
+        fabNext.visibility = View.VISIBLE
+    }
+
+    private fun setEditTextMedicineForm(medicineForm: String?){
+        when(medicineForm){
+            "pill" -> {
+                binding.tvForm.text = "pill(s)"
+            }
+            "drop" -> {
+                binding.tvForm.text = "drop(s)"
+            }
+            "pomade" -> {
+                binding.tvForm.text = "gram(s)"
+            }
+            "injection" ->{
+                binding.tvForm.text = "mL(s)"
+            }
+            "liquid" -> {
+                binding.tvForm.text = "mL(s)"
+            }
+            "inhaler" -> {
+                binding.tvForm.text = "mg(s)"
+            }
+        }
+    }
+
 }

@@ -23,7 +23,7 @@
             android:elevation="4dp" />
 
         <com.google.android.material.tabs.TabLayout
-        android:id="@+id/tlAlarmHour2"
+        android:id="@+id/tlAlarmHour"
         android:layout_width="match_parent"
         android:layout_height="110dp"
         android:background="@color/colorPrimary"

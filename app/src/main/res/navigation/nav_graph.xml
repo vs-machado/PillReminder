@@ -37,12 +37,8 @@
         android:label=""
         tools:layout="@layout/fragment_medicine_form" >
         <action
-            android:id="@+id/action_medicineFormFragment_to_frequencyFragment"
-            app:destination="@id/frequencyFragment"
-            app:enterAnim="@anim/slide_in_right"
-            app:exitAnim="@anim/slide_out_left"
-            app:popEnterAnim="@anim/slide_in_left"
-            app:popExitAnim="@anim/slide_out_right" />
+            android:id="@+id/action_medicineFormFragment_to_quantityAndStrengthFragment"
+            app:destination="@id/quantityAndStrengthFragment" />
     </fragment>
     <fragment
         android:id="@+id/frequencyFragment"
@@ -95,5 +91,14 @@
             app:exitAnim="@anim/slide_out_down"
             app:popEnterAnim="@anim/slide_in_up"
             app:popExitAnim="@anim/slide_out_up" />
+    </fragment>
+    <fragment
+        android:id="@+id/quantityAndStrengthFragment"
+        android:name="com.phoenix.pillreminder.fragments.QuantityAndStrengthFragment"
+        android:label=""
+        tools:layout="@layout/fragment_quantity_and_strength" >
+        <action
+            android:id="@+id/action_quantityAndStrengthFragment_to_frequencyFragment"
+            app:destination="@id/frequencyFragment" />
     </fragment>
 </navigation>

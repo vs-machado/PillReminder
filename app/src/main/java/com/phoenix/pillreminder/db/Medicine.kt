@@ -16,6 +16,8 @@ data class Medicine(
     var quantity:Float,
     @ColumnInfo(name = "medicine_form")
     var form:String,
+    @ColumnInfo(name = "medicine_alarm_in_millis")
+    var alarmInMillis: Long,
     @ColumnInfo(name = "medicine_alarm_hour")
     var alarmHour :Int,
     @ColumnInfo(name = "medicine_alarm_minute")

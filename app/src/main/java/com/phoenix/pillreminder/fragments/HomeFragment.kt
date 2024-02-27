@@ -1,12 +1,9 @@
 package com.phoenix.pillreminder.fragments
 
-import android.Manifest
 import android.app.Dialog
 import android.content.Intent
-import android.content.pm.PackageManager
 import android.graphics.Color
 import android.graphics.drawable.ColorDrawable
-import android.media.audiofx.BassBoost
 import android.net.Uri
 import android.os.Bundle
 import android.provider.Settings
@@ -18,11 +15,10 @@ import android.view.ViewGroup
 import android.widget.Button
 import android.widget.TextView
 import android.widget.Toast
-import androidx.activity.result.contract.ActivityResultContracts
-import androidx.core.app.ActivityCompat
-import androidx.core.content.ContextCompat
 import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.activityViewModels
+import androidx.fragment.app.viewModels
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.findNavController
 import androidx.navigation.fragment.findNavController
@@ -32,8 +28,12 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.phoenix.pillreminder.R
 import com.phoenix.pillreminder.activity.MainActivity
 import com.phoenix.pillreminder.adapter.RvMedicinesListAdapter
+import com.phoenix.pillreminder.alarmscheduler.AlarmItemManager
+import com.phoenix.pillreminder.alarmscheduler.AlarmScheduler
+import com.phoenix.pillreminder.alarmscheduler.AndroidAlarmScheduler
 import com.phoenix.pillreminder.databinding.FragmentHomeBinding
 import com.phoenix.pillreminder.db.Medicine
+import com.phoenix.pillreminder.model.AlarmSettingsSharedViewModel
 import com.phoenix.pillreminder.model.MedicinesViewModel
 import java.text.SimpleDateFormat
 import java.util.Calendar
@@ -44,6 +44,7 @@ class HomeFragment : Fragment() {
     private lateinit var adapter: RvMedicinesListAdapter
     private lateinit var medicinesViewModel: MedicinesViewModel
     private var toast: Toast? = null
+    private val sharedViewModel: AlarmSettingsSharedViewModel by activityViewModels()
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -63,14 +64,13 @@ class HomeFragment : Fragment() {
 
         binding.toolbarHome.setupWithNavController(navController, appBarConfiguration)
 
-        /*test*/
+        /*Needs to further explain to user why the app needs permissions*/
         val hasOverlayPermission = Settings.canDrawOverlays(context)
         if (!hasOverlayPermission) {
             // Request the permission from the user
             val intent = Intent(Settings.ACTION_MANAGE_OVERLAY_PERMISSION, Uri.parse("package:" + context?.packageName))
             context?.startActivity(intent)
         }
-        /*test*/
 
         initRecyclerView()
 
@@ -116,9 +116,26 @@ class HomeFragment : Fragment() {
         tvMedicine.text = context?.getString(R.string.tv_alarm_and_hour, medicine.name, showTvAlarm(medicine.alarmHour, medicine.alarmMinute))
 
         btnDelete.setOnClickListener {
-            medicinesViewModel.deleteMedicines(medicine)
-            dialog.dismiss()
-            showToast()
+            val alarmScheduler: AlarmScheduler = AndroidAlarmScheduler(requireContext().applicationContext)
+            val alarmItemList = AlarmItemManager.getAlarmItems(requireContext().applicationContext)
+
+            Log.i("ALARM ITEM LIST", "$alarmItemList")
+            //Log.i("ALARM ITEM LIST SIZE", "${sharedViewModel.getAlarmItemList().size}")
+            val alarmIterator = alarmItemList.listIterator()
+
+            while(alarmIterator.hasNext()){
+                val alarmItem = alarmIterator.next()
+                val alarmItemMillis = sharedViewModel.localDateTimeToMillis(alarmItem.time)
+                Log.i("ALARM ITEM MILLIS", "$alarmItemMillis")
+                if(alarmItemMillis == medicine.alarmInMillis){
+                    alarmItem.let(alarmScheduler::cancelAlarm)
+                    alarmIterator.remove()
+                    AlarmItemManager.saveAlarmItems(requireContext().applicationContext, alarmItemList)
+                    medicinesViewModel.deleteMedicines(medicine)
+                    dialog.dismiss()
+                    showToastAlarmDeleted()
+                }
+            }
         }
 
         btnCancel.setOnClickListener {
@@ -128,7 +145,7 @@ class HomeFragment : Fragment() {
         dialog.show()
     }
 
-    private fun showToast(){
+    private fun showToastAlarmDeleted(){
         //Checks if a Toast is currently being displayed
         if (toast != null){
             toast?.cancel()

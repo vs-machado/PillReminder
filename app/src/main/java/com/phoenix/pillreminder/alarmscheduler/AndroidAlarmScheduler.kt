@@ -48,6 +48,7 @@ class AndroidAlarmScheduler(private val context: Context): AlarmScheduler {
                 PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE
             )
         )
+        Log.i("ALARM", "ALARM CANCELLED.")
     }
 
 }

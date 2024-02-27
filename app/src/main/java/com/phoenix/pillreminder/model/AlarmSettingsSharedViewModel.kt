@@ -12,11 +12,15 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.phoenix.pillreminder.alarmscheduler.AlarmItem
+import com.phoenix.pillreminder.alarmscheduler.AlarmItemManager
 import com.phoenix.pillreminder.alarmscheduler.AlarmReceiver
 import com.phoenix.pillreminder.alarmscheduler.AlarmScheduler
 import com.phoenix.pillreminder.alarmscheduler.AndroidAlarmScheduler
 import com.phoenix.pillreminder.db.Medicine
+import java.time.Instant
 import java.time.LocalDateTime
+import java.time.ZoneId
+import java.time.ZoneOffset
 import java.util.Calendar
 import java.util.TimeZone
 
@@ -33,6 +37,7 @@ class AlarmSettingsSharedViewModel : ViewModel() {
     private var _medicineForm = MutableLiveData("")
     val medicineForm: LiveData<String> = _medicineForm
 
+    private var alarmItemList = mutableListOf<AlarmItem>()
     private var medicineQuantity = 0F
     private var medicineFrequency = ""
 
@@ -59,8 +64,9 @@ class AlarmSettingsSharedViewModel : ViewModel() {
         val name = _medicineName.value!!
         val quantity = getMedicineQuantity()
         val form = getMedicineForm()
-        val alarmHours = getAlarmHoursList().filterNotNull()
-        val alarmMinutes = getAlarmMinutesList().filterNotNull()
+        val alarmInMillis = getAlarmInMillisList()
+        val alarmHours = getAlarmHoursList()
+        val alarmMinutes = getAlarmMinutesList()
         val startDate = treatmentStartDate
         val endDate = treatmentEndDate
 
@@ -68,7 +74,7 @@ class AlarmSettingsSharedViewModel : ViewModel() {
 
         for (i in alarmHours.indices){
             alarms.add(
-                Medicine(0, name, quantity, form!!, alarmHours[i], alarmMinutes[i], startDate, endDate)
+                Medicine(0, name, quantity, form!!, alarmInMillis[i], alarmHours[i], alarmMinutes[i], startDate, endDate)
             )
         }
         return alarms
@@ -189,6 +195,12 @@ class AlarmSettingsSharedViewModel : ViewModel() {
         
         setTreatmentStartDate(calendarStart.timeInMillis)
         setTreatmentEndDate(calendarEnd.timeInMillis)
+
+        for (i in alarmHour.indices){
+            if(alarmHour[i] != null && alarmMinute[i] != null) {
+                alarmInMillis[i] = getUserDate(i)
+            }
+        }
     }
 
     fun getUserDate(i: Int): Long{
@@ -198,9 +210,6 @@ class AlarmSettingsSharedViewModel : ViewModel() {
 
         if(getTreatmentStartDate() != 0L){
             userDate.timeInMillis = getTreatmentStartDate()
-            Log.i("HORARIOHORA", "${alarmHour[i]}")
-            Log.i("HORARIOMINUTO", "${alarmMinute[i]}")
-
             userDate.set(Calendar.HOUR_OF_DAY, alarmHour[i]!!)
             userDate.set(Calendar.MINUTE, alarmMinute[i]!!)
             userDate.set(Calendar.SECOND, 0)
@@ -217,6 +226,13 @@ class AlarmSettingsSharedViewModel : ViewModel() {
         return userDate.timeInMillis
     }
 
+    fun addAlarmItem(context: Context, alarmItem: AlarmItem){
+        alarmItemList.add(alarmItem)
+    }
+
+    fun removeAlarmItem(alarmItem: Int){
+        alarmItemList.removeAt(alarmItem)
+    }
 
     private fun setTreatmentStartDate(date: Long){
         treatmentStartDate = date
@@ -238,6 +254,10 @@ class AlarmSettingsSharedViewModel : ViewModel() {
 
     fun setNumberOfAlarms(newNumberOfAlarms: Int){
         _numberOfAlarms.value = newNumberOfAlarms
+    }
+
+    fun getAlarmItemList(): MutableList<AlarmItem>{
+        return alarmItemList
     }
 
     fun getMedicineQuantity(): Float {
@@ -264,12 +284,31 @@ class AlarmSettingsSharedViewModel : ViewModel() {
         return alarmMinute.toList().filterNotNull()
     }
 
+    fun getAlarmInMillisList(): List<Long>{
+        return alarmInMillis.toList().filterNotNull()
+    }
+
+    fun getAlarmInMillis(i: Int): Long{
+        return alarmInMillis[i]!!
+    }
+
     fun getAlarmHour(arrayPosition: Int): Int{
         return alarmHour[arrayPosition]!!
     }
 
     fun getAlarmMinute(arrayPosition: Int): Int{
         return alarmMinute[arrayPosition]!!
+    }
+
+    fun millisToDateTime(date: Long): LocalDateTime {
+        return Instant.ofEpochMilli(date).atZone(ZoneId.systemDefault()).toLocalDateTime()
+    }
+
+    fun localDateTimeToMillis(localDateTime: LocalDateTime): Long{
+        var millis = localDateTime.toInstant(ZoneOffset.UTC).toEpochMilli()
+        millis -= TimeZone.getDefault().getOffset(millis)
+
+        return millis
     }
 
     fun clearTreatmentPeriod(){

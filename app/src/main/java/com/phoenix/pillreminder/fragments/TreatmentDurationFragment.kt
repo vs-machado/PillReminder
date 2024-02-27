@@ -24,6 +24,7 @@ import com.google.android.material.datepicker.MaterialDatePicker
 import com.phoenix.pillreminder.R
 import com.phoenix.pillreminder.activity.MainActivity
 import com.phoenix.pillreminder.alarmscheduler.AlarmItem
+import com.phoenix.pillreminder.alarmscheduler.AlarmItemManager
 import com.phoenix.pillreminder.alarmscheduler.AlarmScheduler
 import com.phoenix.pillreminder.alarmscheduler.AndroidAlarmScheduler
 import com.phoenix.pillreminder.databinding.FragmentTreatmentDurationBinding
@@ -122,23 +123,23 @@ class TreatmentDurationFragment : Fragment(), ActivityCompat.OnRequestPermission
                 extractDateComponents(startDateMillis, endDateMillis)
                 medicinesViewModel.insertMedicines(createMedicineAlarm())
 
-                /*for(i in 0 until getAlarmHoursList().size){
-                    setTimer(getUserDate(i), requireActivity(), i)
-                }*/
                 for(i in 0 until getAlarmHoursList().size){
                     alarmItem = AlarmItem(
-                        time = Instant.ofEpochMilli(getUserDate(i)).atZone(ZoneId.systemDefault()).toLocalDateTime(),
-                        message = "test",
+                        time = millisToDateTime(getAlarmInMillis(i)),
                         medicineName = "${getMedicineName()}",
                         medicineForm = "${getMedicineForm()}",
                         medicineQuantity = "${getMedicineQuantity()}",
                         alarmHour = "${getAlarmHour(i)}",
                         alarmMinute = "${getAlarmMinute(i)}"
                     )
+                    //Add the alarm item to alarmItemList
+                    sharedViewModel.addAlarmItem(requireContext().applicationContext, alarmItem!!)
+                    Log.i("ALARMLIST", "${sharedViewModel.getAlarmItemList()}")
                     alarmItem?.let(alarmScheduler::scheduleAlarm)
                 }
 
-
+                //Serializes the list in a JSON file
+                AlarmItemManager.saveAlarmItems(requireContext().applicationContext, getAlarmItemList())
                 //notification()
                 clearTreatmentPeriod()
 

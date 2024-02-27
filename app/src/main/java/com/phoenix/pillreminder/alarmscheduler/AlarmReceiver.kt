@@ -25,25 +25,6 @@ class AlarmReceiver: BroadcastReceiver(), ActivityCompat.OnRequestPermissionsRes
             }
         }
         ContextCompat.startForegroundService(context!!, serviceIntent)
-
-        val builder = NotificationCompat.Builder(context!!, "Notify")
-            .setSmallIcon(R.drawable.ic_launcher_background) //Change this by app icon
-            .setContentTitle("Time to take your medicine!")
-            .setContentText("Do not forget to mark the medicine as taken.")
-            .setAutoCancel(true)
-            .setDefaults(NotificationCompat.DEFAULT_ALL)
-            .setPriority(NotificationCompat.PRIORITY_HIGH)
-
-        val notificationManagerCompat = NotificationManagerCompat.from(context)
-        if (ActivityCompat.checkSelfPermission(
-                context,
-                Manifest.permission.POST_NOTIFICATIONS
-            ) != PackageManager.PERMISSION_GRANTED
-        ) {
-            Log.e("broadcast", "Can't schedule alarm")
-            return
-        }
-        notificationManagerCompat.notify(1, builder.build())
     }
 
     override fun onRequestPermissionsResult(

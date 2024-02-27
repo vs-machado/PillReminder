@@ -6,6 +6,7 @@
     <uses-permission android:name="android.permission.SCHEDULE_EXACT_ALARM" />
     <uses-permission android:name="android.permission.USE_EXACT_ALARM" />
     <uses-permission android:name="android.permission.FOREGROUND_SERVICE"/>
+    <uses-permission android:name="android.permission.FOREGROUND_SERVICE_SPECIAL_USE"/>
     <uses-permission android:name="android.permission.SYSTEM_ALERT_WINDOW"/>
 
     <application
@@ -34,7 +35,11 @@
         </activity>
 
         <receiver android:name=".alarmscheduler.AlarmReceiver" />
-        <service android:name = ".alarmscheduler.AlarmService"/>
+        <service android:name = ".alarmscheduler.AlarmService"
+            android:foregroundServiceType="specialUse">
+            <property android:name="android.app.PROPERTY_SPECIAL_USE_FGS_SUBTYPE"
+                android:value="trigger_alarm_activity"/>
+        </service>
     </application>
 
 </manifest>

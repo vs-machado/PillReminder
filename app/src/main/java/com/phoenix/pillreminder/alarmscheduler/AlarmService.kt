@@ -1,14 +1,32 @@
 package com.phoenix.pillreminder.alarmscheduler
 
+import android.Manifest
+import android.Manifest.permission.FOREGROUND_SERVICE
 import android.app.Service
 import android.content.Intent
+import android.content.pm.PackageManager
+import android.content.pm.ServiceInfo
 import android.os.Build
 import android.os.IBinder
+import android.util.Log
+import androidx.core.app.ActivityCompat
+import androidx.core.app.NotificationManagerCompat
 import com.phoenix.pillreminder.activity.AlarmTriggeredActivity
 
 class AlarmService: Service() {
     override fun onBind(intent: Intent?): IBinder?{
         return null
+    }
+
+    override fun onCreate(){
+        super.onCreate()
+        val notification = NotificationUtils.createNotification(applicationContext)
+
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU){
+            startForeground(1, notification, ServiceInfo.FOREGROUND_SERVICE_TYPE_SPECIAL_USE)
+        } else{
+            startForeground(1, notification)
+        }
     }
 
     override fun onStartCommand(intent: Intent?, flags: Int, startId: Int): Int{

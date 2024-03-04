@@ -9,7 +9,7 @@ import com.phoenix.pillreminder.db.MedicineDatabase
 import com.phoenix.pillreminder.model.MedicinesViewModelFactory
 
 class MainActivity : AppCompatActivity() {
-    lateinit var dao: MedicineDao
+    private lateinit var dao: MedicineDao
     lateinit var factory: MedicinesViewModelFactory
 
     override fun onCreate(savedInstanceState: Bundle?) {

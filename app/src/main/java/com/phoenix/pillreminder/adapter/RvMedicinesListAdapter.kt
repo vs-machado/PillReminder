@@ -3,6 +3,7 @@ package com.phoenix.pillreminder.adapter
 import android.text.format.DateFormat
 import android.view.LayoutInflater
 import android.view.ViewGroup
+import androidx.core.view.isVisible
 import androidx.recyclerview.widget.RecyclerView
 import com.phoenix.pillreminder.R
 import com.phoenix.pillreminder.databinding.AdapterListMedicinesBinding
@@ -87,6 +88,15 @@ class MyViewHolder(private val medicinesBinding: AdapterListMedicinesBinding):Re
                 "drop" -> tvQuantity.text = context.getString(R.string.take_drops, medicine.quantity.toInt().toString(), medicine.form)
                 "inhaler" -> tvQuantity.text = context.getString(R.string.inhale, medicine.quantity.toString())
                 "pomade" -> tvQuantity.text = context.getString(R.string.apply_pomade, medicine.quantity.toString())
+            }
+
+            when(medicine.medicineWasTaken /*and compare user hour to alarm hour in millis*/){
+                true -> {
+                    tvMedicineTaken.isVisible = true
+                    tvMedicineTaken.text = "Medicine already taken" }
+                false -> {
+                    tvMedicineTaken.isVisible = true
+                    tvMedicineTaken.text = "Medicine not taken yet."}
             }
 
            ivDelete.setOnClickListener {

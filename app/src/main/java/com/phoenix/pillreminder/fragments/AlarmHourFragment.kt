@@ -3,15 +3,12 @@ package com.phoenix.pillreminder.fragments
 import android.os.Bundle
 import android.text.format.DateFormat.is24HourFormat
 import android.view.LayoutInflater
-import android.view.MenuItem
 import android.view.View
 import android.view.ViewGroup
 import android.widget.TimePicker
 import androidx.activity.addCallback
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
-import androidx.fragment.app.viewModels
-import androidx.lifecycle.Observer
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.ui.AppBarConfiguration
 import androidx.navigation.ui.setupWithNavController
@@ -51,10 +48,10 @@ class AlarmHourFragment : Fragment() {
         val appBarConfiguration = AppBarConfiguration(navController.graph)
         val hourFormat = is24HourFormat(requireContext())
 
-        sharedViewModel.currentAlarmNumber.observe(viewLifecycleOwner, Observer {
+        sharedViewModel.currentAlarmNumber.observe(viewLifecycleOwner) {
             //Sets the text of the tvAlarmHour according to the current alarm number and goes to the next position of the alarm array.
             setTvAlarmHourAndPosition(it)
-        })
+        }
 
 
         binding.apply {

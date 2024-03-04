@@ -16,6 +16,8 @@ data class Medicine(
     var quantity:Float,
     @ColumnInfo(name = "medicine_form")
     var form:String,
+    @ColumnInfo(name = "medicine_alarm_in_millis")
+    var alarmInMillis: Long,
     @ColumnInfo(name = "medicine_alarm_hour")
     var alarmHour :Int,
     @ColumnInfo(name = "medicine_alarm_minute")
@@ -23,5 +25,8 @@ data class Medicine(
     @ColumnInfo(name = "medicine_start_date")
     var startDate: Long,
     @ColumnInfo(name = "medicine_end_date")
-    var endDate: Long
+    var endDate: Long,
+    @ColumnInfo(name = "medicine_was_taken")
+    var medicineWasTaken: Boolean,
 )
+

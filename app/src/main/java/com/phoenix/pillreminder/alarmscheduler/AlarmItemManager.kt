@@ -2,12 +2,8 @@ package com.phoenix.pillreminder.alarmscheduler
 
 import android.content.Context
 import android.util.Log
-import com.google.gson.Gson
-import com.google.gson.GsonBuilder
 import com.google.gson.reflect.TypeToken
-import com.phoenix.pillreminder.adapter.LocalDateTimeAdapter
 import com.phoenix.pillreminder.alarmscheduler.GsonProvider.gson
-import java.time.LocalDateTime
 
 object AlarmItemManager {
     private const val PREF_NAME = "AlarmItemsPref"

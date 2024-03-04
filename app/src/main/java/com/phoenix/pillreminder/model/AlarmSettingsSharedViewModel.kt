@@ -5,17 +5,12 @@ import android.app.PendingIntent
 import android.content.Context
 import android.content.Intent
 import android.os.Build
-import android.util.Log
 import androidx.annotation.RequiresApi
-import androidx.core.content.ContentProviderCompat.requireContext
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.phoenix.pillreminder.alarmscheduler.AlarmItem
-import com.phoenix.pillreminder.alarmscheduler.AlarmItemManager
 import com.phoenix.pillreminder.alarmscheduler.AlarmReceiver
-import com.phoenix.pillreminder.alarmscheduler.AlarmScheduler
-import com.phoenix.pillreminder.alarmscheduler.AndroidAlarmScheduler
 import com.phoenix.pillreminder.db.Medicine
 import java.time.Instant
 import java.time.LocalDateTime
@@ -26,7 +21,6 @@ import java.util.TimeZone
 
 class AlarmSettingsSharedViewModel : ViewModel() {
     private var _medicineName = MutableLiveData("")
-    val medicineName: LiveData<String> = _medicineName
 
     private var _numberOfAlarms = MutableLiveData<Int>()
     val numberOfAlarms: LiveData<Int> = _numberOfAlarms
@@ -69,12 +63,13 @@ class AlarmSettingsSharedViewModel : ViewModel() {
         val alarmMinutes = getAlarmMinutesList()
         val startDate = treatmentStartDate
         val endDate = treatmentEndDate
+        val medicineWasTaken = false
 
         val alarms = mutableListOf<Medicine>()
 
         for (i in alarmHours.indices){
             alarms.add(
-                Medicine(0, name, quantity, form!!, alarmInMillis[i], alarmHours[i], alarmMinutes[i], startDate, endDate)
+                Medicine(0, name, quantity, form!!, alarmInMillis[i], alarmHours[i], alarmMinutes[i], startDate, endDate, medicineWasTaken)
             )
         }
         return alarms
@@ -162,8 +157,8 @@ class AlarmSettingsSharedViewModel : ViewModel() {
         val timeZone = TimeZone.getTimeZone("UTC")
         val timeZoneDefault = TimeZone.getDefault()
 
-        var endAlarmHour: Int = 0
-        var endAlarmMinute: Int = 0
+        var endAlarmHour = 0
+        var endAlarmMinute = 0
 
         //Sets the treatment start date
         val calendarStart = Calendar.getInstance(timeZone)
@@ -226,7 +221,7 @@ class AlarmSettingsSharedViewModel : ViewModel() {
         return userDate.timeInMillis
     }
 
-    fun addAlarmItem(context: Context, alarmItem: AlarmItem){
+    fun addAlarmItem(alarmItem: AlarmItem){
         alarmItemList.add(alarmItem)
     }
 

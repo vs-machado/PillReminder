@@ -1,7 +1,5 @@
 package com.phoenix.pillreminder.fragments
 
-import android.app.NotificationChannel
-import android.app.NotificationManager
 import android.os.Build
 import android.os.Bundle
 import android.util.Log
@@ -16,7 +14,7 @@ import androidx.core.app.ActivityCompat
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.ViewModelProvider
-import androidx.navigation.findNavController
+import androidx.navigation.NavOptions
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.ui.AppBarConfiguration
 import androidx.navigation.ui.setupWithNavController
@@ -30,15 +28,13 @@ import com.phoenix.pillreminder.alarmscheduler.AndroidAlarmScheduler
 import com.phoenix.pillreminder.databinding.FragmentTreatmentDurationBinding
 import com.phoenix.pillreminder.model.AlarmSettingsSharedViewModel
 import com.phoenix.pillreminder.model.MedicinesViewModel
-import java.time.Instant
-import java.time.ZoneId
 
 
 class TreatmentDurationFragment : Fragment(), ActivityCompat.OnRequestPermissionsResultCallback {
     private lateinit var binding: FragmentTreatmentDurationBinding
     private val sharedViewModel: AlarmSettingsSharedViewModel by activityViewModels()
     private lateinit var medicinesViewModel: MedicinesViewModel
-    var alarmItem : AlarmItem? = null
+    private var alarmItem : AlarmItem? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -76,7 +72,7 @@ class TreatmentDurationFragment : Fragment(), ActivityCompat.OnRequestPermission
                 val arrayAdapter = ArrayAdapter(requireContext(), android.R.layout.simple_list_item_1, list)
                 lvTreatmentDuration.adapter = arrayAdapter
 
-                lvTreatmentDuration.setOnItemClickListener { _, it, position, _ ->
+                lvTreatmentDuration.setOnItemClickListener { _, _, position, _ ->
                     when (position){
                         0 -> {
                             showDateRangePickerAndCreateAlarm()
@@ -89,7 +85,7 @@ class TreatmentDurationFragment : Fragment(), ActivityCompat.OnRequestPermission
                             to the calendar instance*/
                             for(i in 0 until getAlarmHoursList().size){
                                 setTimer(getUserDate(i), requireActivity(), i)
-                            } //Extrair para um método
+                            }
 
                             //notification()
                             clearTreatmentPeriod()
@@ -97,7 +93,8 @@ class TreatmentDurationFragment : Fragment(), ActivityCompat.OnRequestPermission
                             Toast.makeText(requireContext(),
                                 "Alarms successfully created!",
                                 Toast.LENGTH_LONG).show()
-                            it.findNavController().navigate(R.id.action_treatmentDurationFragment_to_homeFragment)
+
+                            popBackStack()
                         }
                     }
                 }
@@ -133,7 +130,7 @@ class TreatmentDurationFragment : Fragment(), ActivityCompat.OnRequestPermission
                         alarmMinute = "${getAlarmMinute(i)}"
                     )
                     //Add the alarm item to alarmItemList
-                    sharedViewModel.addAlarmItem(requireContext().applicationContext, alarmItem!!)
+                    sharedViewModel.addAlarmItem(alarmItem!!)
                     Log.i("ALARMLIST", "${sharedViewModel.getAlarmItemList()}")
                     alarmItem?.let(alarmScheduler::scheduleAlarm)
                 }
@@ -146,9 +143,22 @@ class TreatmentDurationFragment : Fragment(), ActivityCompat.OnRequestPermission
                 Toast.makeText(requireContext(),
                     "Alarms successfully created!",
                     Toast.LENGTH_LONG).show()
-                findNavController().navigate(R.id.action_treatmentDurationFragment_to_homeFragment)
+
+                popBackStack()
             }
             dateRangePicker.show(childFragmentManager, "DATE_RANGE_PICKER")
         }
+    }
+
+    private fun popBackStack(){
+        val navOptions = NavOptions.Builder()
+            .setEnterAnim(R.anim.slide_in_down)
+            .setExitAnim(R.anim.slide_out_down)
+            .setPopEnterAnim(R.anim.slide_in_up)
+            .setPopExitAnim(R.anim.slide_out_up)
+            .build()
+
+        findNavController().popBackStack(R.id.homeFragment, false)
+        findNavController().navigate(R.id.homeFragment, null, navOptions)
     }
 }

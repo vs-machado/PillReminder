@@ -2,17 +2,21 @@ package com.phoenix.pillreminder.model
 
 import android.content.Context
 import android.text.format.DateFormat
-import androidx.core.content.ContextCompat.getString
+import android.util.Log
 import androidx.lifecycle.ViewModel
 import com.phoenix.pillreminder.R
+import com.phoenix.pillreminder.alarmscheduler.AlarmItem
 import java.text.SimpleDateFormat
+import java.time.LocalDateTime
+import java.time.ZoneOffset
 import java.util.Calendar
 import java.util.Locale
+import java.util.TimeZone
 
 private const val HOUR_24_FORMAT = "HH:mm"
 private const val HOUR_12_FORMAT = "hh:mm a"
 
-class AlarmTriggeredViewModel(): ViewModel() {
+class AlarmTriggeredViewModel : ViewModel() {
 
      private fun formatHour(hour: Int, minute: Int, pattern: String): String{
         val calendar = Calendar.getInstance().apply {
@@ -56,6 +60,24 @@ class AlarmTriggeredViewModel(): ViewModel() {
             "inhaler" -> R.drawable.ic_inhalator
             "liquid" -> R.drawable.ic_liquid
             else -> R.drawable.pill_black_and_white
+        }
+    }
+
+    private fun localDateTimeToMillis(localDateTime: LocalDateTime): Long{
+        var millis = localDateTime.toInstant(ZoneOffset.UTC).toEpochMilli()
+        millis -= TimeZone.getDefault().getOffset(millis)
+
+        return millis
+    }
+
+    suspend fun getCurrentAlarmData(alarmItem: AlarmItem, medicinesViewModel: MedicinesViewModel) {
+        val alarmInMillis = localDateTimeToMillis(alarmItem.time)
+        val medicine = medicinesViewModel.getCurrentAlarmData(alarmInMillis)
+        Log.i("ALARM", "$medicine")
+        if (medicine != null) {
+            Log.i("ALARM", "Medicine not null")
+            medicine.medicineWasTaken = true
+            medicinesViewModel.updateMedicines(medicine)
         }
     }
 }

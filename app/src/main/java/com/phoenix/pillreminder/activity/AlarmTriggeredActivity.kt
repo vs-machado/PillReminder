@@ -6,17 +6,26 @@ import android.os.Bundle
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.app.AppCompatDelegate
+import androidx.lifecycle.ViewModelProvider
 import com.phoenix.pillreminder.R
 import com.phoenix.pillreminder.alarmscheduler.AlarmItem
 import com.phoenix.pillreminder.databinding.ActivityAlarmTriggeredBinding
-import com.phoenix.pillreminder.model.AlarmSettingsSharedViewModel
+import com.phoenix.pillreminder.db.MedicineDao
+import com.phoenix.pillreminder.db.MedicineDatabase
 import com.phoenix.pillreminder.model.AlarmTriggeredViewModel
+import com.phoenix.pillreminder.model.MedicinesViewModel
+import com.phoenix.pillreminder.model.MedicinesViewModelFactory
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
 
 class AlarmTriggeredActivity : AppCompatActivity() {
     private lateinit var binding: ActivityAlarmTriggeredBinding
     private var mediaPlayer: MediaPlayer? = null
     private val viewModel: AlarmTriggeredViewModel by viewModels()
-
+    private lateinit var medicinesViewModel: MedicinesViewModel
+    private lateinit var factory: MedicinesViewModelFactory
+    private lateinit var dao: MedicineDao
 
     override fun onCreate(savedInstanceState: Bundle?) {
         binding = ActivityAlarmTriggeredBinding.inflate(layoutInflater)
@@ -24,7 +33,12 @@ class AlarmTriggeredActivity : AppCompatActivity() {
         AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO)
         setContentView(binding.root)
 
-        mediaPlayer = MediaPlayer.create(applicationContext, R.raw.alarm_sound)
+        dao = MedicineDatabase.getInstance(this).medicineDao()
+        factory = MedicinesViewModelFactory(dao)
+
+        medicinesViewModel = ViewModelProvider(this, this.factory)[MedicinesViewModel::class.java]
+
+        mediaPlayer = MediaPlayer.create(this, R.raw.alarm_sound)
         mediaPlayer?.isLooping = true
         mediaPlayer?.start()
 
@@ -32,26 +46,32 @@ class AlarmTriggeredActivity : AppCompatActivity() {
             val alarmItem = if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU){
                 intent?.getParcelableExtra("ALARM_ITEM", AlarmItem::class.java)
             }else{
-                intent?.getParcelableExtra<AlarmItem>("ALARM_ITEM")
+                intent?.getParcelableExtra("ALARM_ITEM")
             }
 
             viewModel.apply{
                 alarmItem?.apply{
-                    if (alarmItem != null) {
-                        tvAlarmMedicineName.text = "$medicineName"
-                        tvAlarmHourMedicine.text = checkDateFormat(alarmHour.toInt(), alarmMinute.toInt(), context = applicationContext)
-                        tvAlarmQuantity.text = checkMedicineForm(medicineForm, medicineQuantity, context = applicationContext)
+                    tvAlarmMedicineName.text = medicineName
+                    tvAlarmHourMedicine.text = checkDateFormat(alarmHour.toInt(), alarmMinute.toInt(), context = applicationContext)
+                    tvAlarmQuantity.text = checkMedicineForm(medicineForm, medicineQuantity, context = applicationContext)
 
-                        ivAlarmMedicineIcon.setImageResource(setMedicineImageView(medicineForm))
+                    ivAlarmMedicineIcon.setImageResource(setMedicineImageView(medicineForm))
+
+                    btnPause.setOnClickListener {
+                        mediaPlayer?.stop()
+                        mediaPlayer?.release()
+                        mediaPlayer = null
                     }
 
+                    btnTaken.setOnClickListener{
+                        CoroutineScope(Dispatchers.IO).launch {
+                            viewModel.getCurrentAlarmData(alarmItem, medicinesViewModel)
+                        }
+                        finish()
+                    }
                 }
             }
-            btnPause.setOnClickListener {
-                mediaPlayer?.stop()
-                mediaPlayer?.release()
-                mediaPlayer = null
-            }
+
         }
 
 

@@ -25,5 +25,8 @@ data class Medicine(
     @ColumnInfo(name = "medicine_start_date")
     var startDate: Long,
     @ColumnInfo(name = "medicine_end_date")
-    var endDate: Long
+    var endDate: Long,
+    @ColumnInfo(name = "medicine_was_taken")
+    var medicineWasTaken: Boolean,
 )
+

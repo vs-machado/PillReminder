@@ -24,7 +24,7 @@ class AddMedicinesFragment : Fragment() {
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? {
+    ): View {
         binding = FragmentAddMedicinesBinding.inflate(layoutInflater)
 
         // Inflate the layout for this fragment

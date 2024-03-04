@@ -1,6 +1,5 @@
 package com.phoenix.pillreminder.alarmscheduler
 
-import android.os.Parcel
 import android.os.Parcelable
 import kotlinx.parcelize.Parcelize
 import java.time.LocalDateTime

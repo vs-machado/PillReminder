@@ -15,11 +15,12 @@ import android.view.ViewGroup
 import android.widget.Button
 import android.widget.TextView
 import android.widget.Toast
+import androidx.activity.addCallback
 import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
-import androidx.fragment.app.viewModels
 import androidx.lifecycle.ViewModelProvider
+import androidx.lifecycle.lifecycleScope
 import androidx.navigation.findNavController
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.ui.AppBarConfiguration
@@ -35,6 +36,8 @@ import com.phoenix.pillreminder.databinding.FragmentHomeBinding
 import com.phoenix.pillreminder.db.Medicine
 import com.phoenix.pillreminder.model.AlarmSettingsSharedViewModel
 import com.phoenix.pillreminder.model.MedicinesViewModel
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
 import java.text.SimpleDateFormat
 import java.util.Calendar
 import java.util.Locale
@@ -45,6 +48,17 @@ class HomeFragment : Fragment() {
     private lateinit var medicinesViewModel: MedicinesViewModel
     private var toast: Toast? = null
     private val sharedViewModel: AlarmSettingsSharedViewModel by activityViewModels()
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        val navController = findNavController()
+
+        requireActivity().onBackPressedDispatcher.addCallback(this){
+            if(navController.currentDestination?.id == R.id.homeFragment){
+                requireActivity().finish()
+            }
+        }
+    }
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -58,8 +72,10 @@ class HomeFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        medicinesViewModel = ViewModelProvider(requireActivity(), (requireActivity() as MainActivity).factory)[MedicinesViewModel::class.java]
         val navController = findNavController()
+
+        medicinesViewModel = ViewModelProvider(requireActivity(), (requireActivity() as MainActivity).factory)[MedicinesViewModel::class.java]
+
         val appBarConfiguration = AppBarConfiguration(navController.graph)
 
         binding.toolbarHome.setupWithNavController(navController, appBarConfiguration)
@@ -74,10 +90,8 @@ class HomeFragment : Fragment() {
 
         initRecyclerView()
 
-        binding.apply{
-            fabAddMedicine.setOnClickListener {
-                it.findNavController().navigate(R.id.action_homeFragment_to_addMedicinesFragment)
-            }
+        binding.fabAddMedicine.setOnClickListener {
+            it.findNavController().navigate(R.id.action_homeFragment_to_addMedicinesFragment)
         }
     }
 
@@ -182,5 +196,12 @@ class HomeFragment : Fragment() {
             return
         }
         binding.tvCredits.isVisible = false
+    }
+
+    override fun onResume() {
+        super.onResume()
+        lifecycleScope.launch(Dispatchers.Main){
+            adapter.setList(medicinesViewModel.getMedicines())
+        }
     }
 }

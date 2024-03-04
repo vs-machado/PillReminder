@@ -44,31 +44,14 @@
                 app:srcCompat="@drawable/pill_black_and_white" />
 
             <TextView
-                android:id="@+id/tvStrength"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="16dp"
-                android:layout_marginTop="26dp"
-                android:layout_marginBottom="8dp"
-                android:text="@string/strength"
-                android:textSize="16sp"
-                app:layout_constraintBottom_toTopOf="@+id/tvQuantity"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintHorizontal_bias="0.0"
-                app:layout_constraintStart_toEndOf="@+id/ivMedicineType"
-                app:layout_constraintTop_toTopOf="parent"
-                app:layout_constraintVertical_chainStyle="packed" />
-
-            <TextView
                 android:id="@+id/tvMedicineName"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="16dp"
-                android:layout_marginBottom="13dp"
+                android:layout_marginTop="16dp"
                 android:text="@string/name_of_the_medicine"
                 android:textSize="20sp"
                 android:textStyle="bold"
-                app:layout_constraintBottom_toTopOf="@+id/tvQuantity"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintHorizontal_bias="0.0"
                 app:layout_constraintStart_toEndOf="@+id/ivMedicineType"
@@ -81,11 +64,8 @@
                 android:layout_marginStart="16dp"
                 android:text="@string/take_2_pill_s"
                 android:textSize="16sp"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintHorizontal_bias="0.0"
                 app:layout_constraintStart_toEndOf="@+id/ivMedicineType"
-                app:layout_constraintTop_toBottomOf="@+id/tvStrength" />
+                app:layout_constraintTop_toBottomOf="@+id/tvMedicineName" />
 
             <ImageView
                 android:id="@+id/ivDelete"
@@ -96,6 +76,16 @@
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
                 app:srcCompat="@drawable/baseline_delete_24" />
+
+            <TextView
+                android:id="@+id/tvMedicineTaken"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="16dp"
+                android:text="Medicine not taken"
+                android:visibility="invisible"
+                app:layout_constraintStart_toEndOf="@+id/ivMedicineType"
+                app:layout_constraintTop_toBottomOf="@+id/tvQuantity" />
 
         </androidx.constraintlayout.widget.ConstraintLayout>
 

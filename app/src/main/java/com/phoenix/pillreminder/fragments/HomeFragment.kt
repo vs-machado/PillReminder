@@ -1,10 +1,14 @@
 package com.phoenix.pillreminder.fragments
 
+import android.Manifest
+import android.app.Activity
 import android.app.Dialog
 import android.content.Intent
+import android.content.pm.PackageManager
 import android.graphics.Color
 import android.graphics.drawable.ColorDrawable
 import android.net.Uri
+import android.os.Build
 import android.os.Bundle
 import android.provider.Settings
 import android.text.format.DateFormat
@@ -16,6 +20,8 @@ import android.widget.Button
 import android.widget.TextView
 import android.widget.Toast
 import androidx.activity.addCallback
+import androidx.activity.result.contract.ActivityResultContracts
+import androidx.core.content.ContextCompat
 import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
@@ -42,17 +48,20 @@ import java.text.SimpleDateFormat
 import java.util.Calendar
 import java.util.Locale
 
+
 class HomeFragment : Fragment() {
     private lateinit var binding: FragmentHomeBinding
     private lateinit var adapter: RvMedicinesListAdapter
     private lateinit var medicinesViewModel: MedicinesViewModel
     private var toast: Toast? = null
     private val sharedViewModel: AlarmSettingsSharedViewModel by activityViewModels()
+    private var wasOverlayPermissionDialogShown: Boolean = false
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         val navController = findNavController()
 
+        //Prevents the app from going back to an alarm registration
         requireActivity().onBackPressedDispatcher.addCallback(this){
             if(navController.currentDestination?.id == R.id.homeFragment){
                 requireActivity().finish()
@@ -72,33 +81,41 @@ class HomeFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        val navController = findNavController()
 
         medicinesViewModel = ViewModelProvider(requireActivity(), (requireActivity() as MainActivity).factory)[MedicinesViewModel::class.java]
 
+        //Toolbar setup
+        val navController = findNavController()
         val appBarConfiguration = AppBarConfiguration(navController.graph)
-
         binding.toolbarHome.setupWithNavController(navController, appBarConfiguration)
-
-        /*Needs to further explain to user why the app needs permissions*/
-        val hasOverlayPermission = Settings.canDrawOverlays(context)
-        if (!hasOverlayPermission) {
-            // Request the permission from the user
-            val intent = Intent(Settings.ACTION_MANAGE_OVERLAY_PERMISSION, Uri.parse("package:" + context?.packageName))
-            context?.startActivity(intent)
-        }
 
         initRecyclerView()
 
+        if(ContextCompat.checkSelfPermission(requireContext(), Manifest.permission.POST_NOTIFICATIONS) == PackageManager.PERMISSION_GRANTED){
+            binding.rvMedicinesList.visibility = View.VISIBLE
+            binding.fabAddMedicine.visibility = View.VISIBLE
+            binding.tvRequestPermissions.visibility = View.INVISIBLE
+            binding.btnRequestPermissions.visibility = View.INVISIBLE
+        }
+
+        if(!Settings.canDrawOverlays(requireContext()) && !wasOverlayPermissionDialogShown){
+            showOverlayPermissionDialog()
+            wasOverlayPermissionDialogShown = true
+        }
+
         binding.fabAddMedicine.setOnClickListener {
             it.findNavController().navigate(R.id.action_homeFragment_to_addMedicinesFragment)
+        }
+
+        binding.btnRequestPermissions.setOnClickListener {
+            requestPermissionLauncher.launch(Manifest.permission.POST_NOTIFICATIONS)
         }
     }
 
      private fun initRecyclerView(){
         binding.rvMedicinesList.layoutManager = LinearLayoutManager(activity)
         adapter = RvMedicinesListAdapter{
-            selectedMedicine: Medicine -> listItemClicked(selectedMedicine)
+            selectedMedicine: Medicine -> showDeleteAlarmDialog(selectedMedicine)
         }
         binding.rvMedicinesList.adapter = adapter
 
@@ -112,10 +129,25 @@ class HomeFragment : Fragment() {
         }
     }
 
-    private fun listItemClicked(medicine: Medicine){
-        showDeleteAlarmDialog(medicine)
-    }
+    private fun showOverlayPermissionDialog(){
+        val dialog = Dialog(this.requireContext())
+        dialog.requestWindowFeature(android.view.Window.FEATURE_NO_TITLE)
+        dialog.setCancelable(false)
+        dialog.setContentView(R.layout.layout_overlay_permission_dialog)
+        dialog.window?.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
 
+        val requestPermission: Button = dialog.findViewById(R.id.btnGivePermissions)
+        val dismissRequest: Button = dialog.findViewById(R.id.btnDismissRequest)
+
+        requestPermission.setOnClickListener {
+            requestOverlayPermission()
+        }
+        dismissRequest.setOnClickListener {
+            dialog.dismiss()
+        }
+
+        dialog.show()
+    }
     private fun showDeleteAlarmDialog(medicine: Medicine){
         val dialog = Dialog(this.requireContext())
         dialog.requestWindowFeature(android.view.Window.FEATURE_NO_TITLE)
@@ -133,14 +165,13 @@ class HomeFragment : Fragment() {
             val alarmScheduler: AlarmScheduler = AndroidAlarmScheduler(requireContext().applicationContext)
             val alarmItemList = AlarmItemManager.getAlarmItems(requireContext().applicationContext)
 
-            Log.i("ALARM ITEM LIST", "$alarmItemList")
-            //Log.i("ALARM ITEM LIST SIZE", "${sharedViewModel.getAlarmItemList().size}")
             val alarmIterator = alarmItemList.listIterator()
 
             while(alarmIterator.hasNext()){
                 val alarmItem = alarmIterator.next()
                 val alarmItemMillis = sharedViewModel.localDateTimeToMillis(alarmItem.time)
-                Log.i("ALARM ITEM MILLIS", "$alarmItemMillis")
+
+                //Cancel the alarm broadcast, remove the alarm from the list and from database and then serialize the list again
                 if(alarmItemMillis == medicine.alarmInMillis){
                     alarmItem.let(alarmScheduler::cancelAlarm)
                     alarmIterator.remove()
@@ -198,10 +229,34 @@ class HomeFragment : Fragment() {
         binding.tvCredits.isVisible = false
     }
 
+    private fun requestOverlayPermission(){
+        if(!Settings.canDrawOverlays(requireActivity().applicationContext)){
+            val overlayIntent = Intent(Settings.ACTION_MANAGE_OVERLAY_PERMISSION).apply{
+                addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
+                data = Uri.parse("package:${requireContext().packageName}")
+            }
+            requestOverlayPermissionLauncher.launch(overlayIntent)
+        }
+    }
+
     override fun onResume() {
         super.onResume()
         lifecycleScope.launch(Dispatchers.Main){
             adapter.setList(medicinesViewModel.getMedicines())
         }
     }
+
+    private val requestPermissionLauncher = registerForActivityResult(ActivityResultContracts.RequestPermission()){ permissionGranted: Boolean ->
+        if(permissionGranted){
+            binding.tvRequestPermissions.visibility = View.INVISIBLE
+            binding.btnRequestPermissions.visibility = View.INVISIBLE
+            binding.fabAddMedicine.visibility = View.VISIBLE
+            binding.rvMedicinesList.visibility = View.VISIBLE
+        } else {
+            binding.tvRequestPermissions.visibility = View.VISIBLE
+            binding.btnRequestPermissions.visibility = View.VISIBLE
+        }
+    }
+
+    private val requestOverlayPermissionLauncher = registerForActivityResult(ActivityResultContracts.StartActivityForResult()){}
 }

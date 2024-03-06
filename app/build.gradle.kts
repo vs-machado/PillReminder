@@ -12,7 +12,7 @@ android {
 
     defaultConfig {
         applicationId = "com.phoenix.pillreminder"
-        minSdk = 26
+        minSdk = 33
         //noinspection EditedTargetSdkVersion
         targetSdk = 34
         versionCode = 1

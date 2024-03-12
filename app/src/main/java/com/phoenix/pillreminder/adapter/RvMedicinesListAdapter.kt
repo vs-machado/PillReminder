@@ -36,8 +36,8 @@ class RvMedicinesListAdapter (private val clickListener: (Medicine) -> Unit) : R
         holder.bind(medicineList[position], holder, clickListener)
     }
 
-    fun setList(medicines: List<Medicine>/*, selectedDate: Date*/){
-        /*val calendar = Calendar.getInstance()
+    fun setList(medicines: List<Medicine>, selectedDate: Date){
+        val calendar = Calendar.getInstance()
         calendar.time = selectedDate
 
         val filteredList = medicines.filter { medicine ->
@@ -48,10 +48,10 @@ class RvMedicinesListAdapter (private val clickListener: (Medicine) -> Unit) : R
             medicineCalendar.get(Calendar.YEAR) == calendar.get(Calendar.YEAR) &&
                     medicineCalendar.get(Calendar.MONTH) == calendar.get(Calendar.MONTH) &&
                     medicineCalendar.get(Calendar.DAY_OF_MONTH) == calendar.get(Calendar.DAY_OF_MONTH)
-        }*/
+        }
 
         medicineList.clear()
-        medicineList.addAll(medicines)
+        medicineList.addAll(filteredList)
         sortList()
         notifyDataSetChanged()
     }

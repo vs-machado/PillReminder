@@ -22,6 +22,7 @@ import androidx.core.content.ContextCompat
 import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
+import androidx.fragment.app.viewModels
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.findNavController
@@ -38,11 +39,15 @@ import com.phoenix.pillreminder.alarmscheduler.AndroidAlarmScheduler
 import com.phoenix.pillreminder.databinding.FragmentHomeBinding
 import com.phoenix.pillreminder.db.Medicine
 import com.phoenix.pillreminder.model.AlarmSettingsSharedViewModel
+import com.phoenix.pillreminder.model.HomeFragmentViewModel
 import com.phoenix.pillreminder.model.MedicinesViewModel
+import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 import java.text.SimpleDateFormat
 import java.util.Calendar
+import java.util.Date
 import java.util.Locale
 
 
@@ -53,6 +58,7 @@ class HomeFragment : Fragment() {
     private var toast: Toast? = null
     private val sharedViewModel: AlarmSettingsSharedViewModel by activityViewModels()
     private var wasOverlayPermissionDialogShown: Boolean = false
+    private val hfViewModel: HomeFragmentViewModel by viewModels()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -86,10 +92,16 @@ class HomeFragment : Fragment() {
         val appBarConfiguration = AppBarConfiguration(navController.graph)
         binding.toolbarHome.setupWithNavController(navController, appBarConfiguration)
 
-        initRecyclerView()
+        initRecyclerView(hfViewModel.getDate())
 
         binding.datePicker.onSelectionChanged = { date ->
-
+            CoroutineScope(Dispatchers.Main).launch{
+                hfViewModel.setDate(date)
+                val medicines = withContext(Dispatchers.IO){
+                    medicinesViewModel.getMedicines()
+                }
+                adapter.setList(medicines, hfViewModel.getDate())
+            }
         }
 
         if(ContextCompat.checkSelfPermission(requireContext(), Manifest.permission.POST_NOTIFICATIONS) == PackageManager.PERMISSION_GRANTED){
@@ -108,19 +120,19 @@ class HomeFragment : Fragment() {
 
     }
 
-     private fun initRecyclerView(){
+     private fun initRecyclerView(dateToFilter: Date){
         binding.rvMedicinesList.layoutManager = LinearLayoutManager(activity)
         adapter = RvMedicinesListAdapter{
             selectedMedicine: Medicine -> showDeleteAlarmDialog(selectedMedicine)
         }
         binding.rvMedicinesList.adapter = adapter
 
-        displayMedicinesList()
+        displayMedicinesList(dateToFilter)
     }
 
-    private fun displayMedicinesList(){
+    private fun displayMedicinesList(dateToFilter: Date){
         medicinesViewModel.medicines.observe(viewLifecycleOwner) {
-            adapter.setList(it)
+            adapter.setList(it, dateToFilter)
             setCreditsVisibility()
         }
     }
@@ -238,7 +250,7 @@ class HomeFragment : Fragment() {
     override fun onResume() {
         super.onResume()
         lifecycleScope.launch(Dispatchers.Main){
-            adapter.setList(medicinesViewModel.getMedicines())
+            adapter.setList(medicinesViewModel.getMedicines(), hfViewModel.getDate())
         }
     }
 

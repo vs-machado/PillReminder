@@ -8,8 +8,10 @@ import androidx.recyclerview.widget.RecyclerView
 import com.phoenix.pillreminder.R
 import com.phoenix.pillreminder.databinding.AdapterListMedicinesBinding
 import com.phoenix.pillreminder.db.Medicine
+import kotlinx.coroutines.selects.select
 import java.text.SimpleDateFormat
 import java.util.Calendar
+import java.util.Date
 import java.util.Locale
 
 private const val HOUR_24_FORMAT = "HH:mm"
@@ -34,7 +36,20 @@ class RvMedicinesListAdapter (private val clickListener: (Medicine) -> Unit) : R
         holder.bind(medicineList[position], holder, clickListener)
     }
 
-    fun setList(medicines: List<Medicine>){
+    fun setList(medicines: List<Medicine>/*, selectedDate: Date*/){
+        /*val calendar = Calendar.getInstance()
+        calendar.time = selectedDate
+
+        val filteredList = medicines.filter { medicine ->
+            val medicineCalendar = Calendar.getInstance().apply {
+                timeInMillis = medicine.alarmInMillis
+            }
+
+            medicineCalendar.get(Calendar.YEAR) == calendar.get(Calendar.YEAR) &&
+                    medicineCalendar.get(Calendar.MONTH) == calendar.get(Calendar.MONTH) &&
+                    medicineCalendar.get(Calendar.DAY_OF_MONTH) == calendar.get(Calendar.DAY_OF_MONTH)
+        }*/
+
         medicineList.clear()
         medicineList.addAll(medicines)
         sortList()

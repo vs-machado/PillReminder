@@ -5,17 +5,18 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:background="#FFFFFF"
-    android:orientation="vertical">
+    android:orientation="vertical"
+    android:paddingBottom="16dp">
 
     <TextView
         android:id="@+id/tvHour"
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        android:layout_marginTop="16dp"
+        android:layout_marginTop="4dp"
         android:layout_weight="1"
         android:gravity="center"
         android:text="@string/hour"
-        android:textSize="20sp" />
+        android:textSize="18sp" />
 
     <androidx.cardview.widget.CardView
         android:id="@+id/cvPills"

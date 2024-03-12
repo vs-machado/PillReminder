@@ -1,18 +1,15 @@
 package com.phoenix.pillreminder.fragments
 
 import android.Manifest
-import android.app.Activity
 import android.app.Dialog
 import android.content.Intent
 import android.content.pm.PackageManager
 import android.graphics.Color
 import android.graphics.drawable.ColorDrawable
 import android.net.Uri
-import android.os.Build
 import android.os.Bundle
 import android.provider.Settings
 import android.text.format.DateFormat
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -91,11 +88,13 @@ class HomeFragment : Fragment() {
 
         initRecyclerView()
 
+        binding.datePicker.onSelectionChanged = { date ->
+
+        }
+
         if(ContextCompat.checkSelfPermission(requireContext(), Manifest.permission.POST_NOTIFICATIONS) == PackageManager.PERMISSION_GRANTED){
             binding.rvMedicinesList.visibility = View.VISIBLE
             binding.fabAddMedicine.visibility = View.VISIBLE
-            binding.tvRequestPermissions.visibility = View.INVISIBLE
-            binding.btnRequestPermissions.visibility = View.INVISIBLE
         }
 
         if(!Settings.canDrawOverlays(requireContext()) && !wasOverlayPermissionDialogShown){
@@ -107,9 +106,6 @@ class HomeFragment : Fragment() {
             it.findNavController().navigate(R.id.action_homeFragment_to_addMedicinesFragment)
         }
 
-        binding.btnRequestPermissions.setOnClickListener {
-            requestPermissionLauncher.launch(Manifest.permission.POST_NOTIFICATIONS)
-        }
     }
 
      private fun initRecyclerView(){
@@ -140,7 +136,7 @@ class HomeFragment : Fragment() {
         val dismissRequest: Button = dialog.findViewById(R.id.btnDismissRequest)
 
         requestPermission.setOnClickListener {
-            requestOverlayPermission()
+            requestPermissionLauncher.launch(Manifest.permission.POST_NOTIFICATIONS)
         }
         dismissRequest.setOnClickListener {
             dialog.dismiss()
@@ -248,15 +244,14 @@ class HomeFragment : Fragment() {
 
     private val requestPermissionLauncher = registerForActivityResult(ActivityResultContracts.RequestPermission()){ permissionGranted: Boolean ->
         if(permissionGranted){
-            binding.tvRequestPermissions.visibility = View.INVISIBLE
-            binding.btnRequestPermissions.visibility = View.INVISIBLE
             binding.fabAddMedicine.visibility = View.VISIBLE
             binding.rvMedicinesList.visibility = View.VISIBLE
-        } else {
-            binding.tvRequestPermissions.visibility = View.VISIBLE
-            binding.btnRequestPermissions.visibility = View.VISIBLE
         }
+        requestOverlayPermission()
     }
 
     private val requestOverlayPermissionLauncher = registerForActivityResult(ActivityResultContracts.StartActivityForResult()){}
 }
+
+
+

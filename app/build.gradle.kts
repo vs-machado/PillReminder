@@ -43,7 +43,6 @@ android {
 }
 
 dependencies {
-    implementation("androidx.legacy:legacy-support-v4:1.0.0")
     val navVersion = "2.7.5"
     val coreVersion = "1.12.0"
     val roomVersion = "2.6.1"
@@ -77,6 +76,9 @@ dependencies {
 
     //Gson
     implementation("com.google.code.gson:gson:2.10.1")
+
+    //Horizontal Date Picker
+    implementation("com.github.myDario:DarioWeekViewDatePicker:1.0.3")
 
     implementation("androidx.core:core-ktx:$coreVersion")
     implementation("androidx.appcompat:appcompat:1.6.1")

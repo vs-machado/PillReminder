@@ -26,7 +26,7 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/toolbarHome">
 
-        <com.labstyle.darioweekviewdatepicker.DarioWeekViewDatePicker
+        <com.phoenix.pillreminder.datepicker.DarioWeekViewDatePicker
             android:id="@+id/datePicker"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"

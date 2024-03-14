@@ -38,7 +38,11 @@
         tools:layout="@layout/fragment_medicine_form" >
         <action
             android:id="@+id/action_medicineFormFragment_to_quantityAndStrengthFragment"
-            app:destination="@id/quantityAndStrengthFragment" />
+            app:destination="@id/quantityAndStrengthFragment"
+            app:enterAnim="@anim/slide_in_right"
+            app:exitAnim="@anim/slide_out_left"
+            app:popEnterAnim="@anim/slide_in_left"
+            app:popExitAnim="@anim/slide_out_right" />
     </fragment>
     <fragment
         android:id="@+id/frequencyFragment"
@@ -99,6 +103,10 @@
         tools:layout="@layout/fragment_quantity_and_strength" >
         <action
             android:id="@+id/action_quantityAndStrengthFragment_to_frequencyFragment"
-            app:destination="@id/frequencyFragment" />
+            app:destination="@id/frequencyFragment"
+            app:enterAnim="@anim/slide_in_right"
+            app:exitAnim="@anim/slide_out_left"
+            app:popEnterAnim="@anim/slide_in_left"
+            app:popExitAnim="@anim/slide_out_right" />
     </fragment>
 </navigation>

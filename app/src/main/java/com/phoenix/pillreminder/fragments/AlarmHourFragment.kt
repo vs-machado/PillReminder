@@ -9,17 +9,20 @@ import android.widget.TimePicker
 import androidx.activity.addCallback
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
+import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.ui.AppBarConfiguration
 import androidx.navigation.ui.setupWithNavController
 import com.phoenix.pillreminder.R
 import com.phoenix.pillreminder.databinding.FragmentAlarmHourBinding
+import com.phoenix.pillreminder.model.AlarmHourViewModel
 import com.phoenix.pillreminder.model.AlarmSettingsSharedViewModel
 import java.util.Calendar
 
 class AlarmHourFragment : Fragment() {
     private lateinit var binding: FragmentAlarmHourBinding
     private val sharedViewModel: AlarmSettingsSharedViewModel by activityViewModels()
+    private val alarmHourViewModel: AlarmHourViewModel by viewModels()
     private val currentHour = Calendar.getInstance().get(Calendar.HOUR_OF_DAY)
     private val currentMinute = Calendar.getInstance().get(Calendar.MINUTE)
 
@@ -59,6 +62,10 @@ class AlarmHourFragment : Fragment() {
                 toolbar.setupWithNavController(navController, appBarConfiguration)
 
                 tpAlarm.setIs24HourView(hourFormat)
+
+                alarmHourViewModel.apply{
+                    saveAlarmHour(position, getCurrentHour(), getCurrentMinute())
+                }
 
                 tpAlarm.setOnTimeChangedListener { _, hourOfDay, minute ->
                     saveAlarmHour(position, hourOfDay, minute)

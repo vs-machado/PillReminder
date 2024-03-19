@@ -6,6 +6,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.ArrayAdapter
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.ui.AppBarConfiguration
@@ -16,7 +17,7 @@ import com.phoenix.pillreminder.model.AlarmSettingsSharedViewModel
 
 class FrequencyFragment : Fragment() {
     private lateinit var binding:FragmentFrequencyBinding
-    private val sharedViewModel:AlarmSettingsSharedViewModel by viewModels()
+    private val sharedViewModel:AlarmSettingsSharedViewModel by activityViewModels()
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -39,7 +40,7 @@ class FrequencyFragment : Fragment() {
             toolbarFrequency.setupWithNavController(navController, appBarConfiguration)
 
             // Frequency of med usage list. User must select the desired usage interval
-            val list: MutableList<String> = mutableListOf("Every day", "Every other day", "Specific days of the week", "On a recurring cycle", "Every X days",
+            val list: MutableList<String> = mutableListOf("Every day", "Every other day", "Specific days of the week", "Every X days",
                 "Every X weeks", "Every X months")
             val arrayAdapter = ArrayAdapter(requireContext(), android.R.layout.simple_list_item_1, list)
             lvFrequency.adapter = arrayAdapter
@@ -68,18 +69,14 @@ class FrequencyFragment : Fragment() {
             }
 
             3 -> {
-                sharedViewModel.setMedicineFrequency("On a recurring cycle")
-            }
-
-            4 -> {
                 sharedViewModel.setMedicineFrequency("Every X days")
             }
 
-            5 -> {
+            4 -> {
                 sharedViewModel.setMedicineFrequency("Every X weeks")
             }
 
-            6 -> {
+            5 -> {
                 sharedViewModel.setMedicineFrequency("Every X months")
             }
         }

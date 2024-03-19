@@ -5,13 +5,15 @@ import android.app.PendingIntent
 import android.content.Context
 import android.content.Intent
 import android.os.Build
-import android.provider.Settings
+import android.util.Log
 import androidx.annotation.RequiresApi
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.phoenix.pillreminder.alarmscheduler.AlarmItem
 import com.phoenix.pillreminder.alarmscheduler.AlarmReceiver
+import com.phoenix.pillreminder.alarmscheduler.AlarmScheduler
+import com.phoenix.pillreminder.alarmscheduler.AndroidAlarmScheduler
 import com.phoenix.pillreminder.db.Medicine
 import java.time.Instant
 import java.time.LocalDateTime
@@ -19,9 +21,10 @@ import java.time.ZoneId
 import java.time.ZoneOffset
 import java.util.Calendar
 import java.util.TimeZone
+import java.util.concurrent.TimeUnit
 
 class AlarmSettingsSharedViewModel : ViewModel() {
-    private var _medicineName = MutableLiveData("")
+    private var medicineName = ""
 
     private var _numberOfAlarms = MutableLiveData<Int>()
     val numberOfAlarms: LiveData<Int> = _numberOfAlarms
@@ -45,6 +48,9 @@ class AlarmSettingsSharedViewModel : ViewModel() {
     private var treatmentStartDate: Long = 0L
     private var treatmentEndDate: Long = 0L
 
+    private var treatmentPeriodInMillis: Long = 0L
+    private var treatmentPeriodInDays: Long = 0L
+
     private lateinit var pendingIntent: PendingIntent
 
     var position = 0
@@ -55,8 +61,8 @@ class AlarmSettingsSharedViewModel : ViewModel() {
         _numberOfAlarms.value = 1
     }
 
-    fun createMedicineAlarm(): List<Medicine> {
-        val name = _medicineName.value!!
+    fun allAlarmsOfTreatment(interval: Long): List<Medicine> {
+        val name = medicineName
         val quantity = getMedicineQuantity()
         val form = getMedicineForm()
         val alarmInMillis = getAlarmInMillisList()
@@ -68,12 +74,62 @@ class AlarmSettingsSharedViewModel : ViewModel() {
 
         val alarms = mutableListOf<Medicine>()
 
-        for (i in alarmHours.indices){
+
+        //Satisfied when user sets a treatment period
+        if(treatmentStartDate != 0L && treatmentEndDate != 0L){
+            setTreatmentPeriodInMillis()
+            setTreatmentPeriodInDays()
+
+            for (day in 0 .. treatmentPeriodInDays step interval){
+                for (i in alarmHours.indices) {
+                    alarms.add( // One day has 86400000 milliseconds
+                        Medicine(
+                            0,
+                            name,
+                            quantity,
+                            form!!,
+                            alarmInMillis[i] + (86400000 * day),
+                            alarmHours[i],
+                            alarmMinutes[i],
+                            startDate,
+                            endDate,
+                            medicineWasTaken
+                        )
+                    )
+                }
+            }
+        }
+        //User did not set a treatment period
+        else {
+
+        }
+
+        /*for (i in alarmHours.indices){
             alarms.add(
                 Medicine(0, name, quantity, form!!, alarmInMillis[i], alarmHours[i], alarmMinutes[i], startDate, endDate, medicineWasTaken)
             )
-        }
+        }*/
         return alarms
+    }
+
+    fun createAlarmItemAndSchedule(context: Context, interval: Long){
+        val alarmScheduler : AlarmScheduler = AndroidAlarmScheduler(context)
+
+        for(day in 0 .. getTreatmentPeriodInDays() step interval){
+            for(i in 0 until getAlarmHoursList().size){
+                val alarmItem = AlarmItem( // One day has 86400000 milliseconds
+                    time = millisToDateTime(getAlarmInMillis(i) + (86400000 * day)),
+                    medicineName = "${getMedicineName()}",
+                    medicineForm = "${getMedicineForm()}",
+                    medicineQuantity = "${getMedicineQuantity()}",
+                    alarmHour = "${getAlarmHour(i)}",
+                    alarmMinute = "${getAlarmMinute(i)}"
+                )
+                //Add the alarm item to alarmItemList
+                addAlarmItem(alarmItem!!)
+                alarmItem?.let(alarmScheduler::scheduleAlarm)
+            }
+        }
     }
 
     fun resetCurrentAlarmNumber(){
@@ -151,10 +207,11 @@ class AlarmSettingsSharedViewModel : ViewModel() {
 
     //Getters and setters
     fun getMedicineName(): String? {
-        return _medicineName.value
+        return medicineName
     }
 
     private fun setTreatmentPeriod(startDate: Long, endDate: Long){
+        Log.i("DATES", "$startDate $endDate")
         val timeZone = TimeZone.getTimeZone("UTC")
         val timeZoneDefault = TimeZone.getDefault()
 
@@ -164,6 +221,7 @@ class AlarmSettingsSharedViewModel : ViewModel() {
         //Sets the treatment start date
         val calendarStart = Calendar.getInstance(timeZone)
         calendarStart.timeInMillis = startDate
+        Log.i("DATES HOUR", "${alarmHour[0]} ${alarmMinute[0]}")
         calendarStart.set(Calendar.HOUR_OF_DAY, alarmHour[0]!!)
         calendarStart.set(Calendar.MINUTE, alarmMinute[0]!!)
         calendarStart.set(Calendar.SECOND, 0)
@@ -237,7 +295,7 @@ class AlarmSettingsSharedViewModel : ViewModel() {
         treatmentEndDate = date
     }
     fun setMedicineName(userInput: String){
-        _medicineName.value = userInput
+        medicineName = userInput
     }
 
     fun setMedicineQuantity(quantity: Float){
@@ -310,6 +368,18 @@ class AlarmSettingsSharedViewModel : ViewModel() {
     fun clearTreatmentPeriod(){
         treatmentStartDate = 0L
         treatmentEndDate = 0L
+    }
+
+    fun getTreatmentPeriodInDays(): Long{
+        return treatmentPeriodInDays
+    }
+
+    private fun setTreatmentPeriodInMillis(){
+        treatmentPeriodInMillis = treatmentEndDate - treatmentStartDate
+    }
+
+    private fun setTreatmentPeriodInDays(){
+        treatmentPeriodInDays = TimeUnit.MILLISECONDS.toDays(treatmentPeriodInMillis)
     }
 
 }

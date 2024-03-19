@@ -171,7 +171,7 @@ class HomeFragment : Fragment() {
 
         btnDelete.setOnClickListener {
             val alarmScheduler: AlarmScheduler = AndroidAlarmScheduler(requireContext().applicationContext)
-            val alarmItemList = AlarmItemManager.getAlarmItems(requireContext().applicationContext)
+            val alarmItemList = AlarmItemManager.getAlarmItems(requireContext().applicationContext, medicine.name)
 
             val alarmIterator = alarmItemList.listIterator()
 
@@ -183,12 +183,14 @@ class HomeFragment : Fragment() {
                 if(alarmItemMillis == medicine.alarmInMillis){
                     alarmItem.let(alarmScheduler::cancelAlarm)
                     alarmIterator.remove()
-                    AlarmItemManager.saveAlarmItems(requireContext().applicationContext, alarmItemList)
+                    AlarmItemManager.saveAlarmItems(requireContext().applicationContext, alarmItemList, alarmItem.medicineName)
                     medicinesViewModel.deleteMedicines(medicine)
+                    displayMedicinesList(hfViewModel.getDate())
                     dialog.dismiss()
                     showToastAlarmDeleted()
                 }
             }
+
         }
 
         btnCancel.setOnClickListener {

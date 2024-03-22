@@ -4,9 +4,7 @@ import android.app.AlarmManager
 import android.app.PendingIntent
 import android.content.Context
 import android.content.Intent
-import android.os.Build
 import android.util.Log
-import androidx.annotation.RequiresApi
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
@@ -71,6 +69,7 @@ class AlarmSettingsSharedViewModel : ViewModel() {
         val startDate = treatmentStartDate
         val endDate = treatmentEndDate
         val medicineWasTaken = false
+        val frequency = medicineFrequency
 
         val alarms = mutableListOf<Medicine>()
 
@@ -93,7 +92,8 @@ class AlarmSettingsSharedViewModel : ViewModel() {
                             alarmMinutes[i],
                             startDate,
                             endDate,
-                            medicineWasTaken
+                            medicineWasTaken,
+                            frequency
                         )
                     )
                 }
@@ -114,20 +114,26 @@ class AlarmSettingsSharedViewModel : ViewModel() {
 
     fun createAlarmItemAndSchedule(context: Context, interval: Long){
         val alarmScheduler : AlarmScheduler = AndroidAlarmScheduler(context)
+        var alarmScheduled = false
 
         for(day in 0 .. getTreatmentPeriodInDays() step interval){
             for(i in 0 until getAlarmHoursList().size){
-                val alarmItem = AlarmItem( // One day has 86400000 milliseconds
-                    time = millisToDateTime(getAlarmInMillis(i) + (86400000 * day)),
+                val alarmItem = AlarmItem (
+                    time = millisToDateTime(getAlarmInMillis(i)),
                     medicineName = "${getMedicineName()}",
                     medicineForm = "${getMedicineForm()}",
                     medicineQuantity = "${getMedicineQuantity()}",
                     alarmHour = "${getAlarmHour(i)}",
                     alarmMinute = "${getAlarmMinute(i)}"
                 )
-                //Add the alarm item to alarmItemList
-                addAlarmItem(alarmItem!!)
-                alarmItem?.let(alarmScheduler::scheduleAlarm)
+                // Add the alarm item to alarmItemList
+                addAlarmItem(alarmItem)
+
+                // It schedules only the first alarm. The next alarm will be set when the first alarm is triggered.
+                if (!alarmScheduled){
+                    alarmItem.let(alarmScheduler::scheduleAlarm)
+                    alarmScheduled = true
+                }
             }
         }
     }
@@ -162,7 +168,6 @@ class AlarmSettingsSharedViewModel : ViewModel() {
         setTreatmentPeriod(startDate.timeInMillis, endDate.timeInMillis)
     }
 
-    @RequiresApi(Build.VERSION_CODES.S)
      fun setTimer(startDate: Long, context: Context, requestCode: Int){
         val alarmManager = context.getSystemService(Context.ALARM_SERVICE) as AlarmManager
 

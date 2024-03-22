@@ -29,4 +29,12 @@ interface MedicineDao {
             "FROM medicines_data_table " +
             "WHERE medicine_alarm_in_millis = :alarmInMillis")
     fun getCurrentAlarmData(alarmInMillis: Long): Medicine?
+
+    @Query("SELECT *" +
+            "FROM medicines_data_table " +
+            "WHERE medicine_alarm_in_millis > :currentTimeMillis " +
+            "AND medicine_name == :medicineName " +
+            "ORDER BY medicine_alarm_in_millis " +
+            "ASC LIMIT 1")
+    suspend fun getNextAlarmData(medicineName: String, currentTimeMillis: Long): Medicine?
 }

@@ -28,5 +28,7 @@ data class Medicine(
     var endDate: Long,
     @ColumnInfo(name = "medicine_was_taken")
     var medicineWasTaken: Boolean,
+    @ColumnInfo(name = "medicine_frequency")
+    var medicineFrequency: String
 )
 

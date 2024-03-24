@@ -6,7 +6,15 @@ import android.content.Context
 import android.content.Intent
 import android.os.Build
 import android.util.Log
+import com.phoenix.pillreminder.db.Medicine
+import com.phoenix.pillreminder.db.MedicineDatabase
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.Job
+import kotlinx.coroutines.launch
+import java.time.Instant
 import java.time.ZoneId
+import kotlin.coroutines.CoroutineContext
 
 class AndroidAlarmScheduler(private val context: Context): AlarmScheduler {
     private val alarmManager = context.getSystemService(AlarmManager::class.java)
@@ -16,12 +24,12 @@ class AndroidAlarmScheduler(private val context: Context): AlarmScheduler {
             putExtra("ALARM_ITEM", item)
         }
 
+        //Log.i("ALARM HASHCODE", "${item.hashCode()}")
+
         // Checks if is possible to schedule exact alarms before calling the schedule method
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S){
-            if(!alarmManager.canScheduleExactAlarms()){
-                Log.e("AlarmScheduler", "Cannot schedule exact alarms")
-                return
-            }
+        if(!alarmManager.canScheduleExactAlarms()){
+            Log.e("AlarmScheduler", "Cannot schedule exact alarms")
+            return
         }
 
         val alarmTime = item.time.atZone(ZoneId.systemDefault()).toEpochSecond() * 1000
@@ -39,16 +47,49 @@ class AndroidAlarmScheduler(private val context: Context): AlarmScheduler {
         Log.i("Alarm", "Alarm set at $alarmTime")
     }
 
-    override fun cancelAlarm(item: AlarmItem) {
-        alarmManager.cancel(
-            PendingIntent.getBroadcast(
+    override fun cancelAlarm(item: AlarmItem, medicine: Medicine) {
+        val database = MedicineDatabase.getInstance(context)
+        val dao = database.medicineDao()
+
+        CoroutineScope(Dispatchers.IO).launch{
+            val currentAlarmInMillis = item.time.atZone(ZoneId.systemDefault()).toInstant().toEpochMilli()
+
+            val medicineData = dao.getNextAlarmData(item.medicineName, currentAlarmInMillis + 1L) // Search for the next alarm in the database
+
+            val pendingIntent =  PendingIntent.getBroadcast(
                 context,
                 item.hashCode(),
                 Intent(context, AlarmReceiver::class.java),
-                PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE
+                PendingIntent.FLAG_NO_CREATE or PendingIntent.FLAG_IMMUTABLE
             )
+
+            if (pendingIntent == null){
+                Log.i("ALARM", "AlarmReceiver is not registered.")
+                return@launch
+            }
+            alarmManager.cancel(pendingIntent)
+
+            if(medicineData?.alarmInMillis != null){
+                scheduleNextAlarm(medicineData, context)
+            }
+
+            Log.i("ALARM", "ALARM CANCELLED.")
+        }
+    }
+
+    fun scheduleNextAlarm(medicine: Medicine, context: Context?){
+        val alarmScheduler: AlarmScheduler = AndroidAlarmScheduler(context!!)
+
+        val alarmItem = AlarmItem(
+            time = Instant.ofEpochMilli(medicine.alarmInMillis).atZone(ZoneId.systemDefault()).toLocalDateTime(),
+            medicineName = medicine.name,
+            medicineForm = medicine.form,
+            medicineQuantity = medicine.quantity.toString(),
+            alarmHour = medicine.alarmHour.toString(),
+            alarmMinute = medicine.alarmMinute.toString()
         )
-        Log.i("ALARM", "ALARM CANCELLED.")
+
+        alarmItem?.let(alarmScheduler::scheduleAlarm)
     }
 
 }

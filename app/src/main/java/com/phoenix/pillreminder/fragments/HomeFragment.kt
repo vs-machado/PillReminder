@@ -33,7 +33,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.phoenix.pillreminder.R
 import com.phoenix.pillreminder.activity.MainActivity
 import com.phoenix.pillreminder.adapter.RvMedicinesListAdapter
-import com.phoenix.pillreminder.alarmscheduler.AlarmItemManager
+import com.phoenix.pillreminder.alarmscheduler.AlarmItem
 import com.phoenix.pillreminder.alarmscheduler.AlarmScheduler
 import com.phoenix.pillreminder.alarmscheduler.AndroidAlarmScheduler
 import com.phoenix.pillreminder.databinding.FragmentHomeBinding
@@ -46,6 +46,8 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import java.text.SimpleDateFormat
+import java.time.Instant
+import java.time.ZoneId
 import java.util.Calendar
 import java.util.Date
 import java.util.Locale
@@ -170,27 +172,26 @@ class HomeFragment : Fragment() {
         tvMedicine.text = context?.getString(R.string.tv_alarm_and_hour, medicine.name, showTvAlarm(medicine.alarmHour, medicine.alarmMinute))
 
         btnDelete.setOnClickListener {
-            val alarmScheduler: AlarmScheduler = AndroidAlarmScheduler(requireContext().applicationContext)
-            val alarmItemList = AlarmItemManager.getAlarmItems(requireContext().applicationContext, medicine.name)
+            val alarmTime = Instant.ofEpochMilli(medicine.alarmInMillis).atZone(ZoneId.systemDefault()).toLocalDateTime()
+            val alarmScheduler : AlarmScheduler = AndroidAlarmScheduler(requireActivity().applicationContext)
 
-            val alarmIterator = alarmItemList.listIterator()
+            val alarmItem = AlarmItem(
+                alarmTime,
+                medicine.name,
+                medicine.form,
+                medicine.quantity.toString(),
+                medicine.alarmHour.toString(),
+                medicine.alarmMinute.toString()
+            )
 
-            while(alarmIterator.hasNext()){
-                val alarmItem = alarmIterator.next()
-                val alarmItemMillis = sharedViewModel.localDateTimeToMillis(alarmItem.time)
-
-                //Cancel the alarm broadcast, remove the alarm from the list and from database and then serialize the list again
-                if(alarmItemMillis == medicine.alarmInMillis){
-                    alarmItem.let(alarmScheduler::cancelAlarm)
-                    alarmIterator.remove()
-                    AlarmItemManager.saveAlarmItems(requireContext().applicationContext, alarmItemList, alarmItem.medicineName)
-                    medicinesViewModel.deleteMedicines(medicine)
-                    displayMedicinesList(hfViewModel.getDate())
-                    dialog.dismiss()
-                    showToastAlarmDeleted()
-                }
+            //Checks if the alarm was already triggered. If so, there is no need to cancel the broadcast.
+            if(medicine.alarmInMillis > System.currentTimeMillis()){
+                alarmScheduler.cancelAlarm(alarmItem, medicine)
             }
-
+            medicinesViewModel.deleteMedicines(medicine)
+            displayMedicinesList(hfViewModel.getDate())
+            dialog.dismiss()
+            showToastAlarmDeleted()
         }
 
         btnCancel.setOnClickListener {

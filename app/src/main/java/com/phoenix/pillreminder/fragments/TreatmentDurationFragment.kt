@@ -1,15 +1,12 @@
 package com.phoenix.pillreminder.fragments
 
-import android.os.Build
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ArrayAdapter
 import android.widget.Toast
 import androidx.activity.addCallback
-import androidx.annotation.RequiresApi
 import androidx.core.app.ActivityCompat
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
@@ -21,17 +18,9 @@ import androidx.navigation.ui.setupWithNavController
 import com.google.android.material.datepicker.MaterialDatePicker
 import com.phoenix.pillreminder.R
 import com.phoenix.pillreminder.activity.MainActivity
-import com.phoenix.pillreminder.alarmscheduler.AlarmItem
-import com.phoenix.pillreminder.alarmscheduler.AlarmItemManager
-import com.phoenix.pillreminder.alarmscheduler.AlarmScheduler
-import com.phoenix.pillreminder.alarmscheduler.AndroidAlarmScheduler
 import com.phoenix.pillreminder.databinding.FragmentTreatmentDurationBinding
 import com.phoenix.pillreminder.model.AlarmSettingsSharedViewModel
 import com.phoenix.pillreminder.model.MedicinesViewModel
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.launch
-import kotlinx.coroutines.withContext
 
 
 class TreatmentDurationFragment : Fragment(), ActivityCompat.OnRequestPermissionsResultCallback {
@@ -160,18 +149,6 @@ class TreatmentDurationFragment : Fragment(), ActivityCompat.OnRequestPermission
                     }
                     "Every X months" -> {
                         // Needs further implementation
-                    }
-                }
-
-                CoroutineScope(Dispatchers.IO).launch{
-                    // Saves the medicine name as a key to the SharedPreferences list
-                    val medicineSharedPreferencesKey = withContext(Dispatchers.IO){
-                        medicinesViewModel.getCurrentAlarmData(getAlarmInMillis(0))?.name
-                    }
-
-                    //Serializes the list in a JSON file
-                    if (medicineSharedPreferencesKey != null) {
-                        AlarmItemManager.saveAlarmItems(requireContext().applicationContext, getAlarmItemList(), medicineSharedPreferencesKey)
                     }
                 }
 

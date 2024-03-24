@@ -31,9 +31,10 @@ class AlarmReceiver: BroadcastReceiver(), ActivityCompat.OnRequestPermissionsRes
 
         launch {
             val medicineData = dao.getNextAlarmData(alarmItem!!.medicineName, System.currentTimeMillis())
+            val alarmScheduler = AndroidAlarmScheduler(context)
 
             if (medicineData?.alarmInMillis != null) {
-                scheduleNextAlarm(medicineData, context)
+                alarmScheduler.scheduleNextAlarm(medicineData, context)
             }
         }
 
@@ -53,21 +54,6 @@ class AlarmReceiver: BroadcastReceiver(), ActivityCompat.OnRequestPermissionsRes
             putExtra("ALARM_ITEM", intent?.getParcelableExtra("ALARM_ITEM", AlarmItem::class.java))
         }
         ContextCompat.startForegroundService(context!!, serviceIntent)
-    }
-
-    private fun scheduleNextAlarm(medicine: Medicine, context: Context?){
-        val alarmScheduler: AlarmScheduler = AndroidAlarmScheduler(context!!)
-
-        val alarmItem = AlarmItem(
-            time = Instant.ofEpochMilli(medicine.alarmInMillis).atZone(ZoneId.systemDefault()).toLocalDateTime(),
-            medicineName = medicine.name,
-            medicineForm = medicine.form,
-            medicineQuantity = medicine.quantity.toString(),
-            alarmHour = medicine.alarmHour.toString(),
-            alarmMinute = medicine.alarmMinute.toString()
-        )
-
-        alarmItem?.let(alarmScheduler::scheduleAlarm)
     }
 
 }

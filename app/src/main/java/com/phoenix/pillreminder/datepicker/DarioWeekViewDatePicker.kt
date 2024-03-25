@@ -13,7 +13,6 @@ import androidx.constraintlayout.widget.ConstraintLayout
 import com.phoenix.pillreminder.R
 import java.text.DateFormat
 import java.text.DateFormatSymbols
-import java.text.SimpleDateFormat
 import java.util.Calendar
 import java.util.Date
 import java.util.Locale
@@ -62,8 +61,7 @@ class DarioWeekViewDatePicker @JvmOverloads constructor(
     private val todayText: TextView
 
     private val shortWeekdays = DateFormatSymbols(Locale.getDefault()).shortWeekdays
-    var selectedDate = Date(System.currentTimeMillis())
-        private set
+    private var selectedDate = Date(System.currentTimeMillis())
     var onSelectionChanged: (Date) -> Unit = {}
 
     init {
@@ -137,7 +135,7 @@ class DarioWeekViewDatePicker @JvmOverloads constructor(
         setSelection(selectedDate)
     }
 
-    fun setSelection(date: Date) {
+    private fun setSelection(date: Date) {
         selectedDate = date
 
         // update long text for selected day

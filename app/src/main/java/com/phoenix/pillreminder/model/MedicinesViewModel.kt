@@ -17,7 +17,7 @@ class MedicinesViewModel(private val dao: MedicineDao): ViewModel() {
         }
     }
 
-    suspend fun getCurrentAlarmData(alarmInMillis: Long): Medicine? {
+    fun getCurrentAlarmData(alarmInMillis: Long): Medicine? {
         return dao.getCurrentAlarmData(alarmInMillis)
     }
 

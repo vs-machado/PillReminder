@@ -5,15 +5,11 @@ import android.content.Context
 import android.content.Intent
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
-import com.phoenix.pillreminder.db.Medicine
 import com.phoenix.pillreminder.db.MedicineDatabase
-import com.phoenix.pillreminder.model.MedicinesViewModel
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.launch
-import java.time.Instant
-import java.time.ZoneId
 import kotlin.coroutines.CoroutineContext
 
 class AlarmReceiver: BroadcastReceiver(), ActivityCompat.OnRequestPermissionsResultCallback,

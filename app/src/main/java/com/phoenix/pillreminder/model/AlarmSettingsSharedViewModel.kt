@@ -33,7 +33,6 @@ class AlarmSettingsSharedViewModel : ViewModel() {
     private var _medicineForm = MutableLiveData("")
     val medicineForm: LiveData<String> = _medicineForm
 
-    private var alarmItemList = mutableListOf<AlarmItem>()
     private var medicineQuantity = 0F
     private var medicineFrequency = ""
 
@@ -126,8 +125,6 @@ class AlarmSettingsSharedViewModel : ViewModel() {
                     alarmHour = "${getAlarmHour(i)}",
                     alarmMinute = "${getAlarmMinute(i)}"
                 )
-                // Add the alarm item to alarmItemList
-                addAlarmItem(alarmItem)
 
                 // It schedules only the first alarm. The next alarm will be set when the first alarm is triggered.
                 if (!alarmScheduled){
@@ -211,7 +208,7 @@ class AlarmSettingsSharedViewModel : ViewModel() {
     }
 
     //Getters and setters
-    fun getMedicineName(): String? {
+    fun getMedicineName(): String {
         return medicineName
     }
 
@@ -285,14 +282,6 @@ class AlarmSettingsSharedViewModel : ViewModel() {
         return userDate.timeInMillis
     }
 
-    fun addAlarmItem(alarmItem: AlarmItem){
-        alarmItemList.add(alarmItem)
-    }
-
-    fun removeAlarmItem(alarmItem: Int){
-        alarmItemList.removeAt(alarmItem)
-    }
-
     private fun setTreatmentStartDate(date: Long){
         treatmentStartDate = date
     }
@@ -313,10 +302,6 @@ class AlarmSettingsSharedViewModel : ViewModel() {
 
     fun setNumberOfAlarms(newNumberOfAlarms: Int){
         _numberOfAlarms.value = newNumberOfAlarms
-    }
-
-    fun getAlarmItemList(): MutableList<AlarmItem>{
-        return alarmItemList
     }
 
     fun getMedicineQuantity(): Float {

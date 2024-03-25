@@ -8,7 +8,6 @@ import androidx.recyclerview.widget.RecyclerView
 import com.phoenix.pillreminder.R
 import com.phoenix.pillreminder.databinding.AdapterListMedicinesBinding
 import com.phoenix.pillreminder.db.Medicine
-import kotlinx.coroutines.selects.select
 import java.text.SimpleDateFormat
 import java.util.Calendar
 import java.util.Date

@@ -21,7 +21,6 @@ import androidx.activity.result.contract.ActivityResultContracts
 import androidx.core.content.ContextCompat
 import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
-import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
@@ -38,7 +37,6 @@ import com.phoenix.pillreminder.alarmscheduler.AlarmScheduler
 import com.phoenix.pillreminder.alarmscheduler.AndroidAlarmScheduler
 import com.phoenix.pillreminder.databinding.FragmentHomeBinding
 import com.phoenix.pillreminder.db.Medicine
-import com.phoenix.pillreminder.model.AlarmSettingsSharedViewModel
 import com.phoenix.pillreminder.model.HomeFragmentViewModel
 import com.phoenix.pillreminder.model.MedicinesViewModel
 import kotlinx.coroutines.CoroutineScope
@@ -58,7 +56,6 @@ class HomeFragment : Fragment() {
     private lateinit var adapter: RvMedicinesListAdapter
     private lateinit var medicinesViewModel: MedicinesViewModel
     private var toast: Toast? = null
-    private val sharedViewModel: AlarmSettingsSharedViewModel by activityViewModels()
     private var wasOverlayPermissionDialogShown: Boolean = false
     private val hfViewModel: HomeFragmentViewModel by viewModels()
 

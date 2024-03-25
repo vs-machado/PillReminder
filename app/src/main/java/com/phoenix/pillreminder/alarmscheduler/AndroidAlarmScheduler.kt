@@ -4,17 +4,14 @@ import android.app.AlarmManager
 import android.app.PendingIntent
 import android.content.Context
 import android.content.Intent
-import android.os.Build
 import android.util.Log
 import com.phoenix.pillreminder.db.Medicine
 import com.phoenix.pillreminder.db.MedicineDatabase
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.Job
 import kotlinx.coroutines.launch
 import java.time.Instant
 import java.time.ZoneId
-import kotlin.coroutines.CoroutineContext
 
 class AndroidAlarmScheduler(private val context: Context): AlarmScheduler {
     private val alarmManager = context.getSystemService(AlarmManager::class.java)
@@ -89,7 +86,7 @@ class AndroidAlarmScheduler(private val context: Context): AlarmScheduler {
             alarmMinute = medicine.alarmMinute.toString()
         )
 
-        alarmItem?.let(alarmScheduler::scheduleAlarm)
+        alarmItem.let(alarmScheduler::scheduleAlarm)
     }
 
 }

@@ -20,6 +20,11 @@ class AlarmReceiver: BroadcastReceiver(), ActivityCompat.OnRequestPermissionsRes
         get() = Dispatchers.Default + job
 
     override fun onReceive(context: Context?, intent: Intent?) {
+        if(intent?.action == Intent.ACTION_BOOT_COMPLETED){
+            rescheduleAlarmsOnBoot(context!!)
+            return
+        }
+
         val alarmItem = intent?.getParcelableExtra("ALARM_ITEM", AlarmItem::class.java)
         val database = MedicineDatabase.getInstance(context!!)
         val dao = database.medicineDao()
@@ -50,6 +55,21 @@ class AlarmReceiver: BroadcastReceiver(), ActivityCompat.OnRequestPermissionsRes
             putExtra("ALARM_ITEM", intent?.getParcelableExtra("ALARM_ITEM", AlarmItem::class.java))
         }
         ContextCompat.startForegroundService(context!!, serviceIntent)
+    }
+
+    private fun rescheduleAlarmsOnBoot(context: Context) {
+        val database = MedicineDatabase.getInstance(context)
+        val dao = database.medicineDao()
+        job = Job()
+
+        launch{
+            val medicineAlarmsToSchedule = dao.getAlarmsToRescheduleAfterReboot(System.currentTimeMillis())
+            val alarmScheduler = AndroidAlarmScheduler(context)
+
+            medicineAlarmsToSchedule.forEach{ medicine ->
+                alarmScheduler.scheduleNextAlarm(medicine, context)
+            }
+        }
     }
 
 }

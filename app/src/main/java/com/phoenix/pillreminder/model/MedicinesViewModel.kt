@@ -21,6 +21,10 @@ class MedicinesViewModel(private val dao: MedicineDao): ViewModel() {
         return dao.getCurrentAlarmData(alarmInMillis)
     }
 
+    fun getAlarmsToRescheduleAfterReboot(currentTimeMillis: Long): List<Medicine>{
+        return dao.getAlarmsToRescheduleAfterReboot(currentTimeMillis)
+    }
+
     fun insertMedicines(medicine: List<Medicine>) = viewModelScope.launch{
         dao.insertMedicines(medicine)
     }

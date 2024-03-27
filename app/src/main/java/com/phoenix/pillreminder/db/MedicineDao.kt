@@ -37,4 +37,12 @@ interface MedicineDao {
             "ORDER BY medicine_alarm_in_millis " +
             "ASC LIMIT 1")
     suspend fun getNextAlarmData(medicineName: String, currentTimeMillis: Long): Medicine?
+
+    @Query("SELECT *" +
+            " FROM medicines_data_table" +
+            " WHERE medicine_alarm_in_millis > :currentTimeMillis" +
+            " AND medicine_was_taken = 0" +
+            " GROUP BY medicine_name" +
+            " ORDER BY ABS(medicine_alarm_in_millis - :currentTimeMillis)")
+    fun getAlarmsToRescheduleAfterReboot(currentTimeMillis: Long): List<Medicine>
 }

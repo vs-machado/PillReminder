@@ -74,11 +74,9 @@ class TreatmentDurationFragment : Fragment(), ActivityCompat.OnRequestPermission
                             when (getMedicineFrequency()){
                                 "Every day" -> {
                                     medicinesViewModel.insertMedicines(allAlarmsOfTreatment(1L))
-                                    // Needs to create alarms for a certain period. FI: 3 days and renew it with a WorkManager
                                 }
                                 "Every other day" -> {
                                     medicinesViewModel.insertMedicines(allAlarmsOfTreatment(2L))
-                                    // Needs to create alarms for a certain period.
                                 }
                                 "Specific days of the week" -> {
                                     // Needs further implementation

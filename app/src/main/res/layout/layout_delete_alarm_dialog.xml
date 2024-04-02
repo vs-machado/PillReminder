@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
@@ -16,7 +15,7 @@
         app:layout_constraintTop_toTopOf="parent">
 
         <androidx.constraintlayout.widget.ConstraintLayout
-            android:layout_width="match_parent"
+            android:layout_width="wrap_content"
             android:layout_height="match_parent"
             android:padding="12dp">
 
@@ -62,26 +61,49 @@
 
             <Button
                 android:id="@+id/btnDelete"
+                style="@style/Widget.Material3.Button.ElevatedButton"
                 android:layout_width="0dp"
-                android:layout_height="wrap_content"
+                android:layout_height="48dp"
                 android:layout_marginTop="16dp"
                 android:backgroundTint="#d24141"
                 android:text="@string/delete"
+                android:textColor="#F6F6F6"
                 app:cornerRadius="20dp"
+                app:icon="@drawable/baseline_delete_24"
+                app:iconTint="#F6F6F6"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/tvMedicineAndHour" />
 
             <Button
-                android:id="@+id/btnCancel"
+                android:id="@+id/btnDeleteAll"
+                style="@style/Widget.Material3.Button.OutlinedButton"
                 android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:backgroundTint="#747272"
-                android:text="@string/cancel"
-                app:cornerRadius="20dp"
+                android:layout_height="48dp"
+                android:backgroundTint="#F3F3F3"
+                android:text="@string/delete_all_alarms"
+                android:textColor="#686868"
+                app:icon="@drawable/baseline_delete_24"
+                app:iconTint="#686868"
+                app:layout_constraintBottom_toTopOf="@+id/btnCancel"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/btnDelete" />
+
+            <Button
+                android:id="@+id/btnCancel"
+                style="@style/Widget.Material3.Button.OutlinedButton"
+                android:backgroundTint="#F3F3F3"
+                android:layout_width="0dp"
+                android:layout_height="48dp"
+                android:text="@string/cancel"
+                android:textColor="#686868"
+                app:cornerRadius="20dp"
+                app:icon="@drawable/baseline_close_24"
+                app:iconTint="#686868"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent" />
 
             <ImageView
                 android:id="@+id/ivAlert"
@@ -96,6 +118,8 @@
                 app:layout_constraintTop_toTopOf="parent"
                 app:srcCompat="@drawable/ic_alert_24"
                 app:tint="#d24141" />
+
+
 
         </androidx.constraintlayout.widget.ConstraintLayout>
 

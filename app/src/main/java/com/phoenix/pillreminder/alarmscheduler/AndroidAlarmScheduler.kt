@@ -21,8 +21,6 @@ class AndroidAlarmScheduler(private val context: Context): AlarmScheduler {
             putExtra("ALARM_ITEM", item)
         }
 
-        //Log.i("ALARM HASHCODE", "${item.hashCode()}")
-
         // Checks if is possible to schedule exact alarms before calling the schedule method
         if(!alarmManager.canScheduleExactAlarms()){
             Log.e("AlarmScheduler", "Cannot schedule exact alarms")

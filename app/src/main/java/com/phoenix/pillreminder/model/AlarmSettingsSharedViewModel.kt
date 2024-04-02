@@ -1,18 +1,17 @@
 package com.phoenix.pillreminder.model
 
-import android.app.AlarmManager
-import android.app.PendingIntent
 import android.content.Context
-import android.content.Intent
-import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import androidx.work.ExistingPeriodicWorkPolicy
+import androidx.work.PeriodicWorkRequestBuilder
+import androidx.work.WorkManager
 import com.phoenix.pillreminder.alarmscheduler.AlarmItem
-import com.phoenix.pillreminder.alarmscheduler.AlarmReceiver
 import com.phoenix.pillreminder.alarmscheduler.AlarmScheduler
 import com.phoenix.pillreminder.alarmscheduler.AndroidAlarmScheduler
 import com.phoenix.pillreminder.db.Medicine
+import com.phoenix.pillreminder.worker.RescheduleWorker
 import java.time.Instant
 import java.time.LocalDateTime
 import java.time.ZoneId
@@ -24,8 +23,7 @@ import java.util.concurrent.TimeUnit
 class AlarmSettingsSharedViewModel : ViewModel() {
     private var medicineName = ""
 
-    private var _numberOfAlarms = MutableLiveData<Int>()
-    val numberOfAlarms: LiveData<Int> = _numberOfAlarms
+    private var alarmsPerDay = 1
 
     private var _currentAlarmNumber = MutableLiveData<Int>()
     val currentAlarmNumber: LiveData<Int> = _currentAlarmNumber
@@ -34,7 +32,7 @@ class AlarmSettingsSharedViewModel : ViewModel() {
     val medicineForm: LiveData<String> = _medicineForm
 
     private var medicineQuantity = 0F
-    private var medicineFrequency = ""
+    private var medicineFrequency = 0
 
     //Variables to store as many alarms as the user wants
     private var alarmHour = Array<Int?>(10){null}
@@ -48,20 +46,22 @@ class AlarmSettingsSharedViewModel : ViewModel() {
     private var treatmentPeriodInMillis: Long = 0L
     private var treatmentPeriodInDays: Long = 0L
 
-    private lateinit var pendingIntent: PendingIntent
+    //Used for alarms rescheduling if user does not set a treatment period
+    private var medicinePeriodSet = true
+    private var medicineNeedsReschedule = false
 
     var position = 0
 
 
     init{
         _currentAlarmNumber.value = 1
-        _numberOfAlarms.value = 1
     }
 
     fun allAlarmsOfTreatment(interval: Long): List<Medicine> {
         val name = medicineName
         val quantity = getMedicineQuantity()
         val form = getMedicineForm()
+        val alarmsPerDay = getAlarmsPerDay()
         val alarmInMillis = getAlarmInMillisList()
         val alarmHours = getAlarmHoursList()
         val alarmMinutes = getAlarmMinutesList()
@@ -69,45 +69,42 @@ class AlarmSettingsSharedViewModel : ViewModel() {
         val endDate = treatmentEndDate
         val medicineWasTaken = false
         val frequency = medicineFrequency
+        val periodSet = medicinePeriodSet
+        val needsReschedule = medicineNeedsReschedule
 
         val alarms = mutableListOf<Medicine>()
 
 
-        //Satisfied when user sets a treatment period
         if(treatmentStartDate != 0L && treatmentEndDate != 0L){
             setTreatmentPeriodInMillis()
             setTreatmentPeriodInDays()
 
             for (day in 0 .. treatmentPeriodInDays step interval){
                 for (i in alarmHours.indices) {
-                    alarms.add( // One day has 86400000 milliseconds
-                        Medicine(
-                            0,
-                            name,
-                            quantity,
-                            form!!,
-                            alarmInMillis[i] + (86400000 * day),
-                            alarmHours[i],
-                            alarmMinutes[i],
-                            startDate,
-                            endDate,
-                            medicineWasTaken,
-                            frequency
+                    if((alarmInMillis[i] + (86400000 * day)) > System.currentTimeMillis()){
+                        alarms.add( // One day has 86400000 milliseconds
+                            Medicine(
+                                0,
+                                name,
+                                quantity,
+                                form!!,
+                                alarmsPerDay,
+                                alarmInMillis[i] + (86400000 * day),
+                                alarmHours[i],
+                                alarmMinutes[i],
+                                startDate,
+                                endDate,
+                                medicineWasTaken,
+                                frequency,
+                                periodSet,
+                                needsReschedule
+                            )
                         )
-                    )
+                    }
                 }
             }
         }
-        //User did not set a treatment period
-        else {
 
-        }
-
-        /*for (i in alarmHours.indices){
-            alarms.add(
-                Medicine(0, name, quantity, form!!, alarmInMillis[i], alarmHours[i], alarmMinutes[i], startDate, endDate, medicineWasTaken)
-            )
-        }*/
         return alarms
     }
 
@@ -117,19 +114,21 @@ class AlarmSettingsSharedViewModel : ViewModel() {
 
         for(day in 0 .. getTreatmentPeriodInDays() step interval){
             for(i in 0 until getAlarmHoursList().size){
-                val alarmItem = AlarmItem (
-                    time = millisToDateTime(getAlarmInMillis(i)),
-                    medicineName = "${getMedicineName()}",
-                    medicineForm = "${getMedicineForm()}",
-                    medicineQuantity = "${getMedicineQuantity()}",
-                    alarmHour = "${getAlarmHour(i)}",
-                    alarmMinute = "${getAlarmMinute(i)}"
-                )
+                if(getAlarmInMillis(i) > System.currentTimeMillis()){
+                    val alarmItem = AlarmItem (
+                        time = millisToDateTime(getAlarmInMillis(i)),
+                        medicineName = "${getMedicineName()}",
+                        medicineForm = "${getMedicineForm()}",
+                        medicineQuantity = "${getMedicineQuantity()}",
+                        alarmHour = "${getAlarmHour(i)}",
+                        alarmMinute = "${getAlarmMinute(i)}"
+                    )
 
-                // It schedules only the first alarm. The next alarm will be set when the first alarm is triggered.
-                if (!alarmScheduled){
-                    alarmItem.let(alarmScheduler::scheduleAlarm)
-                    alarmScheduled = true
+                    // It schedules only the first alarm. The next alarm will be set when the first alarm is triggered.
+                    if (!alarmScheduled){
+                        alarmItem.let(alarmScheduler::scheduleAlarm)
+                        alarmScheduled = true
+                    }
                 }
             }
         }
@@ -163,20 +162,6 @@ class AlarmSettingsSharedViewModel : ViewModel() {
         val endDate = Calendar.getInstance(timeZone).apply { timeInMillis = secondDate }
 
         setTreatmentPeriod(startDate.timeInMillis, endDate.timeInMillis)
-    }
-
-     fun setTimer(startDate: Long, context: Context, requestCode: Int){
-        val alarmManager = context.getSystemService(Context.ALARM_SERVICE) as AlarmManager
-
-        val intent = Intent(context, AlarmReceiver::class.java)
-
-        pendingIntent = PendingIntent.getBroadcast(context, requestCode, intent, PendingIntent.FLAG_IMMUTABLE)
-
-        if(!alarmManager.canScheduleExactAlarms()){
-            //Needs to explain to user why he can't use the app
-            return
-        }
-        alarmManager.setExactAndAllowWhileIdle(AlarmManager.RTC_WAKEUP, startDate, pendingIntent)
     }
 
     fun saveMedicineForm(position: Int){
@@ -213,7 +198,6 @@ class AlarmSettingsSharedViewModel : ViewModel() {
     }
 
     private fun setTreatmentPeriod(startDate: Long, endDate: Long){
-        Log.i("DATES", "$startDate $endDate")
         val timeZone = TimeZone.getTimeZone("UTC")
         val timeZoneDefault = TimeZone.getDefault()
 
@@ -223,7 +207,6 @@ class AlarmSettingsSharedViewModel : ViewModel() {
         //Sets the treatment start date
         val calendarStart = Calendar.getInstance(timeZone)
         calendarStart.timeInMillis = startDate
-        Log.i("DATES HOUR", "${alarmHour[0]} ${alarmMinute[0]}")
         calendarStart.set(Calendar.HOUR_OF_DAY, alarmHour[0]!!)
         calendarStart.set(Calendar.MINUTE, alarmMinute[0]!!)
         calendarStart.set(Calendar.SECOND, 0)
@@ -282,6 +265,25 @@ class AlarmSettingsSharedViewModel : ViewModel() {
         return userDate.timeInMillis
     }
 
+    fun createRescheduleWorker(context: Context){
+        val rescheduleRequest = PeriodicWorkRequestBuilder<RescheduleWorker>(27, TimeUnit.DAYS)
+            .build()
+        val workManager = WorkManager.getInstance(context)
+        workManager.enqueueUniquePeriodicWork(
+            "unique_reschedule_work",
+            ExistingPeriodicWorkPolicy.KEEP,
+            rescheduleRequest)
+    }
+
+    fun setTemporaryPeriod(){
+        medicinePeriodSet = false
+        medicineNeedsReschedule = true
+    }
+
+    fun userWillSetPeriod(){
+        medicinePeriodSet = true
+        medicineNeedsReschedule = false
+    }
     private fun setTreatmentStartDate(date: Long){
         treatmentStartDate = date
     }
@@ -296,12 +298,12 @@ class AlarmSettingsSharedViewModel : ViewModel() {
         medicineQuantity = quantity
     }
 
-    fun setMedicineFrequency(frequency: String){
+    fun setMedicineFrequency(frequency: Int){
         medicineFrequency = frequency
     }
 
     fun setNumberOfAlarms(newNumberOfAlarms: Int){
-        _numberOfAlarms.value = newNumberOfAlarms
+        alarmsPerDay = newNumberOfAlarms
     }
 
     fun getMedicineQuantity(): Float {
@@ -312,11 +314,15 @@ class AlarmSettingsSharedViewModel : ViewModel() {
         return treatmentStartDate
     }
 
+    fun getAlarmsPerDay(): Int{
+        return alarmsPerDay
+    }
+
     fun getMedicineForm(): String? {
         return medicineForm.value
     }
 
-    fun getMedicineFrequency(): String{
+    fun getMedicineFrequency(): Int{
         return medicineFrequency
     }
 
@@ -360,7 +366,7 @@ class AlarmSettingsSharedViewModel : ViewModel() {
         treatmentEndDate = 0L
     }
 
-    fun getTreatmentPeriodInDays(): Long{
+    private fun getTreatmentPeriodInDays(): Long{
         return treatmentPeriodInDays
     }
 

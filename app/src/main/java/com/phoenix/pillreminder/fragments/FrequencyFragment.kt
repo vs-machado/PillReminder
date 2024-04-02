@@ -56,27 +56,34 @@ class FrequencyFragment : Fragment() {
     private fun checkSelectedOption(position: Int){
         when (position){
             0 -> {
-                sharedViewModel.setMedicineFrequency("Every day")
+                sharedViewModel.setMedicineFrequency(1)
             }
 
             1 -> {
-                sharedViewModel.setMedicineFrequency("Every other day")
+                sharedViewModel.setMedicineFrequency(2)
             }
 
             2 -> {
-                sharedViewModel.setMedicineFrequency("Specific days of the week")
+                // Needs to navigate to another fragment and receive user input
+                //Needs to calculate how many days has in the period
+                sharedViewModel.setMedicineFrequency(1) // Temporarily not working
             }
 
             3 -> {
-                sharedViewModel.setMedicineFrequency("Every X days")
+                // Needs to navigate to another fragment and receive user input
+                sharedViewModel.setMedicineFrequency(1) // Temporarily not working
             }
 
             4 -> {
-                sharedViewModel.setMedicineFrequency("Every X weeks")
+                // Needs to navigate to another fragment and receive user input
+                //Needs to calculate how many days has in the period
+                sharedViewModel.setMedicineFrequency(1) // Temporarily not working
             }
 
             5 -> {
-                sharedViewModel.setMedicineFrequency("Every X months")
+                //Needs to navigate to another fragment and receive user input
+                //Needs to calculate how many days has in the period
+                sharedViewModel.setMedicineFrequency(1) // Temporarily not working
             }
         }
     }

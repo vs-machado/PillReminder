@@ -65,7 +65,7 @@
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="16dp"
-                android:backgroundTint="#001A9E"
+                android:backgroundTint="#991532CA"
                 android:text="Go to permissions"
                 app:cornerRadius="20dp"
                 app:layout_constraintEnd_toEndOf="parent"
@@ -84,14 +84,16 @@
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
                 app:srcCompat="@drawable/ic_alert_24"
-                app:tint="#F1BD02" />
+                app:tint="#d24141" />
 
             <Button
                 android:id="@+id/btnDismissRequest"
+                style="@style/Widget.Material3.Button.OutlinedButton"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:backgroundTint="#747272"
+                android:backgroundTint="#F3F3F3"
                 android:text="Dismiss"
+                android:textColor="#686868"
                 app:cornerRadius="20dp"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"

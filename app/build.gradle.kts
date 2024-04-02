@@ -49,6 +49,7 @@ dependencies {
     val lifecycleVersion = "2.5.0-alpha02"
     val activityVersion = "1.8.2"
     val fragmentVersion = "1.6.2"
+    val workVersion = "2.9.0"
 
     //Activity
     implementation("androidx.activity:activity-ktx:$activityVersion")
@@ -73,6 +74,9 @@ dependencies {
 
     //LiveData
     implementation("androidx.lifecycle:lifecycle-livedata-ktx:$lifecycleVersion")
+
+    //WorkManager
+    implementation("androidx.work:work-runtime-ktx:$workVersion")
 
     implementation("androidx.core:core-ktx:$coreVersion")
     implementation("androidx.appcompat:appcompat:1.6.1")

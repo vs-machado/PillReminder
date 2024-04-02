@@ -69,15 +69,26 @@ class TreatmentDurationFragment : Fragment(), ActivityCompat.OnRequestPermission
                         0 -> {
                             showDateRangePickerAndCreateAlarm()
                         }
-                        // User don't want to set a treatment period
+                        /* User don't want to set a treatment period. The app will set a temporary treatment period (30 days). If user
+                        doesn't remove the alarm, it will be renewed in 28 days. */
                         1 -> {
+                            setTemporaryPeriod()
+
+                            val startDateMillis = System.currentTimeMillis()
+                            val endDateMillis = (startDateMillis + (30 * 86400000L))
+
+                            extractDateComponents(startDateMillis,endDateMillis)
+
                             when (getMedicineFrequency()){
-                                "Every day" -> {
+                                1 -> {
                                     medicinesViewModel.insertMedicines(allAlarmsOfTreatment(1L))
+                                    createAlarmItemAndSchedule(requireActivity().applicationContext, 1L)
                                 }
-                                "Every other day" -> {
+                                2 -> {
                                     medicinesViewModel.insertMedicines(allAlarmsOfTreatment(2L))
+                                    createAlarmItemAndSchedule(requireActivity().applicationContext, 2L)
                                 }
+                                /*
                                 "Specific days of the week" -> {
                                     // Needs further implementation
                                 }
@@ -89,15 +100,10 @@ class TreatmentDurationFragment : Fragment(), ActivityCompat.OnRequestPermission
                                 }
                                 "Every X months" -> {
                                     // Needs further implementation
-                                }
-                            }
-                            /*Schedule alarm (if the user does not define a treatment period, it uses the same day to start to trigger alarms)
-                            The -1 passed to the method indicates that there is no need to sum the alarm hours and minutes in millis
-                            to the calendar instance*/
-                            for(i in 0 until getAlarmHoursList().size){
-                                setTimer(getUserDate(i), requireActivity(), i)
+                                }*/
                             }
 
+                            createRescheduleWorker(requireContext().applicationContext)
                             clearTreatmentPeriod()
 
                             Toast.makeText(requireContext(),
@@ -114,6 +120,8 @@ class TreatmentDurationFragment : Fragment(), ActivityCompat.OnRequestPermission
 
     private fun showDateRangePickerAndCreateAlarm(){
         sharedViewModel.apply{
+            userWillSetPeriod()
+
             val dateRangePicker = MaterialDatePicker.Builder.dateRangePicker()
                 .setTitleText("Select the treatment duration:")
                 .build()
@@ -126,16 +134,16 @@ class TreatmentDurationFragment : Fragment(), ActivityCompat.OnRequestPermission
                 //Extracts the treatment period and adds the user alarm hour to it in milliseconds
                 extractDateComponents(startDateMillis, endDateMillis)
 
-
                 when (getMedicineFrequency()){
-                    "Every day" -> {
+                    1 -> {
                         medicinesViewModel.insertMedicines(allAlarmsOfTreatment(1L))
                         createAlarmItemAndSchedule(requireActivity().applicationContext, 1L)
                     }
-                    "Every other day" -> {
+                    2 -> {
                         medicinesViewModel.insertMedicines(allAlarmsOfTreatment(2L))
                         createAlarmItemAndSchedule(requireActivity().applicationContext, 2L)
                     }
+                    /*
                     "Specific days of the week" -> {
                         // Needs further implementation
                     }
@@ -147,10 +155,9 @@ class TreatmentDurationFragment : Fragment(), ActivityCompat.OnRequestPermission
                     }
                     "Every X months" -> {
                         // Needs further implementation
-                    }
+                    }*/
                 }
 
-                //notification()
                 clearTreatmentPeriod()
 
                 Toast.makeText(requireContext(),

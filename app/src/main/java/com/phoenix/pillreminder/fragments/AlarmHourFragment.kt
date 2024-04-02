@@ -76,7 +76,7 @@ class AlarmHourFragment : Fragment() {
                     sharedViewModel.position++
                     updateCurrentAlarmNumber()
 
-                    if (currentAlarmNumber.value!! > numberOfAlarms.value!!) {
+                    if (currentAlarmNumber.value!! > getAlarmsPerDay()) {
                         //Clear the remaining positions of the alarm array
                         clearAlarmArray()
                         findNavController().navigate(R.id.action_alarmHourFragment_to_treatmentDurationFragment)

@@ -11,6 +11,7 @@ import kotlinx.coroutines.withContext
 class MedicinesViewModel(private val dao: MedicineDao): ViewModel() {
 
     val medicines = dao.getAllMedicines()
+
     suspend fun getMedicines(): List<Medicine>{
         return withContext(Dispatchers.IO){
             dao.getMedicines()
@@ -21,8 +22,8 @@ class MedicinesViewModel(private val dao: MedicineDao): ViewModel() {
         return dao.getCurrentAlarmData(alarmInMillis)
     }
 
-    fun getAlarmsToRescheduleAfterReboot(currentTimeMillis: Long): List<Medicine>{
-        return dao.getAlarmsToRescheduleAfterReboot(currentTimeMillis)
+    fun getAllMedicinesWithSameName(medicineName: String): List<Medicine> {
+        return dao.getAllMedicinesWithSameName(medicineName)
     }
 
     fun insertMedicines(medicine: List<Medicine>) = viewModelScope.launch{
@@ -35,6 +36,10 @@ class MedicinesViewModel(private val dao: MedicineDao): ViewModel() {
 
     fun deleteMedicines(medicine: Medicine) = viewModelScope.launch{
         dao.deleteMedicine(medicine)
+    }
+
+    fun deleteAllSelectedMedicines(medicines: List<Medicine>) = viewModelScope.launch{
+        dao.deleteAllSelectedMedicines(medicines)
     }
 
 

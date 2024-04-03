@@ -58,6 +58,7 @@ class HomeFragment : Fragment() {
     private var toast: Toast? = null
     private var wasOverlayPermissionDialogShown: Boolean = false
     private val hfViewModel: HomeFragmentViewModel by viewModels()
+    private lateinit var dialog: Dialog
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -156,7 +157,7 @@ class HomeFragment : Fragment() {
         dialog.show()
     }
     private fun showDeleteAlarmDialog(medicine: Medicine){
-        val dialog = Dialog(this.requireContext())
+        dialog = Dialog(this.requireContext())
         dialog.requestWindowFeature(android.view.Window.FEATURE_NO_TITLE)
         dialog.setCancelable(false)
         dialog.setContentView(R.layout.layout_delete_alarm_dialog)
@@ -164,31 +165,48 @@ class HomeFragment : Fragment() {
 
         val tvMedicine: TextView = dialog.findViewById(R.id.tvMedicineAndHour)
         val btnDelete: Button = dialog.findViewById(R.id.btnDelete)
+        val btnDeleteAll: Button = dialog.findViewById(R.id.btnDeleteAll)
         val btnCancel: Button = dialog.findViewById(R.id.btnCancel)
 
         tvMedicine.text = context?.getString(R.string.tv_alarm_and_hour, medicine.name, showTvAlarm(medicine.alarmHour, medicine.alarmMinute))
 
+        val alarmTime = Instant.ofEpochMilli(medicine.alarmInMillis).atZone(ZoneId.systemDefault()).toLocalDateTime()
+        val alarmScheduler : AlarmScheduler = AndroidAlarmScheduler(requireActivity().applicationContext)
+
+        val alarmItem = AlarmItem(
+            alarmTime,
+            medicine.name,
+            medicine.form,
+            medicine.quantity.toString(),
+            medicine.alarmHour.toString(),
+            medicine.alarmMinute.toString()
+        )
+
         btnDelete.setOnClickListener {
-            val alarmTime = Instant.ofEpochMilli(medicine.alarmInMillis).atZone(ZoneId.systemDefault()).toLocalDateTime()
-            val alarmScheduler : AlarmScheduler = AndroidAlarmScheduler(requireActivity().applicationContext)
-
-            val alarmItem = AlarmItem(
-                alarmTime,
-                medicine.name,
-                medicine.form,
-                medicine.quantity.toString(),
-                medicine.alarmHour.toString(),
-                medicine.alarmMinute.toString()
-            )
-
             //Checks if the alarm was already triggered. If so, there is no need to cancel the broadcast.
             if(medicine.alarmInMillis > System.currentTimeMillis()){
-                alarmScheduler.cancelAlarm(alarmItem, medicine)
+                alarmScheduler.cancelAlarm(alarmItem, false)
             }
             medicinesViewModel.deleteMedicines(medicine)
             displayMedicinesList(hfViewModel.getDate())
             dialog.dismiss()
             showToastAlarmDeleted()
+        }
+
+        btnDeleteAll.setOnClickListener {
+            // Needs to check the scheduled alarms and cancel it
+            CoroutineScope(Dispatchers.Main).launch{
+                alarmScheduler.cancelAlarm(alarmItem, true)
+
+                withContext(Dispatchers.IO){
+                    val alarmsToDelete = medicinesViewModel.getAllMedicinesWithSameName(medicine.name)
+                    medicinesViewModel.deleteAllSelectedMedicines(alarmsToDelete)
+                }
+
+                displayMedicinesList(hfViewModel.getDate())
+                dialog.dismiss()
+                showToastAlarmDeleted()
+            }
         }
 
         btnCancel.setOnClickListener {

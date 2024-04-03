@@ -267,6 +267,7 @@ class AlarmSettingsSharedViewModel : ViewModel() {
 
     fun createRescheduleWorker(context: Context){
         val rescheduleRequest = PeriodicWorkRequestBuilder<RescheduleWorker>(27, TimeUnit.DAYS)
+            .setInitialDelay(27, TimeUnit.DAYS)
             .build()
         val workManager = WorkManager.getInstance(context)
         workManager.enqueueUniquePeriodicWork(

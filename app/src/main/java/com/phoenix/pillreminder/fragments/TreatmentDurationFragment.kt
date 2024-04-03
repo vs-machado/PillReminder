@@ -104,6 +104,7 @@ class TreatmentDurationFragment : Fragment(), ActivityCompat.OnRequestPermission
                             }
 
                             createRescheduleWorker(requireContext().applicationContext)
+                            setNumberOfAlarms(1)
                             clearTreatmentPeriod()
 
                             Toast.makeText(requireContext(),
@@ -158,6 +159,7 @@ class TreatmentDurationFragment : Fragment(), ActivityCompat.OnRequestPermission
                     }*/
                 }
 
+                setNumberOfAlarms(1)
                 clearTreatmentPeriod()
 
                 Toast.makeText(requireContext(),

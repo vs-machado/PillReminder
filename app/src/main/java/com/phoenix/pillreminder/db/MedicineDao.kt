@@ -19,8 +19,16 @@ interface MedicineDao {
     @Delete
     suspend fun deleteMedicine(medicine: Medicine)
 
+    @Delete
+    suspend fun deleteAllSelectedMedicines(medicines: List<Medicine>)
+
     @Query("SELECT * FROM medicines_data_table")
     fun getAllMedicines():LiveData<List<Medicine>>
+
+    @Query("SELECT *" +
+            "FROM medicines_data_table " +
+            "WHERE medicine_name = :medicineName")
+    fun getAllMedicinesWithSameName(medicineName: String): List<Medicine>
 
     @Query("SELECT * FROM medicines_data_table")
     fun getMedicines(): List<Medicine>
@@ -33,7 +41,7 @@ interface MedicineDao {
     @Query("SELECT *" +
             "FROM medicines_data_table " +
             "WHERE medicine_alarm_in_millis > :currentTimeMillis " +
-            "AND medicine_name == :medicineName " +
+            "AND medicine_name = :medicineName " +
             "ORDER BY medicine_alarm_in_millis " +
             "ASC LIMIT 1")
     suspend fun getNextAlarmData(medicineName: String, currentTimeMillis: Long): Medicine?

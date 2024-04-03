@@ -194,7 +194,6 @@ class HomeFragment : Fragment() {
         }
 
         btnDeleteAll.setOnClickListener {
-            // Needs to check the scheduled alarms and cancel it
             CoroutineScope(Dispatchers.Main).launch{
                 alarmScheduler.cancelAlarm(alarmItem, true)
 

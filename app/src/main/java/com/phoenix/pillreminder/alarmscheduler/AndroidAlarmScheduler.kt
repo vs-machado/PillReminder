@@ -90,9 +90,9 @@ class AndroidAlarmScheduler(private val context: Context): AlarmScheduler {
             }
 
             alarmManager.cancel(pendingIntent)
-            Toast.makeText(context,
+            /*Toast.makeText(context,
                 "ALARM CANCELLED: ${item.time}",
-                Toast.LENGTH_LONG).show()
+                Toast.LENGTH_LONG).show()*/
 
             //Log.i("ALARM", "ALARM CANCELLED: ${item.time}")
         }

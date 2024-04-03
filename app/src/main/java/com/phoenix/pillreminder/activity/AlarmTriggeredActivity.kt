@@ -1,5 +1,6 @@
 package com.phoenix.pillreminder.activity
 
+import android.content.Intent
 import android.media.MediaPlayer
 import android.os.Build
 import android.os.Bundle
@@ -58,16 +59,23 @@ class AlarmTriggeredActivity : AppCompatActivity() {
                     ivAlarmMedicineIcon.setImageResource(setMedicineImageView(medicineForm))
 
                     btnPause.setOnClickListener {
-                        mediaPlayer?.stop()
-                        mediaPlayer?.release()
-                        mediaPlayer = null
+                        stopMediaPlayer()
                     }
 
                     btnTaken.setOnClickListener{
+                        stopMediaPlayer()
+
                         CoroutineScope(Dispatchers.IO).launch {
-                            viewModel.getCurrentAlarmData(alarmItem, medicinesViewModel)
+                            viewModel.markMedicineAsTaken(alarmItem, medicinesViewModel)
                         }
-                        finish()
+                        val intent = Intent(applicationContext, MainActivity::class.java)
+                        startActivity(intent)
+                    }
+
+                    btnDismiss.setOnClickListener {
+                        stopMediaPlayer()
+                        val intent = Intent(applicationContext, MainActivity::class.java)
+                        startActivity(intent)
                     }
                 }
             }
@@ -80,6 +88,12 @@ class AlarmTriggeredActivity : AppCompatActivity() {
 
     override fun onDestroy() {
         super.onDestroy()
+        mediaPlayer?.stop()
+        mediaPlayer?.release()
+        mediaPlayer = null
+    }
+
+    private fun stopMediaPlayer(){
         mediaPlayer?.stop()
         mediaPlayer?.release()
         mediaPlayer = null

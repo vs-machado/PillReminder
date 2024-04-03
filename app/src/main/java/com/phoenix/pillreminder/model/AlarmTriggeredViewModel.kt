@@ -70,7 +70,7 @@ class AlarmTriggeredViewModel : ViewModel() {
         return millis
     }
 
-    suspend fun getCurrentAlarmData(alarmItem: AlarmItem, medicinesViewModel: MedicinesViewModel) {
+    suspend fun markMedicineAsTaken(alarmItem: AlarmItem, medicinesViewModel: MedicinesViewModel) {
         val alarmInMillis = localDateTimeToMillis(alarmItem.time)
         val medicine = medicinesViewModel.getCurrentAlarmData(alarmInMillis)
         Log.i("ALARM", "$medicine")

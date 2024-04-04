@@ -59,7 +59,8 @@ class TreatmentDurationFragment : Fragment(), ActivityCompat.OnRequestPermission
                 toolbar.setupWithNavController(navController, appBarConfiguration)
 
                 // Med forms list. User must select the desired type of med
-                val list: MutableList<String> = mutableListOf("Yes, I do", "No, I don't")
+                val list: MutableList<String> = mutableListOf(getString(R.string.yes_i_do),
+                    getString(R.string.no_i_don_t))
                 val arrayAdapter = ArrayAdapter(requireContext(), android.R.layout.simple_list_item_1, list)
                 lvTreatmentDuration.adapter = arrayAdapter
 
@@ -108,7 +109,7 @@ class TreatmentDurationFragment : Fragment(), ActivityCompat.OnRequestPermission
                             clearTreatmentPeriod()
 
                             Toast.makeText(requireContext(),
-                                "Alarms successfully created!",
+                                getString(R.string.alarms_successfully_created),
                                 Toast.LENGTH_LONG).show()
 
                             popBackStack()
@@ -124,7 +125,7 @@ class TreatmentDurationFragment : Fragment(), ActivityCompat.OnRequestPermission
             userWillSetPeriod()
 
             val dateRangePicker = MaterialDatePicker.Builder.dateRangePicker()
-                .setTitleText("Select the treatment duration:")
+                .setTitleText(getString(R.string.select_the_treatment_duration))
                 .build()
 
             dateRangePicker.addOnPositiveButtonClickListener { selection ->
@@ -163,7 +164,7 @@ class TreatmentDurationFragment : Fragment(), ActivityCompat.OnRequestPermission
                 clearTreatmentPeriod()
 
                 Toast.makeText(requireContext(),
-                    "Alarms successfully created!",
+                    getString(R.string.alarms_successfully_created),
                     Toast.LENGTH_LONG).show()
 
                 popBackStack()

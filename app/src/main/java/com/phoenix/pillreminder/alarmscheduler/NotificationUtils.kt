@@ -21,7 +21,8 @@ object NotificationUtils {
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O){
             val name = "PillReminderChannel"
-            val descriptionText = "Channel for reminding users to take their medicines"
+            val descriptionText =
+                context.getString(R.string.channel_for_reminding_users_to_take_their_medicines)
             val importance = NotificationManager.IMPORTANCE_HIGH
             val channel = NotificationChannel(channelId, name, importance).apply {
                 description = descriptionText
@@ -31,8 +32,8 @@ object NotificationUtils {
         }
 
         return NotificationCompat.Builder(context, channelId)
-            .setContentTitle("Time to take your medicine!")
-            .setContentText("Do not forget to mark the medicine as taken.")
+            .setContentTitle(context.getString(R.string.time_to_take_your_medicine))
+            .setContentText(context.getString(R.string.do_not_forget_to_mark_the_medicine_as_taken))
             .setSmallIcon(R.drawable.ic_launcher_background)
             .setContentIntent(pendingIntent)
             .build()

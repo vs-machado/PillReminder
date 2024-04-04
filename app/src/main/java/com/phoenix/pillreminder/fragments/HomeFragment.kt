@@ -220,7 +220,8 @@ class HomeFragment : Fragment() {
         if (toast != null){
             toast?.cancel()
         }
-        toast = Toast.makeText(context, "Alarm successfully deleted!", Toast.LENGTH_LONG)
+        toast = Toast.makeText(context,
+            getString(R.string.alarm_successfully_deleted), Toast.LENGTH_LONG)
         toast?.show()
     }
 

@@ -39,8 +39,11 @@ class FrequencyFragment : Fragment() {
             toolbarFrequency.setupWithNavController(navController, appBarConfiguration)
 
             // Frequency of med usage list. User must select the desired usage interval
-            val list: MutableList<String> = mutableListOf("Every day", "Every other day", "Specific days of the week", "Every X days",
-                "Every X weeks", "Every X months")
+            val list: MutableList<String> = mutableListOf(
+                getString(R.string.every_day),
+                getString(R.string.every_other_day),
+                getString(R.string.specific_days_of_the_week), getString(R.string.every_x_days),
+                getString(R.string.every_x_weeks), getString(R.string.every_x_months))
             val arrayAdapter = ArrayAdapter(requireContext(), android.R.layout.simple_list_item_1, list)
             lvFrequency.adapter = arrayAdapter
 

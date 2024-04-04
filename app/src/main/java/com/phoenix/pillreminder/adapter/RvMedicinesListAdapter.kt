@@ -96,10 +96,10 @@ class MyViewHolder(private val medicinesBinding: AdapterListMedicinesBinding):Re
 
 
             when(medicine.form){
-                "pill" -> tvQuantity.text = context.getString(R.string.take_pill, medicine.quantity.toInt().toString(), medicine.form)
+                "pill" -> tvQuantity.text = context.getString(R.string.take_pill, medicine.quantity.toInt().toString())
                 "injection" -> tvQuantity.text = context.getString(R.string.take_injection, medicine.quantity.toString())
                 "liquid" -> tvQuantity.text = context.getString(R.string.take_liquid, medicine.quantity.toString())
-                "drop" -> tvQuantity.text = context.getString(R.string.take_drops, medicine.quantity.toInt().toString(), medicine.form)
+                "drop" -> tvQuantity.text = context.getString(R.string.take_drops, medicine.quantity.toInt().toString())
                 "inhaler" -> tvQuantity.text = context.getString(R.string.inhale, medicine.quantity.toString())
                 "pomade" -> tvQuantity.text = context.getString(R.string.apply_pomade, medicine.quantity.toString())
             }
@@ -107,10 +107,10 @@ class MyViewHolder(private val medicinesBinding: AdapterListMedicinesBinding):Re
             when(medicine.medicineWasTaken /*and compare user hour to alarm hour in millis*/){
                 true -> {
                     tvMedicineTaken.isVisible = true
-                    tvMedicineTaken.text = "Medicine already taken" }
+                    tvMedicineTaken.text = context.getString(R.string.medicine_already_taken) }
                 false -> {
                     tvMedicineTaken.isVisible = true
-                    tvMedicineTaken.text = "Medicine not taken yet."}
+                    tvMedicineTaken.text = context.getString(R.string.medicine_not_taken_yet)}
             }
 
            ivDelete.setOnClickListener {

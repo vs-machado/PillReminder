@@ -79,7 +79,7 @@
                 android:id="@+id/btnDeleteAll"
                 style="@style/Widget.Material3.Button.OutlinedButton"
                 android:layout_width="0dp"
-                android:layout_height="48dp"
+                android:layout_height="wrap_content"
                 android:backgroundTint="#F3F3F3"
                 android:text="@string/delete_all_alarms"
                 android:textColor="#686868"

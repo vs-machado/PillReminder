@@ -74,22 +74,22 @@ class QuantityAndStrengthFragment : Fragment() {
     private fun setEditTextMedicineForm(medicineForm: String?){
         when(medicineForm){
             "pill" -> {
-                binding.tvForm.text = "pill(s)"
+                binding.tvForm.text = getString(R.string.pills)
             }
             "drop" -> {
-                binding.tvForm.text = "drop(s)"
+                binding.tvForm.text = getString(R.string.drops)
             }
             "pomade" -> {
-                binding.tvForm.text = "gram(s)"
+                binding.tvForm.text = getString(R.string.grams)
             }
             "injection" ->{
-                binding.tvForm.text = "mL(s)"
+                binding.tvForm.text = getString(R.string.mls)
             }
             "liquid" -> {
-                binding.tvForm.text = "mL(s)"
+                binding.tvForm.text = getString(R.string.mls)
             }
             "inhaler" -> {
-                binding.tvForm.text = "mg(s)"
+                binding.tvForm.text = getString(R.string.mgs)
             }
         }
     }

@@ -80,6 +80,7 @@ class RescheduleWorker(appContext: Context, workerParams: WorkerParameters) : Co
             val frequency = medicine.medicineFrequency
             val periodSet = medicine.medicinePeriodSet
             val needsReschedule = medicine.medicineNeedsReschedule
+            val workerID = medicine.rescheduleWorkerID
 
             if((alarmInMillis + (86400000L * day)) > System.currentTimeMillis()){
                 alarms.add(
@@ -97,7 +98,8 @@ class RescheduleWorker(appContext: Context, workerParams: WorkerParameters) : Co
                         medicineWasTaken,
                         frequency,
                         periodSet,
-                        needsReschedule
+                        needsReschedule,
+                        workerID
                     )
                 )
             }

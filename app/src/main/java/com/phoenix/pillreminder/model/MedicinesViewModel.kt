@@ -22,6 +22,16 @@ class MedicinesViewModel(private val dao: MedicineDao): ViewModel() {
         return dao.getCurrentAlarmData(alarmInMillis)
     }
 
+    suspend fun hasNextAlarmData(medicineName: String, currentTimeMillis: Long): Boolean{
+        return withContext(Dispatchers.IO){
+            dao.hasNextAlarmData(medicineName, currentTimeMillis)
+        }
+    }
+
+    fun getWorkerID(medicineName: String): String {
+        return dao.getWorkerID(medicineName)
+    }
+
     fun getAllMedicinesWithSameName(medicineName: String): List<Medicine> {
         return dao.getAllMedicinesWithSameName(medicineName)
     }

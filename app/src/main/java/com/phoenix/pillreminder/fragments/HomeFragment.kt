@@ -10,6 +10,7 @@ import android.net.Uri
 import android.os.Bundle
 import android.provider.Settings
 import android.text.format.DateFormat
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -29,6 +30,7 @@ import androidx.navigation.fragment.findNavController
 import androidx.navigation.ui.AppBarConfiguration
 import androidx.navigation.ui.setupWithNavController
 import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.work.WorkManager
 import com.phoenix.pillreminder.R
 import com.phoenix.pillreminder.activity.MainActivity
 import com.phoenix.pillreminder.adapter.RvMedicinesListAdapter
@@ -42,6 +44,7 @@ import com.phoenix.pillreminder.model.MedicinesViewModel
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.runBlocking
 import kotlinx.coroutines.withContext
 import java.text.SimpleDateFormat
 import java.time.Instant
@@ -49,6 +52,7 @@ import java.time.ZoneId
 import java.util.Calendar
 import java.util.Date
 import java.util.Locale
+import java.util.UUID
 
 
 class HomeFragment : Fragment() {
@@ -91,6 +95,8 @@ class HomeFragment : Fragment() {
         val navController = findNavController()
         val appBarConfiguration = AppBarConfiguration(navController.graph)
         binding.toolbarHome.setupWithNavController(navController, appBarConfiguration)
+        binding.toolbarHome.title = "Pill Reminder"
+        binding.toolbarHome.setTitleTextColor(Color.WHITE)
 
         initRecyclerView(hfViewModel.getDate())
 
@@ -183,14 +189,26 @@ class HomeFragment : Fragment() {
         )
 
         btnDelete.setOnClickListener {
-            //Checks if the alarm was already triggered. If so, there is no need to cancel the broadcast.
-            if(medicine.alarmInMillis > System.currentTimeMillis()){
-                alarmScheduler.cancelAlarm(alarmItem, false)
+            CoroutineScope(Dispatchers.Main).launch{
+                //Checks if the alarm was already triggered. If so, there is no need to cancel the broadcast.
+                if(medicine.alarmInMillis > System.currentTimeMillis()){
+                    alarmScheduler.cancelAlarm(alarmItem, false)
+                }
+                Log.i("alarmdata", "medicine name ${medicine.name} and currentmillis ${System.currentTimeMillis()}")
+                withContext(Dispatchers.IO){
+                    val hasNextAlarm = medicinesViewModel.hasNextAlarmData(medicine.name, System.currentTimeMillis())
+                    Log.i("alarmdata", hasNextAlarm.toString())
+
+                    if(!hasNextAlarm){
+                        val workRequestID = UUID.fromString(medicinesViewModel.getWorkerID(medicine.name))
+                        WorkManager.getInstance(requireContext().applicationContext).cancelWorkById(workRequestID)
+                    }
+                }
+                medicinesViewModel.deleteMedicines(medicine)
+                displayMedicinesList(hfViewModel.getDate())
+                dialog.dismiss()
+                showToastAlarmDeleted()
             }
-            medicinesViewModel.deleteMedicines(medicine)
-            displayMedicinesList(hfViewModel.getDate())
-            dialog.dismiss()
-            showToastAlarmDeleted()
         }
 
         btnDeleteAll.setOnClickListener {
@@ -198,6 +216,11 @@ class HomeFragment : Fragment() {
                 alarmScheduler.cancelAlarm(alarmItem, true)
 
                 withContext(Dispatchers.IO){
+                    val workRequestID = UUID.fromString(medicinesViewModel.getWorkerID(medicine.name))
+                    val workManager = WorkManager.getInstance(requireContext().applicationContext).cancelWorkById(workRequestID)
+                    val workInfo = workManager.state
+                    Log.i("WorkManager", "${workInfo.value}")
+
                     val alarmsToDelete = medicinesViewModel.getAllMedicinesWithSameName(medicine.name)
                     medicinesViewModel.deleteAllSelectedMedicines(alarmsToDelete)
                 }

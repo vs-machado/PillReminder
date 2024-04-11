@@ -13,9 +13,9 @@
     <string name="goes_back_to_previous_page">Goes back to previous page</string>
     <string name="goes_to_the_next_page">Goes to the next page</string>
     <string name="what_form_is_the_med">What form is the med?</string>
-    <string name="how_often_do_you_take_it">How often do you take it?</string>
+    <string name="how_often_do_you_take_it">How often do you use it?</string>
     <string name="clock_icon">Clock icon</string>
-    <string name="how_many_do_you_take_per_day">How many times do you take it per day?</string>
+    <string name="how_many_do_you_take_per_day">How many times do you use it per day?</string>
     <string name="time">time(s)</string>
     <string name="do_you_want_to_set_a_treatment_duration">Do you want to set a treatment duration?</string>
     <string name="please_insert_the_medicine_alarm_hour">Please, insert the medicine alarm hour:</string>
@@ -77,4 +77,15 @@
     <string name="medicine_not_taken_yet">Medicine not taken yet.</string>
     <string name="quantity">Quantity</string>
     <string name="set_the_quantity_per_dosage">Set the quantity per dosage:</string>
+    <string name="this_app_heavily_depends_on_user_overlay_and_notification_permissions_to_properly_work">This app heavily depends on user overlay and notification permissions to properly work.</string>
+    <string name="the_app_must_not_be_used_without_these_permissions">The app must not be used without these permissions.</string>
+    <string name="go_to_permissions">Go to permissions</string>
+    <string name="dismiss">Dismiss</string>
+    <string name="permission_required">Permission required</string>
+    <string name="alarm">Alarm</string>
+    <string name="clock_icon_designed_by_bukeicon_assets_source_from_freepik">Clock icon designed by bukeicon. Assets source from Freepik.</string>
+    <string name="_00_00">00:00</string>
+    <string name="medicine_name">Medicine name</string>
+    <string name="mark_as_taken">MARK AS TAKEN</string>
+    <string name="mute_sound">Mute sound</string>
 </resources>

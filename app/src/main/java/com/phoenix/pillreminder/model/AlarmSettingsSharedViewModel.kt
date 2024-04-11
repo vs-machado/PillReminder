@@ -4,7 +4,6 @@ import android.content.Context
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
-import androidx.work.ExistingPeriodicWorkPolicy
 import androidx.work.PeriodicWorkRequestBuilder
 import androidx.work.WorkManager
 import com.phoenix.pillreminder.alarmscheduler.AlarmItem
@@ -18,6 +17,7 @@ import java.time.ZoneId
 import java.time.ZoneOffset
 import java.util.Calendar
 import java.util.TimeZone
+import java.util.UUID
 import java.util.concurrent.TimeUnit
 
 class AlarmSettingsSharedViewModel : ViewModel() {
@@ -97,7 +97,60 @@ class AlarmSettingsSharedViewModel : ViewModel() {
                                 medicineWasTaken,
                                 frequency,
                                 periodSet,
-                                needsReschedule
+                                needsReschedule,
+                                "noID"
+                            )
+                        )
+                    }
+                }
+            }
+        }
+
+        return alarms
+    }
+
+    fun allAlarmsOfTreatment(interval: Long, workerID: UUID): List<Medicine> {
+        val name = medicineName
+        val quantity = getMedicineQuantity()
+        val form = getMedicineForm()
+        val alarmsPerDay = getAlarmsPerDay()
+        val alarmInMillis = getAlarmInMillisList()
+        val alarmHours = getAlarmHoursList()
+        val alarmMinutes = getAlarmMinutesList()
+        val startDate = treatmentStartDate
+        val endDate = treatmentEndDate
+        val medicineWasTaken = false
+        val frequency = medicineFrequency
+        val periodSet = medicinePeriodSet
+        val needsReschedule = medicineNeedsReschedule
+
+        val alarms = mutableListOf<Medicine>()
+
+
+        if(treatmentStartDate != 0L && treatmentEndDate != 0L){
+            setTreatmentPeriodInMillis()
+            setTreatmentPeriodInDays()
+
+            for (day in 0 .. treatmentPeriodInDays step interval){
+                for (i in alarmHours.indices) {
+                    if((alarmInMillis[i] + (86400000 * day)) > System.currentTimeMillis()){
+                        alarms.add( // One day has 86400000 milliseconds
+                            Medicine(
+                                0,
+                                name,
+                                quantity,
+                                form!!,
+                                alarmsPerDay,
+                                alarmInMillis[i] + (86400000 * day),
+                                alarmHours[i],
+                                alarmMinutes[i],
+                                startDate,
+                                endDate,
+                                medicineWasTaken,
+                                frequency,
+                                periodSet,
+                                needsReschedule,
+                                workerID.toString()
                             )
                         )
                     }
@@ -265,15 +318,14 @@ class AlarmSettingsSharedViewModel : ViewModel() {
         return userDate.timeInMillis
     }
 
-    fun createRescheduleWorker(context: Context){
-        val rescheduleRequest = PeriodicWorkRequestBuilder<RescheduleWorker>(27, TimeUnit.DAYS)
-            .setInitialDelay(27, TimeUnit.DAYS)
+    fun createRescheduleWorker(context: Context): UUID {
+        val rescheduleRequest = PeriodicWorkRequestBuilder<RescheduleWorker>(32, TimeUnit.DAYS)
+            .setInitialDelay(32, TimeUnit.DAYS)
             .build()
         val workManager = WorkManager.getInstance(context)
-        workManager.enqueueUniquePeriodicWork(
-            "unique_reschedule_work",
-            ExistingPeriodicWorkPolicy.KEEP,
-            rescheduleRequest)
+        workManager.enqueue(rescheduleRequest)
+
+        return rescheduleRequest.id
     }
 
     fun setTemporaryPeriod(){

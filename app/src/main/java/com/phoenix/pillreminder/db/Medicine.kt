@@ -35,7 +35,9 @@ data class Medicine(
     @ColumnInfo(name = "medicine_treatment_period_set")
     var medicinePeriodSet: Boolean,
     @ColumnInfo(name = "medicine_needs_reschedule")
-    var medicineNeedsReschedule: Boolean
+    var medicineNeedsReschedule: Boolean,
+    @ColumnInfo(name = "medicine_reschedule_worker_id")
+    var rescheduleWorkerID: String
 
 )
 

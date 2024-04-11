@@ -13,9 +13,9 @@
     <string name="goes_back_to_previous_page">Volta para a página anterior</string>
     <string name="goes_to_the_next_page">Vai para a próxima página</string>
     <string name="what_form_is_the_med">Qual a forma do medicamento?</string>
-    <string name="how_often_do_you_take_it">Com que frequência você o toma?</string>
+    <string name="how_often_do_you_take_it">Com que frequência você o utiliza?</string>
     <string name="clock_icon">Ícone de um relógio</string>
-    <string name="how_many_do_you_take_per_day">Quantas vezes por dia você o toma?</string>
+    <string name="how_many_do_you_take_per_day">Quantas vezes por dia você o utiliza?</string>
     <string name="time">vez(es)</string>
     <string name="do_you_want_to_set_a_treatment_duration">Deseja definir o período de duração do tratamento?</string>
     <string name="please_insert_the_medicine_alarm_hour">Por favor, insira o horário do alarme do remédio:</string>
@@ -77,4 +77,15 @@
     <string name="medicine_not_taken_yet">Ainda não foi tomado</string>
     <string name="quantity">Quantidade</string>
     <string name="set_the_quantity_per_dosage">Insira a quantidade por dose:</string>
+    <string name="this_app_heavily_depends_on_user_overlay_and_notification_permissions_to_properly_work">O aplicativo depende fortemente das permissões do usuário de sobreposição e notificação para funcionar corretamente. </string>
+    <string name="the_app_must_not_be_used_without_these_permissions">O aplicativo não deve ser usado sem a concessão das permissões.</string>
+    <string name="go_to_permissions">Ir para as permissões</string>
+    <string name="dismiss">Fechar</string>
+    <string name="permission_required">Permissão necessária</string>
+    <string name="alarm">Alarme</string>
+    <string name="clock_icon_designed_by_bukeicon_assets_source_from_freepik">Ícone do relógio desenvolvido por bukeicon. Assets pertencem à Freepik.</string>
+    <string name="_00_00">00:00</string>
+    <string name="medicine_name">Nome do medicamento</string>
+    <string name="mark_as_taken">Marcar como utilizado</string>
+    <string name="mute_sound">Silenciar som</string>
 </resources>

@@ -70,23 +70,27 @@ class TreatmentDurationFragment : Fragment(), ActivityCompat.OnRequestPermission
                         0 -> {
                             showDateRangePickerAndCreateAlarm()
                         }
-                        /* User don't want to set a treatment period. The app will set a temporary treatment period (30 days). If user
-                        doesn't remove the alarm, it will be renewed in 28 days. */
+                        /* User don't want to set a treatment period. The app will set a temporary treatment period (33 days). If user
+                        doesn't remove the alarm, it will be renewed in 32 days. */
                         1 -> {
                             setTemporaryPeriod()
 
                             val startDateMillis = System.currentTimeMillis()
-                            val endDateMillis = (startDateMillis + (30 * 86400000L))
+                            //use 33 days
+                            val endDateMillis = (startDateMillis + (2 * 86400000L))
 
                             extractDateComponents(startDateMillis,endDateMillis)
 
+                            // Catches the workerID to cancel it if needed. workerID will be stored in the database.
+                            val workerID = createRescheduleWorker(requireContext().applicationContext)
+
                             when (getMedicineFrequency()){
                                 1 -> {
-                                    medicinesViewModel.insertMedicines(allAlarmsOfTreatment(1L))
+                                    medicinesViewModel.insertMedicines(allAlarmsOfTreatment(1L, workerID))
                                     createAlarmItemAndSchedule(requireActivity().applicationContext, 1L)
                                 }
                                 2 -> {
-                                    medicinesViewModel.insertMedicines(allAlarmsOfTreatment(2L))
+                                    medicinesViewModel.insertMedicines(allAlarmsOfTreatment(2L, workerID))
                                     createAlarmItemAndSchedule(requireActivity().applicationContext, 2L)
                                 }
                                 /*
@@ -104,7 +108,6 @@ class TreatmentDurationFragment : Fragment(), ActivityCompat.OnRequestPermission
                                 }*/
                             }
 
-                            createRescheduleWorker(requireContext().applicationContext)
                             setNumberOfAlarms(1)
                             clearTreatmentPeriod()
 

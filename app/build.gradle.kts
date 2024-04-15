@@ -12,7 +12,7 @@ android {
 
     defaultConfig {
         applicationId = "com.phoenix.pillreminder"
-        minSdk = 26
+        minSdk = 33
         //noinspection EditedTargetSdkVersion
         targetSdk = 34
         versionCode = 1
@@ -43,13 +43,13 @@ android {
 }
 
 dependencies {
-    implementation("androidx.legacy:legacy-support-v4:1.0.0")
     val navVersion = "2.7.5"
     val coreVersion = "1.12.0"
     val roomVersion = "2.6.1"
     val lifecycleVersion = "2.5.0-alpha02"
     val activityVersion = "1.8.2"
     val fragmentVersion = "1.6.2"
+    val workVersion = "2.9.0"
 
     //Activity
     implementation("androidx.activity:activity-ktx:$activityVersion")
@@ -75,8 +75,8 @@ dependencies {
     //LiveData
     implementation("androidx.lifecycle:lifecycle-livedata-ktx:$lifecycleVersion")
 
-    //Gson
-    implementation("com.google.code.gson:gson:2.10.1")
+    //WorkManager
+    implementation("androidx.work:work-runtime-ktx:$workVersion")
 
     implementation("androidx.core:core-ktx:$coreVersion")
     implementation("androidx.appcompat:appcompat:1.6.1")

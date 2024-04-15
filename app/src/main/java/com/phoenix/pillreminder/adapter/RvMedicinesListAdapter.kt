@@ -10,6 +10,7 @@ import com.phoenix.pillreminder.databinding.AdapterListMedicinesBinding
 import com.phoenix.pillreminder.db.Medicine
 import java.text.SimpleDateFormat
 import java.util.Calendar
+import java.util.Date
 import java.util.Locale
 
 private const val HOUR_24_FORMAT = "HH:mm"
@@ -34,9 +35,22 @@ class RvMedicinesListAdapter (private val clickListener: (Medicine) -> Unit) : R
         holder.bind(medicineList[position], holder, clickListener)
     }
 
-    fun setList(medicines: List<Medicine>){
+    fun setList(medicines: List<Medicine>, selectedDate: Date){
+        val calendar = Calendar.getInstance()
+        calendar.time = selectedDate
+
+        val filteredList = medicines.filter { medicine ->
+            val medicineCalendar = Calendar.getInstance().apply {
+                timeInMillis = medicine.alarmInMillis
+            }
+
+            medicineCalendar.get(Calendar.YEAR) == calendar.get(Calendar.YEAR) &&
+                    medicineCalendar.get(Calendar.MONTH) == calendar.get(Calendar.MONTH) &&
+                    medicineCalendar.get(Calendar.DAY_OF_MONTH) == calendar.get(Calendar.DAY_OF_MONTH)
+        }
+
         medicineList.clear()
-        medicineList.addAll(medicines)
+        medicineList.addAll(filteredList)
         sortList()
         notifyDataSetChanged()
     }
@@ -82,10 +96,10 @@ class MyViewHolder(private val medicinesBinding: AdapterListMedicinesBinding):Re
 
 
             when(medicine.form){
-                "pill" -> tvQuantity.text = context.getString(R.string.take_pill, medicine.quantity.toInt().toString(), medicine.form)
+                "pill" -> tvQuantity.text = context.getString(R.string.take_pill, medicine.quantity.toInt().toString())
                 "injection" -> tvQuantity.text = context.getString(R.string.take_injection, medicine.quantity.toString())
                 "liquid" -> tvQuantity.text = context.getString(R.string.take_liquid, medicine.quantity.toString())
-                "drop" -> tvQuantity.text = context.getString(R.string.take_drops, medicine.quantity.toInt().toString(), medicine.form)
+                "drop" -> tvQuantity.text = context.getString(R.string.take_drops, medicine.quantity.toInt().toString())
                 "inhaler" -> tvQuantity.text = context.getString(R.string.inhale, medicine.quantity.toString())
                 "pomade" -> tvQuantity.text = context.getString(R.string.apply_pomade, medicine.quantity.toString())
             }
@@ -93,10 +107,10 @@ class MyViewHolder(private val medicinesBinding: AdapterListMedicinesBinding):Re
             when(medicine.medicineWasTaken /*and compare user hour to alarm hour in millis*/){
                 true -> {
                     tvMedicineTaken.isVisible = true
-                    tvMedicineTaken.text = "Medicine already taken" }
+                    tvMedicineTaken.text = context.getString(R.string.medicine_already_taken) }
                 false -> {
                     tvMedicineTaken.isVisible = true
-                    tvMedicineTaken.text = "Medicine not taken yet."}
+                    tvMedicineTaken.text = context.getString(R.string.medicine_not_taken_yet)}
             }
 
            ivDelete.setOnClickListener {

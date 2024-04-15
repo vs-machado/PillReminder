@@ -9,17 +9,20 @@ import android.widget.TimePicker
 import androidx.activity.addCallback
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
+import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.ui.AppBarConfiguration
 import androidx.navigation.ui.setupWithNavController
 import com.phoenix.pillreminder.R
 import com.phoenix.pillreminder.databinding.FragmentAlarmHourBinding
+import com.phoenix.pillreminder.model.AlarmHourViewModel
 import com.phoenix.pillreminder.model.AlarmSettingsSharedViewModel
 import java.util.Calendar
 
 class AlarmHourFragment : Fragment() {
     private lateinit var binding: FragmentAlarmHourBinding
     private val sharedViewModel: AlarmSettingsSharedViewModel by activityViewModels()
+    private val alarmHourViewModel: AlarmHourViewModel by viewModels()
     private val currentHour = Calendar.getInstance().get(Calendar.HOUR_OF_DAY)
     private val currentMinute = Calendar.getInstance().get(Calendar.MINUTE)
 
@@ -60,6 +63,10 @@ class AlarmHourFragment : Fragment() {
 
                 tpAlarm.setIs24HourView(hourFormat)
 
+                alarmHourViewModel.apply{
+                    saveAlarmHour(position, getCurrentHour(), getCurrentMinute())
+                }
+
                 tpAlarm.setOnTimeChangedListener { _, hourOfDay, minute ->
                     saveAlarmHour(position, hourOfDay, minute)
                 }
@@ -69,7 +76,7 @@ class AlarmHourFragment : Fragment() {
                     sharedViewModel.position++
                     updateCurrentAlarmNumber()
 
-                    if (currentAlarmNumber.value!! > numberOfAlarms.value!!) {
+                    if (currentAlarmNumber.value!! > getAlarmsPerDay()) {
                         //Clear the remaining positions of the alarm array
                         clearAlarmArray()
                         findNavController().navigate(R.id.action_alarmHourFragment_to_treatmentDurationFragment)
@@ -93,51 +100,51 @@ class AlarmHourFragment : Fragment() {
     private fun setTvAlarmHourAndPosition(currentAlarmNumber: Int) {
         when (currentAlarmNumber) {
             1 -> {
-                binding.tvAlarmHour.text = "Please, set the medicine alarm hour:"
+                binding.tvAlarmHour.text = getString(R.string.please_set_the_medicine_alarm_hour)
             }
 
             2 -> {
-                binding.tvAlarmHour.text = "Please, set the second medicine alarm:"
+                binding.tvAlarmHour.text = getString(R.string.please_set_the_second_medicine_alarm)
                 resetTimePicker(binding.tpAlarm)
             }
 
             3 -> {
-                binding.tvAlarmHour.text = "Please, set the third medicine alarm:"
+                binding.tvAlarmHour.text = getString(R.string.please_set_the_third_medicine_alarm)
                 resetTimePicker(binding.tpAlarm)
             }
 
             4 -> {
-                binding.tvAlarmHour.text = "Please, set the fourth medicine alarm:"
+                binding.tvAlarmHour.text = getString(R.string.please_set_the_fourth_medicine_alarm)
                 resetTimePicker(binding.tpAlarm)
             }
 
             5 -> {
-                binding.tvAlarmHour.text = "Please, set the fifth medicine alarm:"
+                binding.tvAlarmHour.text = getString(R.string.please_set_the_fifth_medicine_alarm)
                 resetTimePicker(binding.tpAlarm)
             }
 
             6 -> {
-                binding.tvAlarmHour.text = "Please, set the sixth medicine alarm:"
+                binding.tvAlarmHour.text = getString(R.string.please_set_the_sixth_medicine_alarm)
                 resetTimePicker(binding.tpAlarm)
             }
 
             7 -> {
-                binding.tvAlarmHour.text = "Please, set the seventh medicine alarm:"
+                binding.tvAlarmHour.text = getString(R.string.please_set_the_seventh_medicine_alarm)
                 resetTimePicker(binding.tpAlarm)
             }
 
             8 -> {
-                binding.tvAlarmHour.text = "Please, set the eighth medicine alarm:"
+                binding.tvAlarmHour.text = getString(R.string.please_set_the_eighth_medicine_alarm)
                 resetTimePicker(binding.tpAlarm)
             }
 
             9 -> {
-                binding.tvAlarmHour.text = "Please, set the ninth medicine alarm:"
+                binding.tvAlarmHour.text = getString(R.string.please_set_the_ninth_medicine_alarm)
                 resetTimePicker(binding.tpAlarm)
             }
 
             10 -> {
-                binding.tvAlarmHour.text = "Please, set the tenth medicine alarm:"
+                binding.tvAlarmHour.text = getString(R.string.please_set_the_tenth_medicine_alarm)
                 resetTimePicker(binding.tpAlarm)
             }
     }

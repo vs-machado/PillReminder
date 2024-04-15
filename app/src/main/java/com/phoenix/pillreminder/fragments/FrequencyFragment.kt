@@ -6,7 +6,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.ArrayAdapter
 import androidx.fragment.app.Fragment
-import androidx.fragment.app.viewModels
+import androidx.fragment.app.activityViewModels
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.ui.AppBarConfiguration
 import androidx.navigation.ui.setupWithNavController
@@ -16,7 +16,7 @@ import com.phoenix.pillreminder.model.AlarmSettingsSharedViewModel
 
 class FrequencyFragment : Fragment() {
     private lateinit var binding:FragmentFrequencyBinding
-    private val sharedViewModel:AlarmSettingsSharedViewModel by viewModels()
+    private val sharedViewModel:AlarmSettingsSharedViewModel by activityViewModels()
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -39,8 +39,11 @@ class FrequencyFragment : Fragment() {
             toolbarFrequency.setupWithNavController(navController, appBarConfiguration)
 
             // Frequency of med usage list. User must select the desired usage interval
-            val list: MutableList<String> = mutableListOf("Every day", "Every other day", "Specific days of the week", "On a recurring cycle", "Every X days",
-                "Every X weeks", "Every X months")
+            val list: MutableList<String> = mutableListOf(
+                getString(R.string.every_day),
+                getString(R.string.every_other_day),
+                getString(R.string.specific_days_of_the_week), getString(R.string.every_x_days),
+                getString(R.string.every_x_weeks), getString(R.string.every_x_months))
             val arrayAdapter = ArrayAdapter(requireContext(), android.R.layout.simple_list_item_1, list)
             lvFrequency.adapter = arrayAdapter
 
@@ -56,31 +59,34 @@ class FrequencyFragment : Fragment() {
     private fun checkSelectedOption(position: Int){
         when (position){
             0 -> {
-                sharedViewModel.setMedicineFrequency("Every day")
+                sharedViewModel.setMedicineFrequency(1)
             }
 
             1 -> {
-                sharedViewModel.setMedicineFrequency("Every other day")
+                sharedViewModel.setMedicineFrequency(2)
             }
 
             2 -> {
-                sharedViewModel.setMedicineFrequency("Specific days of the week")
+                // Needs to navigate to another fragment and receive user input
+                //Needs to calculate how many days has in the period
+                sharedViewModel.setMedicineFrequency(1) // Temporarily not working
             }
 
             3 -> {
-                sharedViewModel.setMedicineFrequency("On a recurring cycle")
+                // Needs to navigate to another fragment and receive user input
+                sharedViewModel.setMedicineFrequency(1) // Temporarily not working
             }
 
             4 -> {
-                sharedViewModel.setMedicineFrequency("Every X days")
+                // Needs to navigate to another fragment and receive user input
+                //Needs to calculate how many days has in the period
+                sharedViewModel.setMedicineFrequency(1) // Temporarily not working
             }
 
             5 -> {
-                sharedViewModel.setMedicineFrequency("Every X weeks")
-            }
-
-            6 -> {
-                sharedViewModel.setMedicineFrequency("Every X months")
+                //Needs to navigate to another fragment and receive user input
+                //Needs to calculate how many days has in the period
+                sharedViewModel.setMedicineFrequency(1) // Temporarily not working
             }
         }
     }

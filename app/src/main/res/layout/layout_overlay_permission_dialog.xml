@@ -5,7 +5,7 @@
     android:layout_height="match_parent">
 
     <androidx.cardview.widget.CardView
-        android:id="@+id/cvDeleteAlarm"
+        android:id="@+id/cvOverlayPermission"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         app:cardCornerRadius="20dp"
@@ -15,17 +15,17 @@
         app:layout_constraintTop_toTopOf="parent">
 
         <androidx.constraintlayout.widget.ConstraintLayout
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:padding="12dp">
 
             <TextView
-                android:id="@+id/tvDeleteAlarm"
+                android:id="@+id/tvOverlayPermission"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="8dp"
                 android:layout_marginTop="4dp"
-                android:text="@string/delete_alarm"
+                android:text="@string/permission_required"
                 android:textSize="20sp"
                 android:textStyle="bold"
                 app:layout_constraintEnd_toEndOf="parent"
@@ -34,76 +34,42 @@
                 app:layout_constraintTop_toTopOf="parent" />
 
             <TextView
-                android:id="@+id/tvYouSure"
-                android:layout_width="wrap_content"
+                android:id="@+id/tvDisclaimer"
+                android:layout_width="250dp"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="16dp"
                 android:gravity="center"
-                android:text="@string/are_you_sure_you_want_to_delete_n_the_following_alarm"
+                android:text="@string/this_app_heavily_depends_on_user_overlay_and_notification_permissions_to_properly_work"
                 android:textSize="16sp"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintHorizontal_bias="0.482"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/tvDeleteAlarm" />
+                app:layout_constraintTop_toBottomOf="@+id/tvOverlayPermission" />
 
             <TextView
-                android:id="@+id/tvMedicineAndHour"
-                android:layout_width="wrap_content"
+                android:id="@+id/tvDisclaimer2"
+                android:layout_width="250dp"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="16dp"
                 android:gravity="center"
-                android:text="@string/medicine_name_n_hh_mm"
+                android:text="@string/the_app_must_not_be_used_without_these_permissions"
                 android:textSize="16sp"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintHorizontal_bias="0.493"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/tvYouSure" />
+                app:layout_constraintTop_toBottomOf="@+id/tvDisclaimer" />
 
             <Button
-                android:id="@+id/btnDelete"
-                style="@style/Widget.Material3.Button.ElevatedButton"
-                android:layout_width="0dp"
-                android:layout_height="48dp"
-                android:layout_marginTop="16dp"
-                android:backgroundTint="#d24141"
-                android:text="@string/delete"
-                android:textColor="#F6F6F6"
-                app:cornerRadius="20dp"
-                app:icon="@drawable/baseline_delete_24"
-                app:iconTint="#F6F6F6"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/tvMedicineAndHour" />
-
-            <Button
-                android:id="@+id/btnDeleteAll"
-                style="@style/Widget.Material3.Button.OutlinedButton"
+                android:id="@+id/btnGivePermissions"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:backgroundTint="#F3F3F3"
-                android:text="@string/delete_all_alarms"
-                android:textColor="#686868"
-                app:icon="@drawable/baseline_delete_24"
-                app:iconTint="#686868"
-                app:layout_constraintBottom_toTopOf="@+id/btnCancel"
+                android:layout_marginTop="16dp"
+                android:backgroundTint="#991532CA"
+                android:text="@string/go_to_permissions"
+                app:cornerRadius="20dp"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/btnDelete" />
-
-            <Button
-                android:id="@+id/btnCancel"
-                style="@style/Widget.Material3.Button.OutlinedButton"
-                android:backgroundTint="#F3F3F3"
-                android:layout_width="0dp"
-                android:layout_height="48dp"
-                android:text="@string/cancel"
-                android:textColor="#686868"
-                app:cornerRadius="20dp"
-                app:icon="@drawable/baseline_close_24"
-                app:iconTint="#686868"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent" />
+                app:layout_constraintTop_toBottomOf="@+id/tvDisclaimer2" />
 
             <ImageView
                 android:id="@+id/ivAlert"
@@ -111,7 +77,7 @@
                 android:layout_height="20dp"
                 android:layout_marginTop="8dp"
                 android:importantForAccessibility="no"
-                app:layout_constraintEnd_toStartOf="@+id/tvDeleteAlarm"
+                app:layout_constraintEnd_toStartOf="@+id/tvOverlayPermission"
                 app:layout_constraintHorizontal_bias="0.5"
                 app:layout_constraintHorizontal_chainStyle="packed"
                 app:layout_constraintStart_toStartOf="parent"
@@ -119,7 +85,20 @@
                 app:srcCompat="@drawable/ic_alert_24"
                 app:tint="#d24141" />
 
-
+            <Button
+                android:id="@+id/btnDismissRequest"
+                style="@style/Widget.Material3.Button.OutlinedButton"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:backgroundTint="#F3F3F3"
+                android:text="@string/dismiss"
+                android:textColor="#686868"
+                app:cornerRadius="20dp"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="1.0"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/btnGivePermissions" />
 
         </androidx.constraintlayout.widget.ConstraintLayout>
 

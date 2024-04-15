@@ -37,8 +37,11 @@ class MedicineFormFragment : Fragment() {
             toolbarMedicineForm.setupWithNavController(navController, appBarConfiguration)
 
             // Med forms list. User must select the desired type of med
-            val list: MutableList<String> = mutableListOf("Pill", "Injection", "Liquid", "Drops", "Inhaler",
-            "Pomade")
+            val list: MutableList<String> = mutableListOf(
+                getString(R.string.pill),
+                getString(R.string.injection), getString(R.string.liquid),
+                getString(R.string.Drops), getString(R.string.inhaler),
+                getString(R.string.pomade))
             val arrayAdapter = ArrayAdapter(requireContext(), android.R.layout.simple_list_item_1, list)
             lvMedForm.adapter = arrayAdapter
 

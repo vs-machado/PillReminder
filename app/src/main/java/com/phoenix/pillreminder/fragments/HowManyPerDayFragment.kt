@@ -1,11 +1,9 @@
 package com.phoenix.pillreminder.fragments
 
-import android.os.Build
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.annotation.RequiresApi
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.navigation.findNavController
@@ -27,7 +25,6 @@ class HowManyPerDayFragment : Fragment() {
         return binding.root
     }
 
-    @RequiresApi(Build.VERSION_CODES.Q)
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
@@ -53,7 +50,6 @@ class HowManyPerDayFragment : Fragment() {
 
     }
 
-    @RequiresApi(Build.VERSION_CODES.Q)
     private fun setNumberPicker(){
         binding.apply{
             // Sets doses options

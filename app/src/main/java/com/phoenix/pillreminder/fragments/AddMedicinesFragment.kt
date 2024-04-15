@@ -72,7 +72,7 @@ class AddMedicinesFragment : Fragment() {
     fun setFabVisibility(inputIsEmpty: Boolean, fabNext: FloatingActionButton, tilMedicineName: TextInputLayout){
         if (inputIsEmpty){
             fabNext.visibility = View.INVISIBLE
-            tilMedicineName.helperText = "*Required"
+            tilMedicineName.helperText = getString(R.string.required)
             return
         }
         fabNext.visibility = View.VISIBLE

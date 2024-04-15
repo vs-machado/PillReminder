@@ -1,15 +1,12 @@
 package com.phoenix.pillreminder.fragments
 
-import android.os.Build
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ArrayAdapter
 import android.widget.Toast
 import androidx.activity.addCallback
-import androidx.annotation.RequiresApi
 import androidx.core.app.ActivityCompat
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
@@ -21,10 +18,6 @@ import androidx.navigation.ui.setupWithNavController
 import com.google.android.material.datepicker.MaterialDatePicker
 import com.phoenix.pillreminder.R
 import com.phoenix.pillreminder.activity.MainActivity
-import com.phoenix.pillreminder.alarmscheduler.AlarmItem
-import com.phoenix.pillreminder.alarmscheduler.AlarmItemManager
-import com.phoenix.pillreminder.alarmscheduler.AlarmScheduler
-import com.phoenix.pillreminder.alarmscheduler.AndroidAlarmScheduler
 import com.phoenix.pillreminder.databinding.FragmentTreatmentDurationBinding
 import com.phoenix.pillreminder.model.AlarmSettingsSharedViewModel
 import com.phoenix.pillreminder.model.MedicinesViewModel
@@ -34,7 +27,6 @@ class TreatmentDurationFragment : Fragment(), ActivityCompat.OnRequestPermission
     private lateinit var binding: FragmentTreatmentDurationBinding
     private val sharedViewModel: AlarmSettingsSharedViewModel by activityViewModels()
     private lateinit var medicinesViewModel: MedicinesViewModel
-    private var alarmItem : AlarmItem? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -55,7 +47,6 @@ class TreatmentDurationFragment : Fragment(), ActivityCompat.OnRequestPermission
         return binding.root
     }
 
-    @RequiresApi(Build.VERSION_CODES.S)
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         val navController = findNavController()
         val appBarConfiguration = AppBarConfiguration(navController.graph)
@@ -68,30 +59,60 @@ class TreatmentDurationFragment : Fragment(), ActivityCompat.OnRequestPermission
                 toolbar.setupWithNavController(navController, appBarConfiguration)
 
                 // Med forms list. User must select the desired type of med
-                val list: MutableList<String> = mutableListOf("Yes, I do", "No, I don't")
+                val list: MutableList<String> = mutableListOf(getString(R.string.yes_i_do),
+                    getString(R.string.no_i_don_t))
                 val arrayAdapter = ArrayAdapter(requireContext(), android.R.layout.simple_list_item_1, list)
                 lvTreatmentDuration.adapter = arrayAdapter
 
                 lvTreatmentDuration.setOnItemClickListener { _, _, position, _ ->
                     when (position){
+                        // User want to set a treatment period
                         0 -> {
                             showDateRangePickerAndCreateAlarm()
                         }
+                        /* User don't want to set a treatment period. The app will set a temporary treatment period (33 days). If user
+                        doesn't remove the alarm, it will be renewed in 32 days. */
                         1 -> {
-                            //Insert into database
-                            medicinesViewModel.insertMedicines(createMedicineAlarm())
-                            /*Schedule alarm (if the user does not define a treatment period, it uses the same day to start to trigger alarms)
-                            The -1 passed to the method indicates that there is no need to sum the alarm hours and minutes in millis
-                            to the calendar instance*/
-                            for(i in 0 until getAlarmHoursList().size){
-                                setTimer(getUserDate(i), requireActivity(), i)
+                            setTemporaryPeriod()
+
+                            val startDateMillis = System.currentTimeMillis()
+                            //use 33 days
+                            val endDateMillis = (startDateMillis + (2 * 86400000L))
+
+                            extractDateComponents(startDateMillis,endDateMillis)
+
+                            // Catches the workerID to cancel it if needed. workerID will be stored in the database.
+                            val workerID = createRescheduleWorker(requireContext().applicationContext)
+
+                            when (getMedicineFrequency()){
+                                1 -> {
+                                    medicinesViewModel.insertMedicines(allAlarmsOfTreatment(1L, workerID))
+                                    createAlarmItemAndSchedule(requireActivity().applicationContext, 1L)
+                                }
+                                2 -> {
+                                    medicinesViewModel.insertMedicines(allAlarmsOfTreatment(2L, workerID))
+                                    createAlarmItemAndSchedule(requireActivity().applicationContext, 2L)
+                                }
+                                /*
+                                "Specific days of the week" -> {
+                                    // Needs further implementation
+                                }
+                                "Every X days" -> {
+                                    // Needs further implementation
+                                }
+                                "Every X weeks" -> {
+                                    // Needs further implementation
+                                }
+                                "Every X months" -> {
+                                    // Needs further implementation
+                                }*/
                             }
 
-                            //notification()
+                            setNumberOfAlarms(1)
                             clearTreatmentPeriod()
 
                             Toast.makeText(requireContext(),
-                                "Alarms successfully created!",
+                                getString(R.string.alarms_successfully_created),
                                 Toast.LENGTH_LONG).show()
 
                             popBackStack()
@@ -102,13 +123,12 @@ class TreatmentDurationFragment : Fragment(), ActivityCompat.OnRequestPermission
         }
     }
 
-    @RequiresApi(Build.VERSION_CODES.S)
     private fun showDateRangePickerAndCreateAlarm(){
-        val alarmScheduler : AlarmScheduler = AndroidAlarmScheduler(requireActivity())
-
         sharedViewModel.apply{
+            userWillSetPeriod()
+
             val dateRangePicker = MaterialDatePicker.Builder.dateRangePicker()
-                .setTitleText("Select the treatment duration:")
+                .setTitleText(getString(R.string.select_the_treatment_duration))
                 .build()
 
             dateRangePicker.addOnPositiveButtonClickListener { selection ->
@@ -118,30 +138,36 @@ class TreatmentDurationFragment : Fragment(), ActivityCompat.OnRequestPermission
 
                 //Extracts the treatment period and adds the user alarm hour to it in milliseconds
                 extractDateComponents(startDateMillis, endDateMillis)
-                medicinesViewModel.insertMedicines(createMedicineAlarm())
 
-                for(i in 0 until getAlarmHoursList().size){
-                    alarmItem = AlarmItem(
-                        time = millisToDateTime(getAlarmInMillis(i)),
-                        medicineName = "${getMedicineName()}",
-                        medicineForm = "${getMedicineForm()}",
-                        medicineQuantity = "${getMedicineQuantity()}",
-                        alarmHour = "${getAlarmHour(i)}",
-                        alarmMinute = "${getAlarmMinute(i)}"
-                    )
-                    //Add the alarm item to alarmItemList
-                    sharedViewModel.addAlarmItem(alarmItem!!)
-                    Log.i("ALARMLIST", "${sharedViewModel.getAlarmItemList()}")
-                    alarmItem?.let(alarmScheduler::scheduleAlarm)
+                when (getMedicineFrequency()){
+                    1 -> {
+                        medicinesViewModel.insertMedicines(allAlarmsOfTreatment(1L))
+                        createAlarmItemAndSchedule(requireActivity().applicationContext, 1L)
+                    }
+                    2 -> {
+                        medicinesViewModel.insertMedicines(allAlarmsOfTreatment(2L))
+                        createAlarmItemAndSchedule(requireActivity().applicationContext, 2L)
+                    }
+                    /*
+                    "Specific days of the week" -> {
+                        // Needs further implementation
+                    }
+                    "Every X days" -> {
+                        // Needs further implementation
+                    }
+                    "Every X weeks" -> {
+                        // Needs further implementation
+                    }
+                    "Every X months" -> {
+                        // Needs further implementation
+                    }*/
                 }
 
-                //Serializes the list in a JSON file
-                AlarmItemManager.saveAlarmItems(requireContext().applicationContext, getAlarmItemList())
-                //notification()
+                setNumberOfAlarms(1)
                 clearTreatmentPeriod()
 
                 Toast.makeText(requireContext(),
-                    "Alarms successfully created!",
+                    getString(R.string.alarms_successfully_created),
                     Toast.LENGTH_LONG).show()
 
                 popBackStack()

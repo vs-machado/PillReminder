@@ -16,6 +16,8 @@ data class Medicine(
     var quantity:Float,
     @ColumnInfo(name = "medicine_form")
     var form:String,
+    @ColumnInfo(name = "medicine_alarms_per_day")
+    var alarmsPerDay: Int,
     @ColumnInfo(name = "medicine_alarm_in_millis")
     var alarmInMillis: Long,
     @ColumnInfo(name = "medicine_alarm_hour")
@@ -28,5 +30,14 @@ data class Medicine(
     var endDate: Long,
     @ColumnInfo(name = "medicine_was_taken")
     var medicineWasTaken: Boolean,
+    @ColumnInfo(name = "medicine_frequency")
+    var medicineFrequency: Int,
+    @ColumnInfo(name = "medicine_treatment_period_set")
+    var medicinePeriodSet: Boolean,
+    @ColumnInfo(name = "medicine_needs_reschedule")
+    var medicineNeedsReschedule: Boolean,
+    @ColumnInfo(name = "medicine_reschedule_worker_id")
+    var rescheduleWorkerID: String
+
 )
 

@@ -27,7 +27,7 @@ class AlarmService: Service() {
         val alarmItem = if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU){
             intent?.getParcelableExtra("ALARM_ITEM", AlarmItem::class.java)
         }else{
-            intent?.getParcelableExtra<AlarmItem>("ALARM_ITEM")
+            intent?.getParcelableExtra("ALARM_ITEM")
         }
 
         val activityIntent = Intent(this, AlarmTriggeredActivity::class.java).apply{

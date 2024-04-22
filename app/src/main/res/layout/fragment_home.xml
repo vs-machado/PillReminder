@@ -6,7 +6,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/white"
-    tools:context=".fragments.HomeFragment">
+    tools:context=".feature_alarms.presentation.fragments.HomeFragment">
 
     <androidx.appcompat.widget.Toolbar
         android:id="@+id/toolbarHome"
@@ -26,7 +26,7 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/toolbarHome">
 
-        <com.phoenix.pillreminder.datepicker.DarioWeekViewDatePicker
+        <com.phoenix.pillreminder.feature_alarms.presentation.datepicker.DarioWeekViewDatePicker
             android:id="@+id/datePicker"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"

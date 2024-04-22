@@ -11,7 +11,7 @@
     <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED" />
 
     <application
-        android:name=".alarmscheduler.AlarmApp"
+        android:name=".feature_alarms.presentation.AlarmApp"
         android:allowBackup="true"
         android:dataExtractionRules="@xml/data_extraction_rules"
         android:fullBackupContent="@xml/backup_rules"
@@ -22,10 +22,10 @@
         android:theme="@style/Theme.PillReminder">
 
         <activity
-            android:name=".activity.AlarmTriggeredActivity"
+            android:name=".feature_alarms.presentation.activities.AlarmTriggeredActivity"
             android:exported="false" />
         <activity
-            android:name=".activity.MainActivity"
+            android:name=".feature_alarms.presentation.activities.MainActivity"
             android:exported="true"
             android:windowSoftInputMode="adjustResize">
             <intent-filter>
@@ -36,14 +36,14 @@
         </activity>
 
         <receiver
-            android:name=".alarmscheduler.AlarmReceiver"
+            android:name=".feature_alarms.presentation.AlarmReceiver"
             android:exported="false">
             <intent-filter>
                 <action android:name="android.intent.action.BOOT_COMPLETED"/>
             </intent-filter>
          </receiver>
 
-        <service android:name = ".alarmscheduler.AlarmService"
+        <service android:name = ".feature_alarms.presentation.AlarmService"
             android:foregroundServiceType="specialUse">
             <property android:name="android.app.PROPERTY_SPECIAL_USE_FGS_SUBTYPE"
                 android:value="trigger_alarm_activity"/>

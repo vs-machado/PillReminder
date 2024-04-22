@@ -7,7 +7,7 @@
 
     <fragment
         android:id="@+id/homeFragment"
-        android:name="com.phoenix.pillreminder.fragments.HomeFragment"
+        android:name="com.phoenix.pillreminder.feature_alarms.presentation.fragments.HomeFragment"
         android:label=""
         tools:layout="@layout/fragment_home" >
         <action
@@ -20,7 +20,7 @@
     </fragment>
     <fragment
         android:id="@+id/addMedicinesFragment"
-        android:name="com.phoenix.pillreminder.fragments.AddMedicinesFragment"
+        android:name="com.phoenix.pillreminder.feature_alarms.presentation.fragments.AddMedicinesFragment"
         android:label=""
         tools:layout="@layout/fragment_add_medicines" >
         <action
@@ -33,7 +33,7 @@
     </fragment>
     <fragment
         android:id="@+id/medicineFormFragment"
-        android:name="com.phoenix.pillreminder.fragments.MedicineFormFragment"
+        android:name="com.phoenix.pillreminder.feature_alarms.presentation.fragments.MedicineFormFragment"
         android:label=""
         tools:layout="@layout/fragment_medicine_form" >
         <action
@@ -46,7 +46,7 @@
     </fragment>
     <fragment
         android:id="@+id/frequencyFragment"
-        android:name="com.phoenix.pillreminder.fragments.FrequencyFragment"
+        android:name="com.phoenix.pillreminder.feature_alarms.presentation.fragments.FrequencyFragment"
         android:label=""
         tools:layout="@layout/fragment_frequency" >
         <action
@@ -59,7 +59,7 @@
     </fragment>
     <fragment
         android:id="@+id/howManyPerDayFragment"
-        android:name="com.phoenix.pillreminder.fragments.HowManyPerDayFragment"
+        android:name="com.phoenix.pillreminder.feature_alarms.presentation.fragments.HowManyPerDayFragment"
         android:label=""
         tools:layout="@layout/fragment_how_many_per_day" >
         <action
@@ -72,7 +72,7 @@
     </fragment>
     <fragment
         android:id="@+id/alarmHourFragment"
-        android:name="com.phoenix.pillreminder.fragments.AlarmHourFragment"
+        android:name="com.phoenix.pillreminder.feature_alarms.presentation.fragments.AlarmHourFragment"
         android:label=""
         tools:layout="@layout/fragment_alarm_hour" >
         <action
@@ -85,7 +85,7 @@
     </fragment>
     <fragment
         android:id="@+id/treatmentDurationFragment"
-        android:name="com.phoenix.pillreminder.fragments.TreatmentDurationFragment"
+        android:name="com.phoenix.pillreminder.feature_alarms.presentation.fragments.TreatmentDurationFragment"
         android:label=""
         tools:layout="@layout/fragment_treatment_duration" >
         <action
@@ -98,7 +98,7 @@
     </fragment>
     <fragment
         android:id="@+id/quantityAndStrengthFragment"
-        android:name="com.phoenix.pillreminder.fragments.QuantityAndStrengthFragment"
+        android:name="com.phoenix.pillreminder.feature_alarms.presentation.fragments.QuantityAndStrengthFragment"
         android:label=""
         tools:layout="@layout/fragment_quantity_and_strength" >
         <action

@@ -71,8 +71,8 @@ interface MedicineDao {
             "WHERE medicine_name = :medicineName " +
             "AND medicine_treatment_period_set = 0 " +
             "AND medicine_needs_reschedule = 1 " +
-            "ORDER BY medicine_alarm_in_millis " +
-            "DESC LIMIT :alarmsPerDay ")
+            "ORDER BY medicine_alarm_in_millis DESC " +
+            "LIMIT :alarmsPerDay ")
     fun getAlarmsToRescheduleEveryMonth(medicineName: String, alarmsPerDay: Int): List<Medicine>
 
     @Query("SELECT * " +
@@ -80,5 +80,10 @@ interface MedicineDao {
             "WHERE medicine_id IN " +
             "(SELECT MIN (medicine_id) FROM medicines_data_table GROUP BY medicine_name)")
     fun getAllDistinctMedicines(): List<Medicine>
+
+    @Query("SELECT * " +
+            "FROM medicines_data_table " +
+            "WHERE medicine_id = :id")
+    fun getMedicineById(id: Int): Medicine?
 
 }

@@ -16,13 +16,6 @@ class AlarmService: Service() {
 
     override fun onCreate(){
         super.onCreate()
-        val notification = NotificationUtils.createNotification(applicationContext)
-
-        if (Build.VERSION.SDK_INT > Build.VERSION_CODES.TIRAMISU){
-            startForeground(1, notification, ServiceInfo.FOREGROUND_SERVICE_TYPE_SPECIAL_USE)
-        } else{
-            startForeground(1, notification)
-        }
     }
 
     override fun onStartCommand(intent: Intent?, flags: Int, startId: Int): Int{
@@ -30,6 +23,17 @@ class AlarmService: Service() {
             intent?.getParcelableExtra("ALARM_ITEM", AlarmItem::class.java)
         }else{
             intent?.getParcelableExtra("ALARM_ITEM")
+        }
+
+        val notification =
+            alarmItem?.let { NotificationUtils.createNotification(applicationContext, it) }
+
+        if (Build.VERSION.SDK_INT > Build.VERSION_CODES.TIRAMISU){
+            if (notification != null) {
+                startForeground(1, notification, ServiceInfo.FOREGROUND_SERVICE_TYPE_SPECIAL_USE)
+            }
+        } else{
+            startForeground(1, notification)
         }
 
         val activityIntent = Intent(this, AlarmTriggeredActivity::class.java).apply{

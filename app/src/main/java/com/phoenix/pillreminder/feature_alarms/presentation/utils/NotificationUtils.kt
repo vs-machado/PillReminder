@@ -9,12 +9,13 @@ import android.content.Intent
 import android.os.Build
 import androidx.core.app.NotificationCompat
 import com.phoenix.pillreminder.R
+import com.phoenix.pillreminder.feature_alarms.domain.model.AlarmItem
 import com.phoenix.pillreminder.feature_alarms.presentation.activities.AlarmTriggeredActivity
 
 object NotificationUtils {
-    fun createNotification(context: Context): Notification {
+    fun createNotification(context: Context, item: AlarmItem): Notification {
         val notificationIntent = Intent(context, AlarmTriggeredActivity::class.java)
-        val pendingIntent = PendingIntent.getActivity(context, 0, notificationIntent,
+        val pendingIntent = PendingIntent.getActivity(context, item.hashCode(), notificationIntent,
             PendingIntent.FLAG_IMMUTABLE or PendingIntent.FLAG_UPDATE_CURRENT)
 
         val channelId = "AlarmChannel"

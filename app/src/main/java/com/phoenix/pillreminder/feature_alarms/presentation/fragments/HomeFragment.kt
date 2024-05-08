@@ -212,23 +212,24 @@ class HomeFragment : Fragment() {
         }
 
         btnDeleteAll.setOnClickListener {
-            CoroutineScope(Dispatchers.Main).launch{
-                alarmScheduler.cancelAlarm(alarmItem, true)
+            alarmScheduler.cancelAlarm(alarmItem, true)
 
-                withContext(Dispatchers.IO){
-                    val workRequestID = UUID.fromString(medicinesViewModel.getWorkerID(medicine.name))
-                    val workManager = WorkManager.getInstance(requireContext().applicationContext).cancelWorkById(workRequestID)
-                    val workInfo = workManager.state
-                    Log.i("WorkManager", "${workInfo.value}")
+            CoroutineScope(Dispatchers.IO).launch{
+                val workRequestID = medicinesViewModel.getWorkerID(medicine.name)
 
-                    val alarmsToDelete = medicinesViewModel.getAllMedicinesWithSameName(medicine.name)
-                    medicinesViewModel.deleteAllSelectedMedicines(alarmsToDelete)
+                if(workRequestID != "noID"){
+                    val workRequestUUID = UUID.fromString(workRequestID)
+                    WorkManager.getInstance(requireContext().applicationContext).cancelWorkById(workRequestUUID)
                 }
 
-                displayMedicinesList(hfViewModel.getDate())
-                dialog.dismiss()
-                showToastAlarmDeleted()
+                val alarmsToDelete = medicinesViewModel.getAllMedicinesWithSameName(medicine.name)
+                medicinesViewModel.deleteAllSelectedMedicines(alarmsToDelete)
             }
+
+            displayMedicinesList(hfViewModel.getDate())
+            dialog.dismiss()
+            showToastAlarmDeleted()
+
         }
 
         btnCancel.setOnClickListener {

@@ -76,8 +76,7 @@ class TreatmentDurationFragment : Fragment(), ActivityCompat.OnRequestPermission
                             setTemporaryPeriod()
 
                             val startDateMillis = System.currentTimeMillis()
-                            //use 33 days
-                            val endDateMillis = (startDateMillis + (2 * 86400000L))
+                            val endDateMillis = (startDateMillis + (33 * 86400000L))
 
                             extractDateComponents(startDateMillis,endDateMillis)
 

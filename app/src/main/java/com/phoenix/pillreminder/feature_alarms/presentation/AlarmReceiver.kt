@@ -1,38 +1,67 @@
 package com.phoenix.pillreminder.feature_alarms.presentation
 
+import android.app.NotificationManager
 import android.content.BroadcastReceiver
 import android.content.Context
 import android.content.Intent
+import android.util.Log
 import androidx.core.app.ActivityCompat
+import androidx.core.app.NotificationManagerCompat
 import androidx.core.content.ContextCompat
+import androidx.lifecycle.ViewModelProvider
+import com.phoenix.pillreminder.feature_alarms.data.data_source.MedicineDao
 import com.phoenix.pillreminder.feature_alarms.domain.model.AlarmItem
 import com.phoenix.pillreminder.feature_alarms.data.data_source.MedicineDatabase
+import com.phoenix.pillreminder.feature_alarms.data.repository.MedicineRepositoryImpl
+import com.phoenix.pillreminder.feature_alarms.domain.repository.MedicineRepository
+import com.phoenix.pillreminder.feature_alarms.presentation.activities.AlarmTriggeredActivity
+import com.phoenix.pillreminder.feature_alarms.presentation.activities.MainActivity
+import com.phoenix.pillreminder.feature_alarms.presentation.viewmodels.MedicinesViewModel
+import com.phoenix.pillreminder.feature_alarms.presentation.viewmodels.MedicinesViewModelFactory
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.launch
+import java.time.LocalDateTime
+import java.time.ZoneOffset
+import java.util.TimeZone
 import kotlin.coroutines.CoroutineContext
 
 class AlarmReceiver: BroadcastReceiver(), ActivityCompat.OnRequestPermissionsResultCallback,
     CoroutineScope {
     private lateinit var job: Job
+    private lateinit var repository: MedicineRepository
+    private lateinit var factory: MedicinesViewModelFactory
+    private lateinit var medicinesViewModel: MedicinesViewModel
 
     override val coroutineContext: CoroutineContext
         get() = Dispatchers.Default + job
 
     override fun onReceive(context: Context?, intent: Intent?) {
+        val dao = MedicineDatabase.getInstance(context!!).medicineDao()
+        val alarmItem = intent?.getParcelableExtra("ALARM_ITEM", AlarmItem::class.java)
+        val alarmItemAction = intent?.getParcelableExtra("ALARM_ITEM_ACTION", AlarmItem::class.java)
+        job = Job()
+
         if(intent?.action == Intent.ACTION_BOOT_COMPLETED){
             rescheduleAlarmsOnBoot(context!!)
             return
         }
+        if(intent?.action == "Mark as used" && alarmItemAction != null){
+            markMedicineAsTaken(alarmItemAction, dao)
+            Log.i("alarmItem", "$alarmItemAction")
 
-        val alarmItem = intent?.getParcelableExtra("ALARM_ITEM", AlarmItem::class.java)
-        val database = MedicineDatabase.getInstance(context!!)
-        val dao = database.medicineDao()
-        job = Job()
+            //Notification dismissal after pressing button
+            val notificationManager = context?.getSystemService(Context.NOTIFICATION_SERVICE) as? NotificationManager
+            notificationManager?.cancel(alarmItemAction.hashCode())
+            val stopServiceIntent = Intent(context, AlarmService::class.java)
+            context?.stopService(stopServiceIntent)
+
+            return
+        }
 
         launch {
-            val medicineData = dao.getNextAlarmData(alarmItem!!.medicineName, System.currentTimeMillis())
+            val medicineData = alarmItem?.let { dao.getNextAlarmData(it.medicineName, System.currentTimeMillis()) }
             val alarmScheduler = AndroidAlarmScheduler(context)
 
             if (medicineData?.alarmInMillis != null) {
@@ -40,6 +69,7 @@ class AlarmReceiver: BroadcastReceiver(), ActivityCompat.OnRequestPermissionsRes
             }
         }
 
+        Log.d("AlarmReceiver", "AlarmItem received: $alarmItem")
         startAlarmService(context, intent)
     }
 
@@ -72,5 +102,25 @@ class AlarmReceiver: BroadcastReceiver(), ActivityCompat.OnRequestPermissionsRes
             }
         }
     }
+
+    private fun markMedicineAsTaken(alarmItem: AlarmItem, dao: MedicineDao) {
+        CoroutineScope(Dispatchers.IO).launch{
+            val alarmInMillis = localDateTimeToMillis(alarmItem.time)
+            val medicine = dao.getCurrentAlarmData(alarmInMillis)
+            Log.i("ALARM", "$medicine")
+            if (medicine != null) {
+                Log.i("ALARM", "Medicine not null")
+                medicine.medicineWasTaken = true
+                dao.updateMedicine(medicine)
+            }
+        }
+    }
+    private fun localDateTimeToMillis(localDateTime: LocalDateTime): Long{
+        var millis = localDateTime.toInstant(ZoneOffset.UTC).toEpochMilli()
+        millis -= TimeZone.getDefault().getOffset(millis)
+
+        return millis
+    }
+
 
 }

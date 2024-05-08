@@ -189,20 +189,19 @@ class HomeFragment : Fragment() {
         )
 
         btnDelete.setOnClickListener {
-            CoroutineScope(Dispatchers.Main).launch{
+            CoroutineScope(Dispatchers.IO).launch{
                 //Checks if the alarm was already triggered. If so, there is no need to cancel the broadcast.
                 if(medicine.alarmInMillis > System.currentTimeMillis()){
                     alarmScheduler.cancelAlarm(alarmItem, false)
                 }
-                Log.i("alarmdata", "medicine name ${medicine.name} and currentmillis ${System.currentTimeMillis()}")
-                withContext(Dispatchers.IO){
-                    val hasNextAlarm = medicinesViewModel.hasNextAlarmData(medicine.name, System.currentTimeMillis())
-                    Log.i("alarmdata", hasNextAlarm.toString())
+                //Log.i("alarmdata", "medicine name ${medicine.name} and currentmillis ${System.currentTimeMillis()}")
 
-                    if(!hasNextAlarm){
-                        val workRequestID = UUID.fromString(medicinesViewModel.getWorkerID(medicine.name))
-                        WorkManager.getInstance(requireContext().applicationContext).cancelWorkById(workRequestID)
-                    }
+                val hasNextAlarm = medicinesViewModel.hasNextAlarmData(medicine.name, System.currentTimeMillis())
+                //Log.i("alarmdata", hasNextAlarm.toString())
+
+                if(!hasNextAlarm){
+                    val workRequestID = UUID.fromString(medicinesViewModel.getWorkerID(medicine.name))
+                    WorkManager.getInstance(requireContext().applicationContext).cancelWorkById(workRequestID)
                 }
                 medicinesViewModel.deleteMedicines(medicine)
                 displayMedicinesList(hfViewModel.getDate())
@@ -212,9 +211,9 @@ class HomeFragment : Fragment() {
         }
 
         btnDeleteAll.setOnClickListener {
-            alarmScheduler.cancelAlarm(alarmItem, true)
-
             CoroutineScope(Dispatchers.IO).launch{
+                alarmScheduler.cancelAlarm(alarmItem, true)
+
                 val workRequestID = medicinesViewModel.getWorkerID(medicine.name)
 
                 if(workRequestID != "noID"){

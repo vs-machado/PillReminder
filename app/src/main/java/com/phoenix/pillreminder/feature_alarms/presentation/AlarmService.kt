@@ -5,9 +5,12 @@ import android.content.Intent
 import android.content.pm.ServiceInfo
 import android.os.Build
 import android.os.IBinder
+import android.provider.Settings
+import android.util.Log
 import com.phoenix.pillreminder.feature_alarms.domain.model.AlarmItem
 import com.phoenix.pillreminder.feature_alarms.presentation.utils.NotificationUtils
 import com.phoenix.pillreminder.feature_alarms.presentation.activities.AlarmTriggeredActivity
+import com.phoenix.pillreminder.feature_alarms.presentation.activities.MainActivity
 
 class AlarmService: Service() {
     override fun onBind(intent: Intent?): IBinder?{
@@ -16,6 +19,11 @@ class AlarmService: Service() {
 
     override fun onCreate(){
         super.onCreate()
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
+        stopForeground(STOP_FOREGROUND_REMOVE)
     }
 
     override fun onStartCommand(intent: Intent?, flags: Int, startId: Int): Int{
@@ -36,11 +44,20 @@ class AlarmService: Service() {
             startForeground(1, notification)
         }
 
-        val activityIntent = Intent(this, AlarmTriggeredActivity::class.java).apply{
-            putExtra("ALARM_ITEM", alarmItem)
+        if(Settings.canDrawOverlays(applicationContext)){
+            val activityIntent = Intent(this, AlarmTriggeredActivity::class.java).apply{
+                putExtra("ALARM_ITEM", alarmItem)
+            }
+            Log.d("AlarmService", "AlarmItem received: $alarmItem")
+            activityIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
+            startActivity(activityIntent)
+        } else {
+            val activityIntent = Intent(this, MainActivity::class.java).apply{
+                putExtra("ALARM_ITEM", alarmItem)
+            }
+            activityIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
+            startActivity(activityIntent)
         }
-        activityIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
-        startActivity(activityIntent)
 
         return START_NOT_STICKY
     }

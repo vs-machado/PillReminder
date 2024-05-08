@@ -9,7 +9,11 @@ import com.phoenix.pillreminder.feature_alarms.domain.model.AlarmItem
 import com.phoenix.pillreminder.feature_alarms.domain.repository.AlarmScheduler
 import com.phoenix.pillreminder.feature_alarms.domain.model.Medicine
 import com.phoenix.pillreminder.feature_alarms.data.data_source.MedicineDatabase
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
 import kotlinx.coroutines.runBlocking
+import kotlinx.coroutines.withContext
 import java.time.Instant
 import java.time.ZoneId
 
@@ -47,7 +51,7 @@ class AndroidAlarmScheduler(private val context: Context): AlarmScheduler {
         val dao = database.medicineDao()
         val itemTimeInMillis = item.time.atZone(ZoneId.systemDefault()).toInstant().toEpochMilli()
 
-        runBlocking{
+        CoroutineScope(Dispatchers.IO).launch{
             val pendingIntent =  PendingIntent.getBroadcast(
                 context,
                 item.hashCode(),
@@ -72,7 +76,7 @@ class AndroidAlarmScheduler(private val context: Context): AlarmScheduler {
 
                     cancelAlarm(alarmItem, true)
                 }
-                return@runBlocking
+                return@launch
             }
 
             if(!cancelAll){
@@ -84,10 +88,13 @@ class AndroidAlarmScheduler(private val context: Context): AlarmScheduler {
                 if(nextAlarm?.alarmInMillis != null){
                     scheduleNextAlarm(nextAlarm, context)
                 }
-                return@runBlocking
+                return@launch
             }
 
-            alarmManager.cancel(pendingIntent)
+            withContext(Dispatchers.Main) {
+                alarmManager.cancel(pendingIntent)
+            }
+
             /*Toast.makeText(context,
                 "ALARM CANCELLED: ${item.time}",
                 Toast.LENGTH_LONG).show()*/

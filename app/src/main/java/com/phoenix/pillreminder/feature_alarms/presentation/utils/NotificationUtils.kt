@@ -6,6 +6,8 @@ import android.app.NotificationManager
 import android.app.PendingIntent
 import android.content.Context
 import android.content.Intent
+import android.media.AudioAttributes
+import android.net.Uri
 import android.os.Build
 import android.provider.Settings
 import androidx.core.app.NotificationCompat
@@ -19,6 +21,8 @@ object NotificationUtils {
     val channelId = "AlarmChannel"
     const val ACTION_MARK_AS_USED = "Mark as used"
     fun createNotification(context: Context, item: AlarmItem): Notification {
+        val alarmUri = Uri.parse("android.resource://" + context.packageName + "/" + R.raw.alarm_sound)
+
         when(Settings.canDrawOverlays(context)){
             true -> {
                 /* If user give overlay permissions, an activity with medicine informations will be triggered along with a notification.
@@ -30,7 +34,7 @@ object NotificationUtils {
                     context, item.hashCode(), notificationIntent,
                     PendingIntent.FLAG_IMMUTABLE or PendingIntent.FLAG_UPDATE_CURRENT
                 )
-                createNotificationChannel(context)
+                createNotificationChannel(context, alarmUri)
 
                 return notificationBuilder(context, channelId, pendingIntent, item)
             }
@@ -53,21 +57,25 @@ object NotificationUtils {
                     markAsUsedIntent, PendingIntent.FLAG_IMMUTABLE
                 )
 
-                createNotificationChannel(context)
+                createNotificationChannel(context, alarmUri)
 
                 return notificationBuilderWithActionButtons(context, channelId, pendingIntent, markAsUsedPendingIntent, item)
             }
         }
     }
 
-    private fun createNotificationChannel(context: Context){
+    private fun createNotificationChannel(context: Context, alarmUri: Uri){
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
             val name = "PillReminderChannel"
             val descriptionText =
                 context.getString(R.string.channel_for_reminding_users_to_take_their_medicines)
             val importance = NotificationManager.IMPORTANCE_HIGH
+            val audioAttributes = AudioAttributes.Builder()
+                .setUsage(AudioAttributes.USAGE_ALARM)
+                .build()
             val channel = NotificationChannel(channelId, name, importance).apply {
                 description = descriptionText
+                setSound(alarmUri, audioAttributes)
             }
             val notificationManager = context.getSystemService(NotificationManager::class.java)
             notificationManager.createNotificationChannel(channel)

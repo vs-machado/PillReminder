@@ -24,7 +24,7 @@ import kotlinx.coroutines.launch
 
 class AlarmTriggeredActivity : AppCompatActivity() {
     private lateinit var binding: ActivityAlarmTriggeredBinding
-    private var mediaPlayer: MediaPlayer? = null
+    //private var mediaPlayer: MediaPlayer? = null
     private val viewModel: AlarmTriggeredViewModel by viewModels()
     private lateinit var medicinesViewModel: MedicinesViewModel
     private lateinit var factory: MedicinesViewModelFactory
@@ -43,9 +43,9 @@ class AlarmTriggeredActivity : AppCompatActivity() {
 
         medicinesViewModel = ViewModelProvider(this, this.factory)[MedicinesViewModel::class.java]
 
-        mediaPlayer = MediaPlayer.create(this, R.raw.alarm_sound)
+        /*mediaPlayer = MediaPlayer.create(this, R.raw.alarm_sound)
         mediaPlayer?.isLooping = true
-        mediaPlayer?.start()
+        mediaPlayer?.start()*/
 
         binding.apply{
             val alarmItem = if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU){
@@ -62,12 +62,12 @@ class AlarmTriggeredActivity : AppCompatActivity() {
 
                     ivAlarmMedicineIcon.setImageResource(setMedicineImageView(medicineForm))
 
-                    btnPause.setOnClickListener {
+                    /*btnPause.setOnClickListener {
                         stopMediaPlayer()
-                    }
+                    }*/
 
                     btnTaken.setOnClickListener{
-                        stopMediaPlayer()
+                        //stopMediaPlayer()
 
                         CoroutineScope(Dispatchers.IO).launch {
                             viewModel.markMedicineAsTaken(alarmItem, medicinesViewModel)
@@ -77,7 +77,7 @@ class AlarmTriggeredActivity : AppCompatActivity() {
                     }
 
                     btnDismiss.setOnClickListener {
-                        stopMediaPlayer()
+                        //stopMediaPlayer()
                         val intent = Intent(applicationContext, MainActivity::class.java)
                         startActivity(intent)
                     }
@@ -92,15 +92,15 @@ class AlarmTriggeredActivity : AppCompatActivity() {
 
     override fun onDestroy() {
         super.onDestroy()
-        mediaPlayer?.stop()
+        /*mediaPlayer?.stop()
         mediaPlayer?.release()
-        mediaPlayer = null
+        mediaPlayer = null*/
     }
 
-    private fun stopMediaPlayer(){
+    /*private fun stopMediaPlayer(){
         mediaPlayer?.stop()
         mediaPlayer?.release()
         mediaPlayer = null
-    }
+    }*/
 
 }

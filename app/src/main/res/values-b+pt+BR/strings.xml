@@ -29,7 +29,7 @@
     <string name="take_liquid">Tomar %1$s mL</string>
     <string name="take_drops">Tomar %1$s gota(s)</string>
     <string name="inhale">Inalar %1$s mg</string>
-    <string name="apply_pomade">Aplicar %1$s g</string>
+    <string name="apply_pomade">1 aplicação</string>
     <string name="delete_alarm">Deletar alarme?</string>
     <string name="medicine_name_n_hh_mm">[Nome do remédio] \n [HH:MM]</string>
     <string name="are_you_sure_you_want_to_delete_n_the_following_alarm">Tem certeza que deseja deletar\n o seguinte alarme?</string>
@@ -66,8 +66,8 @@
     <string name="inhaler">Inalante</string>
     <string name="pomade">Pomada</string>
     <string name="channel_for_reminding_users_to_take_their_medicines">Canal para lembrar os usuários de tomarem seus remédios</string>
-    <string name="time_to_take_your_medicine">Hora de tomar o seu remédio!</string>
-    <string name="do_not_forget_to_mark_the_medicine_as_taken">Não esqueça de marcar o remédio como tomado.</string>
+    <string name="time_to_take_your_medicine">Hora de usar o seu remédio!</string>
+    <string name="do_not_forget_to_mark_the_medicine_as_taken">Remédio: %1$s\n%2$s</string>
     <string name="yes_i_do">Sim</string>
     <string name="no_i_don_t">Não</string>
     <string name="alarms_successfully_created">Alarmes criados com sucesso!</string>

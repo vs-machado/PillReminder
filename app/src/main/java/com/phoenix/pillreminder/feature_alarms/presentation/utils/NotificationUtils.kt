@@ -32,7 +32,7 @@ object NotificationUtils {
                 )
                 createNotificationChannel(context)
 
-                return notificationBuilder(context, channelId, pendingIntent)
+                return notificationBuilder(context, channelId, pendingIntent, item)
             }
             false -> {
                 /* If user does not give overlay permissions he will mark medicine as used through an action button in notification.
@@ -55,7 +55,7 @@ object NotificationUtils {
 
                 createNotificationChannel(context)
 
-                return notificationBuilderWithActionButtons(context, channelId, pendingIntent, markAsUsedPendingIntent)
+                return notificationBuilderWithActionButtons(context, channelId, pendingIntent, markAsUsedPendingIntent, item)
             }
         }
     }
@@ -74,24 +74,39 @@ object NotificationUtils {
         }
     }
 
-    private fun notificationBuilder(context: Context, channelId: String, pendingIntent: PendingIntent): Notification {
+    private fun notificationBuilder(context: Context, channelId: String, pendingIntent: PendingIntent, item: AlarmItem): Notification {
         return NotificationCompat.Builder(context, channelId)
             .setContentTitle(context.getString(R.string.time_to_take_your_medicine))
-            .setContentText(context.getString(R.string.do_not_forget_to_mark_the_medicine_as_taken))
+            .setContentText(context.getString(R.string.do_not_forget_to_mark_the_medicine_as_taken, item.medicineName, checkMedicineForm(item.medicineForm,
+                item.medicineQuantity, context)))
             .setSmallIcon(R.drawable.ic_launcher_background)
             .setPriority(NotificationCompat.PRIORITY_MAX)
             .setContentIntent(pendingIntent)
             .build()
     }
 
-    private fun notificationBuilderWithActionButtons(context: Context, channelId: String, pendingIntent: PendingIntent, actionButtonPendingIntent1: PendingIntent): Notification {
+    private fun notificationBuilderWithActionButtons(context: Context, channelId: String, pendingIntent: PendingIntent,
+                                                     actionButtonPendingIntent1: PendingIntent, item: AlarmItem): Notification {
         return NotificationCompat.Builder(context, channelId)
             .setContentTitle(context.getString(R.string.time_to_take_your_medicine))
-            .setContentText(context.getString(R.string.do_not_forget_to_mark_the_medicine_as_taken))
+            .setContentText(context.getString(R.string.do_not_forget_to_mark_the_medicine_as_taken, item.medicineName, checkMedicineForm(item.medicineForm,
+                item.medicineQuantity, context)))
             .setSmallIcon(R.drawable.ic_launcher_background)
             .setPriority(NotificationCompat.PRIORITY_MAX)
             .setContentIntent(pendingIntent)
             .addAction(0, ACTION_MARK_AS_USED, actionButtonPendingIntent1)
             .build()
+    }
+
+    private fun checkMedicineForm(medicineForm: String, medicineQuantity: String, context: Context): String{
+        return when(medicineForm){
+            "pill" -> context.getString(R.string.take_pill, medicineQuantity)
+            "injection" -> context.getString(R.string.take_injection, medicineQuantity)
+            "liquid" ->  context.getString(R.string.take_liquid, medicineQuantity)
+            "drop" -> context.getString(R.string.take_drops, medicineQuantity)
+            "inhaler" -> context.getString(R.string.inhale, medicineQuantity)
+            "pomade" -> context.getString(R.string.apply_pomade)
+            else -> {""}
+        }
     }
 }

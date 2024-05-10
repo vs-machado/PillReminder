@@ -2,7 +2,9 @@ package com.phoenix.pillreminder.feature_alarms.presentation.adapter
 
 import android.text.format.DateFormat
 import android.view.LayoutInflater
+import android.view.View
 import android.view.ViewGroup
+import android.widget.PopupMenu
 import androidx.core.view.isVisible
 import androidx.recyclerview.widget.RecyclerView
 import com.phoenix.pillreminder.R
@@ -66,6 +68,7 @@ class MyViewHolder(private val medicinesBinding: AdapterListMedicinesBinding):Re
 
     fun bind(medicine: Medicine, holder: MyViewHolder, clickListener: (Medicine) -> Unit){
         val context = holder.itemView.context
+        val currentTimeInMillis = System.currentTimeMillis()
 
         //Formats the textview to show the hour in format HH:MM
         medicinesBinding.apply{
@@ -101,7 +104,7 @@ class MyViewHolder(private val medicinesBinding: AdapterListMedicinesBinding):Re
                 "liquid" -> tvQuantity.text = context.getString(R.string.take_liquid, medicine.quantity.toString())
                 "drop" -> tvQuantity.text = context.getString(R.string.take_drops, medicine.quantity.toInt().toString())
                 "inhaler" -> tvQuantity.text = context.getString(R.string.inhale, medicine.quantity.toString())
-                "pomade" -> tvQuantity.text = context.getString(R.string.apply_pomade, medicine.quantity.toString())
+                "pomade" -> tvQuantity.text = context.getString(R.string.apply_pomade)
             }
 
             when(medicine.medicineWasTaken /*and compare user hour to alarm hour in millis*/){
@@ -113,9 +116,31 @@ class MyViewHolder(private val medicinesBinding: AdapterListMedicinesBinding):Re
                     tvMedicineTaken.text = context.getString(R.string.medicine_not_taken_yet)}
             }
 
-           ivDelete.setOnClickListener {
-                clickListener(medicine)
+           ivMenu.setOnClickListener {
+               val popup = PopupMenu(context, ivMenu)
+               popup.inflate(R.menu.options_menu)
+
+               popup.setOnMenuItemClickListener { menuItem ->
+                   when (menuItem.itemId) {
+                       R.id.menu1 -> {
+                           clickListener(medicine)
+                           true
+                       }
+                       else -> false
+                   }
+               }
+               popup.show()
            }
+
+            btnMarkUsage.visibility =
+                if (currentTimeInMillis > medicine.alarmInMillis && !medicine.medicineWasTaken){
+                    View.VISIBLE
+                }  else View.GONE
+
+            /*figure out why this does not work
+            btnMarkUsage.setOnClickListener {
+                medicine.medicineWasTaken = true
+            }*/
         }
     }
 

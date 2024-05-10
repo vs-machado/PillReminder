@@ -11,6 +11,10 @@
         <item name="cornerSize">50%</item>
     </style>
 
+    <style name="ShapeAppearance.App.SmallComponent" parent="ShapeAppearance.MaterialComponents.SmallComponent">
+        <item name="cornerSize">20dp</item>
+    </style>
+
     <style name = "DefaultNumberPickerTheme" parent= "Base.Theme.PillReminder">
         <item name="colorControlNormal">@color/black</item>
     </style>

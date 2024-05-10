@@ -1,6 +1,7 @@
 package com.phoenix.pillreminder.feature_alarms.presentation.viewmodels
 
 import android.content.Context
+import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
@@ -260,12 +261,14 @@ class AlarmSettingsSharedViewModel : ViewModel() {
         //Sets the treatment start date
         val calendarStart = Calendar.getInstance(timeZone)
         calendarStart.timeInMillis = startDate
+        Log.d("date calendar before", "${calendarStart.timeInMillis}")
         calendarStart.set(Calendar.HOUR_OF_DAY, alarmHour[0]!!)
         calendarStart.set(Calendar.MINUTE, alarmMinute[0]!!)
         calendarStart.set(Calendar.SECOND, 0)
         calendarStart.set(Calendar.MILLISECOND, 0)
         calendarStart.timeInMillis = (calendarStart.timeInMillis - timeZoneDefault.getOffset(startDate))
-
+        Log.d("date calendar after", "${calendarStart.timeInMillis}")
+        Log.d("date timezone", "$timeZoneDefault")
 
         //The for loop will search for the last value of the array. This is necessary to set the end treatment date (last alarm).
         for(i in alarmHour.indices){
@@ -312,9 +315,9 @@ class AlarmSettingsSharedViewModel : ViewModel() {
             userDate.set(Calendar.SECOND, 0)
             userDate.set(Calendar.MILLISECOND, 0)
         }
-
+        Log.d("date before", "${userDate.timeInMillis}")
         userDate.timeInMillis = (userDate.timeInMillis - timeZoneDefault.getOffset(userDate.timeInMillis))
-
+        Log.d("date after", "${userDate.timeInMillis}")
         return userDate.timeInMillis
     }
 

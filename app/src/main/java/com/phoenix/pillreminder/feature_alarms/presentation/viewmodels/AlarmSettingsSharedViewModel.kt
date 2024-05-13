@@ -1,21 +1,19 @@
 package com.phoenix.pillreminder.feature_alarms.presentation.viewmodels
 
 import android.content.Context
-import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.work.PeriodicWorkRequestBuilder
 import androidx.work.WorkManager
+import com.phoenix.pillreminder.feature_alarms.data.worker.RescheduleWorker
 import com.phoenix.pillreminder.feature_alarms.domain.model.AlarmItem
+import com.phoenix.pillreminder.feature_alarms.domain.model.Medicine
 import com.phoenix.pillreminder.feature_alarms.domain.repository.AlarmScheduler
 import com.phoenix.pillreminder.feature_alarms.presentation.AndroidAlarmScheduler
-import com.phoenix.pillreminder.feature_alarms.domain.model.Medicine
-import com.phoenix.pillreminder.feature_alarms.data.worker.RescheduleWorker
 import java.time.Instant
 import java.time.LocalDateTime
 import java.time.ZoneId
-import java.time.ZoneOffset
 import java.util.Calendar
 import java.util.TimeZone
 import java.util.UUID
@@ -247,77 +245,68 @@ class AlarmSettingsSharedViewModel : ViewModel() {
     }
 
     //Getters and setters
-    fun getMedicineName(): String {
+    private fun getMedicineName(): String {
         return medicineName
     }
 
-    private fun setTreatmentPeriod(startDate: Long, endDate: Long){
-        val timeZone = TimeZone.getTimeZone("UTC")
+    private fun setTreatmentPeriod(startDate: Long, endDate: Long) {
         val timeZoneDefault = TimeZone.getDefault()
+        val calendarStart = Calendar.getInstance(timeZoneDefault)
+        val calendarEnd = Calendar.getInstance(timeZoneDefault)
 
-        var endAlarmHour = 0
-        var endAlarmMinute = 0
-
-        //Sets the treatment start date
-        val calendarStart = Calendar.getInstance(timeZone)
+        // Set treatment start date
         calendarStart.timeInMillis = startDate
-        Log.d("date calendar before", "${calendarStart.timeInMillis}")
         calendarStart.set(Calendar.HOUR_OF_DAY, alarmHour[0]!!)
         calendarStart.set(Calendar.MINUTE, alarmMinute[0]!!)
         calendarStart.set(Calendar.SECOND, 0)
         calendarStart.set(Calendar.MILLISECOND, 0)
-        calendarStart.timeInMillis = (calendarStart.timeInMillis - timeZoneDefault.getOffset(startDate))
-        Log.d("date calendar after", "${calendarStart.timeInMillis}")
-        Log.d("date timezone", "$timeZoneDefault")
 
-        //The for loop will search for the last value of the array. This is necessary to set the end treatment date (last alarm).
-        for(i in alarmHour.indices){
-            if(alarmHour[i] != null && alarmMinute[i] != null){
+        var endAlarmHour = 0
+        var endAlarmMinute = 0
+
+        // Find the last alarm's hour and minute
+        for (i in alarmHour.indices) {
+            if (alarmHour[i] != null && alarmMinute[i] != null) {
                 endAlarmHour = alarmHour[i]!!
                 endAlarmMinute = alarmMinute[i]!!
             }
         }
 
-        //Sets the treatment end date
-        val calendarEnd = Calendar.getInstance(timeZone)
+        // Set treatment end date
         calendarEnd.timeInMillis = endDate
         calendarEnd.set(Calendar.HOUR_OF_DAY, endAlarmHour)
         calendarEnd.set(Calendar.MINUTE, endAlarmMinute)
         calendarEnd.set(Calendar.SECOND, 0)
         calendarEnd.set(Calendar.MILLISECOND, 0)
-        calendarEnd.timeInMillis = (calendarEnd.timeInMillis - timeZoneDefault.getOffset(startDate))
 
-        
         setTreatmentStartDate(calendarStart.timeInMillis)
         setTreatmentEndDate(calendarEnd.timeInMillis)
 
-        for (i in alarmHour.indices){
-            if(alarmHour[i] != null && alarmMinute[i] != null) {
+        // Update alarmInMillis array with the adjusted treatment start date
+        for (i in alarmHour.indices) {
+            if (alarmHour[i] != null && alarmMinute[i] != null) {
                 alarmInMillis[i] = getUserDate(i)
             }
         }
     }
 
-    fun getUserDate(i: Int): Long{
-        val timeZone = TimeZone.getTimeZone("UTC")
+    private fun getUserDate(i: Int): Long {
         val timeZoneDefault = TimeZone.getDefault()
-        val userDate = Calendar.getInstance(timeZone)
+        val userDate = Calendar.getInstance(timeZoneDefault)
 
-        if(getTreatmentStartDate() != 0L){
+        if (getTreatmentStartDate() != 0L) {
             userDate.timeInMillis = getTreatmentStartDate()
             userDate.set(Calendar.HOUR_OF_DAY, alarmHour[i]!!)
             userDate.set(Calendar.MINUTE, alarmMinute[i]!!)
             userDate.set(Calendar.SECOND, 0)
             userDate.set(Calendar.MILLISECOND, 0)
-        }else{
+        } else {
             userDate.set(Calendar.HOUR_OF_DAY, alarmHour[i]!!)
             userDate.set(Calendar.MINUTE, alarmMinute[i]!!)
             userDate.set(Calendar.SECOND, 0)
             userDate.set(Calendar.MILLISECOND, 0)
         }
-        Log.d("date before", "${userDate.timeInMillis}")
-        userDate.timeInMillis = (userDate.timeInMillis - timeZoneDefault.getOffset(userDate.timeInMillis))
-        Log.d("date after", "${userDate.timeInMillis}")
+
         return userDate.timeInMillis
     }
 
@@ -362,11 +351,11 @@ class AlarmSettingsSharedViewModel : ViewModel() {
         alarmsPerDay = newNumberOfAlarms
     }
 
-    fun getMedicineQuantity(): Float {
+    private fun getMedicineQuantity(): Float {
         return medicineQuantity
     }
 
-    fun getTreatmentStartDate(): Long{
+    private fun getTreatmentStartDate(): Long{
         return treatmentStartDate
     }
 
@@ -374,7 +363,7 @@ class AlarmSettingsSharedViewModel : ViewModel() {
         return alarmsPerDay
     }
 
-    fun getMedicineForm(): String? {
+    private fun getMedicineForm(): String? {
         return medicineForm.value
     }
 
@@ -382,39 +371,32 @@ class AlarmSettingsSharedViewModel : ViewModel() {
         return medicineFrequency
     }
 
-    fun getAlarmHoursList(): List<Int>{
+    private fun getAlarmHoursList(): List<Int>{
         return alarmHour.toList().filterNotNull()
     }
 
-    fun getAlarmMinutesList(): List<Int>{
+    private fun getAlarmMinutesList(): List<Int>{
         return alarmMinute.toList().filterNotNull()
     }
 
-    fun getAlarmInMillisList(): List<Long>{
+    private fun getAlarmInMillisList(): List<Long>{
         return alarmInMillis.toList().filterNotNull()
     }
 
-    fun getAlarmInMillis(i: Int): Long{
+    private fun getAlarmInMillis(i: Int): Long{
         return alarmInMillis[i]!!
     }
 
-    fun getAlarmHour(arrayPosition: Int): Int{
+    private fun getAlarmHour(arrayPosition: Int): Int{
         return alarmHour[arrayPosition]!!
     }
 
-    fun getAlarmMinute(arrayPosition: Int): Int{
+    private fun getAlarmMinute(arrayPosition: Int): Int{
         return alarmMinute[arrayPosition]!!
     }
 
-    fun millisToDateTime(date: Long): LocalDateTime {
+    private fun millisToDateTime(date: Long): LocalDateTime {
         return Instant.ofEpochMilli(date).atZone(ZoneId.systemDefault()).toLocalDateTime()
-    }
-
-    fun localDateTimeToMillis(localDateTime: LocalDateTime): Long{
-        var millis = localDateTime.toInstant(ZoneOffset.UTC).toEpochMilli()
-        millis -= TimeZone.getDefault().getOffset(millis)
-
-        return millis
     }
 
     fun clearTreatmentPeriod(){

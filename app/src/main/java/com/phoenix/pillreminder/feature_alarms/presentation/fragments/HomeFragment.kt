@@ -204,9 +204,12 @@ class HomeFragment : Fragment() {
                     WorkManager.getInstance(requireContext().applicationContext).cancelWorkById(workRequestID)
                 }
                 medicinesViewModel.deleteMedicines(medicine)
-                displayMedicinesList(hfViewModel.getDate())
-                dialog.dismiss()
-                showToastAlarmDeleted()
+
+                withContext(Dispatchers.Main){
+                    displayMedicinesList(hfViewModel.getDate())
+                    dialog.dismiss()
+                    showToastAlarmDeleted()
+                }
             }
         }
 

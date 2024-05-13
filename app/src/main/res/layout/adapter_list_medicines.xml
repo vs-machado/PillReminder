@@ -71,9 +71,9 @@
 
             <ImageView
                 android:id="@+id/ivMenu"
-                android:layout_width="30dp"
-                android:layout_height="30dp"
-                android:layout_marginEnd="8dp"
+                android:layout_width="24dp"
+                android:layout_height="24dp"
+                android:layout_marginEnd="10dp"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintTop_toTopOf="@+id/tvMedicineName"
                 app:srcCompat="@drawable/ic_more_vert" />

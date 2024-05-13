@@ -23,6 +23,9 @@
     <string name="hour_minute_format">0%1$s</string>
     <string name="tv_hour">%1$s:%2$s</string>
     <string name="tv_alarm_and_hour">%1$s\n%2$s</string>
+    <string name="tv_medicine">Medicamento: %1$s</string>
+    <string name="delete_all_alarms_question">Tem certeza que deseja deletar\ntodos os alarmes?</string>
+    <string name="delete_all">Deletar todos</string>
 
     <string name="take_pill">Tomar %1$s comprimido(s)</string>
     <string name="take_injection">Injetar %1$s mL</string>

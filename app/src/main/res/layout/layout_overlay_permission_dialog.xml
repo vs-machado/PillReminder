@@ -84,7 +84,7 @@
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
                 app:srcCompat="@drawable/ic_alert_24"
-                app:tint="#7C1138" />
+                app:tint="#000000" />
 
             <Button
                 android:id="@+id/btnDismissRequest"

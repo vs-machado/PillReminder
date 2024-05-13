@@ -10,7 +10,6 @@ import android.net.Uri
 import android.os.Bundle
 import android.provider.Settings
 import android.text.format.DateFormat
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -33,13 +32,13 @@ import androidx.navigation.ui.setupWithNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.work.WorkManager
 import com.phoenix.pillreminder.R
-import com.phoenix.pillreminder.feature_alarms.presentation.activities.MainActivity
-import com.phoenix.pillreminder.feature_alarms.presentation.adapter.RvMedicinesListAdapter
+import com.phoenix.pillreminder.databinding.FragmentHomeBinding
 import com.phoenix.pillreminder.feature_alarms.domain.model.AlarmItem
+import com.phoenix.pillreminder.feature_alarms.domain.model.Medicine
 import com.phoenix.pillreminder.feature_alarms.domain.repository.AlarmScheduler
 import com.phoenix.pillreminder.feature_alarms.presentation.AndroidAlarmScheduler
-import com.phoenix.pillreminder.databinding.FragmentHomeBinding
-import com.phoenix.pillreminder.feature_alarms.domain.model.Medicine
+import com.phoenix.pillreminder.feature_alarms.presentation.activities.MainActivity
+import com.phoenix.pillreminder.feature_alarms.presentation.adapter.RvMedicinesListAdapter
 import com.phoenix.pillreminder.feature_alarms.presentation.viewmodels.HomeFragmentViewModel
 import com.phoenix.pillreminder.feature_alarms.presentation.viewmodels.MedicinesViewModel
 import kotlinx.coroutines.CoroutineScope
@@ -128,9 +127,14 @@ class HomeFragment : Fragment() {
 
      private fun initRecyclerView(dateToFilter: Date){
         binding.rvMedicinesList.layoutManager = LinearLayoutManager(activity)
-        adapter = RvMedicinesListAdapter{
-            selectedMedicine: Medicine -> showDeleteAlarmDialog(selectedMedicine)
-        }
+        adapter = RvMedicinesListAdapter(
+            showDeleteAlarmDialog = {selectedMedicine: Medicine ->
+                showDeleteAlarmDialog(selectedMedicine)
+            },
+            showDeleteAllAlarmsDialog = {selectedMedicine: Medicine ->
+                showDeleteAllAlarmsDialog(selectedMedicine)
+            }
+        )
         binding.rvMedicinesList.adapter = adapter
 
         displayMedicinesList(dateToFilter)
@@ -171,7 +175,6 @@ class HomeFragment : Fragment() {
 
         val tvMedicine: TextView = dialog.findViewById(R.id.tvMedicineAndHour)
         val btnDelete: Button = dialog.findViewById(R.id.btnDelete)
-        val btnDeleteAll: Button = dialog.findViewById(R.id.btnDeleteAll)
         val btnCancel: Button = dialog.findViewById(R.id.btnCancel)
 
         tvMedicine.text = context?.getString(R.string.tv_alarm_and_hour, medicine.name, showTvAlarm(medicine.alarmHour, medicine.alarmMinute))
@@ -213,7 +216,39 @@ class HomeFragment : Fragment() {
             }
         }
 
-        btnDeleteAll.setOnClickListener {
+        btnCancel.setOnClickListener {
+            dialog.dismiss()
+        }
+
+        dialog.show()
+    }
+
+    private fun showDeleteAllAlarmsDialog(medicine: Medicine){
+        dialog = Dialog(this.requireContext())
+        dialog.requestWindowFeature(Window.FEATURE_NO_TITLE)
+        dialog.setCancelable(false)
+        dialog.setContentView(R.layout.layout_delete_all_alarms_dialog)
+        dialog.window?.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
+
+        val tvMedicine: TextView = dialog.findViewById(R.id.tvMedicineAndHour)
+        val btnDelete: Button = dialog.findViewById(R.id.btnDelete)
+        val btnCancel: Button = dialog.findViewById(R.id.btnCancel)
+
+        tvMedicine.text = context?.getString(R.string.tv_medicine, medicine.name)
+
+        val alarmTime = Instant.ofEpochMilli(medicine.alarmInMillis).atZone(ZoneId.systemDefault()).toLocalDateTime()
+        val alarmScheduler : AlarmScheduler = AndroidAlarmScheduler(requireActivity().applicationContext)
+
+        val alarmItem = AlarmItem(
+            alarmTime,
+            medicine.name,
+            medicine.form,
+            medicine.quantity.toString(),
+            medicine.alarmHour.toString(),
+            medicine.alarmMinute.toString()
+        )
+
+        btnDelete.setOnClickListener {
             CoroutineScope(Dispatchers.IO).launch{
                 alarmScheduler.cancelAlarm(alarmItem, true)
 
@@ -226,11 +261,13 @@ class HomeFragment : Fragment() {
 
                 val alarmsToDelete = medicinesViewModel.getAllMedicinesWithSameName(medicine.name)
                 medicinesViewModel.deleteAllSelectedMedicines(alarmsToDelete)
-            }
 
-            displayMedicinesList(hfViewModel.getDate())
-            dialog.dismiss()
-            showToastAlarmDeleted()
+                withContext(Dispatchers.Main){
+                    displayMedicinesList(hfViewModel.getDate())
+                    dialog.dismiss()
+                    showToastAlarmDeleted()
+                }
+            }
 
         }
 

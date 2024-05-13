@@ -16,7 +16,7 @@
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="wrap_content"
-            android:layout_height="match_parent"
+            android:layout_height="wrap_content"
             android:paddingStart="12dp"
             android:paddingTop="12dp"
             android:paddingEnd="12dp">
@@ -27,7 +27,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginStart="8dp"
                 android:layout_marginTop="4dp"
-                android:text="@string/delete_alarm"
+                android:text="@string/delete_all_alarms"
                 android:textSize="20sp"
                 android:textStyle="bold"
                 app:layout_constraintEnd_toEndOf="parent"
@@ -41,7 +41,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="16dp"
                 android:gravity="center"
-                android:text="@string/are_you_sure_you_want_to_delete_n_the_following_alarm"
+                android:text="@string/delete_all_alarms_question"
                 android:textSize="16sp"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintHorizontal_bias="0.482"
@@ -54,7 +54,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="16dp"
                 android:gravity="center"
-                android:text="@string/medicine_name_n_hh_mm"
+                android:text="@string/medicine_name"
                 android:textSize="16sp"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintHorizontal_bias="0.493"
@@ -68,13 +68,11 @@
                 android:layout_height="48dp"
                 android:layout_marginTop="16dp"
                 android:backgroundTint="#d24141"
-                android:text="@string/delete"
+                android:text="@string/delete_all"
                 android:textColor="#F6F6F6"
-                app:cornerRadius="20dp"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/tvMedicineAndHour" />
-
 
             <Button
                 android:id="@+id/btnCancel"

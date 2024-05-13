@@ -17,7 +17,9 @@
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:padding="12dp">
+            android:paddingStart="12dp"
+            android:paddingTop="12dp"
+            android:paddingEnd="12dp">
 
             <TextView
                 android:id="@+id/tvOverlayPermission"
@@ -61,12 +63,11 @@
 
             <Button
                 android:id="@+id/btnGivePermissions"
+                style="@style/Widget.Material3.Button"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="16dp"
-                android:backgroundTint="#991532CA"
                 android:text="@string/go_to_permissions"
-                app:cornerRadius="20dp"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/tvDisclaimer2" />
@@ -83,17 +84,15 @@
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
                 app:srcCompat="@drawable/ic_alert_24"
-                app:tint="#d24141" />
+                app:tint="#7C1138" />
 
             <Button
                 android:id="@+id/btnDismissRequest"
-                style="@style/Widget.Material3.Button.OutlinedButton"
+                style="@style/Widget.Material3.Button.TextButton"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:backgroundTint="#F3F3F3"
+                android:backgroundTint="#FFFFFF"
                 android:text="@string/dismiss"
-                android:textColor="#686868"
-                app:cornerRadius="20dp"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintHorizontal_bias="1.0"

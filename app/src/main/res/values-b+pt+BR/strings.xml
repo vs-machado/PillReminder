@@ -89,6 +89,6 @@
     <string name="clock_icon_designed_by_bukeicon_assets_source_from_freepik">Ícone do relógio desenvolvido por bukeicon. Assets pertencem à Freepik.</string>
     <string name="_00_00">00:00</string>
     <string name="medicine_name">Nome do medicamento</string>
-    <string name="mark_as_taken">Marcar como utilizado</string>
+    <string name="mark_as_used">Marcar como utilizado</string>
     <string name="mute_sound">Silenciar som</string>
 </resources>

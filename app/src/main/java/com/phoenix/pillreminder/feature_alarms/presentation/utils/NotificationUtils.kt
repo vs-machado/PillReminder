@@ -19,7 +19,7 @@ import com.phoenix.pillreminder.feature_alarms.presentation.activities.MainActiv
 
 object NotificationUtils {
     val channelId = "AlarmChannel"
-    const val ACTION_MARK_AS_USED = "Mark as used"
+
     fun createNotification(context: Context, item: AlarmItem): Notification {
         val alarmUri = Uri.parse("android.resource://" + context.packageName + "/" + R.raw.alarm_sound)
 
@@ -49,7 +49,7 @@ object NotificationUtils {
                 )
 
                 val markAsUsedIntent = Intent(context, AlarmReceiver::class.java).apply {
-                    action = ACTION_MARK_AS_USED
+                    action = context.getString(R.string.mark_as_used)
                     putExtra("ALARM_ITEM_ACTION", item)
                 }
                 val markAsUsedPendingIntent: PendingIntent = PendingIntent.getBroadcast(
@@ -102,7 +102,7 @@ object NotificationUtils {
             .setSmallIcon(R.drawable.ic_launcher_background)
             .setPriority(NotificationCompat.PRIORITY_MAX)
             .setContentIntent(pendingIntent)
-            .addAction(0, ACTION_MARK_AS_USED, actionButtonPendingIntent1)
+            .addAction(0, context.getString(R.string.mark_as_used), actionButtonPendingIntent1)
             .build()
     }
 

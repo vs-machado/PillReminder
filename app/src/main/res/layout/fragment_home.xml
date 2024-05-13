@@ -6,6 +6,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/white"
+    android:backgroundTint="#FBFBFB"
     tools:context=".feature_alarms.presentation.fragments.HomeFragment">
 
     <androidx.appcompat.widget.Toolbar
@@ -21,6 +22,7 @@
         android:id="@+id/linearLayout"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
+        android:backgroundTint="#FBFBFB"
         android:orientation="vertical"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -30,6 +32,7 @@
             android:id="@+id/datePicker"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:backgroundTint="#FBFBFB"
             android:paddingStart="20dp"
             android:paddingEnd="20dp" />
 
@@ -40,6 +43,7 @@
         android:layout_width="0dp"
         android:layout_height="0dp"
         android:background="@color/white"
+        android:backgroundTint="#FBFBFB"
         android:paddingStart="20dp"
         android:paddingEnd="20dp"
         android:visibility="visible"

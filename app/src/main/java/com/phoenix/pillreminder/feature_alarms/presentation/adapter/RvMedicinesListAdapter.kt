@@ -18,7 +18,9 @@ import java.util.Locale
 private const val HOUR_24_FORMAT = "HH:mm"
 private const val HOUR_12_FORMAT = "hh:mm a"
 
-class RvMedicinesListAdapter (private val showDeleteAlarmDialog: (Medicine) -> Unit, private val showDeleteAllAlarmsDialog: (Medicine) -> Unit) : RecyclerView.Adapter<MyViewHolder>() {
+class RvMedicinesListAdapter (private val showDeleteAlarmDialog: (Medicine) -> Unit,
+                              private val showDeleteAllAlarmsDialog: (Medicine) -> Unit,
+                              private val markMedicineUsage: (Medicine) -> Unit) : RecyclerView.Adapter<MyViewHolder>() {
 
     private val medicineList = ArrayList<Medicine>()
 
@@ -34,7 +36,7 @@ class RvMedicinesListAdapter (private val showDeleteAlarmDialog: (Medicine) -> U
     }
 
     override fun onBindViewHolder(holder: MyViewHolder, position: Int) {
-        holder.bind(medicineList[position], holder, showDeleteAlarmDialog, showDeleteAllAlarmsDialog)
+        holder.bind(medicineList[position], holder, showDeleteAlarmDialog, showDeleteAllAlarmsDialog, markMedicineUsage)
     }
 
     fun setList(medicines: List<Medicine>, selectedDate: Date){
@@ -66,7 +68,7 @@ class RvMedicinesListAdapter (private val showDeleteAlarmDialog: (Medicine) -> U
 class MyViewHolder(private val medicinesBinding: AdapterListMedicinesBinding):RecyclerView.ViewHolder(medicinesBinding.root){
 
 
-    fun bind(medicine: Medicine, holder: MyViewHolder, clickListener: (Medicine) -> Unit, showDeleteAllAlarmsDialog: (Medicine) -> Unit){
+    fun bind(medicine: Medicine, holder: MyViewHolder, showDeleteAlarmDialog: (Medicine) -> Unit, showDeleteAllAlarmsDialog: (Medicine) -> Unit, markMedicineUsage: (Medicine) -> Unit){
         val context = holder.itemView.context
         val currentTimeInMillis = System.currentTimeMillis()
 
@@ -123,7 +125,7 @@ class MyViewHolder(private val medicinesBinding: AdapterListMedicinesBinding):Re
                popup.setOnMenuItemClickListener { menuItem ->
                    when (menuItem.itemId) {
                        R.id.menu1 -> {
-                           clickListener(medicine)
+                           showDeleteAlarmDialog(medicine)
                            true
                        }
                        R.id.menu2 -> {
@@ -141,10 +143,9 @@ class MyViewHolder(private val medicinesBinding: AdapterListMedicinesBinding):Re
                     View.VISIBLE
                 }  else View.GONE
 
-            /*figure out why this does not work
             btnMarkUsage.setOnClickListener {
-                medicine.medicineWasTaken = true
-            }*/
+                markMedicineUsage(medicine)
+            }
         }
     }
 

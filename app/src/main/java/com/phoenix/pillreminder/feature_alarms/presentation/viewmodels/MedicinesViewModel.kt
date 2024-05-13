@@ -37,19 +37,27 @@ class MedicinesViewModel(private val medicineRepository: MedicineRepository): Vi
     }
 
     fun insertMedicines(medicine: List<Medicine>) = viewModelScope.launch{
-        medicineRepository.insertMedicines(medicine)
+        withContext(Dispatchers.IO){
+            medicineRepository.insertMedicines(medicine)
+        }
     }
 
     fun updateMedicines(medicine: Medicine) = viewModelScope.launch{
-        medicineRepository.updateMedicine(medicine)
+        withContext(Dispatchers.IO){
+            medicineRepository.updateMedicine(medicine)
+        }
     }
 
     fun deleteMedicines(medicine: Medicine) = viewModelScope.launch{
-        medicineRepository.deleteMedicine(medicine)
+        withContext(Dispatchers.IO){
+            medicineRepository.deleteMedicine(medicine)
+        }
     }
 
     fun deleteAllSelectedMedicines(medicines: List<Medicine>) = viewModelScope.launch{
-        medicineRepository.deleteAllSelectedMedicines(medicines)
+        withContext(Dispatchers.IO){
+            medicineRepository.deleteAllSelectedMedicines(medicines)
+        }
     }
 
 

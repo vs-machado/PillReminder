@@ -133,6 +133,9 @@ class HomeFragment : Fragment() {
             },
             showDeleteAllAlarmsDialog = {selectedMedicine: Medicine ->
                 showDeleteAllAlarmsDialog(selectedMedicine)
+            },
+            markMedicineUsage = {selectedMedicine: Medicine ->
+                markMedicineUsage(selectedMedicine)
             }
         )
         binding.rvMedicinesList.adapter = adapter
@@ -192,7 +195,7 @@ class HomeFragment : Fragment() {
         )
 
         btnDelete.setOnClickListener {
-            CoroutineScope(Dispatchers.IO).launch{
+            CoroutineScope(Dispatchers.Default).launch{
                 //Checks if the alarm was already triggered. If so, there is no need to cancel the broadcast.
                 if(medicine.alarmInMillis > System.currentTimeMillis()){
                     alarmScheduler.cancelAlarm(alarmItem, false)
@@ -249,7 +252,7 @@ class HomeFragment : Fragment() {
         )
 
         btnDelete.setOnClickListener {
-            CoroutineScope(Dispatchers.IO).launch{
+            CoroutineScope(Dispatchers.Default).launch{
                 alarmScheduler.cancelAlarm(alarmItem, true)
 
                 val workRequestID = medicinesViewModel.getWorkerID(medicine.name)
@@ -276,6 +279,12 @@ class HomeFragment : Fragment() {
         }
 
         dialog.show()
+    }
+
+    private fun markMedicineUsage(medicine: Medicine){
+        medicine.medicineWasTaken = true
+        medicinesViewModel.updateMedicines(medicine)
+        displayMedicinesList(hfViewModel.getDate())
     }
 
     private fun showToastAlarmDeleted(){

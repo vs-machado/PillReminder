@@ -17,46 +17,70 @@ class AlarmService: Service() {
         return null
     }
 
-    override fun onCreate(){
-        super.onCreate()
-    }
-
     override fun onDestroy() {
         super.onDestroy()
         stopForeground(STOP_FOREGROUND_REMOVE)
     }
 
     override fun onStartCommand(intent: Intent?, flags: Int, startId: Int): Int{
+        val notificationType = intent?.getStringExtra("NOTIFICATION_TYPE")
+
         val alarmItem = if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU){
             intent?.getParcelableExtra("ALARM_ITEM", AlarmItem::class.java)
         }else{
             intent?.getParcelableExtra("ALARM_ITEM")
         }
 
-        val notification =
-            alarmItem?.let { NotificationUtils.createNotification(applicationContext, it) }
+        val hashCode = if (notificationType == "follow_up"){
+            intent.getStringExtra("HASH_CODE")
+        } else {null}
 
-        if (Build.VERSION.SDK_INT > Build.VERSION_CODES.TIRAMISU){
-            if (notification != null) {
-                startForeground(1, notification, ServiceInfo.FOREGROUND_SERVICE_TYPE_SPECIAL_USE)
-            }
-        } else{
-            startForeground(1, notification)
-        }
+        when(notificationType){
+            "normal" -> {
+                val notification =
+                    alarmItem?.let { NotificationUtils.createNotification(applicationContext, it) }
 
-        if(Settings.canDrawOverlays(applicationContext)){
-            val activityIntent = Intent(this, AlarmTriggeredActivity::class.java).apply{
-                putExtra("ALARM_ITEM", alarmItem)
+                if (Build.VERSION.SDK_INT > Build.VERSION_CODES.TIRAMISU){
+                    if (notification != null) {
+                        startForeground(1, notification, ServiceInfo.FOREGROUND_SERVICE_TYPE_SPECIAL_USE)
+                    }
+                } else{
+                    startForeground(1, notification)
+                }
+                if(Settings.canDrawOverlays(applicationContext)){
+                    val activityIntent = Intent(this, AlarmTriggeredActivity::class.java).apply{
+                        putExtra("ALARM_ITEM", alarmItem)
+                    }
+                    Log.d("AlarmService", "AlarmItem received: $alarmItem")
+                    activityIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
+                    startActivity(activityIntent)
+                } else {
+                    val activityIntent = Intent(this, MainActivity::class.java).apply{
+                        putExtra("ALARM_ITEM", alarmItem)
+                    }
+                    activityIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
+                    startActivity(activityIntent)
+                }
             }
-            Log.d("AlarmService", "AlarmItem received: $alarmItem")
-            activityIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
-            startActivity(activityIntent)
-        } else {
-            val activityIntent = Intent(this, MainActivity::class.java).apply{
-                putExtra("ALARM_ITEM", alarmItem)
+            "follow_up" -> {
+                if(hashCode != null){
+                    val notification = alarmItem?.let{ NotificationUtils.createFollowUpNotification(applicationContext, it, hashCode)}
+
+                    if (Build.VERSION.SDK_INT > Build.VERSION_CODES.TIRAMISU){
+                        if (notification != null) {
+                            startForeground(1, notification, ServiceInfo.FOREGROUND_SERVICE_TYPE_SPECIAL_USE)
+                        }
+                    } else{
+                        startForeground(1, notification)
+                    }
+                    val activityIntent = Intent(this, MainActivity::class.java).apply{
+                        putExtra("ALARM_ITEM", alarmItem)
+                    }
+                    activityIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
+                    startActivity(activityIntent)
+                }
+
             }
-            activityIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
-            startActivity(activityIntent)
         }
 
         return START_NOT_STICKY

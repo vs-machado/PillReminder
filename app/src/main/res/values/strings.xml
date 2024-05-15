@@ -70,6 +70,8 @@
     <string name="pomade">Pomade</string>
     <string name="channel_for_reminding_users_to_take_their_medicines">Channel for reminding users to take their medicines</string>
     <string name="time_to_take_your_medicine">Time to take your medicine!</string>
+    <string name="did_you_forget_to_use_your_medicine">Did you forget to use %1$s?</string>
+    <string name="do_not_forget_to_mark_the_medicine_as_used">Do not forget to mark the medicine as used.\n%1$s</string>
     <string name="do_not_forget_to_mark_the_medicine_as_taken">Medicine: %1$s\n%2$s</string>
     <string name="yes_i_do">Yes, I do</string>
     <string name="no_i_don_t">No, I don\'t</string>

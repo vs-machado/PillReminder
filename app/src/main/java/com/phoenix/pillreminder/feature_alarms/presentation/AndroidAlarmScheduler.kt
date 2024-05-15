@@ -119,4 +119,27 @@ class AndroidAlarmScheduler(private val context: Context): AlarmScheduler {
         //Log.i("ALARM", "ALARM SCHEDULED: ${alarmItem.time}")
     }
 
+    fun scheduleFollowUpAlarm(medicine: Medicine, item: AlarmItem, followUpTime: Long){
+        val intent = Intent(context, FollowUpAlarmReceiver::class.java).apply {
+            putExtra("ALARM_ITEM", item)
+        }
+        Log.d("Alarm intent", "$intent")
+
+        //The first alarm requestCode is based on AlarmItem hashcode. The follow up alarm is based on Medicine hashcode.
+        val pendingIntent = PendingIntent.getBroadcast(
+            context,
+            medicine.hashCode(),
+            intent,
+            PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE
+        )
+        Log.d("Alarm pending intent", "$pendingIntent")
+
+        alarmManager.setExactAndAllowWhileIdle(
+            AlarmManager.RTC_WAKEUP,
+            followUpTime,
+            pendingIntent
+        )
+        Log.d("Alarm", "alarm scheduler")
+    }
+
 }

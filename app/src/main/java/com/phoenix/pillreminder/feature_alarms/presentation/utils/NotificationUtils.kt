@@ -10,6 +10,7 @@ import android.media.AudioAttributes
 import android.net.Uri
 import android.os.Build
 import android.provider.Settings
+import android.util.Log
 import androidx.core.app.NotificationCompat
 import com.phoenix.pillreminder.R
 import com.phoenix.pillreminder.feature_alarms.domain.model.AlarmItem
@@ -18,7 +19,8 @@ import com.phoenix.pillreminder.feature_alarms.presentation.activities.AlarmTrig
 import com.phoenix.pillreminder.feature_alarms.presentation.activities.MainActivity
 
 object NotificationUtils {
-    val channelId = "AlarmChannel"
+    private val channelId = "AlarmChannel"
+    private val followUpChannelId = "FollowUpAlarmChannel"
 
     fun createNotification(context: Context, item: AlarmItem): Notification {
         val alarmUri = Uri.parse("android.resource://" + context.packageName + "/" + R.raw.alarm_sound)
@@ -59,9 +61,45 @@ object NotificationUtils {
 
                 createNotificationChannel(context, alarmUri)
 
-                return notificationBuilderWithActionButtons(context, channelId, pendingIntent, markAsUsedPendingIntent, item)
+                val title = context.getString(R.string.time_to_take_your_medicine)
+                val text = context.getString(R.string.do_not_forget_to_mark_the_medicine_as_taken, item.medicineName, checkMedicineForm(item.medicineForm,
+                    item.medicineQuantity, context))
+
+                return notificationBuilderWithActionButtons(
+                    context, channelId, pendingIntent, title, text,
+                    markAsUsedPendingIntent
+                )
             }
         }
+    }
+
+     fun createFollowUpNotification(context: Context, item: AlarmItem, medicineHashCode: String): Notification{
+        val notificationIntent = Intent(context, MainActivity::class.java)
+        val pendingIntent = PendingIntent.getActivity(
+            context, medicineHashCode.toInt(), notificationIntent,
+            PendingIntent.FLAG_IMMUTABLE or PendingIntent.FLAG_UPDATE_CURRENT
+        )
+
+        val markAsUsedIntent = Intent(context, AlarmReceiver::class.java).apply {
+            action = context.getString(R.string.mark_as_used)
+            putExtra("ALARM_ITEM_ACTION", item)
+        }
+        val markAsUsedPendingIntent: PendingIntent = PendingIntent.getBroadcast(
+            context, medicineHashCode.toInt(),
+            markAsUsedIntent, PendingIntent.FLAG_IMMUTABLE
+        )
+
+        createNotificationChannel(context)
+
+         val title = context.getString(R.string.did_you_forget_to_use_your_medicine, item.medicineName)
+         val text = context.getString(R.string.do_not_forget_to_mark_the_medicine_as_used, checkMedicineForm(item.medicineForm,
+             item.medicineQuantity, context))
+         Log.d("Alarm", "NotificationUtils")
+
+        return notificationBuilderWithActionButtons(
+            context, followUpChannelId, pendingIntent, title, text,
+            markAsUsedPendingIntent
+        )
     }
 
     private fun createNotificationChannel(context: Context, alarmUri: Uri){
@@ -81,6 +119,19 @@ object NotificationUtils {
             notificationManager.createNotificationChannel(channel)
         }
     }
+    private fun createNotificationChannel(context: Context){
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            val name = "PillReminderFollowUpChannel"
+            val descriptionText =
+                context.getString(R.string.channel_for_reminding_users_to_take_their_medicines)
+            val importance = NotificationManager.IMPORTANCE_HIGH
+            val channel = NotificationChannel(followUpChannelId, name, importance).apply {
+                description = descriptionText
+            }
+            val notificationManager = context.getSystemService(NotificationManager::class.java)
+            notificationManager.createNotificationChannel(channel)
+        }
+    }
 
     private fun notificationBuilder(context: Context, channelId: String, pendingIntent: PendingIntent, item: AlarmItem): Notification {
         return NotificationCompat.Builder(context, channelId)
@@ -93,12 +144,14 @@ object NotificationUtils {
             .build()
     }
 
-    private fun notificationBuilderWithActionButtons(context: Context, channelId: String, pendingIntent: PendingIntent,
-                                                     actionButtonPendingIntent1: PendingIntent, item: AlarmItem): Notification {
+    private fun notificationBuilderWithActionButtons(
+        context: Context, channelId: String, pendingIntent: PendingIntent,
+        title: String, content: String,
+        actionButtonPendingIntent1: PendingIntent
+    ): Notification {
         return NotificationCompat.Builder(context, channelId)
-            .setContentTitle(context.getString(R.string.time_to_take_your_medicine))
-            .setContentText(context.getString(R.string.do_not_forget_to_mark_the_medicine_as_taken, item.medicineName, checkMedicineForm(item.medicineForm,
-                item.medicineQuantity, context)))
+            .setContentTitle(title)
+            .setContentText(content)
             .setSmallIcon(R.drawable.ic_launcher_background)
             .setPriority(NotificationCompat.PRIORITY_MAX)
             .setContentIntent(pendingIntent)

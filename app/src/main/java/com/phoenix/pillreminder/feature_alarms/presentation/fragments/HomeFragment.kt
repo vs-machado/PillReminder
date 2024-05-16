@@ -10,6 +10,7 @@ import android.net.Uri
 import android.os.Bundle
 import android.provider.Settings
 import android.text.format.DateFormat
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -30,6 +31,7 @@ import androidx.navigation.fragment.findNavController
 import androidx.navigation.ui.AppBarConfiguration
 import androidx.navigation.ui.setupWithNavController
 import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
 import androidx.work.WorkManager
 import com.phoenix.pillreminder.R
 import com.phoenix.pillreminder.databinding.FragmentHomeBinding
@@ -90,13 +92,7 @@ class HomeFragment : Fragment() {
 
         medicinesViewModel = ViewModelProvider(requireActivity(), (requireActivity() as MainActivity).factory)[MedicinesViewModel::class.java]
 
-        //Toolbar setup
-        val navController = findNavController()
-        val appBarConfiguration = AppBarConfiguration(navController.graph)
-        binding.toolbarHome.setupWithNavController(navController, appBarConfiguration)
-        binding.toolbarHome.title = "Pill Reminder"
-        binding.toolbarHome.setTitleTextColor(Color.WHITE)
-
+        setupToolbar()
         initRecyclerView(hfViewModel.getDate())
 
         binding.datePicker.onSelectionChanged = { date ->
@@ -125,6 +121,14 @@ class HomeFragment : Fragment() {
 
     }
 
+    private fun setupToolbar(){
+        val navController = findNavController()
+        val appBarConfiguration = AppBarConfiguration(navController.graph)
+        binding.toolbarHome.setupWithNavController(navController, appBarConfiguration)
+        binding.toolbarHome.title = "Pill Reminder"
+        binding.toolbarHome.setTitleTextColor(Color.WHITE)
+    }
+
      private fun initRecyclerView(dateToFilter: Date){
         binding.rvMedicinesList.layoutManager = LinearLayoutManager(activity)
         adapter = RvMedicinesListAdapter(
@@ -139,8 +143,7 @@ class HomeFragment : Fragment() {
             }
         )
         binding.rvMedicinesList.adapter = adapter
-
-        displayMedicinesList(dateToFilter)
+         displayMedicinesList(dateToFilter)
     }
 
     private fun displayMedicinesList(dateToFilter: Date){

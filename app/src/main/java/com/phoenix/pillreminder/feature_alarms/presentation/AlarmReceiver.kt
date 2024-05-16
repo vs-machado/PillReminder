@@ -39,7 +39,6 @@ class AlarmReceiver: BroadcastReceiver(), ActivityCompat.OnRequestPermissionsRes
         }
         if(intent?.action == "Mark as used" && alarmItemAction != null){
             markMedicineAsTaken(alarmItemAction, dao)
-            Log.i("alarmItem", "$alarmItemAction")
 
             //Notification dismissal after pressing button
             val notificationManager = context.getSystemService(Context.NOTIFICATION_SERVICE) as? NotificationManager
@@ -53,18 +52,15 @@ class AlarmReceiver: BroadcastReceiver(), ActivityCompat.OnRequestPermissionsRes
         launch {
             val alarmScheduler = AndroidAlarmScheduler(context)
 
-            Log.d("ALARM ITEM", "${alarmItem?.time}")
+
             //Example: If interval between alarms is equal to 1 hour a notification will be sent after 15 minutes if user don't mark the medicine as used
             if(alarmItem?.time != null) {
-                Log.d("ALARM ITEM", "not null")
                 val alarmItemMillis = localDateTimeToMillis(alarmItem.time)
                 val followUpTime = System.currentTimeMillis() + aQuarterIntervalBetweenAlarms(alarmItem.medicineName, alarmItemMillis, dao)
                 val medicine = dao.getCurrentAlarmData(alarmItemMillis)
 
                 if(medicine != null){
-                    Log.d("Alarm", "medicine: $medicine, alarmItem: $alarmItem, followUpTime: $followUpTime")
                     alarmScheduler.scheduleFollowUpAlarm(medicine, alarmItem, followUpTime)
-                    Log.d("Alarm", "scheduleFollowUpAlarm being called")
                 }
             }
 
@@ -77,7 +73,6 @@ class AlarmReceiver: BroadcastReceiver(), ActivityCompat.OnRequestPermissionsRes
 
         }
 
-        Log.d("AlarmReceiver", "AlarmItem received: $alarmItem")
         startAlarmService(context, intent)
     }
 
@@ -116,9 +111,8 @@ class AlarmReceiver: BroadcastReceiver(), ActivityCompat.OnRequestPermissionsRes
         CoroutineScope(Dispatchers.IO).launch{
             val alarmInMillis = localDateTimeToMillis(alarmItem.time)
             val medicine = dao.getCurrentAlarmData(alarmInMillis)
-            Log.i("ALARM", "$medicine")
+
             if (medicine != null) {
-                Log.i("ALARM", "Medicine not null")
                 medicine.medicineWasTaken = true
                 dao.updateMedicine(medicine)
             }
@@ -134,7 +128,6 @@ class AlarmReceiver: BroadcastReceiver(), ActivityCompat.OnRequestPermissionsRes
     private suspend fun aQuarterIntervalBetweenAlarms(medicineName: String, alarmInMillis: Long, dao: MedicineDao): Long{
         return withContext(Dispatchers.IO) {
             val nextAlarm = dao.getNextAlarmData(medicineName, alarmInMillis)
-            Log.d("Alarm nextAlarm", "${nextAlarm?.alarmInMillis}")
 
             if (nextAlarm != null) {
                 (nextAlarm.alarmInMillis - alarmInMillis) / 4

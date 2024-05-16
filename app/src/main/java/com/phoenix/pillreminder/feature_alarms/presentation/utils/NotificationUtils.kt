@@ -94,7 +94,6 @@ object NotificationUtils {
          val title = context.getString(R.string.did_you_forget_to_use_your_medicine, item.medicineName)
          val text = context.getString(R.string.do_not_forget_to_mark_the_medicine_as_used, checkMedicineForm(item.medicineForm,
              item.medicineQuantity, context))
-         Log.d("Alarm", "NotificationUtils")
 
         return notificationBuilderWithActionButtons(
             context, followUpChannelId, pendingIntent, title, text,

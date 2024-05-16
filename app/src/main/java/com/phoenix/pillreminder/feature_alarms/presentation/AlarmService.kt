@@ -51,7 +51,7 @@ class AlarmService: Service() {
                     val activityIntent = Intent(this, AlarmTriggeredActivity::class.java).apply{
                         putExtra("ALARM_ITEM", alarmItem)
                     }
-                    Log.d("AlarmService", "AlarmItem received: $alarmItem")
+
                     activityIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
                     startActivity(activityIntent)
                 } else {

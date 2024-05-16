@@ -32,7 +32,7 @@ class FollowUpAlarmReceiver: BroadcastReceiver(), ActivityCompat.OnRequestPermis
 
         CoroutineScope(Dispatchers.IO).launch {
             val updatedMedicine = dao.getCurrentAlarmData(alarmTimeInMillis ?: 0)
-            Log.d("Alarm updated medicine medicine item", "${updatedMedicine?.medicineWasTaken}, $medicineItem")
+
             if(updatedMedicine?.medicineWasTaken == false && medicineItem != null){
                 startAlarmService(context, intent, updatedMedicine)
             }

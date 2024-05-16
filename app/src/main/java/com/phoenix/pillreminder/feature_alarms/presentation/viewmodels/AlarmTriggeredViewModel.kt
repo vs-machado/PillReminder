@@ -73,9 +73,8 @@ class AlarmTriggeredViewModel : ViewModel() {
     suspend fun markMedicineAsTaken(alarmItem: AlarmItem, medicinesViewModel: MedicinesViewModel) {
         val alarmInMillis = localDateTimeToMillis(alarmItem.time)
         val medicine = medicinesViewModel.getCurrentAlarmData(alarmInMillis)
-        Log.i("ALARM", "$medicine")
+
         if (medicine != null) {
-            Log.i("ALARM", "Medicine not null")
             medicine.medicineWasTaken = true
             medicinesViewModel.updateMedicines(medicine)
         }

@@ -83,7 +83,7 @@
     <string name="quantity">Quantity</string>
     <string name="set_the_quantity_per_dosage">Set the quantity per dosage:</string>
     <string name="this_app_heavily_depends_on_user_overlay_and_notification_permissions_to_properly_work">This app heavily depends on user overlay and notification permissions to properly work.</string>
-    <string name="the_app_must_not_be_used_without_these_permissions">The app must not be used without these permissions.</string>
+    <string name="the_app_must_not_be_used_without_these_permissions">The user\'s notification permission is mandatory for the proper functioning of the application.\n\n User\'s overlay permission\ngranting is optional.</string>
     <string name="go_to_permissions">Go to permissions</string>
     <string name="dismiss">Dismiss</string>
     <string name="permission_required">Permission required</string>
@@ -93,4 +93,5 @@
     <string name="medicine_name">Medicine name</string>
     <string name="mark_as_used">Mark as used</string>
     <string name="mute_sound">Mute sound</string>
+    <string name="dont_show_again">Don\'t show again</string>
 </resources>

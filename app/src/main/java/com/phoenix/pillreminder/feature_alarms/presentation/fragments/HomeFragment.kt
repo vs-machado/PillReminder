@@ -2,6 +2,7 @@ package com.phoenix.pillreminder.feature_alarms.presentation.fragments
 
 import android.Manifest
 import android.app.Dialog
+import android.content.Context
 import android.content.Intent
 import android.content.pm.PackageManager
 import android.graphics.Color
@@ -10,12 +11,12 @@ import android.net.Uri
 import android.os.Bundle
 import android.provider.Settings
 import android.text.format.DateFormat
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.view.Window
 import android.widget.Button
+import android.widget.CheckBox
 import android.widget.TextView
 import android.widget.Toast
 import androidx.activity.addCallback
@@ -31,7 +32,6 @@ import androidx.navigation.fragment.findNavController
 import androidx.navigation.ui.AppBarConfiguration
 import androidx.navigation.ui.setupWithNavController
 import androidx.recyclerview.widget.LinearLayoutManager
-import androidx.recyclerview.widget.RecyclerView
 import androidx.work.WorkManager
 import com.phoenix.pillreminder.R
 import com.phoenix.pillreminder.databinding.FragmentHomeBinding
@@ -61,7 +61,6 @@ class HomeFragment : Fragment() {
     private lateinit var adapter: RvMedicinesListAdapter
     private lateinit var medicinesViewModel: MedicinesViewModel
     private var toast: Toast? = null
-    private var wasOverlayPermissionDialogShown: Boolean = false
     private val hfViewModel: HomeFragmentViewModel by viewModels()
     private lateinit var dialog: Dialog
 
@@ -110,9 +109,11 @@ class HomeFragment : Fragment() {
             binding.fabAddMedicine.visibility = View.VISIBLE
         }
 
-        if(!Settings.canDrawOverlays(requireContext()) && !wasOverlayPermissionDialogShown){
-            showOverlayPermissionDialog()
-            wasOverlayPermissionDialogShown = true
+        val sharedPreferences = requireContext().getSharedPreferences("dont_show_again", Context.MODE_PRIVATE)
+        val dontShowAgain = sharedPreferences.getBoolean("dont_show_again", false)
+
+        if(!Settings.canDrawOverlays(requireContext()) && !dontShowAgain){
+            showOverlayAndNotificationPermissionDialog()
         }
 
         binding.fabAddMedicine.setOnClickListener {
@@ -153,7 +154,14 @@ class HomeFragment : Fragment() {
         }
     }
 
-    private fun showOverlayPermissionDialog(){
+    private fun showOverlayAndNotificationPermissionDialog(){
+        val sharedPreferences = requireContext().getSharedPreferences("overlay_permission_prefs", Context.MODE_PRIVATE)
+        val dontShowAgain = sharedPreferences.getBoolean("dont_show_again", false)
+
+        if (dontShowAgain){
+            return
+        }
+
         val dialog = Dialog(this.requireContext())
         dialog.requestWindowFeature(Window.FEATURE_NO_TITLE)
         dialog.setCancelable(false)
@@ -162,11 +170,18 @@ class HomeFragment : Fragment() {
 
         val requestPermission: Button = dialog.findViewById(R.id.btnGivePermissions)
         val dismissRequest: Button = dialog.findViewById(R.id.btnDismissRequest)
+        val checkboxDontShowAgain: CheckBox = dialog.findViewById(R.id.cbDontShowAgain)
 
         requestPermission.setOnClickListener {
             requestPermissionLauncher.launch(Manifest.permission.POST_NOTIFICATIONS)
         }
         dismissRequest.setOnClickListener {
+            if(checkboxDontShowAgain.isChecked){
+                with(sharedPreferences.edit()){
+                    putBoolean("dont_show_again", true)
+                    apply()
+                }
+            }
             dialog.dismiss()
         }
 

@@ -18,9 +18,9 @@
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
-            android:paddingStart="12dp"
+            android:paddingStart="24dp"
             android:paddingTop="12dp"
-            android:paddingEnd="12dp">
+            android:paddingEnd="24dp">
 
             <TextView
                 android:id="@+id/tvNearTime"
@@ -49,32 +49,35 @@
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/tvNearTime" />
 
+
             <Button
                 android:id="@+id/btnMarkMedicineUsage"
-                style="@style/Widget.Material3.Button.ElevatedButton"
-                android:layout_width="0dp"
-                android:layout_height="48dp"
-                android:layout_marginTop="16dp"
-                android:backgroundTint="#d24141"
+                style="@style/Widget.Material3.Button.TextButton"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="24dp"
+                android:layout_marginBottom="8dp"
                 android:text="Mark medicine usage"
-                android:textColor="#F6F6F6"
+                android:textColor="#d24141"
                 app:cornerRadius="20dp"
+                app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintHorizontal_bias="0.5"
+                app:layout_constraintStart_toEndOf="@+id/btnSkipDose"
                 app:layout_constraintTop_toBottomOf="@+id/tvYouSure" />
-
 
             <Button
                 android:id="@+id/btnSkipDose"
                 style="@style/Widget.Material3.Button.TextButton"
-                android:layout_width="0dp"
-                android:layout_height="48dp"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
                 android:text="Skip dose"
-                android:textColor="#686868"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintEnd_toEndOf="parent"
+                android:textColor="#d24141"
+                app:layout_constraintBottom_toBottomOf="@+id/btnMarkMedicineUsage"
+                app:layout_constraintEnd_toStartOf="@+id/btnMarkMedicineUsage"
+                app:layout_constraintHorizontal_bias="0.5"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/btnMarkMedicineUsage" />
+                app:layout_constraintTop_toTopOf="@+id/btnMarkMedicineUsage" />
 
             <ImageView
                 android:id="@+id/ivAlert"

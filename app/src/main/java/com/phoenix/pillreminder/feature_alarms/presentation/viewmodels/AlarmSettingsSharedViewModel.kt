@@ -1,6 +1,7 @@
 package com.phoenix.pillreminder.feature_alarms.presentation.viewmodels
 
 import android.content.Context
+import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
@@ -180,6 +181,7 @@ class AlarmSettingsSharedViewModel : ViewModel() {
 
                     // It schedules only the first alarm. The next alarm will be set when the first alarm is triggered.
                     if (!alarmScheduled){
+                        Log.d("alarm", "createalarmitem")
                         alarmItem.let(alarmScheduler::scheduleAlarm)
                         alarmScheduled = true
                     }

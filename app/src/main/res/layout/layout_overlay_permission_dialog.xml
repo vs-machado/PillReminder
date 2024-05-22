@@ -51,12 +51,16 @@
 
             <Button
                 android:id="@+id/btnGivePermissions"
-                style="@style/Widget.Material3.Button"
-                android:layout_width="0dp"
+                style="@style/Widget.Material3.Button.TextButton"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_marginTop="8dp"
+                android:layout_marginBottom="8dp"
                 android:text="@string/go_to_permissions"
+                app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintHorizontal_bias="0.5"
+                app:layout_constraintStart_toEndOf="@+id/btnDismissRequest"
                 app:layout_constraintTop_toBottomOf="@+id/cbDontShowAgain" />
 
             <ImageView
@@ -76,15 +80,14 @@
             <Button
                 android:id="@+id/btnDismissRequest"
                 style="@style/Widget.Material3.Button.TextButton"
-                android:layout_width="0dp"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:backgroundTint="#FFFFFF"
                 android:text="@string/dismiss"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintHorizontal_bias="1.0"
+                app:layout_constraintEnd_toStartOf="@+id/btnGivePermissions"
+                app:layout_constraintHorizontal_bias="0.5"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/btnGivePermissions" />
+                app:layout_constraintTop_toTopOf="@+id/btnGivePermissions" />
 
             <CheckBox
                 android:id="@+id/cbDontShowAgain"

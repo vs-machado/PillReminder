@@ -11,6 +11,7 @@ import android.net.Uri
 import android.os.Bundle
 import android.provider.Settings
 import android.text.format.DateFormat
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -35,6 +36,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.work.WorkManager
 import com.phoenix.pillreminder.R
 import com.phoenix.pillreminder.databinding.FragmentHomeBinding
+import com.phoenix.pillreminder.databinding.LayoutWarnAboutMedicineUsageHourBinding
 import com.phoenix.pillreminder.feature_alarms.domain.model.AlarmItem
 import com.phoenix.pillreminder.feature_alarms.domain.model.Medicine
 import com.phoenix.pillreminder.feature_alarms.domain.repository.AlarmScheduler
@@ -140,7 +142,17 @@ class HomeFragment : Fragment() {
                 showDeleteAllAlarmsDialog(selectedMedicine)
             },
             markMedicineUsage = {selectedMedicine: Medicine ->
-                markMedicineUsage(selectedMedicine)
+                isNextToAnotherDoseHour(selectedMedicine) { result ->
+                    if(result){
+                        showWarningMedicineUsageDialog(selectedMedicine)
+                    }
+                    else{
+                        markMedicineUsage(selectedMedicine)
+                    }
+                }
+            },
+            markMedicinesAsSkipped = {selectedMedicine ->
+                markMedicinesAsSkipped(selectedMedicine)
             }
         )
         binding.rvMedicinesList.adapter = adapter
@@ -218,10 +230,8 @@ class HomeFragment : Fragment() {
                 if(medicine.alarmInMillis > System.currentTimeMillis()){
                     alarmScheduler.cancelAlarm(alarmItem, false)
                 }
-                //Log.i("alarmdata", "medicine name ${medicine.name} and currentmillis ${System.currentTimeMillis()}")
 
                 val hasNextAlarm = medicinesViewModel.hasNextAlarmData(medicine.name, System.currentTimeMillis())
-                //Log.i("alarmdata", hasNextAlarm.toString())
 
                 if(!hasNextAlarm){
                     val workRequestID = UUID.fromString(medicinesViewModel.getWorkerID(medicine.name))
@@ -252,7 +262,7 @@ class HomeFragment : Fragment() {
         dialog.window?.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
 
         val tvMedicine: TextView = dialog.findViewById(R.id.tvMedicineAndHour)
-        val btnDelete: Button = dialog.findViewById(R.id.btnDelete)
+        val btnDelete: Button = dialog.findViewById(R.id.btnDeleteAll)
         val btnCancel: Button = dialog.findViewById(R.id.btnCancel)
 
         tvMedicine.text = context?.getString(R.string.tv_medicine, medicine.name)
@@ -299,10 +309,98 @@ class HomeFragment : Fragment() {
         dialog.show()
     }
 
+    private fun showWarningMedicineUsageDialog(medicine: Medicine){
+        dialog = Dialog(this.requireContext())
+        dialog.requestWindowFeature(Window.FEATURE_NO_TITLE)
+        dialog.setCancelable(false)
+
+        val inflater = context?.getSystemService(Context.LAYOUT_INFLATER_SERVICE) as LayoutInflater
+        val binding = LayoutWarnAboutMedicineUsageHourBinding.inflate(inflater)
+
+        dialog.setContentView(binding.root)
+        dialog.window?.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
+
+        binding.btnMarkMedicineUsage.setOnClickListener {
+            markMedicineUsage(medicine)
+            dialog.dismiss()
+        }
+
+        binding.btnSkipDose.setOnClickListener {
+            markMedicinesAsSkipped(medicine)
+            dialog.dismiss()
+        }
+
+        dialog.show()
+    }
+
+    private fun isNextToAnotherDoseHour(selectedMedicine: Medicine, callback: (Boolean) -> Unit){
+        val usageHour = selectedMedicine.alarmInMillis
+
+        CoroutineScope(Dispatchers.IO).launch{
+            val nextAlarmHour = medicinesViewModel.getNextAlarmData(selectedMedicine.name, selectedMedicine.alarmInMillis)?.alarmInMillis
+
+            withContext(Dispatchers.Main){
+                val intervalBetweenAlarms = nextAlarmHour?.minus(usageHour)
+
+                if(intervalBetweenAlarms != null){
+                    val closeToNextAlarm = (System.currentTimeMillis() - usageHour) > ((2.0/3.0) * intervalBetweenAlarms)
+                    val pastTheNextAlarmHour = System.currentTimeMillis() > nextAlarmHour
+
+                    //If user is next to the next alarm hour a warning will be displayed asking if he really wants to use the medicine
+                    if(closeToNextAlarm || pastTheNextAlarmHour){
+                        callback(true)
+                    } else{
+                        callback(false)
+                    }
+                }
+            }
+        }
+    }
+
     private fun markMedicineUsage(medicine: Medicine){
         medicine.medicineWasTaken = true
         medicinesViewModel.updateMedicines(medicine)
         displayMedicinesList(hfViewModel.getDate())
+    }
+
+    private fun markMedicinesAsSkipped(medicine: Medicine){
+        val alarmScheduler : AlarmScheduler = AndroidAlarmScheduler(requireActivity().applicationContext)
+        val alarmTime = Instant.ofEpochMilli(medicine.alarmInMillis).atZone(ZoneId.systemDefault()).toLocalDateTime()
+
+        val alarmItem = AlarmItem(
+            alarmTime,
+            medicine.name,
+            medicine.form,
+            medicine.quantity.toString(),
+            medicine.alarmHour.toString(),
+            medicine.alarmMinute.toString()
+        )
+
+        medicine.wasSkipped = true
+
+        CoroutineScope(Dispatchers.IO).launch{
+            medicinesViewModel.updateMedicines(medicine)
+
+            withContext(Dispatchers.Main){
+                /*Checks if the alarm was already triggered. If so, there is no need to cancel the broadcast.
+                cancelAlarm() will cancel the alarm and check if there is another alarm to be scheduled*/
+                if(medicine.alarmInMillis > System.currentTimeMillis()){
+                    Log.d("alarm cancel", "cancel called")
+                    alarmScheduler.cancelAlarm(alarmItem, false)
+                }
+            }
+
+            val hasNextAlarm = medicinesViewModel.hasNextAlarmData(medicine.name, System.currentTimeMillis())
+
+            withContext(Dispatchers.Main){
+                if(!hasNextAlarm){
+                    val workRequestID = UUID.fromString(medicinesViewModel.getWorkerID(medicine.name))
+                    WorkManager.getInstance(requireContext().applicationContext).cancelWorkById(workRequestID)
+                }
+
+                displayMedicinesList(hfViewModel.getDate())
+            }
+        }
     }
 
     private fun showToastAlarmDeleted(){

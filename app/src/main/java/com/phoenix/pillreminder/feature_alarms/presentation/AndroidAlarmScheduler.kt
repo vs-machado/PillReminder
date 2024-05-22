@@ -43,7 +43,6 @@ class AndroidAlarmScheduler(private val context: Context): AlarmScheduler {
                 PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE
             )
         )
-        //Log.i("Alarm", "Alarm set at $alarmTime")
     }
 
     override fun cancelAlarm(item: AlarmItem, cancelAll: Boolean) {
@@ -80,6 +79,7 @@ class AndroidAlarmScheduler(private val context: Context): AlarmScheduler {
             }
 
             if(!cancelAll){
+                alarmManager.cancel(pendingIntent)
                 val currentAlarmInMillis = item.time.atZone(ZoneId.systemDefault()).toInstant().toEpochMilli()
 
                 // Search for the alarm (next to the selected) in the database
@@ -94,12 +94,6 @@ class AndroidAlarmScheduler(private val context: Context): AlarmScheduler {
             withContext(Dispatchers.Main) {
                 alarmManager.cancel(pendingIntent)
             }
-
-            /*Toast.makeText(context,
-                "ALARM CANCELLED: ${item.time}",
-                Toast.LENGTH_LONG).show()*/
-
-            //Log.i("ALARM", "ALARM CANCELLED: ${item.time}")
         }
     }
 
@@ -116,7 +110,6 @@ class AndroidAlarmScheduler(private val context: Context): AlarmScheduler {
         )
 
         alarmItem.let(alarmScheduler::scheduleAlarm)
-        //Log.i("ALARM", "ALARM SCHEDULED: ${alarmItem.time}")
     }
 
     fun scheduleFollowUpAlarm(medicine: Medicine, item: AlarmItem, followUpTime: Long){

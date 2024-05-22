@@ -28,6 +28,12 @@ class MedicinesViewModel(private val medicineRepository: MedicineRepository): Vi
         }
     }
 
+    suspend fun getNextAlarmData(medicineName: String, currentTimeMillis: Long): Medicine? {
+        return withContext(Dispatchers.IO){
+            medicineRepository.getNextAlarmData(medicineName, currentTimeMillis)
+        }
+    }
+
     fun getWorkerID(medicineName: String): String {
         return medicineRepository.getWorkerID(medicineName)
     }

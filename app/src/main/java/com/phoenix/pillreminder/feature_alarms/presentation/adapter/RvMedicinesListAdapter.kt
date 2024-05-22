@@ -20,7 +20,8 @@ private const val HOUR_12_FORMAT = "hh:mm a"
 
 class RvMedicinesListAdapter (private val showDeleteAlarmDialog: (Medicine) -> Unit,
                               private val showDeleteAllAlarmsDialog: (Medicine) -> Unit,
-                              private val markMedicineUsage: (Medicine) -> Unit) : RecyclerView.Adapter<MyViewHolder>() {
+                              private val markMedicineUsage: (Medicine) -> Unit,
+                              private val markMedicinesAsSkipped: (Medicine) -> Unit) : RecyclerView.Adapter<MyViewHolder>() {
 
     private val medicineList = ArrayList<Medicine>()
 
@@ -36,7 +37,7 @@ class RvMedicinesListAdapter (private val showDeleteAlarmDialog: (Medicine) -> U
     }
 
     override fun onBindViewHolder(holder: MyViewHolder, position: Int) {
-        holder.bind(medicineList[position], holder, showDeleteAlarmDialog, showDeleteAllAlarmsDialog, markMedicineUsage)
+        holder.bind(medicineList[position], holder, showDeleteAlarmDialog, showDeleteAllAlarmsDialog, markMedicineUsage, markMedicinesAsSkipped)
     }
 
     fun setList(medicines: List<Medicine>, selectedDate: Date){
@@ -68,7 +69,7 @@ class RvMedicinesListAdapter (private val showDeleteAlarmDialog: (Medicine) -> U
 class MyViewHolder(private val medicinesBinding: AdapterListMedicinesBinding):RecyclerView.ViewHolder(medicinesBinding.root){
 
 
-    fun bind(medicine: Medicine, holder: MyViewHolder, showDeleteAlarmDialog: (Medicine) -> Unit, showDeleteAllAlarmsDialog: (Medicine) -> Unit, markMedicineUsage: (Medicine) -> Unit){
+    fun bind(medicine: Medicine, holder: MyViewHolder, showDeleteAlarmDialog: (Medicine) -> Unit, showDeleteAllAlarmsDialog: (Medicine) -> Unit, markMedicineUsage: (Medicine) -> Unit, markMedicinesAsSkipped: (Medicine) -> Unit){
         val context = holder.itemView.context
         val currentTimeInMillis = System.currentTimeMillis()
 
@@ -109,13 +110,24 @@ class MyViewHolder(private val medicinesBinding: AdapterListMedicinesBinding):Re
                 "pomade" -> tvQuantity.text = context.getString(R.string.apply_pomade)
             }
 
-            when(medicine.medicineWasTaken /*and compare user hour to alarm hour in millis*/){
+            when(medicine.medicineWasTaken){
                 true -> {
                     tvMedicineTaken.isVisible = true
                     tvMedicineTaken.text = context.getString(R.string.medicine_already_taken) }
                 false -> {
                     tvMedicineTaken.isVisible = true
-                    tvMedicineTaken.text = context.getString(R.string.medicine_not_taken_yet)}
+
+                    when (medicine.wasSkipped) {
+                        true -> {
+                            tvMedicineTaken.text =
+                                context.getString(R.string.medicine_skipped)
+                        }
+                        false -> {
+                            tvMedicineTaken.text = context.getString(R.string.medicine_not_taken_yet)
+                        }
+                    }
+                }
+
             }
 
            ivMenu.setOnClickListener {
@@ -132,6 +144,10 @@ class MyViewHolder(private val medicinesBinding: AdapterListMedicinesBinding):Re
                            showDeleteAllAlarmsDialog(medicine)
                            true
                        }
+                       R.id.menu3 -> {
+                           markMedicinesAsSkipped(medicine)
+                           true
+                       }
                        else -> false
                    }
                }
@@ -139,7 +155,7 @@ class MyViewHolder(private val medicinesBinding: AdapterListMedicinesBinding):Re
            }
 
             btnMarkUsage.visibility =
-                if (currentTimeInMillis > medicine.alarmInMillis && !medicine.medicineWasTaken){
+                if (currentTimeInMillis > medicine.alarmInMillis && !medicine.medicineWasTaken && !medicine.wasSkipped){
                     View.VISIBLE
                 }  else View.GONE
 

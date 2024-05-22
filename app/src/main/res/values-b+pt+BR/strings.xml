@@ -39,6 +39,7 @@
     <string name="delete">Deletar</string>
     <string name="cancel">Cancelar</string>
     <string name="delete_all_alarms">Deletar todos os alarmes</string>
+    <string name="skip_dose">Pular dose</string>
     <string name="pills">comprimido(s)</string>
     <string name="drops">gota(s)</string>
     <string name="grams">g</string>
@@ -80,6 +81,7 @@
     <string name="assets_designed_by_freepik">Ícones criados pela Freepik</string>
     <string name="medicine_already_taken">Medicamento foi tomado</string>
     <string name="medicine_not_taken_yet">Ainda não foi tomado</string>
+    <string name="medicine_skipped">Dose pulada.</string>
     <string name="quantity">Quantidade</string>
     <string name="set_the_quantity_per_dosage">Insira a quantidade por dose:</string>
     <string name="this_app_heavily_depends_on_user_overlay_and_notification_permissions_to_properly_work">O aplicativo depende fortemente das permissões do usuário de sobreposição e notificação para funcionar corretamente. </string>

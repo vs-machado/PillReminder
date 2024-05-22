@@ -39,6 +39,7 @@
     <string name="delete">Delete</string>
     <string name="cancel">Cancel</string>
     <string name="delete_all_alarms">Delete all alarms</string>
+    <string name="skip_dose">Skip dose</string>
     <string name="pills">pill(s)</string>
     <string name="drops">drop(s)</string>
     <string name="grams">g</string>
@@ -80,6 +81,7 @@
     <string name="assets_designed_by_freepik">Assets designed by Freepik</string>
     <string name="medicine_already_taken">Medicine already taken</string>
     <string name="medicine_not_taken_yet">Medicine not taken yet.</string>
+    <string name="medicine_skipped">Dose skipped.</string>
     <string name="quantity">Quantity</string>
     <string name="set_the_quantity_per_dosage">Set the quantity per dosage:</string>
     <string name="this_app_heavily_depends_on_user_overlay_and_notification_permissions_to_properly_work">This app heavily depends on user overlay and notification permissions to properly work.</string>
@@ -94,4 +96,5 @@
     <string name="mark_as_used">Mark as used</string>
     <string name="mute_sound">Mute sound</string>
     <string name="dont_show_again">Don\'t show again</string>
+    <string name="medicine_type_icon">Medicine type icon</string>
 </resources>

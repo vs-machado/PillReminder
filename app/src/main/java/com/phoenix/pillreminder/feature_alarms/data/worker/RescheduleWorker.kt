@@ -100,6 +100,7 @@ class RescheduleWorker(appContext: Context, workerParams: WorkerParameters) : Co
                         startDate,
                         endDate,
                         medicineWasTaken,
+                        false,
                         frequency,
                         periodSet,
                         needsReschedule,

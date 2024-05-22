@@ -30,6 +30,8 @@ data class Medicine(
     var endDate: Long,
     @ColumnInfo(name = "medicine_was_taken")
     var medicineWasTaken: Boolean,
+    @ColumnInfo(name = "medicine_was_skipped")
+    var wasSkipped: Boolean,
     @ColumnInfo(name = "medicine_frequency")
     var medicineFrequency: Int,
     @ColumnInfo(name = "medicine_treatment_period_set")

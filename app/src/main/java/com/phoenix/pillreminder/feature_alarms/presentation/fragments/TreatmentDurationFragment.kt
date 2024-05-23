@@ -78,7 +78,7 @@ class TreatmentDurationFragment : Fragment(), ActivityCompat.OnRequestPermission
                             val startDateMillis = System.currentTimeMillis()
                             val endDateMillis = (startDateMillis + (33 * 86400000L))
 
-                            extractDateComponents(startDateMillis,endDateMillis)
+                            extractDateComponents(startDateMillis, endDateMillis, false)
 
                             // Catches the workerID to cancel it if needed. workerID will be stored in the database.
                             val workerID = createRescheduleWorker(requireContext().applicationContext)
@@ -136,7 +136,7 @@ class TreatmentDurationFragment : Fragment(), ActivityCompat.OnRequestPermission
                 val endDateMillis = selection.second
 
                 //Extracts the treatment period and adds the user alarm hour to it in milliseconds
-                extractDateComponents(startDateMillis, endDateMillis)
+                extractDateComponents(startDateMillis, endDateMillis, true)
 
                 when (getMedicineFrequency()){
                     1 -> {

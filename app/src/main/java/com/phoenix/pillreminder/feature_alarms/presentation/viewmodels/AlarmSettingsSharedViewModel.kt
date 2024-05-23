@@ -181,7 +181,6 @@ class AlarmSettingsSharedViewModel : ViewModel() {
 
                     // It schedules only the first alarm. The next alarm will be set when the first alarm is triggered.
                     if (!alarmScheduled){
-                        Log.d("alarm", "createalarmitem")
                         alarmItem.let(alarmScheduler::scheduleAlarm)
                         alarmScheduled = true
                     }
@@ -212,12 +211,25 @@ class AlarmSettingsSharedViewModel : ViewModel() {
         }
     }
 
-    fun extractDateComponents(firstDate: Long, secondDate: Long){
-        val timeZone = TimeZone.getTimeZone("UTC")
-        val startDate = Calendar.getInstance(timeZone).apply { timeInMillis = firstDate }
-        val endDate = Calendar.getInstance(timeZone).apply { timeInMillis = secondDate }
+    fun extractDateComponents(firstDate: Long, secondDate: Long, userSetPeriod: Boolean){
+        when(userSetPeriod){
+            true -> {
+                val userTimeZone = TimeZone.getDefault()
+                val timeZoneOffset = userTimeZone.getOffset(firstDate)
 
-        setTreatmentPeriod(startDate.timeInMillis, endDate.timeInMillis)
+                val startDate = Calendar.getInstance().apply { timeInMillis = firstDate - timeZoneOffset }
+                val endDate = Calendar.getInstance().apply { timeInMillis = secondDate - timeZoneOffset }
+
+                setTreatmentPeriod(startDate.timeInMillis, endDate.timeInMillis)
+            }
+            false -> {
+                val startDate = Calendar.getInstance().apply { timeInMillis = firstDate }
+                val endDate = Calendar.getInstance().apply { timeInMillis = secondDate }
+
+                setTreatmentPeriod(startDate.timeInMillis, endDate.timeInMillis)
+            }
+        }
+
     }
 
     fun saveMedicineForm(position: Int){

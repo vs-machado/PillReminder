@@ -90,11 +90,14 @@ class HomeFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        val sharedPreferences = requireContext().getSharedPreferences("dont_show_again", Context.MODE_PRIVATE)
+        val dontShowAgain = sharedPreferences.getBoolean("dont_show_again", false)
 
         medicinesViewModel = ViewModelProvider(requireActivity(), (requireActivity() as MainActivity).factory)[MedicinesViewModel::class.java]
 
         setupToolbar()
         initRecyclerView(hfViewModel.getDate())
+        requestPermissions(dontShowAgain)
 
         binding.datePicker.onSelectionChanged = { date ->
             CoroutineScope(Dispatchers.Main).launch{
@@ -106,22 +109,20 @@ class HomeFragment : Fragment() {
             }
         }
 
-        if(ContextCompat.checkSelfPermission(requireContext(), Manifest.permission.POST_NOTIFICATIONS) == PackageManager.PERMISSION_GRANTED){
-            binding.rvMedicinesList.visibility = View.VISIBLE
-            binding.fabAddMedicine.visibility = View.VISIBLE
-        }
-
-        val sharedPreferences = requireContext().getSharedPreferences("dont_show_again", Context.MODE_PRIVATE)
-        val dontShowAgain = sharedPreferences.getBoolean("dont_show_again", false)
-
-        if(!Settings.canDrawOverlays(requireContext()) && !dontShowAgain){
-            showOverlayAndNotificationPermissionDialog()
-        }
-
         binding.fabAddMedicine.setOnClickListener {
             it.findNavController().navigate(R.id.action_homeFragment_to_addMedicinesFragment)
         }
 
+    }
+
+    private fun requestPermissions(dontShowAgain: Boolean){
+        if(ContextCompat.checkSelfPermission(requireContext(), Manifest.permission.POST_NOTIFICATIONS) == PackageManager.PERMISSION_GRANTED){
+            binding.rvMedicinesList.visibility = View.VISIBLE
+            binding.fabAddMedicine.visibility = View.VISIBLE
+        }
+        if(!Settings.canDrawOverlays(requireContext()) && !dontShowAgain){
+            showOverlayAndNotificationPermissionDialog()
+        }
     }
 
     private fun setupToolbar(){
@@ -199,6 +200,7 @@ class HomeFragment : Fragment() {
 
         dialog.show()
     }
+
     private fun showDeleteAlarmDialog(medicine: Medicine){
         dialog = Dialog(this.requireContext())
         dialog.requestWindowFeature(Window.FEATURE_NO_TITLE)
@@ -385,7 +387,6 @@ class HomeFragment : Fragment() {
                 /*Checks if the alarm was already triggered. If so, there is no need to cancel the broadcast.
                 cancelAlarm() will cancel the alarm and check if there is another alarm to be scheduled*/
                 if(medicine.alarmInMillis > System.currentTimeMillis()){
-                    Log.d("alarm cancel", "cancel called")
                     alarmScheduler.cancelAlarm(alarmItem, false)
                 }
             }

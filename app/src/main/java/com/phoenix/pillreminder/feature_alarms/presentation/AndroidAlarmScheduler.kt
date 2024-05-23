@@ -24,7 +24,6 @@ class AndroidAlarmScheduler(private val context: Context): AlarmScheduler {
         val intent = Intent(context, AlarmReceiver::class.java).apply {
             putExtra("ALARM_ITEM", item)
         }
-        Log.d("alarm", "scheduleAlarm")
 
         // Checks if is possible to schedule exact alarms before calling the schedule method
         if(!alarmManager.canScheduleExactAlarms()){
@@ -45,7 +44,6 @@ class AndroidAlarmScheduler(private val context: Context): AlarmScheduler {
             )
         )
 
-        Log.d("alarm", "alarm set at $alarmTime")
     }
 
     override fun cancelAlarm(item: AlarmItem, cancelAll: Boolean) {

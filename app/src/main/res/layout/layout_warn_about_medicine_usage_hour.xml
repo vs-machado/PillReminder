@@ -16,7 +16,7 @@
         app:layout_constraintTop_toTopOf="parent">
 
         <androidx.constraintlayout.widget.ConstraintLayout
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:paddingStart="24dp"
             android:paddingTop="12dp"
@@ -28,7 +28,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginStart="8dp"
                 android:layout_marginTop="4dp"
-                android:text="Near the time of the next dose"
+                android:text="@string/close_to_the_next_dosage"
                 android:textSize="20sp"
                 android:textStyle="bold"
                 app:layout_constraintEnd_toEndOf="parent"
@@ -38,11 +38,13 @@
 
             <TextView
                 android:id="@+id/tvYouSure"
-                android:layout_width="wrap_content"
+                android:layout_width="0dp"
                 android:layout_height="wrap_content"
+                android:layout_marginStart="8dp"
                 android:layout_marginTop="16dp"
+                android:layout_marginEnd="8dp"
                 android:gravity="center"
-                android:text="Are you sure about using the medicine at this hour?\n\nAsk your doctor what to do if you miss a dose and remember to take it when it's time for the next dose.\n\nIt is usually advisable to skip the dose and use\nthe medicine at the next scheduled time."
+                android:text="@string/are_you_sure_about_using_the_medicine_at_this_hour_n_nask_your_doctor_what_to_do_if_you_miss_a_dose_n_nit_is_usually_advisable_to_skip_the_dose_and_use_the_medicine_at_the_next_scheduled_time"
                 android:textSize="16sp"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintHorizontal_bias="0.482"
@@ -57,7 +59,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="24dp"
                 android:layout_marginBottom="8dp"
-                android:text="Mark medicine usage"
+                android:text="@string/mark_medicine_usage"
                 android:textColor="#d24141"
                 app:cornerRadius="20dp"
                 app:layout_constraintBottom_toBottomOf="parent"
@@ -71,7 +73,7 @@
                 style="@style/Widget.Material3.Button.TextButton"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Skip dose"
+                android:text="@string/skip_dose"
                 android:textColor="#d24141"
                 app:layout_constraintBottom_toBottomOf="@+id/btnMarkMedicineUsage"
                 app:layout_constraintEnd_toStartOf="@+id/btnMarkMedicineUsage"

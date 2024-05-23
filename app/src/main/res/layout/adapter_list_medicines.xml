@@ -46,7 +46,8 @@
                 android:layout_marginStart="16dp"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
-                app:srcCompat="@drawable/pill_black_and_white" />
+                app:srcCompat="@drawable/pill_black_and_white"
+                android:contentDescription="@string/medicine_type_icon" />
 
             <TextView
                 android:id="@+id/tvMedicineName"
@@ -79,14 +80,15 @@
                 android:layout_marginEnd="10dp"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintTop_toTopOf="@+id/tvMedicineName"
-                app:srcCompat="@drawable/ic_more_vert" />
+                app:srcCompat="@drawable/ic_more_vert"
+                android:contentDescription="@string/menu_with_medicine_options" />
 
             <TextView
                 android:id="@+id/tvMedicineTaken"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="16dp"
-                android:text="Medicine not taken"
+                android:text="@string/medicine_not_taken"
                 android:visibility="visible"
                 app:layout_constraintStart_toEndOf="@+id/ivMedicineType"
                 app:layout_constraintTop_toBottomOf="@+id/tvQuantity" />
@@ -99,7 +101,7 @@
                 android:layout_marginStart="8dp"
                 android:layout_marginTop="8dp"
                 android:backgroundTint="#4CAF50"
-                android:text="Marcar como utilizado"
+                android:text="@string/mark_as_used"
                 android:textColor="@color/white"
                 android:visibility="visible"
                 app:icon="@drawable/baseline_check_24"

@@ -97,4 +97,9 @@
     <string name="mute_sound">Mute sound</string>
     <string name="dont_show_again">Don\'t show again</string>
     <string name="medicine_type_icon">Medicine type icon</string>
+    <string name="close_to_the_next_dosage">Close to the next dosage</string>
+    <string name="mark_medicine_usage">Mark medicine usage</string>
+    <string name="are_you_sure_about_using_the_medicine_at_this_hour_n_nask_your_doctor_what_to_do_if_you_miss_a_dose_n_nit_is_usually_advisable_to_skip_the_dose_and_use_the_medicine_at_the_next_scheduled_time">Are you sure about using the medicine at this hour?\n\nAsk your doctor what to do if you miss a dose.\n\nIt is usually advisable to skip the dose and use the medicine at the next scheduled time.</string>
+    <string name="medicine_not_taken">Medicine not taken</string>
+    <string name="menu_with_medicine_options">Menu with medicine options</string>
 </resources>

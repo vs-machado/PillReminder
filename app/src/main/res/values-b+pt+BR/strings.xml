@@ -93,7 +93,13 @@
     <string name="clock_icon_designed_by_bukeicon_assets_source_from_freepik">Ícone do relógio desenvolvido por bukeicon. Assets pertencem à Freepik.</string>
     <string name="_00_00">00:00</string>
     <string name="medicine_name">Nome do medicamento</string>
-    <string name="mark_as_used">Marcar como utilizado</string>
+    <string name="mark_as_used">Marcar o uso</string>
     <string name="mute_sound">Silenciar som</string>
     <string name="dont_show_again">Não mostrar novamente</string>
+    <string name="medicine_type_icon">Ícone do tipo do medicamento</string>
+    <string name="close_to_the_next_dosage">Perto da próxima dose</string>
+    <string name="mark_medicine_usage">Marcar o uso</string>
+    <string name="are_you_sure_about_using_the_medicine_at_this_hour_n_nask_your_doctor_what_to_do_if_you_miss_a_dose_n_nit_is_usually_advisable_to_skip_the_dose_and_use_the_medicine_at_the_next_scheduled_time">Tem certeza que deseja usar o medicamento agora?\n\nPergunte o seu médico o que fazer quando esquecer de usar o medicamento.\n\nGeralmente é aconselhável pular a dose e usar o medicamento no próximo horário agendado.</string>
+    <string name="medicine_not_taken">Medicamento não utilizado</string>
+    <string name="menu_with_medicine_options">Menu com opções do remédio</string>
 </resources>

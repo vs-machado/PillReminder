@@ -102,4 +102,13 @@
     <string name="are_you_sure_about_using_the_medicine_at_this_hour_n_nask_your_doctor_what_to_do_if_you_miss_a_dose_n_nit_is_usually_advisable_to_skip_the_dose_and_use_the_medicine_at_the_next_scheduled_time">Are you sure about using the medicine at this hour?\n\nAsk your doctor what to do if you miss a dose.\n\nIt is usually advisable to skip the dose and use the medicine at the next scheduled time.</string>
     <string name="medicine_not_taken">Medicine not taken</string>
     <string name="menu_with_medicine_options">Menu with medicine options</string>
+    <string name="welcome">Welcome!</string>
+    <string name="app_explanation">Pill Reminder is an app to help you to keep track of your medicine doses.</string>
+    <string name="app_needs_permissions">...But first we need your permission.</string>
+    <string name="notification_mandatory">"Sending notifications is mandatory for the proper functioning of the application."</string>
+    <string name="pillbox_reminders">Pillbox refill reminders</string>
+    <string name="click_on_pillbox">Click on pillbox refill reminders button to receive daily refill reminders. The reminder will be sent 30 minutes before the first alarm.</string>
+    <string name="app_usage">App usage is simple:</string>
+    <string name="just_click_on_plus_btn">Just click on the + button and fill out the medicine information.</string>
+
 </resources>

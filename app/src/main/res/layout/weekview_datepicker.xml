@@ -353,4 +353,12 @@
         app:layout_constraintEnd_toStartOf="@+id/arrowLeft"
         app:layout_constraintTop_toTopOf="@+id/arrowLeft"
         tools:text="Today" />
+
+    <Switch
+        android:id="@+id/switch1"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/pillbox_reminders"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/scrollDays" />
 </androidx.constraintlayout.widget.ConstraintLayout>

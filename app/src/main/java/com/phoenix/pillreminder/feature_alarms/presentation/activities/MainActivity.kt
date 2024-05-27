@@ -1,5 +1,7 @@
 package com.phoenix.pillreminder.feature_alarms.presentation.activities
 
+import android.content.Context
+import android.content.Intent
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.app.AppCompatDelegate
@@ -25,5 +27,21 @@ class MainActivity : AppCompatActivity() {
 
         AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO)
 
+        if(!isTutorialShown()){
+            startActivity(Intent(this, MyAppIntro::class.java))
+            markTutorialAsShown()
+        }
+    }
+
+    private fun isTutorialShown(): Boolean {
+        val sharedPref = getPreferences(Context.MODE_PRIVATE)
+        return sharedPref.getBoolean("isTutorialShown", false)
+    }
+
+     private fun markTutorialAsShown(){
+        val sharedPref = getPreferences(Context.MODE_PRIVATE)
+        val editor = sharedPref.edit()
+        editor.putBoolean("isTutorialShown", true)
+        editor.apply()
     }
 }

@@ -56,6 +56,9 @@ dependencies {
     //Activity
     implementation("androidx.activity:activity-ktx:$activityVersion")
 
+    //AppIntro
+    implementation("com.github.AppIntro:AppIntro:6.3.1")
+
     //Fragment
     implementation("androidx.fragment:fragment-ktx:$fragmentVersion")
 

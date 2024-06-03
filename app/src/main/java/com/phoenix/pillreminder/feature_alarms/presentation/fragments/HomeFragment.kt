@@ -42,6 +42,7 @@ import com.phoenix.pillreminder.feature_alarms.domain.model.AlarmItem
 import com.phoenix.pillreminder.feature_alarms.domain.model.Medicine
 import com.phoenix.pillreminder.feature_alarms.domain.repository.AlarmScheduler
 import com.phoenix.pillreminder.feature_alarms.presentation.AndroidAlarmScheduler
+import com.phoenix.pillreminder.feature_alarms.presentation.HideFabScrollListener
 import com.phoenix.pillreminder.feature_alarms.presentation.activities.MainActivity
 import com.phoenix.pillreminder.feature_alarms.presentation.adapter.RvMedicinesListAdapter
 import com.phoenix.pillreminder.feature_alarms.presentation.viewmodels.HomeFragmentViewModel
@@ -211,6 +212,9 @@ class HomeFragment : Fragment() {
         )
         binding.rvMedicinesList.adapter = adapter
          displayMedicinesList(dateToFilter)
+
+         val hideFabScrollListener = HideFabScrollListener(binding.fabAddMedicine)
+         binding.rvMedicinesList.addOnScrollListener(hideFabScrollListener)
     }
 
     private fun displayMedicinesList(dateToFilter: Date){

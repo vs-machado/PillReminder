@@ -51,6 +51,14 @@ class MedicineRepositoryImpl (
         return dao.getNextAlarmData(medicineName, currentTimeMillis)
     }
 
+    override suspend fun getFirstMedicineOfNextDay(nextDayInMillis: Long): Medicine? {
+        return dao.getFirstMedicineOfNextDay(nextDayInMillis)
+    }
+
+    override suspend fun getFirstMedicineOfTheDay(millis: Long): Medicine? {
+        return dao.getFirstMedicineOfTheDay(millis)
+    }
+
     override suspend fun hasNextAlarmData(medicineName: String, currentTimeMillis: Long): Boolean {
         return dao.hasNextAlarmData(medicineName, currentTimeMillis)
     }

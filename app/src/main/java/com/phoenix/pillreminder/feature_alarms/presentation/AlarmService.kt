@@ -81,6 +81,19 @@ class AlarmService: Service() {
                 }
 
             }
+            "pillbox_reminder" -> {
+                val notification = NotificationUtils.schedulePillboxDailyReminder(applicationContext)
+
+                if (Build.VERSION.SDK_INT > Build.VERSION_CODES.TIRAMISU){
+                    startForeground(1, notification, ServiceInfo.FOREGROUND_SERVICE_TYPE_SPECIAL_USE)
+                } else{
+                    startForeground(1, notification)
+                }
+                val activityIntent = Intent(this, MainActivity::class.java)
+
+                activityIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
+                startActivity(activityIntent)
+            }
         }
 
         return START_NOT_STICKY

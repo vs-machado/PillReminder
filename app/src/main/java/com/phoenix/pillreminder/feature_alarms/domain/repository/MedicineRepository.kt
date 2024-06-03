@@ -27,6 +27,10 @@ interface MedicineRepository {
 
     suspend fun getNextAlarmData(medicineName: String, currentTimeMillis: Long): Medicine?
 
+    suspend fun getFirstMedicineOfNextDay(nextDayInMillis: Long): Medicine?
+
+    suspend fun getFirstMedicineOfTheDay(millis: Long): Medicine?
+
     suspend fun hasNextAlarmData(medicineName: String, currentTimeMillis: Long): Boolean
 
     fun getAlarmsToRescheduleAfterReboot(currentTimeMillis: Long): List<Medicine>

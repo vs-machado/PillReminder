@@ -21,7 +21,7 @@ class DarioWeekViewDatePicker @JvmOverloads constructor(
     context: Context,
     attrs: AttributeSet? = null,
     defStyle: Int = 0,
-    defStyleRes: Int = 0
+    defStyleRes: Int = 0,
 ): ConstraintLayout(context, attrs, defStyle, defStyleRes) {
 
     companion object {
@@ -72,6 +72,7 @@ class DarioWeekViewDatePicker @JvmOverloads constructor(
         rightArrow = findViewById(R.id.arrowRight)
         selectedDayText = findViewById(R.id.selectedDayText)
         todayText = findViewById(R.id.textViewToday)
+        
         weekdayTextViews.addAll(listOf(
             findViewById(R.id.weekdayText1),
             findViewById(R.id.weekdayText2),

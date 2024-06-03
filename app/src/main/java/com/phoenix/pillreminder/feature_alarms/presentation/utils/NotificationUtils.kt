@@ -1,5 +1,6 @@
 package com.phoenix.pillreminder.feature_alarms.presentation.utils
 
+import android.app.AlarmManager
 import android.app.Notification
 import android.app.NotificationChannel
 import android.app.NotificationManager
@@ -14,13 +15,17 @@ import android.util.Log
 import androidx.core.app.NotificationCompat
 import com.phoenix.pillreminder.R
 import com.phoenix.pillreminder.feature_alarms.domain.model.AlarmItem
+import com.phoenix.pillreminder.feature_alarms.domain.model.Medicine
 import com.phoenix.pillreminder.feature_alarms.presentation.AlarmReceiver
+import com.phoenix.pillreminder.feature_alarms.presentation.AndroidAlarmScheduler
+import com.phoenix.pillreminder.feature_alarms.presentation.PillboxReminderReceiver
 import com.phoenix.pillreminder.feature_alarms.presentation.activities.AlarmTriggeredActivity
 import com.phoenix.pillreminder.feature_alarms.presentation.activities.MainActivity
 
 object NotificationUtils {
     private val channelId = "AlarmChannel"
     private val followUpChannelId = "FollowUpAlarmChannel"
+    private val pillboxReminderChannelId = "PillboxReminderChannel"
 
     fun createNotification(context: Context, item: AlarmItem): Notification {
         val alarmUri = Uri.parse("android.resource://" + context.packageName + "/" + R.raw.alarm_sound)
@@ -38,7 +43,10 @@ object NotificationUtils {
                 )
                 createNotificationChannel(context, alarmUri)
 
-                return notificationBuilder(context, channelId, pendingIntent, item)
+                return notificationBuilder(context, channelId, pendingIntent,
+                    context.getString(R.string.time_to_take_your_medicine),
+                    context.getString(R.string.do_not_forget_to_mark_the_medicine_as_taken, item.medicineName,
+                        checkMedicineForm(item.medicineForm, item.medicineQuantity, context)))
             }
             false -> {
                 /* If user does not give overlay permissions he will mark medicine as used through an action button in notification.
@@ -101,6 +109,21 @@ object NotificationUtils {
         )
     }
 
+    fun schedulePillboxDailyReminder(context: Context): Notification {
+        val notificationIntent = Intent(context, PillboxReminderReceiver::class.java)
+        val pendingIntent = PendingIntent.getActivity(
+            context, 999, notificationIntent,
+            PendingIntent.FLAG_IMMUTABLE or PendingIntent.FLAG_UPDATE_CURRENT
+        )
+
+        createPillboxNotificationChannel(context)
+
+        val title = "It's time to refill your pillbox"
+        val text = "Refill your pillbox and avoid forgetting to take your medication."
+
+        return notificationBuilder(context, pillboxReminderChannelId, pendingIntent, title, text)
+    }
+
     private fun createNotificationChannel(context: Context, alarmUri: Uri){
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
             val name = "PillReminderChannel"
@@ -132,11 +155,23 @@ object NotificationUtils {
         }
     }
 
-    private fun notificationBuilder(context: Context, channelId: String, pendingIntent: PendingIntent, item: AlarmItem): Notification {
+    private fun createPillboxNotificationChannel(context: Context){
+        if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.O){
+            val name = "PillboxReminderChannel"
+            val descriptionText = "Channel for reminding users to refill their pillboxes"
+            val importance = NotificationManager.IMPORTANCE_HIGH
+            val channel = NotificationChannel(pillboxReminderChannelId, name, importance).apply{
+                description = descriptionText
+            }
+            val notificationManager = context.getSystemService(NotificationManager::class.java)
+            notificationManager.createNotificationChannel(channel)
+        }
+    }
+
+    private fun notificationBuilder(context: Context, channelId: String, pendingIntent: PendingIntent, title: String, text: String): Notification {
         return NotificationCompat.Builder(context, channelId)
-            .setContentTitle(context.getString(R.string.time_to_take_your_medicine))
-            .setContentText(context.getString(R.string.do_not_forget_to_mark_the_medicine_as_taken, item.medicineName, checkMedicineForm(item.medicineForm,
-                item.medicineQuantity, context)))
+            .setContentTitle(title)
+            .setContentText(text)
             .setSmallIcon(R.drawable.ic_launcher_background)
             .setPriority(NotificationCompat.PRIORITY_MAX)
             .setContentIntent(pendingIntent)

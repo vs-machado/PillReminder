@@ -4,6 +4,7 @@
         <!-- Customize your light theme here. -->
         <item name="colorPrimary">@color/colorPrimary</item>
         <item name="android:textColorSecondary">@color/white</item>
+        <item name="android:colorControlActivated">@color/fab</item>
     </style>
     <style name="Theme.PillReminder" parent="Base.Theme.PillReminder" />
 

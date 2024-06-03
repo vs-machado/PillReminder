@@ -34,6 +34,18 @@ class MedicinesViewModel(private val medicineRepository: MedicineRepository): Vi
         }
     }
 
+    suspend fun getFirstMedicineOfNextDay(nextDayInMillis: Long): Medicine?{
+        return withContext(Dispatchers.IO){
+            medicineRepository.getFirstMedicineOfNextDay(nextDayInMillis)
+        }
+    }
+
+    suspend fun getFirstMedicineOfTheDay(millis: Long): Medicine?{
+        return withContext(Dispatchers.IO){
+            medicineRepository.getFirstMedicineOfTheDay(millis)
+        }
+    }
+
     fun getWorkerID(medicineName: String): String {
         return medicineRepository.getWorkerID(medicineName)
     }

@@ -9,6 +9,7 @@ import com.phoenix.pillreminder.feature_alarms.domain.model.AlarmItem
 import com.phoenix.pillreminder.feature_alarms.domain.repository.AlarmScheduler
 import com.phoenix.pillreminder.feature_alarms.domain.model.Medicine
 import com.phoenix.pillreminder.feature_alarms.data.data_source.MedicineDatabase
+import com.phoenix.pillreminder.feature_alarms.presentation.activities.MainActivity
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -16,6 +17,9 @@ import kotlinx.coroutines.runBlocking
 import kotlinx.coroutines.withContext
 import java.time.Instant
 import java.time.ZoneId
+import java.util.Calendar
+
+const val pillboxRequestCode: Int = 999
 
 class AndroidAlarmScheduler(private val context: Context): AlarmScheduler {
     private val alarmManager = context.getSystemService(AlarmManager::class.java)
@@ -113,6 +117,24 @@ class AndroidAlarmScheduler(private val context: Context): AlarmScheduler {
         alarmItem.let(alarmScheduler::scheduleAlarm)
     }
 
+    override fun schedulePillboxReminder(hours: Int, minutes: Int) {
+        val intent = Intent(context, PillboxReminderReceiver::class.java)
+
+        val pendingIntent = PendingIntent.getBroadcast(
+            context,
+            pillboxRequestCode,
+            intent,
+            PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE
+        )
+
+        alarmManager.setRepeating(
+            AlarmManager.RTC_WAKEUP,
+            getTimeInMillisForAlarm(hours, minutes),
+            AlarmManager.INTERVAL_DAY,
+            pendingIntent
+        )
+    }
+
     fun scheduleFollowUpAlarm(medicine: Medicine, item: AlarmItem, followUpTime: Long){
         val intent = Intent(context, FollowUpAlarmReceiver::class.java).apply {
             putExtra("ALARM_ITEM", item)
@@ -131,6 +153,42 @@ class AndroidAlarmScheduler(private val context: Context): AlarmScheduler {
             followUpTime,
             pendingIntent
         )
+    }
+
+    private fun getTimeInMillisForAlarm(hours: Int, minutes: Int): Long{
+        val currentTimeMillis = System.currentTimeMillis()
+        val calendar = Calendar.getInstance()
+        calendar.timeInMillis = currentTimeMillis
+
+        val totalMinutes = (hours * 60) + minutes
+        val userProvidedMillis = totalMinutes * 60000L
+
+        val userCalendar = Calendar.getInstance()
+
+        userCalendar.apply{
+            timeInMillis = System.currentTimeMillis()
+            set(Calendar.HOUR_OF_DAY, 0)
+            set(Calendar.MINUTE, 0)
+            set(Calendar.SECOND, 0)
+            set(Calendar.MILLISECOND, 0)
+            timeInMillis += userProvidedMillis
+        }
+
+        //When user sets refill reminders at a time of day that has already passed, the notifications start being sent the next day
+        return if (calendar.timeInMillis < userCalendar.timeInMillis){
+            userCalendar.set(Calendar.HOUR_OF_DAY, hours)
+            userCalendar.set(Calendar.MINUTE, minutes)
+            userCalendar.set(Calendar.SECOND, 0)
+            userCalendar.set(Calendar.MILLISECOND, 0)
+            userCalendar.timeInMillis
+        } else {
+            userCalendar.add(Calendar.DAY_OF_YEAR, 1)
+            userCalendar.set(Calendar.HOUR_OF_DAY, hours)
+            userCalendar.set(Calendar.MINUTE, minutes)
+            userCalendar.set(Calendar.SECOND, 0)
+            userCalendar.set(Calendar.MILLISECOND, 0)
+            userCalendar.timeInMillis
+        }
     }
 
 }

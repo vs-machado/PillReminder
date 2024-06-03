@@ -52,6 +52,11 @@
             android:exported="false">
         </receiver>
 
+        <receiver
+            android:name=".feature_alarms.presentation.PillboxReminderReceiver"
+            android:exported="false">
+        </receiver>
+
         <service android:name = ".feature_alarms.presentation.AlarmService"
             android:foregroundServiceType="specialUse">
             <property android:name="android.app.PROPERTY_SPECIAL_USE_FGS_SUBTYPE"

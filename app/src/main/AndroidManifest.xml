@@ -19,7 +19,8 @@
         android:label="@string/app_name"
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
-        android:theme="@style/Theme.PillReminder">
+        android:theme="@style/Theme.PillReminder"
+        android:enableOnBackInvokedCallback="true">
 
         <activity
             android:name=".feature_alarms.presentation.activities.AlarmTriggeredActivity"

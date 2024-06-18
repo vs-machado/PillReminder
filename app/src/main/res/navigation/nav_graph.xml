@@ -17,6 +17,9 @@
             app:exitAnim="@anim/slide_out_up"
             app:popEnterAnim="@anim/slide_in_down"
             app:popExitAnim="@anim/slide_out_down" />
+        <action
+            android:id="@+id/action_homeFragment_to_myMedicinesFragment"
+            app:destination="@id/myMedicinesFragment" />
     </fragment>
     <fragment
         android:id="@+id/addMedicinesFragment"
@@ -109,4 +112,9 @@
             app:popEnterAnim="@anim/slide_in_left"
             app:popExitAnim="@anim/slide_out_right" />
     </fragment>
+    <fragment
+        android:id="@+id/myMedicinesFragment"
+        android:name="com.phoenix.pillreminder.feature_alarms.presentation.fragments.MyMedicinesFragment"
+        android:label="fragment_my_medicines"
+        tools:layout="@layout/fragment_my_medicines" />
 </navigation>

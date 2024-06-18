@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <group
+        android:checkableBehavior="single">
+        <item
+            android:title="">
+            <menu>
+                <item
+                    android:id="@+id/home_item"
+                    android:title="Home"
+                    android:checkable="true"/>
+                <item
+                    android:id="@+id/mymedicines_item"
+                    android:title="My medicines"
+                    android:checkable="true"/>
+            </menu>
+        </item>
+        <item android:title="">
+            <menu>
+                <item
+                    android:id="@+id/help_item"
+                    android:title="Help"
+                    android:checkable="true"/>
+                <item
+                    android:id="@+id/about_item"
+                    android:title="About"
+                    android:checkable="true"/>
+            </menu>
+        </item>
+    </group>
+
+
+</menu>

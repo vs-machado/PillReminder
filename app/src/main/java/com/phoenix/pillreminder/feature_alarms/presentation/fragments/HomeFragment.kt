@@ -185,6 +185,27 @@ class HomeFragment : Fragment() {
         binding.toolbarHome.setupWithNavController(navController, appBarConfiguration)
         binding.toolbarHome.title = "Pill Reminder"
         binding.toolbarHome.setTitleTextColor(Color.WHITE)
+        binding.toolbarHome.setNavigationIcon(R.drawable.baseline_menu_24)
+
+        binding.toolbarHome.setNavigationOnClickListener {
+            binding.drawerLayout.open()
+        }
+
+        binding.navigationView.setNavigationItemSelectedListener { menuItem ->
+            when(menuItem.itemId){
+                R.id.home_item -> {
+                    true
+                }
+                R.id.mymedicines_item -> {
+                    findNavController().navigate(R.id.action_homeFragment_to_myMedicinesFragment)
+                    true
+                }
+            }
+
+            menuItem.isChecked = true
+            binding.drawerLayout.close()
+            true
+        }
     }
 
      private fun initRecyclerView(dateToFilter: Date){

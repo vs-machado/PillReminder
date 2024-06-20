@@ -112,5 +112,7 @@
     <string name="just_click_on_plus_btn">Just click on the + button and fill out the medicine information.</string>
     <string name="open">Open</string>
     <string name="close">Close</string>
+    <string name="granting_screen_overlay_permission_is_optional">Granting screen overlay permission is optional.</string>
+    <string name="permission_request">Permission request</string>
 
 </resources>

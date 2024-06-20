@@ -6,6 +6,7 @@ import android.text.TextWatcher
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.navigation.findNavController
@@ -13,6 +14,7 @@ import androidx.navigation.fragment.findNavController
 import androidx.navigation.ui.AppBarConfiguration
 import androidx.navigation.ui.setupWithNavController
 import com.google.android.material.floatingactionbutton.FloatingActionButton
+import com.google.android.material.navigation.NavigationView
 import com.google.android.material.textfield.TextInputLayout
 import com.phoenix.pillreminder.R
 import com.phoenix.pillreminder.databinding.FragmentAddMedicinesBinding
@@ -26,7 +28,6 @@ class AddMedicinesFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View {
         binding = FragmentAddMedicinesBinding.inflate(layoutInflater)
-
         // Inflate the layout for this fragment
         return binding.root
     }
@@ -65,6 +66,16 @@ class AddMedicinesFragment : Fragment() {
 
         }
 
+    }
+
+    override fun onResume() {
+        super.onResume()
+        (activity as AppCompatActivity).supportActionBar?.hide()
+    }
+
+    override fun onStop() {
+        super.onStop()
+        (activity as AppCompatActivity).supportActionBar?.show()
     }
 
     /*Checks if the medicine name is filled. If so, displays the FAB to navigate

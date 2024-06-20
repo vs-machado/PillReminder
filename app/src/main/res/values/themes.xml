@@ -24,4 +24,8 @@
         <item name="colorControlNormal">@color/black</item>
     </style>
 
+    <style name="ToolbarTitleTheme" parent="Widget.AppCompat.Toolbar">
+        <item name="titleTextColor">@color/white</item>
+    </style>
+
 </resources>

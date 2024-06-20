@@ -29,37 +29,7 @@ class MyMedicinesFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        setupToolbar()
     }
 
-    private fun setupToolbar(){
-        val navController = findNavController()
-        val appBarConfiguration = AppBarConfiguration(navController.graph)
-        binding.toolbarHome.setupWithNavController(navController, appBarConfiguration)
-        binding.toolbarHome.title = "Pill Reminder"
-        binding.toolbarHome.setTitleTextColor(Color.WHITE)
-        binding.toolbarHome.setNavigationIcon(R.drawable.baseline_menu_24)
-
-        binding.toolbarHome.setNavigationOnClickListener {
-            binding.dlMyMedicines.open()
-        }
-
-        binding.navigationView.setNavigationItemSelectedListener { menuItem ->
-            when(menuItem.itemId){
-                R.id.home_item -> {
-                    true
-                }
-                R.id.mymedicines_item -> {
-                    menuItem.isChecked = true
-                    findNavController().navigate(R.id.action_homeFragment_to_myMedicinesFragment)
-                    true
-                }
-            }
-
-            menuItem.isChecked = true
-            binding.dlMyMedicines.close()
-            true
-        }
-    }
 
 }

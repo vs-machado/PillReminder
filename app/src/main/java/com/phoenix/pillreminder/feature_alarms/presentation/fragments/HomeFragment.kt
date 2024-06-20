@@ -100,7 +100,6 @@ class HomeFragment : Fragment() {
         thisFragment = this
         medicinesViewModel = ViewModelProvider(requireActivity(), (requireActivity() as MainActivity).factory)[MedicinesViewModel::class.java]
 
-        setupToolbar()
         initRecyclerView(hfViewModel.getDate())
         binding.switchPillbox.isChecked = pillboxReminder
         requestPermissions(dontShowAgain)
@@ -180,7 +179,7 @@ class HomeFragment : Fragment() {
     }
 
     private fun setupToolbar(){
-        val navController = findNavController()
+        /*val navController = findNavController()
         val appBarConfiguration = AppBarConfiguration(navController.graph)
         binding.toolbarHome.setupWithNavController(navController, appBarConfiguration)
         binding.toolbarHome.title = "Pill Reminder"
@@ -205,7 +204,7 @@ class HomeFragment : Fragment() {
             menuItem.isChecked = true
             binding.drawerLayout.close()
             true
-        }
+        }*/
     }
 
      private fun initRecyclerView(dateToFilter: Date){

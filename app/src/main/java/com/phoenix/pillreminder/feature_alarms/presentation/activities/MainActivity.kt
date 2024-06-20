@@ -2,10 +2,22 @@ package com.phoenix.pillreminder.feature_alarms.presentation.activities
 
 import android.content.Context
 import android.content.Intent
+import android.graphics.Color
 import android.os.Bundle
+import android.view.MenuItem
+import android.view.View
+import android.widget.Toast
+import androidx.appcompat.app.ActionBarDrawerToggle
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.app.AppCompatDelegate
+import androidx.navigation.findNavController
+import androidx.navigation.fragment.NavHostFragment
+import androidx.navigation.fragment.findNavController
+import androidx.navigation.ui.AppBarConfiguration
+import androidx.navigation.ui.setupActionBarWithNavController
+import androidx.navigation.ui.setupWithNavController
 import com.phoenix.pillreminder.R
+import com.phoenix.pillreminder.databinding.ActivityMainBinding
 import com.phoenix.pillreminder.feature_alarms.data.data_source.MedicineDao
 import com.phoenix.pillreminder.feature_alarms.data.data_source.MedicineDatabase
 import com.phoenix.pillreminder.feature_alarms.data.repository.MedicineRepositoryImpl
@@ -16,10 +28,42 @@ class MainActivity : AppCompatActivity() {
     private lateinit var dao: MedicineDao
     lateinit var factory: MedicinesViewModelFactory
     private lateinit var repository: MedicineRepository
+    private lateinit var binding: ActivityMainBinding
+    private lateinit var toggle: ActionBarDrawerToggle
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_main)
+        binding = ActivityMainBinding.inflate(layoutInflater)
+        setContentView(binding.root)
+
+        toggle = ActionBarDrawerToggle(this, binding.dlMainActivity, R.string.open, R.string.close)
+        binding.dlMainActivity.addDrawerListener(toggle)
+        toggle.syncState()
+
+        setSupportActionBar(binding.appBarMain.toolbarHome)
+        supportActionBar?.setDisplayHomeAsUpEnabled(true)
+
+        binding.navigationView.setNavigationItemSelectedListener {menuItem ->
+            when(menuItem.itemId){
+                R.id.home_item -> {
+                    findNavController(R.id.fragmentContainerView3).navigate(R.id.homeFragment)
+                }
+                R.id.mymedicines_item -> {
+                    findNavController(R.id.fragmentContainerView3).navigate(R.id.myMedicinesFragment)
+                }
+                R.id.help_item -> {
+                    findNavController(R.id.fragmentContainerView3).navigate(R.id.helpFragment)
+                }
+                R.id.about_item -> {
+                    findNavController(R.id.fragmentContainerView3).navigate(R.id.aboutFragment)
+                }
+            }
+
+            menuItem.isChecked = true
+            binding.dlMainActivity.close()
+            true
+
+        }
 
         dao = MedicineDatabase.getInstance(this).medicineDao()
         repository = MedicineRepositoryImpl(dao)
@@ -31,6 +75,18 @@ class MainActivity : AppCompatActivity() {
             startActivity(Intent(this, MyAppIntro::class.java))
             markTutorialAsShown()
         }
+    }
+
+    override fun onSupportNavigateUp(): Boolean {
+        val navController = findNavController(R.id.fragmentContainerView3)
+        return navController.navigateUp() || super.onSupportNavigateUp()
+    }
+
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        if(toggle.onOptionsItemSelected(item)){
+            return true
+        }
+        return super.onOptionsItemSelected(item)
     }
 
     private fun isTutorialShown(): Boolean {

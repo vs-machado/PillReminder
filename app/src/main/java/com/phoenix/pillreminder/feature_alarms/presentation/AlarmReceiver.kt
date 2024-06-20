@@ -7,6 +7,7 @@ import android.content.Intent
 import android.util.Log
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
+import com.phoenix.pillreminder.R
 import com.phoenix.pillreminder.feature_alarms.data.data_source.MedicineDao
 import com.phoenix.pillreminder.feature_alarms.data.data_source.MedicineDatabase
 import com.phoenix.pillreminder.feature_alarms.domain.model.AlarmItem
@@ -31,13 +32,14 @@ class AlarmReceiver: BroadcastReceiver(), ActivityCompat.OnRequestPermissionsRes
         val dao = MedicineDatabase.getInstance(context!!).medicineDao()
         val alarmItem = intent?.getParcelableExtra("ALARM_ITEM", AlarmItem::class.java)
         val alarmItemAction = intent?.getParcelableExtra("ALARM_ITEM_ACTION", AlarmItem::class.java)
+        val actionString = context.getString(R.string.mark_as_used)
         job = Job()
 
         if(intent?.action == Intent.ACTION_BOOT_COMPLETED){
             rescheduleAlarmsOnBoot(context)
             return
         }
-        if(intent?.action == "Mark as used" && alarmItemAction != null){
+        if(intent?.action == actionString && alarmItemAction != null){
             markMedicineAsTaken(alarmItemAction, dao)
 
             //Notification dismissal after pressing button

@@ -110,5 +110,7 @@
     <string name="click_on_pillbox">Click on the Pillbox refill reminders button and set a time to receive daily reminders.</string>
     <string name="app_usage">App usage is simple:</string>
     <string name="just_click_on_plus_btn">Just click on the + button and fill out the medicine information.</string>
+    <string name="open">Open</string>
+    <string name="close">Close</string>
 
 </resources>

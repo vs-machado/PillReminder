@@ -110,5 +110,7 @@
     <string name="click_on_pillbox">Clique no botão Lembrete de recarga e defina um horário para receber lembretes diários.</string>
     <string name="app_usage">Usar o app é simples:</string>
     <string name="just_click_on_plus_btn">Basta clicar no botão + e preencher as informações do medicamento.</string>
+    <string name="open">Abrir</string>
+    <string name="close">Fechar</string>
 
 </resources>

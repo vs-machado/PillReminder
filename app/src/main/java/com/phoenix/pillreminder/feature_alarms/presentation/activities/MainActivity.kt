@@ -2,20 +2,14 @@ package com.phoenix.pillreminder.feature_alarms.presentation.activities
 
 import android.content.Context
 import android.content.Intent
-import android.graphics.Color
 import android.os.Bundle
 import android.view.MenuItem
-import android.view.View
-import android.widget.Toast
 import androidx.appcompat.app.ActionBarDrawerToggle
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.app.AppCompatDelegate
-import androidx.navigation.findNavController
 import androidx.navigation.fragment.NavHostFragment
-import androidx.navigation.fragment.findNavController
 import androidx.navigation.ui.AppBarConfiguration
 import androidx.navigation.ui.setupActionBarWithNavController
-import androidx.navigation.ui.setupWithNavController
 import com.phoenix.pillreminder.R
 import com.phoenix.pillreminder.databinding.ActivityMainBinding
 import com.phoenix.pillreminder.feature_alarms.data.data_source.MedicineDao
@@ -30,6 +24,7 @@ class MainActivity : AppCompatActivity() {
     private lateinit var repository: MedicineRepository
     private lateinit var binding: ActivityMainBinding
     private lateinit var toggle: ActionBarDrawerToggle
+    private lateinit var appBarConfiguration: AppBarConfiguration
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -43,19 +38,30 @@ class MainActivity : AppCompatActivity() {
         setSupportActionBar(binding.appBarMain.toolbarHome)
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
 
+        val navHostFragment = supportFragmentManager.findFragmentById(R.id.fragmentContainerView3) as NavHostFragment
+        val navController = navHostFragment.navController
+
+        appBarConfiguration = AppBarConfiguration(
+            setOf(
+                R.id.homeFragment
+            ), binding.dlMainActivity
+        )
+
+        setupActionBarWithNavController(navController, appBarConfiguration)
+
         binding.navigationView.setNavigationItemSelectedListener {menuItem ->
             when(menuItem.itemId){
                 R.id.home_item -> {
-                    findNavController(R.id.fragmentContainerView3).navigate(R.id.homeFragment)
+                    navController.navigate(R.id.homeFragment)
                 }
                 R.id.mymedicines_item -> {
-                    findNavController(R.id.fragmentContainerView3).navigate(R.id.myMedicinesFragment)
+                   navController.navigate(R.id.myMedicinesFragment)
                 }
                 R.id.help_item -> {
-                    findNavController(R.id.fragmentContainerView3).navigate(R.id.helpFragment)
+                    navController.navigate(R.id.helpFragment)
                 }
                 R.id.about_item -> {
-                    findNavController(R.id.fragmentContainerView3).navigate(R.id.aboutFragment)
+                    navController.navigate(R.id.aboutFragment)
                 }
             }
 
@@ -63,6 +69,15 @@ class MainActivity : AppCompatActivity() {
             binding.dlMainActivity.close()
             true
 
+        }
+
+        navController.addOnDestinationChangedListener{ _, destination, _ ->
+            when(destination.id){
+                R.id.homeFragment -> binding.navigationView.setCheckedItem(R.id.home_item)
+                R.id.myMedicinesFragment -> binding.navigationView.setCheckedItem(R.id.mymedicines_item)
+                R.id.helpFragment -> binding.navigationView.setCheckedItem(R.id.help_item)
+                R.id.aboutFragment -> binding.navigationView.setCheckedItem(R.id.about_item)
+            }
         }
 
         dao = MedicineDatabase.getInstance(this).medicineDao()
@@ -78,7 +93,9 @@ class MainActivity : AppCompatActivity() {
     }
 
     override fun onSupportNavigateUp(): Boolean {
-        val navController = findNavController(R.id.fragmentContainerView3)
+        val navHostFragment = supportFragmentManager.findFragmentById(R.id.fragmentContainerView3) as NavHostFragment
+        val navController = navHostFragment.navController
+
         return navController.navigateUp() || super.onSupportNavigateUp()
     }
 

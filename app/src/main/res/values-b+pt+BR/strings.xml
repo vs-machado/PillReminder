@@ -112,7 +112,7 @@
     <string name="just_click_on_plus_btn">Basta clicar no botão + e preencher as informações do medicamento.</string>
     <string name="open">Abrir</string>
     <string name="close">Fechar</string>
-    <string name="granting_screen_overlay_permission_is_optional">A concessão da permissão de sobreposição de tela é opcional.</string>
+    <string name="granting_screen_overlay_permission_is_optional">A concessão da permissão de sobreposição de tela é opcional.\n\nÉ recomendada caso você não olhe frequentemente as notificações.</string>
     <string name="permission_request">Solicitação de permissão</string>
 
 </resources>

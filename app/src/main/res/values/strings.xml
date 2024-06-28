@@ -106,7 +106,7 @@
     <string name="app_explanation">Pill Reminder is an app to help you to keep track of your medicine doses.</string>
     <string name="app_needs_permissions">...But first we need your permission.</string>
     <string name="notification_mandatory">"Sending notifications is mandatory for the proper functioning of the application."</string>
-    <string name="pillbox_reminders">Pillbox refill reminders</string>
+    <string name="pillbox_reminders">Pillbox reminders</string>
     <string name="click_on_pillbox">Click on the Pillbox refill reminders button and set a time to receive daily reminders.</string>
     <string name="app_usage">App usage is simple:</string>
     <string name="just_click_on_plus_btn">Just click on the + button and fill out the medicine information.</string>

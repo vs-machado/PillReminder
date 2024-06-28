@@ -55,7 +55,7 @@ class DarioWeekViewDatePicker @JvmOverloads constructor(
     private val blocks = arrayListOf<ConstraintLayout>()
     private val dots = arrayListOf<ImageView>()
     private val weekDates = arrayListOf<Date>()
-    private val selectedDayText: TextView
+    //private val selectedDayText: TextView
     private val leftArrow: AppCompatImageButton
     private val rightArrow: AppCompatImageButton
     private val todayText: TextView
@@ -70,7 +70,7 @@ class DarioWeekViewDatePicker @JvmOverloads constructor(
         // refs to views
         leftArrow = findViewById(R.id.arrowLeft)
         rightArrow = findViewById(R.id.arrowRight)
-        selectedDayText = findViewById(R.id.selectedDayText)
+        //selectedDayText = findViewById(R.id.selectedDayText)
         todayText = findViewById(R.id.textViewToday)
         
         weekdayTextViews.addAll(listOf(
@@ -124,7 +124,6 @@ class DarioWeekViewDatePicker @JvmOverloads constructor(
 
         val dayOfWeekString =  DateUtils.getRelativeTimeSpanString(selectedDate.time, System.currentTimeMillis(), DateUtils.DAY_IN_MILLIS, DateUtils.FORMAT_SHOW_WEEKDAY or DateUtils.FORMAT_ABBREV_WEEKDAY)
         val mSpannableString = SpannableString(context.getString(R.string.today, dayOfWeekString))
-        mSpannableString.setSpan(UnderlineSpan(), 0, mSpannableString.length, 0)
         todayText.text = mSpannableString
 
 
@@ -145,11 +144,11 @@ class DarioWeekViewDatePicker @JvmOverloads constructor(
         if (isToday(date)) {
             todayText.visibility = View.GONE
             val formattedDate =  DateUtils.getRelativeTimeSpanString(selectedDate.time, System.currentTimeMillis(), DateUtils.DAY_IN_MILLIS, DateUtils.FORMAT_SHOW_WEEKDAY or DateUtils.FORMAT_ABBREV_WEEKDAY)
-            selectedDayText.text = context.getString(R.string.today_date, formattedDate)
+            //selectedDayText.text = context.getString(R.string.today_date, formattedDate)
         }
         else {
             todayText.visibility = View.VISIBLE
-            selectedDayText.text = dateFormat.format(selectedDate)
+            //selectedDayText.text = dateFormat.format(selectedDate)
         }
 
         // index of selected day of week

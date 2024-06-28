@@ -34,10 +34,12 @@ import androidx.navigation.ui.AppBarConfiguration
 import androidx.navigation.ui.setupWithNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.work.WorkManager
+import com.google.android.material.switchmaterial.SwitchMaterial
 import com.phoenix.pillreminder.R
 import com.phoenix.pillreminder.databinding.FragmentHomeBinding
 import com.phoenix.pillreminder.databinding.LayoutSetPillboxReminderDialogBinding
 import com.phoenix.pillreminder.databinding.LayoutWarnAboutMedicineUsageHourBinding
+import com.phoenix.pillreminder.databinding.WeekviewDatepickerBinding
 import com.phoenix.pillreminder.feature_alarms.domain.model.AlarmItem
 import com.phoenix.pillreminder.feature_alarms.domain.model.Medicine
 import com.phoenix.pillreminder.feature_alarms.domain.repository.AlarmScheduler
@@ -92,6 +94,7 @@ class HomeFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+
         val sharedPreferences = requireContext().getSharedPreferences("dont_show_again", Context.MODE_PRIVATE)
         val sharedPreferencesPillbox =  requireContext().getSharedPreferences("pillbox_reminder", Context.MODE_PRIVATE)
         val pillboxReminder = sharedPreferencesPillbox.getBoolean("pillbox_reminder", false)
@@ -101,7 +104,7 @@ class HomeFragment : Fragment() {
         medicinesViewModel = ViewModelProvider(requireActivity(), (requireActivity() as MainActivity).factory)[MedicinesViewModel::class.java]
 
         initRecyclerView(hfViewModel.getDate())
-        binding.switchPillbox.isChecked = pillboxReminder
+        binding.datePicker.findViewById<SwitchMaterial>(R.id.switchPillbox).isChecked = pillboxReminder
         requestPermissions(dontShowAgain)
 
         binding.datePicker.onSelectionChanged = { date ->
@@ -119,7 +122,7 @@ class HomeFragment : Fragment() {
             it.findNavController().navigate(R.id.action_homeFragment_to_addMedicinesFragment)
         }
 
-        binding.switchPillbox.setOnCheckedChangeListener { _, isChecked ->
+        binding.datePicker.findViewById<SwitchMaterial>(R.id.switchPillbox).setOnCheckedChangeListener { _, isChecked ->
             val alarmScheduler = AndroidAlarmScheduler(requireContext())
             val editor = sharedPreferencesPillbox.edit()
 
@@ -245,7 +248,7 @@ class HomeFragment : Fragment() {
     }
 
     private fun uncheckSwitch(){
-        binding.switchPillbox.isChecked = false
+        binding.datePicker.findViewById<SwitchMaterial>(R.id.switchPillbox).isChecked = false
     }
 
     private fun showOverlayAndNotificationPermissionDialog(){

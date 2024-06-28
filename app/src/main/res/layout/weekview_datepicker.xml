@@ -4,48 +4,31 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:paddingTop="4dp">
-
-    <TextView
-        android:id="@+id/selectedDayText"
-        style="@style/TitleSelectedDate"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:paddingTop="8dp"
-        android:paddingBottom="8dp"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        tools:text="Today, May 6, 2022" />
+    android:paddingTop="16dp">
 
     <androidx.appcompat.widget.AppCompatImageButton
         android:id="@+id/arrowLeft"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginEnd="22dp"
+        android:layout_marginTop="10dp"
+        android:layout_marginEnd="16dp"
         android:background="?attr/selectableItemBackgroundBorderless"
         android:padding="10dp"
         android:src="@drawable/ic_weekday_chevron_left"
-        app:layout_constraintBottom_toBottomOf="@+id/selectedDayText"
         app:layout_constraintEnd_toStartOf="@+id/arrowRight"
-        app:layout_constraintTop_toTopOf="@+id/selectedDayText" />
+        app:layout_constraintTop_toBottomOf="@+id/scrollDays" />
 
     <androidx.appcompat.widget.AppCompatImageButton
         android:id="@+id/arrowRight"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginEnd="14dp"
         android:background="?attr/selectableItemBackgroundBorderless"
         android:padding="10dp"
         android:src="@drawable/ic_weekday_chevron_right"
-        app:layout_constraintBottom_toBottomOf="@+id/selectedDayText"
+        app:layout_constraintBottom_toBottomOf="@+id/arrowLeft"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="@+id/selectedDayText" />
-
-    <androidx.constraintlayout.widget.Barrier
-        android:id="@+id/barrierTop"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        app:barrierDirection="bottom"
-        app:constraint_referenced_ids="arrowLeft,arrowRight,selectedDayText" />
+        app:layout_constraintTop_toTopOf="@+id/arrowLeft" />
 
     <HorizontalScrollView
         android:id="@+id/scrollDays"
@@ -54,7 +37,7 @@
         android:scrollbars="none"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/barrierTop">
+        app:layout_constraintTop_toTopOf="parent">
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:id="@+id/daysContainer"
@@ -371,18 +354,30 @@
         </androidx.constraintlayout.widget.ConstraintLayout>
     </HorizontalScrollView>
 
-    <TextView
-        android:id="@+id/textViewToday"
+    <com.google.android.material.switchmaterial.SwitchMaterial
+        android:id="@+id/switchPillbox"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginEnd="16dp"
-        android:fontFamily="@font/gilroy_medium"
-        android:padding="7dp"
-        android:textColor="#0C3078"
-        android:textSize="16sp"
-        app:layout_constraintBottom_toBottomOf="@+id/arrowLeft"
+        android:layout_marginStart="26dp"
+        android:text="@string/pillbox_reminders"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/scrollDays"
+        tools:layout_conversion_absoluteHeight="48dp"
+        tools:layout_conversion_absoluteWidth="184dp" />
+
+    <TextView
+        android:id="@+id/textViewToday"
+        android:layout_width="70dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="10dp"
+        android:background="@drawable/round_button_background"
+        android:gravity="center"
+        android:padding="5dp"
+        android:textColor="@color/white"
+        android:textSize="14sp"
         app:layout_constraintEnd_toStartOf="@+id/arrowLeft"
-        app:layout_constraintTop_toTopOf="@+id/arrowLeft"
+        app:layout_constraintStart_toEndOf="@+id/switchPillbox"
+        app:layout_constraintTop_toBottomOf="@+id/scrollDays"
         tools:text="Today" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

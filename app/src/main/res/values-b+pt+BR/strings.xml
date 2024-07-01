@@ -114,5 +114,15 @@
     <string name="close">Fechar</string>
     <string name="granting_screen_overlay_permission_is_optional">A concessão da permissão de sobreposição de tela é opcional.\n\nÉ recomendada caso você não olhe frequentemente as notificações.</string>
     <string name="permission_request">Solicitação de permissão</string>
+    <string name="features_text">• Agendar alarmes para lembrar o usuário das suas medicações\n• Receber notificações se o usuário não marcar a medicação como utilizada no aplicativo.
+        \n• Permitir o usuário a definir um período de tratamento ou receber alarmes até que a medicação seja deletada.\n• Recebimento de notificações após configurar um lembrete diário de recarga do porta comprimidos.
+        \n• Alertar o usuário caso tente marcar uma medicação como utilizada perto do horário da próxima dose.</string>
+    <string name="about_us_text">Aplicativo desenvolvido por Vinícius Santos como trabalho de conclusão de curso de Engenharia da Computação.</string>
+    <string name="contact_me">Contato</string>
+    <string name="pill_reminder">Pill Reminder</string>
+    <string name="app_description">Um aplicativo Android de código aberto para auxiliar os usuários a acompanharem seus medicamentos. </string>
+    <string name="features">Recursos</string>
+    <string name="about_me">Sobre mim</string>
+    <string name="email">Email: vinicius.s.machado@protonmail.com</string>
 
 </resources>

@@ -114,5 +114,16 @@
     <string name="close">Close</string>
     <string name="granting_screen_overlay_permission_is_optional">Granting screen overlay permission is optional.\n\nIt\'s recommended if you often don\'t see your notifications.</string>
     <string name="permission_request">Permission request</string>
+    <string name="features_text">• Schedule alarms to remind users about their medications.\n• Receive notifications
+    if the user does not mark a medication as used in the application.\n• Allow users to set a treatment period or
+        receive alarms until the medication is deleted.\n• Receive notifications after setting a daily pillbox refill reminder.
+        \n• Warn users if they attempt to mark a medication as used close to the next dose time.</string>
+    <string name="about_us_text">Application developed by Vinícius Santos as his final project for his bachelor\'s degree in Computer Engineering.</string>
+    <string name="contact_me">Contact me</string>
+    <string name="pill_reminder">Pill Reminder</string>
+    <string name="app_description">An Android open source application for helping users to track their medicines doses.</string>
+    <string name="features">Features</string>
+    <string name="about_me">About me</string>
+    <string name="email">Email: vinicius.s.machado@protonmail.com</string>
 
 </resources>

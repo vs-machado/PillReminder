@@ -121,16 +121,16 @@
     <fragment
         android:id="@+id/myMedicinesFragment"
         android:name="com.phoenix.pillreminder.feature_alarms.presentation.fragments.MyMedicinesFragment"
-        android:label="My medicines"
+        android:label="@string/my_medicines"
         tools:layout="@layout/fragment_my_medicines" />
     <fragment
         android:id="@+id/helpFragment"
         android:name="com.phoenix.pillreminder.feature_alarms.presentation.fragments.HelpFragment"
-        android:label="Help"
+        android:label="@string/help"
         tools:layout="@layout/fragment_help" />
     <fragment
         android:id="@+id/aboutFragment"
         android:name="com.phoenix.pillreminder.feature_alarms.presentation.fragments.AboutFragment"
-        android:label="About"
+        android:label="@string/about"
         tools:layout="@layout/fragment_about" />
 </navigation>

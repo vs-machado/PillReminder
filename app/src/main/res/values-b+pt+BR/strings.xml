@@ -124,5 +124,19 @@
     <string name="features">Recursos</string>
     <string name="about_me">Sobre mim</string>
     <string name="email">Email: vinicius.s.machado@protonmail.com</string>
-
+    <string name="frequent_questions">Perguntas frequentes</string>
+    <string name="how_do_i_delete_a_medication">Como eu deleto um medicamento?</string>
+    <string name="answer_how_do_i_delete_a_medication">Clique no ícone ⋮ no canto direito do medicamento que você deseja deletar e selecione Deletar ou Deletar todos.</string>
+    <string name="how_do_i_skip_a_dose">Como eu pulo uma dose?</string>
+    <string name="answer_how_do_i_skip_a_dose">Clique no ícone ⋮ no canto direito do medicamento que você deseja pular a dose e selecione a opção Pular dose.</string>
+    <string name="i_m_not_receiving_alarms">Eu não estou recebendo alarmes.</string>
+    <string name="answer_i_m_not_receiving_alarms"><![CDATA[É necessário verificar se as permissões do aplicativo para enviar notificações foram concedidas ou não. Às vezes, quando você não abre um aplicativo por um tempo, o telefone remove automaticamente as permissões de notificações.\n\nVá para Configurações > Apps > Pill Reminder > Permissões e clique em qualquer permissão não concedida para concedê-la.]]></string>
+    <string name="medicine_not_appearing_everyday_even_if_i_don_t_set_a_treatment_period">O medicamento não aparece todos os dias, mesmo que eu não tenha definido um período de tratamento.</string>
+    <string name="answer_medicine_not_appearing_everyday_even_if_i_don_t_set_a_treatment_period">Isso é normal. Um medicamento sem período de tratamento será eventualmente reinserido no aplicativo após um mês.</string>
+    <string name="dashboard">Painel</string>
+    <string name="home">Página inicial</string>
+    <string name="my_medicines">Meus medicamentos</string>
+    <string name="info">Info</string>
+    <string name="about">Sobre</string>
+    <string name="help">Ajuda</string>
 </resources>

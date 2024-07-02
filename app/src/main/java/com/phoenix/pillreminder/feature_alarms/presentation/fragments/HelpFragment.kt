@@ -3,29 +3,22 @@ package com.phoenix.pillreminder.feature_alarms.presentation.fragments
 import android.animation.LayoutTransition
 import android.animation.ObjectAnimator
 import android.os.Bundle
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageButton
 import android.widget.TextView
-import androidx.cardview.widget.CardView
-import androidx.constraintlayout.widget.ConstraintLayout
-import com.phoenix.pillreminder.R
+import androidx.fragment.app.Fragment
 import com.phoenix.pillreminder.databinding.FragmentHelpBinding
 
 class HelpFragment : Fragment() {
     private lateinit var binding: FragmentHelpBinding
     private var rotationAngle = 0
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-    }
-
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? {
+    ): View {
         binding = FragmentHelpBinding.inflate(layoutInflater)
         // Inflate the layout for this fragment
         return binding.root

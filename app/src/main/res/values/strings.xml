@@ -134,4 +134,10 @@
     <string name="answer_i_m_not_receiving_alarms"><![CDATA[It is necessary to check if the app permissions to send notifications were granted or not. Sometimes when you don\'t open an app in a while, the phone automatically remove notifications permissions.\n\nGo to Settings > Apps > Pill Reminder > Permissions and click on any not allowed permission to grant it.]]></string>
     <string name="medicine_not_appearing_everyday_even_if_i_don_t_set_a_treatment_period">Medicine not appearing everyday even if I don\'t set a treatment period</string>
     <string name="answer_medicine_not_appearing_everyday_even_if_i_don_t_set_a_treatment_period">This is normal. A medication without treatment period will be eventually reinserted in the app after a month.</string>
+    <string name="dashboard">Dashboard</string>
+    <string name="home">Home</string>
+    <string name="my_medicines">My medicines</string>
+    <string name="info">Info</string>
+    <string name="about">About</string>
+    <string name="help">Help</string>
 </resources>

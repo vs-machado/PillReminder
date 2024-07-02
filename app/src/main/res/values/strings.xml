@@ -125,5 +125,13 @@
     <string name="features">Features</string>
     <string name="about_me">About me</string>
     <string name="email">Email: vinicius.s.machado@protonmail.com</string>
-
+    <string name="frequent_questions">Frequent questions</string>
+    <string name="how_do_i_delete_a_medication">How do I delete a medication?</string>
+    <string name="answer_how_do_i_delete_a_medication">Click the ⋮ icon at the right corner of the medication you want to delete, then select Delete or Delete all.</string>
+    <string name="how_do_i_skip_a_dose">How do I skip a dose?</string>
+    <string name="answer_how_do_i_skip_a_dose">Click the ⋮ icon at the right corner of the medication you want to skip the dose, then select Skip dose option.</string>
+    <string name="i_m_not_receiving_alarms">I\'m not receiving alarms.</string>
+    <string name="answer_i_m_not_receiving_alarms"><![CDATA[It is necessary to check if the app permissions to send notifications were granted or not. Sometimes when you don\'t open an app in a while, the phone automatically remove notifications permissions.\n\nGo to Settings > Apps > Pill Reminder > Permissions and click on any not allowed permission to grant it.]]></string>
+    <string name="medicine_not_appearing_everyday_even_if_i_don_t_set_a_treatment_period">Medicine not appearing everyday even if I don\'t set a treatment period</string>
+    <string name="answer_medicine_not_appearing_everyday_even_if_i_don_t_set_a_treatment_period">This is normal. A medication without treatment period will be eventually reinserted in the app after a month.</string>
 </resources>

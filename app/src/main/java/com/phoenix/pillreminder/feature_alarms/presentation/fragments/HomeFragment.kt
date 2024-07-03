@@ -11,6 +11,7 @@ import android.net.Uri
 import android.os.Bundle
 import android.provider.Settings
 import android.text.format.DateFormat
+import android.text.format.DateFormat.is24HourFormat
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
@@ -119,9 +120,11 @@ class HomeFragment : Fragment() {
             it.findNavController().navigate(R.id.action_homeFragment_to_addMedicinesFragment)
         }
 
+
         binding.datePicker.findViewById<SwitchMaterial>(R.id.switchPillbox).setOnCheckedChangeListener { _, isChecked ->
             val alarmScheduler = AndroidAlarmScheduler(requireContext())
             val editor = sharedPreferencesPillbox.edit()
+            val hourFormat = is24HourFormat(requireContext())
 
             if (isChecked) {
                 editor.putBoolean("pillbox_reminder", true)
@@ -139,6 +142,8 @@ class HomeFragment : Fragment() {
 
                 var pillboxReminderHour: Int? = null
                 var pillboxReminderMinute: Int? = null
+
+                binding.tpDialogPillbox.setIs24HourView(hourFormat)
 
                 binding.tpDialogPillbox.setOnTimeChangedListener { _, hourOfDay, minute ->
                     pillboxReminderHour = hourOfDay

@@ -1,12 +1,12 @@
 package com.phoenix.pillreminder.feature_alarms.presentation.utils
 
-import android.app.AlarmManager
 import android.app.Notification
 import android.app.NotificationChannel
 import android.app.NotificationManager
 import android.app.PendingIntent
 import android.content.Context
 import android.content.Intent
+import android.graphics.BitmapFactory
 import android.media.AudioAttributes
 import android.net.Uri
 import android.os.Build
@@ -15,10 +15,7 @@ import android.util.Log
 import androidx.core.app.NotificationCompat
 import com.phoenix.pillreminder.R
 import com.phoenix.pillreminder.feature_alarms.domain.model.AlarmItem
-import com.phoenix.pillreminder.feature_alarms.domain.model.Medicine
 import com.phoenix.pillreminder.feature_alarms.presentation.AlarmReceiver
-import com.phoenix.pillreminder.feature_alarms.presentation.AndroidAlarmScheduler
-import com.phoenix.pillreminder.feature_alarms.presentation.PillboxReminderReceiver
 import com.phoenix.pillreminder.feature_alarms.presentation.activities.AlarmTriggeredActivity
 import com.phoenix.pillreminder.feature_alarms.presentation.activities.MainActivity
 
@@ -110,7 +107,7 @@ object NotificationUtils {
     }
 
     fun schedulePillboxDailyReminder(context: Context): Notification {
-        val notificationIntent = Intent(context, PillboxReminderReceiver::class.java)
+        val notificationIntent = Intent(context, MainActivity::class.java)
         val pendingIntent = PendingIntent.getActivity(
             context, 999, notificationIntent,
             PendingIntent.FLAG_IMMUTABLE or PendingIntent.FLAG_UPDATE_CURRENT
@@ -120,6 +117,7 @@ object NotificationUtils {
 
         val title = "It's time to refill your pillbox"
         val text = "Refill your pillbox and avoid forgetting to take your medication."
+        Log.d("Alarm", "notificationutils")
 
         return notificationBuilder(context, pillboxReminderChannelId, pendingIntent, title, text)
     }
@@ -172,7 +170,7 @@ object NotificationUtils {
         return NotificationCompat.Builder(context, channelId)
             .setContentTitle(title)
             .setContentText(text)
-            .setSmallIcon(R.drawable.ic_launcher_background)
+            .setSmallIcon(R.drawable.ic_pill)
             .setPriority(NotificationCompat.PRIORITY_MAX)
             .setContentIntent(pendingIntent)
             .build()
@@ -183,10 +181,13 @@ object NotificationUtils {
         title: String, content: String,
         actionButtonPendingIntent1: PendingIntent
     ): Notification {
+        val largeIcon = BitmapFactory.decodeResource(context.resources, R.drawable.ic_pill)
+
         return NotificationCompat.Builder(context, channelId)
             .setContentTitle(title)
             .setContentText(content)
-            .setSmallIcon(R.drawable.ic_launcher_background)
+            .setSmallIcon(R.drawable.ic_pill)
+            .setLargeIcon(largeIcon)
             .setPriority(NotificationCompat.PRIORITY_MAX)
             .setContentIntent(pendingIntent)
             .addAction(0, context.getString(R.string.mark_as_used), actionButtonPendingIntent1)

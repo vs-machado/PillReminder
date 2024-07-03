@@ -140,4 +140,7 @@
     <string name="info">Info</string>
     <string name="about">About</string>
     <string name="help">Help</string>
+    <string name="set_pillbox_daily_refill_reminders">Set pillbox daily refill reminders</string>
+    <string name="set_the_hour_that_you_wish_to_receive_n_daily_reminders">Set the hour at which you wish to receive\ndaily reminders:</string>
+    <string name="save">Save</string>
 </resources>

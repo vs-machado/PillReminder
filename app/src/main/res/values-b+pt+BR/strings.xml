@@ -102,7 +102,7 @@
     <string name="are_you_sure_about_using_the_medicine_at_this_hour_n_nask_your_doctor_what_to_do_if_you_miss_a_dose_n_nit_is_usually_advisable_to_skip_the_dose_and_use_the_medicine_at_the_next_scheduled_time">Tem certeza que deseja usar o medicamento agora?\n\nPergunte o seu médico o que fazer quando esquecer de usar o medicamento.\n\nGeralmente é aconselhável pular a dose e usar o medicamento no próximo horário agendado.</string>
     <string name="medicine_not_taken">Medicamento não utilizado</string>
     <string name="menu_with_medicine_options">Menu com opções do remédio</string>
-    <string name="welcome">Bem vindo!</string>
+    <string name="welcome">Bem-vindo!</string>
     <string name="app_explanation">O Pill Reminder é um app que te ajuda a controlar as doses de seus medicamentos.</string>
     <string name="app_needs_permissions">...Mas primeiro precisamos de sua permissão.</string>
     <string name="notification_mandatory">"O envio de notificações é obrigatório para o funcionamento ideal do aplicativo."</string>
@@ -139,4 +139,7 @@
     <string name="info">Info</string>
     <string name="about">Sobre</string>
     <string name="help">Ajuda</string>
+    <string name="set_pillbox_daily_refill_reminders">Recarga do porta comprimidos</string>
+    <string name="set_the_hour_that_you_wish_to_receive_n_daily_reminders">Defina o horário que você deseja receber lembretes diários de recarga do porta comprimidos:</string>
+    <string name="save">Salvar</string>
 </resources>

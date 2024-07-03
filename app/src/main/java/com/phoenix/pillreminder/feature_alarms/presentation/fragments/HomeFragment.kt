@@ -30,8 +30,6 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.findNavController
 import androidx.navigation.fragment.findNavController
-import androidx.navigation.ui.AppBarConfiguration
-import androidx.navigation.ui.setupWithNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.work.WorkManager
 import com.google.android.material.switchmaterial.SwitchMaterial
@@ -39,7 +37,6 @@ import com.phoenix.pillreminder.R
 import com.phoenix.pillreminder.databinding.FragmentHomeBinding
 import com.phoenix.pillreminder.databinding.LayoutSetPillboxReminderDialogBinding
 import com.phoenix.pillreminder.databinding.LayoutWarnAboutMedicineUsageHourBinding
-import com.phoenix.pillreminder.databinding.WeekviewDatepickerBinding
 import com.phoenix.pillreminder.feature_alarms.domain.model.AlarmItem
 import com.phoenix.pillreminder.feature_alarms.domain.model.Medicine
 import com.phoenix.pillreminder.feature_alarms.domain.repository.AlarmScheduler
@@ -150,6 +147,7 @@ class HomeFragment : Fragment() {
 
                 binding.btnSaveDialogPillbox.setOnClickListener {
                     if(pillboxReminderHour != null && pillboxReminderMinute != null){
+                        Log.d("Alarm", "homefragment")
                         alarmScheduler.schedulePillboxReminder(pillboxReminderHour!!,
                             pillboxReminderMinute!!
                         )
@@ -179,35 +177,6 @@ class HomeFragment : Fragment() {
         if(!Settings.canDrawOverlays(requireContext()) && !dontShowAgain){
             showOverlayAndNotificationPermissionDialog()
         }
-    }
-
-    private fun setupToolbar(){
-        /*val navController = findNavController()
-        val appBarConfiguration = AppBarConfiguration(navController.graph)
-        binding.toolbarHome.setupWithNavController(navController, appBarConfiguration)
-        binding.toolbarHome.title = "Pill Reminder"
-        binding.toolbarHome.setTitleTextColor(Color.WHITE)
-        binding.toolbarHome.setNavigationIcon(R.drawable.baseline_menu_24)
-
-        binding.toolbarHome.setNavigationOnClickListener {
-            binding.drawerLayout.open()
-        }
-
-        binding.navigationView.setNavigationItemSelectedListener { menuItem ->
-            when(menuItem.itemId){
-                R.id.home_item -> {
-                    true
-                }
-                R.id.mymedicines_item -> {
-                    findNavController().navigate(R.id.action_homeFragment_to_myMedicinesFragment)
-                    true
-                }
-            }
-
-            menuItem.isChecked = true
-            binding.drawerLayout.close()
-            true
-        }*/
     }
 
      private fun initRecyclerView(dateToFilter: Date){
@@ -578,6 +547,7 @@ class HomeFragment : Fragment() {
     }
 
     private val requestOverlayPermissionLauncher = registerForActivityResult(ActivityResultContracts.StartActivityForResult()){}
+
 }
 
 

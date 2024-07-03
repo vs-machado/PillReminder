@@ -5,21 +5,22 @@ import android.app.PendingIntent
 import android.content.Context
 import android.content.Intent
 import android.util.Log
-import com.phoenix.pillreminder.feature_alarms.domain.model.AlarmItem
-import com.phoenix.pillreminder.feature_alarms.domain.repository.AlarmScheduler
-import com.phoenix.pillreminder.feature_alarms.domain.model.Medicine
+import androidx.work.ExistingPeriodicWorkPolicy
+import androidx.work.PeriodicWorkRequestBuilder
+import androidx.work.WorkManager
 import com.phoenix.pillreminder.feature_alarms.data.data_source.MedicineDatabase
-import com.phoenix.pillreminder.feature_alarms.presentation.activities.MainActivity
+import com.phoenix.pillreminder.feature_alarms.data.worker.PillboxReminderWorker
+import com.phoenix.pillreminder.feature_alarms.domain.model.AlarmItem
+import com.phoenix.pillreminder.feature_alarms.domain.model.Medicine
+import com.phoenix.pillreminder.feature_alarms.domain.repository.AlarmScheduler
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
-import kotlinx.coroutines.runBlocking
 import kotlinx.coroutines.withContext
 import java.time.Instant
 import java.time.ZoneId
 import java.util.Calendar
-
-const val pillboxRequestCode: Int = 999
+import java.util.concurrent.TimeUnit
 
 class AndroidAlarmScheduler(private val context: Context): AlarmScheduler {
     private val alarmManager = context.getSystemService(AlarmManager::class.java)
@@ -118,7 +119,7 @@ class AndroidAlarmScheduler(private val context: Context): AlarmScheduler {
     }
 
     override fun schedulePillboxReminder(hours: Int, minutes: Int) {
-        val intent = Intent(context, PillboxReminderReceiver::class.java)
+        /*val intent = Intent(context, PillboxReminderReceiver::class.java)
 
         val pendingIntent = PendingIntent.getBroadcast(
             context,
@@ -132,6 +133,17 @@ class AndroidAlarmScheduler(private val context: Context): AlarmScheduler {
             getTimeInMillisForAlarm(hours, minutes),
             AlarmManager.INTERVAL_DAY,
             pendingIntent
+        )*/
+        Log.d("Alarm", "alarmscheduler work creation")
+
+        val workRequest = PeriodicWorkRequestBuilder<PillboxReminderWorker>(1, TimeUnit.DAYS)
+            .setInitialDelay(getInitialDelay(hours,minutes), TimeUnit.MILLISECONDS)
+            .build()
+
+        WorkManager.getInstance(context).enqueueUniquePeriodicWork(
+            "PillboxReminder",
+            ExistingPeriodicWorkPolicy.UPDATE,
+            workRequest
         )
     }
 
@@ -153,6 +165,16 @@ class AndroidAlarmScheduler(private val context: Context): AlarmScheduler {
             followUpTime,
             pendingIntent
         )
+    }
+
+    private fun getInitialDelay(hours: Int, minutes: Int): Long {
+        val now = System.currentTimeMillis()
+        val desiredTime = getTimeInMillisForAlarm(hours, minutes)
+        return if (desiredTime > now) {
+            desiredTime - now
+        } else {
+            desiredTime + 24 * 60 * 60 * 1000 - now // Schedule for next day
+        }
     }
 
     private fun getTimeInMillisForAlarm(hours: Int, minutes: Int): Long{

@@ -13,6 +13,7 @@ import android.os.Build
 import android.provider.Settings
 import android.util.Log
 import androidx.core.app.NotificationCompat
+import androidx.core.content.ContextCompat
 import com.phoenix.pillreminder.R
 import com.phoenix.pillreminder.feature_alarms.domain.model.AlarmItem
 import com.phoenix.pillreminder.feature_alarms.presentation.AlarmReceiver
@@ -170,6 +171,8 @@ object NotificationUtils {
         return NotificationCompat.Builder(context, channelId)
             .setContentTitle(title)
             .setContentText(text)
+            .setAutoCancel(true)
+            //.setColor(ContextCompat.getColor(context, R.color.colorPrimary))
             .setSmallIcon(R.drawable.ic_pill)
             .setPriority(NotificationCompat.PRIORITY_MAX)
             .setContentIntent(pendingIntent)
@@ -186,6 +189,7 @@ object NotificationUtils {
         return NotificationCompat.Builder(context, channelId)
             .setContentTitle(title)
             .setContentText(content)
+            .setAutoCancel(true)
             .setSmallIcon(R.drawable.ic_pill)
             .setLargeIcon(largeIcon)
             .setPriority(NotificationCompat.PRIORITY_MAX)

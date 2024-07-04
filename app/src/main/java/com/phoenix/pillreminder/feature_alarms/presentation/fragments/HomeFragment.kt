@@ -10,7 +10,6 @@ import android.graphics.drawable.ColorDrawable
 import android.net.Uri
 import android.os.Bundle
 import android.provider.Settings
-import android.text.format.DateFormat
 import android.text.format.DateFormat.is24HourFormat
 import android.util.Log
 import android.view.LayoutInflater
@@ -32,6 +31,7 @@ import androidx.lifecycle.lifecycleScope
 import androidx.navigation.findNavController
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.work.WorkInfo
 import androidx.work.WorkManager
 import com.google.android.material.switchmaterial.SwitchMaterial
 import com.phoenix.pillreminder.R
@@ -499,10 +499,10 @@ class HomeFragment : Fragment() {
     private fun showTvAlarm(alarmHour: Int, alarmMinute: Int): String{
         val context = requireContext()
         when {
-            DateFormat.is24HourFormat(context) -> {
+            is24HourFormat(context) -> {
                 return formatHour(alarmHour, alarmMinute, "HH:mm")
             }
-            !DateFormat.is24HourFormat(context) -> {
+            !is24HourFormat(context) -> {
                 return formatHour(alarmHour, alarmMinute, "hh:mm a")
             }
         }
@@ -552,6 +552,34 @@ class HomeFragment : Fragment() {
     }
 
     private val requestOverlayPermissionLauncher = registerForActivityResult(ActivityResultContracts.StartActivityForResult()){}
+
+    override fun onPause() {
+        super.onPause()
+
+        //Dismiss the dialog to avoid window leakage
+        if(::dialog.isInitialized && dialog.isShowing){
+            dialog.dismiss()
+        }
+
+        val switchPillbox = binding.datePicker.findViewById<SwitchMaterial>(R.id.switchPillbox)
+
+        //If user minimizes or closes the app with pillboxreminder dialog opened, the switch is unchecked
+        if(switchPillbox.isChecked && !isWorkerActive()){
+            switchPillbox.isChecked = false
+        }
+    }
+
+    private fun isWorkerActive(): Boolean{
+        val workManager = WorkManager.getInstance(requireContext())
+        val workInfoList = workManager.getWorkInfosForUniqueWork("PillboxReminderWorker").get()
+
+        for(workInfo in workInfoList){
+            if(workInfo.state == WorkInfo.State.RUNNING) {
+                return true
+            }
+        }
+        return false
+    }
 
 }
 

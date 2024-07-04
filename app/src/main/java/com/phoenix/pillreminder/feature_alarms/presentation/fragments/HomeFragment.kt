@@ -563,6 +563,8 @@ class HomeFragment : Fragment() {
 
         val switchPillbox = binding.datePicker.findViewById<SwitchMaterial>(R.id.switchPillbox)
 
+        Log.d("Worker", "${isWorkerActive()}")
+
         //If user minimizes or closes the app with pillboxreminder dialog opened, the switch is unchecked
         if(switchPillbox.isChecked && !isWorkerActive()){
             switchPillbox.isChecked = false
@@ -571,10 +573,10 @@ class HomeFragment : Fragment() {
 
     private fun isWorkerActive(): Boolean{
         val workManager = WorkManager.getInstance(requireContext())
-        val workInfoList = workManager.getWorkInfosForUniqueWork("PillboxReminderWorker").get()
+        val workInfoList = workManager.getWorkInfosForUniqueWork("PillboxReminder").get()
 
         for(workInfo in workInfoList){
-            if(workInfo.state == WorkInfo.State.RUNNING) {
+            if(workInfo.state == WorkInfo.State.ENQUEUED) {
                 return true
             }
         }

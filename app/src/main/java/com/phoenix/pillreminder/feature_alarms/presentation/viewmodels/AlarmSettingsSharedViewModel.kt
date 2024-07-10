@@ -11,7 +11,9 @@ import com.phoenix.pillreminder.feature_alarms.data.worker.RescheduleWorker
 import com.phoenix.pillreminder.feature_alarms.domain.model.AlarmItem
 import com.phoenix.pillreminder.feature_alarms.domain.model.Medicine
 import com.phoenix.pillreminder.feature_alarms.domain.repository.AlarmScheduler
+import com.phoenix.pillreminder.feature_alarms.domain.repository.MedicineRepository
 import com.phoenix.pillreminder.feature_alarms.presentation.AndroidAlarmScheduler
+import dagger.hilt.android.lifecycle.HiltViewModel
 import java.time.Instant
 import java.time.LocalDateTime
 import java.time.ZoneId
@@ -19,8 +21,12 @@ import java.util.Calendar
 import java.util.TimeZone
 import java.util.UUID
 import java.util.concurrent.TimeUnit
+import javax.inject.Inject
 
-class AlarmSettingsSharedViewModel : ViewModel() {
+@HiltViewModel
+class AlarmSettingsSharedViewModel @Inject constructor(
+    private val repository: MedicineRepository
+) : ViewModel() {
     private var medicineName = ""
 
     private var alarmsPerDay = 1
@@ -164,7 +170,7 @@ class AlarmSettingsSharedViewModel : ViewModel() {
     }
 
     fun createAlarmItemAndSchedule(context: Context, interval: Long){
-        val alarmScheduler : AlarmScheduler = AndroidAlarmScheduler(context)
+        val alarmScheduler : AlarmScheduler = AndroidAlarmScheduler(repository, context)
         var alarmScheduled = false
 
         for(day in 0 .. getTreatmentPeriodInDays() step interval){

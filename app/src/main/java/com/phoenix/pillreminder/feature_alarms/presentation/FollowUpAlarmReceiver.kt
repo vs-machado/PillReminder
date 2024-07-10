@@ -9,29 +9,35 @@ import androidx.core.content.ContextCompat
 import com.phoenix.pillreminder.feature_alarms.data.data_source.MedicineDatabase
 import com.phoenix.pillreminder.feature_alarms.domain.model.AlarmItem
 import com.phoenix.pillreminder.feature_alarms.domain.model.Medicine
+import com.phoenix.pillreminder.feature_alarms.domain.repository.MedicineRepository
+import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.launch
 import java.time.ZoneId
+import javax.inject.Inject
 import kotlin.coroutines.CoroutineContext
 
+@AndroidEntryPoint
 class FollowUpAlarmReceiver: BroadcastReceiver(), ActivityCompat.OnRequestPermissionsResultCallback,
     CoroutineScope {
-    private lateinit var job: Job
+
+    @Inject
+    lateinit var repository: MedicineRepository
+
+    private var job: Job = Job()
 
     override val coroutineContext: CoroutineContext
         get() = Dispatchers.Default + job
 
 
     override fun onReceive(context: Context?, intent: Intent?) {
-        val dao = MedicineDatabase.getInstance(context!!).medicineDao()
         val medicineItem = intent?.getParcelableExtra("ALARM_ITEM", AlarmItem::class.java)
         val alarmTimeInMillis = medicineItem?.time?.atZone(ZoneId.systemDefault())?.toInstant()?.toEpochMilli()
-        job = Job()
 
-        CoroutineScope(Dispatchers.IO).launch {
-            val updatedMedicine = dao.getCurrentAlarmData(alarmTimeInMillis ?: 0)
+        launch(Dispatchers.IO) {
+            val updatedMedicine = repository.getCurrentAlarmData(alarmTimeInMillis ?: 0)
 
             if(updatedMedicine?.medicineWasTaken == false && medicineItem != null){
                 startAlarmService(context, intent, updatedMedicine)

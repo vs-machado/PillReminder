@@ -12,16 +12,15 @@ import androidx.navigation.ui.AppBarConfiguration
 import androidx.navigation.ui.setupActionBarWithNavController
 import com.phoenix.pillreminder.R
 import com.phoenix.pillreminder.databinding.ActivityMainBinding
-import com.phoenix.pillreminder.feature_alarms.data.data_source.MedicineDao
-import com.phoenix.pillreminder.feature_alarms.data.data_source.MedicineDatabase
-import com.phoenix.pillreminder.feature_alarms.data.repository.MedicineRepositoryImpl
 import com.phoenix.pillreminder.feature_alarms.domain.repository.MedicineRepository
-import com.phoenix.pillreminder.feature_alarms.presentation.viewmodels.MedicinesViewModelFactory
+import dagger.hilt.android.AndroidEntryPoint
+import javax.inject.Inject
 
-class MainActivity : AppCompatActivity() {
-    private lateinit var dao: MedicineDao
-    lateinit var factory: MedicinesViewModelFactory
-    private lateinit var repository: MedicineRepository
+@AndroidEntryPoint
+class MainActivity: AppCompatActivity() {
+    @Inject
+    lateinit var repository: MedicineRepository
+
     private lateinit var binding: ActivityMainBinding
     private lateinit var toggle: ActionBarDrawerToggle
     private lateinit var appBarConfiguration: AppBarConfiguration
@@ -79,10 +78,6 @@ class MainActivity : AppCompatActivity() {
                 R.id.aboutFragment -> binding.navigationView.setCheckedItem(R.id.about_item)
             }
         }
-
-        dao = MedicineDatabase.getInstance(this).medicineDao()
-        repository = MedicineRepositoryImpl(dao)
-        factory = MedicinesViewModelFactory(repository)
 
         AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO)
 

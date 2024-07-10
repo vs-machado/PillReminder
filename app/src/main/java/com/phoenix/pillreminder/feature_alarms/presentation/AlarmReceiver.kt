@@ -4,13 +4,13 @@ import android.app.NotificationManager
 import android.content.BroadcastReceiver
 import android.content.Context
 import android.content.Intent
-import android.util.Log
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import com.phoenix.pillreminder.R
-import com.phoenix.pillreminder.feature_alarms.data.data_source.MedicineDao
-import com.phoenix.pillreminder.feature_alarms.data.data_source.MedicineDatabase
 import com.phoenix.pillreminder.feature_alarms.domain.model.AlarmItem
+import com.phoenix.pillreminder.feature_alarms.domain.repository.MedicineRepository
+import dagger.hilt.android.AndroidEntryPoint
+import dagger.hilt.android.qualifiers.ApplicationContext
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
@@ -19,57 +19,63 @@ import kotlinx.coroutines.withContext
 import java.time.LocalDateTime
 import java.time.ZoneOffset
 import java.util.TimeZone
+import javax.inject.Inject
 import kotlin.coroutines.CoroutineContext
 
-class AlarmReceiver: BroadcastReceiver(), ActivityCompat.OnRequestPermissionsResultCallback,
-    CoroutineScope {
+@AndroidEntryPoint
+class AlarmReceiver: BroadcastReceiver(), ActivityCompat.OnRequestPermissionsResultCallback, CoroutineScope {
+
+    @Inject
+    lateinit var repository: MedicineRepository
+
     private lateinit var job: Job
 
     override val coroutineContext: CoroutineContext
         get() = Dispatchers.Default + job
 
     override fun onReceive(context: Context?, intent: Intent?) {
-        val dao = MedicineDatabase.getInstance(context!!).medicineDao()
         val alarmItem = intent?.getParcelableExtra("ALARM_ITEM", AlarmItem::class.java)
         val alarmItemAction = intent?.getParcelableExtra("ALARM_ITEM_ACTION", AlarmItem::class.java)
-        val actionString = context.getString(R.string.mark_as_used)
+        val actionString = context?.getString(R.string.mark_as_used)
         job = Job()
 
         if(intent?.action == Intent.ACTION_BOOT_COMPLETED){
-            rescheduleAlarmsOnBoot(context)
+            if (context != null) {
+                rescheduleAlarmsOnBoot(context)
+            }
             return
         }
         if(intent?.action == actionString && alarmItemAction != null){
-            markMedicineAsTaken(alarmItemAction, dao)
+            markMedicineAsTaken(alarmItemAction, repository)
 
             //Notification dismissal after pressing button
-            val notificationManager = context.getSystemService(Context.NOTIFICATION_SERVICE) as? NotificationManager
+            val notificationManager = context?.getSystemService(Context.NOTIFICATION_SERVICE) as? NotificationManager
             notificationManager?.cancel(alarmItemAction.hashCode())
             val stopServiceIntent = Intent(context, AlarmService::class.java)
-            context.stopService(stopServiceIntent)
+            context?.stopService(stopServiceIntent)
 
             return
         }
 
         launch {
-            val alarmScheduler = AndroidAlarmScheduler(context)
+            val alarmScheduler = context?.let { AndroidAlarmScheduler(repository, it) }
 
 
             //Example: If interval between alarms is equal to 1 hour a notification will be sent after 15 minutes if user don't mark the medicine as used
             if(alarmItem?.time != null) {
                 val alarmItemMillis = localDateTimeToMillis(alarmItem.time)
-                val followUpTime = System.currentTimeMillis() + aQuarterIntervalBetweenAlarms(alarmItem.medicineName, alarmItemMillis, dao)
-                val medicine = dao.getCurrentAlarmData(alarmItemMillis)
+                val followUpTime = System.currentTimeMillis() + aQuarterIntervalBetweenAlarms(alarmItem.medicineName, alarmItemMillis, repository)
+                val medicine = repository.getCurrentAlarmData(alarmItemMillis)
 
                 if(medicine != null){
-                    alarmScheduler.scheduleFollowUpAlarm(medicine, alarmItem, followUpTime)
+                    alarmScheduler?.scheduleFollowUpAlarm(medicine, alarmItem, followUpTime)
                 }
             }
 
             //When an alarm is received by system the next alarm is automatically scheduled
-            val medicineData = alarmItem?.let { dao.getNextAlarmData(it.medicineName, System.currentTimeMillis()) }
+            val medicineData = alarmItem?.let { repository.getNextAlarmData(it.medicineName, System.currentTimeMillis()) }
             if (medicineData?.alarmInMillis != null) {
-                alarmScheduler.scheduleNextAlarm(medicineData, context)
+                alarmScheduler?.scheduleNextAlarm(medicineData)
             }
 
 
@@ -95,28 +101,26 @@ class AlarmReceiver: BroadcastReceiver(), ActivityCompat.OnRequestPermissionsRes
     }
 
     private fun rescheduleAlarmsOnBoot(context: Context) {
-        val database = MedicineDatabase.getInstance(context)
-        val dao = database.medicineDao()
         job = Job()
 
         launch{
-            val medicineAlarmsToSchedule = dao.getAlarmsToRescheduleAfterReboot(System.currentTimeMillis())
-            val alarmScheduler = AndroidAlarmScheduler(context)
+            val medicineAlarmsToSchedule = repository.getAlarmsToRescheduleAfterReboot(System.currentTimeMillis())
+            val alarmScheduler = AndroidAlarmScheduler(repository, context)
 
             medicineAlarmsToSchedule.forEach{ medicine ->
-                alarmScheduler.scheduleNextAlarm(medicine, context)
+                alarmScheduler.scheduleNextAlarm(medicine)
             }
         }
     }
 
-    private fun markMedicineAsTaken(alarmItem: AlarmItem, dao: MedicineDao) {
+    private fun markMedicineAsTaken(alarmItem: AlarmItem, repository: MedicineRepository) {
         CoroutineScope(Dispatchers.IO).launch{
             val alarmInMillis = localDateTimeToMillis(alarmItem.time)
-            val medicine = dao.getCurrentAlarmData(alarmInMillis)
+            val medicine = repository.getCurrentAlarmData(alarmInMillis)
 
             if (medicine != null) {
                 medicine.medicineWasTaken = true
-                dao.updateMedicine(medicine)
+                repository.updateMedicine(medicine)
             }
         }
     }
@@ -127,9 +131,9 @@ class AlarmReceiver: BroadcastReceiver(), ActivityCompat.OnRequestPermissionsRes
         return millis
     }
 
-    private suspend fun aQuarterIntervalBetweenAlarms(medicineName: String, alarmInMillis: Long, dao: MedicineDao): Long{
+    private suspend fun aQuarterIntervalBetweenAlarms(medicineName: String, alarmInMillis: Long, repository: MedicineRepository): Long{
         return withContext(Dispatchers.IO) {
-            val nextAlarm = dao.getNextAlarmData(medicineName, alarmInMillis)
+            val nextAlarm = repository.getNextAlarmData(medicineName, alarmInMillis)
 
             if (nextAlarm != null) {
                 (nextAlarm.alarmInMillis - alarmInMillis) / 4

@@ -4,11 +4,16 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.phoenix.pillreminder.feature_alarms.domain.model.Medicine
 import com.phoenix.pillreminder.feature_alarms.domain.repository.MedicineRepository
+import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
+import javax.inject.Inject
 
-class MedicinesViewModel(private val medicineRepository: MedicineRepository): ViewModel() {
+@HiltViewModel
+class MedicinesViewModel @Inject constructor(
+    private val medicineRepository: MedicineRepository
+): ViewModel() {
 
     val medicines = medicineRepository.getAllMedicines()
 

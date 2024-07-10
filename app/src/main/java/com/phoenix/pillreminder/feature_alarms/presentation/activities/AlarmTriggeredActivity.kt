@@ -1,35 +1,34 @@
 package com.phoenix.pillreminder.feature_alarms.presentation.activities
 
 import android.content.Intent
-import android.media.MediaPlayer
 import android.os.Build
 import android.os.Bundle
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.app.AppCompatDelegate
 import androidx.lifecycle.ViewModelProvider
-import com.phoenix.pillreminder.R
-import com.phoenix.pillreminder.feature_alarms.domain.model.AlarmItem
 import com.phoenix.pillreminder.databinding.ActivityAlarmTriggeredBinding
-import com.phoenix.pillreminder.feature_alarms.data.data_source.MedicineDao
-import com.phoenix.pillreminder.feature_alarms.data.data_source.MedicineDatabase
-import com.phoenix.pillreminder.feature_alarms.data.repository.MedicineRepositoryImpl
+import com.phoenix.pillreminder.feature_alarms.domain.model.AlarmItem
 import com.phoenix.pillreminder.feature_alarms.domain.repository.MedicineRepository
 import com.phoenix.pillreminder.feature_alarms.presentation.viewmodels.AlarmTriggeredViewModel
 import com.phoenix.pillreminder.feature_alarms.presentation.viewmodels.MedicinesViewModel
-import com.phoenix.pillreminder.feature_alarms.presentation.viewmodels.MedicinesViewModelFactory
+import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
+import javax.inject.Inject
 
-class AlarmTriggeredActivity : AppCompatActivity() {
+@AndroidEntryPoint
+class AlarmTriggeredActivity: AppCompatActivity() {
+
+    @Inject
+    lateinit var repository: MedicineRepository
+
+    private lateinit var medicinesViewModel: MedicinesViewModel
     private lateinit var binding: ActivityAlarmTriggeredBinding
     //private var mediaPlayer: MediaPlayer? = null
     private val viewModel: AlarmTriggeredViewModel by viewModels()
-    private lateinit var medicinesViewModel: MedicinesViewModel
-    private lateinit var factory: MedicinesViewModelFactory
-    private lateinit var dao: MedicineDao
-    private lateinit var repository: MedicineRepository
+    //private lateinit var factory: MedicinesViewModelFactory
 
     override fun onCreate(savedInstanceState: Bundle?) {
         binding = ActivityAlarmTriggeredBinding.inflate(layoutInflater)
@@ -37,15 +36,10 @@ class AlarmTriggeredActivity : AppCompatActivity() {
         AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO)
         setContentView(binding.root)
 
-        dao = MedicineDatabase.getInstance(this).medicineDao()
-        repository = MedicineRepositoryImpl(dao)
-        factory = MedicinesViewModelFactory(repository)
-
-        medicinesViewModel = ViewModelProvider(this, this.factory)[MedicinesViewModel::class.java]
-
         /*mediaPlayer = MediaPlayer.create(this, R.raw.alarm_sound)
         mediaPlayer?.isLooping = true
         mediaPlayer?.start()*/
+        medicinesViewModel = ViewModelProvider(this).get(MedicinesViewModel::class.java)
 
         binding.apply{
             val alarmItem = if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU){

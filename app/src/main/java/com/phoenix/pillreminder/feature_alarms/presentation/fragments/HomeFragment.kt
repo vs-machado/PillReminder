@@ -26,6 +26,7 @@ import androidx.core.content.ContextCompat
 import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
+import androidx.hilt.navigation.fragment.hiltNavGraphViewModels
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.findNavController
@@ -41,12 +42,14 @@ import com.phoenix.pillreminder.databinding.LayoutWarnAboutMedicineUsageHourBind
 import com.phoenix.pillreminder.feature_alarms.domain.model.AlarmItem
 import com.phoenix.pillreminder.feature_alarms.domain.model.Medicine
 import com.phoenix.pillreminder.feature_alarms.domain.repository.AlarmScheduler
+import com.phoenix.pillreminder.feature_alarms.domain.repository.MedicineRepository
 import com.phoenix.pillreminder.feature_alarms.presentation.AndroidAlarmScheduler
 import com.phoenix.pillreminder.feature_alarms.presentation.HideFabScrollListener
 import com.phoenix.pillreminder.feature_alarms.presentation.activities.MainActivity
 import com.phoenix.pillreminder.feature_alarms.presentation.adapter.RvMedicinesListAdapter
 import com.phoenix.pillreminder.feature_alarms.presentation.viewmodels.HomeFragmentViewModel
 import com.phoenix.pillreminder.feature_alarms.presentation.viewmodels.MedicinesViewModel
+import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -58,13 +61,17 @@ import java.util.Calendar
 import java.util.Date
 import java.util.Locale
 import java.util.UUID
+import javax.inject.Inject
 
+@AndroidEntryPoint
+class HomeFragment: Fragment() {
 
-class HomeFragment : Fragment() {
-    private lateinit var thisFragment: HomeFragment
+    @Inject
+    lateinit var repository: MedicineRepository
+
     private lateinit var binding: FragmentHomeBinding
     private lateinit var adapter: RvMedicinesListAdapter
-    private lateinit var medicinesViewModel: MedicinesViewModel
+    private val medicinesViewModel: MedicinesViewModel by hiltNavGraphViewModels(R.id.nav_graph)
     private var toast: Toast? = null
     private val hfViewModel: HomeFragmentViewModel by viewModels()
     private lateinit var dialog: Dialog
@@ -98,9 +105,6 @@ class HomeFragment : Fragment() {
         val pillboxReminder = sharedPreferencesPillbox.getBoolean("pillbox_reminder", false)
         val dontShowAgain = sharedPreferences.getBoolean("dont_show_again", false)
 
-        thisFragment = this
-        medicinesViewModel = ViewModelProvider(requireActivity(), (requireActivity() as MainActivity).factory)[MedicinesViewModel::class.java]
-
         initRecyclerView(hfViewModel.getDate())
         binding.datePicker.findViewById<SwitchMaterial>(R.id.switchPillbox).isChecked = pillboxReminder
         requestPermissions(dontShowAgain)
@@ -122,7 +126,7 @@ class HomeFragment : Fragment() {
 
 
         binding.datePicker.findViewById<SwitchMaterial>(R.id.switchPillbox).setOnCheckedChangeListener { _, isChecked ->
-            val alarmScheduler = AndroidAlarmScheduler(requireContext())
+            val alarmScheduler = AndroidAlarmScheduler(repository, requireContext())
             val editor = sharedPreferencesPillbox.edit()
             val hourFormat = is24HourFormat(requireContext())
 
@@ -273,7 +277,7 @@ class HomeFragment : Fragment() {
         tvMedicine.text = context?.getString(R.string.tv_alarm_and_hour, medicine.name, showTvAlarm(medicine.alarmHour, medicine.alarmMinute))
 
         val alarmTime = Instant.ofEpochMilli(medicine.alarmInMillis).atZone(ZoneId.systemDefault()).toLocalDateTime()
-        val alarmScheduler : AlarmScheduler = AndroidAlarmScheduler(requireContext())
+        val alarmScheduler : AlarmScheduler = AndroidAlarmScheduler(repository, requireContext())
 
         val alarmItem = AlarmItem(
             alarmTime,
@@ -352,7 +356,7 @@ class HomeFragment : Fragment() {
         tvMedicine.text = context?.getString(R.string.tv_medicine, medicine.name)
 
         val alarmTime = Instant.ofEpochMilli(medicine.alarmInMillis).atZone(ZoneId.systemDefault()).toLocalDateTime()
-        val alarmScheduler : AlarmScheduler = AndroidAlarmScheduler(requireActivity().applicationContext)
+        val alarmScheduler : AlarmScheduler = AndroidAlarmScheduler(repository, requireContext())
 
         val alarmItem = AlarmItem(
             alarmTime,
@@ -448,7 +452,7 @@ class HomeFragment : Fragment() {
     }
 
     private fun markMedicinesAsSkipped(medicine: Medicine){
-        val alarmScheduler : AlarmScheduler = AndroidAlarmScheduler(requireActivity().applicationContext)
+        val alarmScheduler : AlarmScheduler = AndroidAlarmScheduler(repository, requireContext())
         val alarmTime = Instant.ofEpochMilli(medicine.alarmInMillis).atZone(ZoneId.systemDefault()).toLocalDateTime()
 
         val alarmItem = AlarmItem(
@@ -527,7 +531,7 @@ class HomeFragment : Fragment() {
     }
 
     private fun requestOverlayPermission(){
-        if(!Settings.canDrawOverlays(requireActivity().applicationContext)){
+        if(!Settings.canDrawOverlays(requireContext())){
             val overlayIntent = Intent(Settings.ACTION_MANAGE_OVERLAY_PERMISSION).apply{
                 addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
                 data = Uri.parse("package:${requireContext().packageName}")

@@ -1,40 +1,35 @@
 package com.phoenix.pillreminder.feature_alarms.data.worker
 
 import android.content.Context
+import androidx.hilt.work.HiltWorker
 import androidx.work.CoroutineWorker
 import androidx.work.WorkerParameters
 import com.phoenix.pillreminder.feature_alarms.domain.model.AlarmItem
-import com.phoenix.pillreminder.feature_alarms.presentation.AndroidAlarmScheduler
 import com.phoenix.pillreminder.feature_alarms.domain.model.Medicine
-import com.phoenix.pillreminder.feature_alarms.data.data_source.MedicineDao
-import com.phoenix.pillreminder.feature_alarms.data.data_source.MedicineDatabase
-import com.phoenix.pillreminder.feature_alarms.data.repository.MedicineRepositoryImpl
 import com.phoenix.pillreminder.feature_alarms.domain.repository.MedicineRepository
-import com.phoenix.pillreminder.feature_alarms.presentation.viewmodels.MedicinesViewModelFactory
+import com.phoenix.pillreminder.feature_alarms.presentation.AndroidAlarmScheduler
+import dagger.assisted.Assisted
+import dagger.assisted.AssistedInject
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 import java.time.Instant
 import java.time.ZoneId
 import java.util.Calendar
 
-class RescheduleWorker(appContext: Context, workerParams: WorkerParameters) : CoroutineWorker(appContext,
-    workerParams
-) {
-    private lateinit var factory: MedicinesViewModelFactory
-    private lateinit var dao: MedicineDao
-    private lateinit var repository: MedicineRepository
+@HiltWorker
+class RescheduleWorker @AssistedInject constructor(
+    private val repository: MedicineRepository,
+    @Assisted appContext: Context,
+    @Assisted workerParams: WorkerParameters
+) : CoroutineWorker(appContext, workerParams) {
 
     override suspend fun doWork(): Result {
-        dao = MedicineDatabase.getInstance(applicationContext).medicineDao()
-        repository = MedicineRepositoryImpl(dao)
-        factory = MedicinesViewModelFactory(repository)
 
-
-        val distinctMedicines = dao.getAllDistinctMedicines()
-        val alarmScheduler = AndroidAlarmScheduler(applicationContext)
+        val distinctMedicines = repository.getAllDistinctMedicines()
+        val alarmScheduler = AndroidAlarmScheduler(repository, applicationContext)
 
         val alarmsToReschedule = distinctMedicines.flatMap{ medicine ->
-            dao.getAlarmsToRescheduleEveryMonth(medicine.name, medicine.alarmsPerDay)
+            repository.getAlarmsToRescheduleEveryMonth(medicine.name, medicine.alarmsPerDay)
         }
 
         alarmsToReschedule.forEach { medicine ->
@@ -43,7 +38,7 @@ class RescheduleWorker(appContext: Context, workerParams: WorkerParameters) : Co
 
             withContext(Dispatchers.IO){
                 // Reinserts medicines alarms into the database for another month
-                dao.insertMedicines(allAlarmsOfTreatment(medicine, interval, treatmentPeriodInDays))
+                repository.insertMedicines(allAlarmsOfTreatment(medicine, interval, treatmentPeriodInDays))
             }
 
             //Keeps track of alarms that have already been scheduled (only sets 1 alarm per medicine)

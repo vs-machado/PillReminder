@@ -8,11 +8,12 @@ import android.util.Log
 import androidx.work.ExistingPeriodicWorkPolicy
 import androidx.work.PeriodicWorkRequestBuilder
 import androidx.work.WorkManager
-import com.phoenix.pillreminder.feature_alarms.data.data_source.MedicineDatabase
 import com.phoenix.pillreminder.feature_alarms.data.worker.PillboxReminderWorker
 import com.phoenix.pillreminder.feature_alarms.domain.model.AlarmItem
 import com.phoenix.pillreminder.feature_alarms.domain.model.Medicine
 import com.phoenix.pillreminder.feature_alarms.domain.repository.AlarmScheduler
+import com.phoenix.pillreminder.feature_alarms.domain.repository.MedicineRepository
+import dagger.hilt.android.qualifiers.ApplicationContext
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -21,12 +22,16 @@ import java.time.Instant
 import java.time.ZoneId
 import java.util.Calendar
 import java.util.concurrent.TimeUnit
+import javax.inject.Inject
 
-class AndroidAlarmScheduler(private val context: Context): AlarmScheduler {
-    private val alarmManager = context.getSystemService(AlarmManager::class.java)
+class AndroidAlarmScheduler @Inject constructor(
+    private val medicineRepository: MedicineRepository,
+   @ApplicationContext private val appContext: Context
+): AlarmScheduler {
+    private val alarmManager = appContext.getSystemService(AlarmManager::class.java)
 
     override fun scheduleAlarm(item: AlarmItem) {
-        val intent = Intent(context, AlarmReceiver::class.java).apply {
+        val intent = Intent(appContext, AlarmReceiver::class.java).apply {
             putExtra("ALARM_ITEM", item)
         }
 
@@ -42,7 +47,7 @@ class AndroidAlarmScheduler(private val context: Context): AlarmScheduler {
             AlarmManager.RTC_WAKEUP,
             alarmTime,
             PendingIntent.getBroadcast(
-                context,
+                appContext,
                 item.hashCode(),
                 intent,
                 PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE
@@ -52,20 +57,18 @@ class AndroidAlarmScheduler(private val context: Context): AlarmScheduler {
     }
 
     override fun cancelAlarm(item: AlarmItem, cancelAll: Boolean) {
-        val database = MedicineDatabase.getInstance(context)
-        val dao = database.medicineDao()
         val itemTimeInMillis = item.time.atZone(ZoneId.systemDefault()).toInstant().toEpochMilli()
 
         CoroutineScope(Dispatchers.IO).launch{
             val pendingIntent =  PendingIntent.getBroadcast(
-                context,
+                appContext,
                 item.hashCode(),
-                Intent(context, AlarmReceiver::class.java),
+                Intent(appContext, AlarmReceiver::class.java),
                 PendingIntent.FLAG_NO_CREATE or PendingIntent.FLAG_IMMUTABLE
             )
 
             if (pendingIntent == null || itemTimeInMillis < System.currentTimeMillis()){
-                val alarmAlreadyScheduled = dao.getNextAlarmData(item.medicineName, System.currentTimeMillis())
+                val alarmAlreadyScheduled = medicineRepository.getNextAlarmData(item.medicineName, System.currentTimeMillis())
                 val alarmItemTime = alarmAlreadyScheduled?.alarmInMillis?.let {
                     Instant.ofEpochMilli(it).atZone(ZoneId.systemDefault()).toLocalDateTime()
                 }
@@ -89,10 +92,10 @@ class AndroidAlarmScheduler(private val context: Context): AlarmScheduler {
                 val currentAlarmInMillis = item.time.atZone(ZoneId.systemDefault()).toInstant().toEpochMilli()
 
                 // Search for the alarm (next to the selected) in the database
-                val nextAlarm = dao.getNextAlarmData(item.medicineName, currentAlarmInMillis + 1L)
+                val nextAlarm = medicineRepository.getNextAlarmData(item.medicineName, currentAlarmInMillis + 1L)
 
                 if(nextAlarm?.alarmInMillis != null){
-                    scheduleNextAlarm(nextAlarm, context)
+                    scheduleNextAlarm(nextAlarm)
                 }
                 return@launch
             }
@@ -103,8 +106,8 @@ class AndroidAlarmScheduler(private val context: Context): AlarmScheduler {
         }
     }
 
-    fun scheduleNextAlarm(medicine: Medicine, context: Context?){
-        val alarmScheduler: AlarmScheduler = AndroidAlarmScheduler(context!!)
+    fun scheduleNextAlarm(medicine: Medicine){
+        val alarmScheduler: AlarmScheduler = AndroidAlarmScheduler(medicineRepository, appContext)
 
         val alarmItem = AlarmItem(
             time = Instant.ofEpochMilli(medicine.alarmInMillis).atZone(ZoneId.systemDefault()).toLocalDateTime(),
@@ -140,7 +143,7 @@ class AndroidAlarmScheduler(private val context: Context): AlarmScheduler {
             .setInitialDelay(getInitialDelay(hours,minutes), TimeUnit.MILLISECONDS)
             .build()
 
-        WorkManager.getInstance(context).enqueueUniquePeriodicWork(
+        WorkManager.getInstance(appContext).enqueueUniquePeriodicWork(
             "PillboxReminder",
             ExistingPeriodicWorkPolicy.UPDATE,
             workRequest
@@ -148,13 +151,13 @@ class AndroidAlarmScheduler(private val context: Context): AlarmScheduler {
     }
 
     fun scheduleFollowUpAlarm(medicine: Medicine, item: AlarmItem, followUpTime: Long){
-        val intent = Intent(context, FollowUpAlarmReceiver::class.java).apply {
+        val intent = Intent(appContext, FollowUpAlarmReceiver::class.java).apply {
             putExtra("ALARM_ITEM", item)
         }
 
         //The first alarm requestCode is based on AlarmItem hashcode. The follow up alarm is based on Medicine hashcode.
         val pendingIntent = PendingIntent.getBroadcast(
-            context,
+            appContext,
             medicine.hashCode(),
             intent,
             PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE

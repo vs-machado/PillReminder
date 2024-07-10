@@ -6,7 +6,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/colorPrimary"
-    tools:context=".activity.AlarmTriggeredActivity">
+    tools:context=".feature_alarms.presentation.activities.AlarmTriggeredActivity">
 
     <androidx.cardview.widget.CardView
         android:id="@+id/cardView"
@@ -30,7 +30,7 @@
                 android:id="@+id/ivAlarmTriggered"
                 android:layout_width="100dp"
                 android:layout_height="100dp"
-                android:layout_marginTop="24dp"
+                android:layout_marginTop="16dp"
                 android:contentDescription="@string/alarm"
                 android:src="@drawable/ic_alarm"
                 app:layout_constraintEnd_toEndOf="parent"
@@ -67,6 +67,7 @@
                 android:layout_width="100dp"
                 android:layout_height="100dp"
                 android:layout_marginTop="24dp"
+                android:contentDescription="@string/medicine_type_icon"
                 android:src="@drawable/pill_black_and_white"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintHorizontal_bias="0.498"
@@ -99,14 +100,13 @@
 
             <com.google.android.material.button.MaterialButton
                 android:id="@+id/btnDismiss"
+                style="@style/Widget.Material3.Button.TextButton"
                 android:layout_width="320dp"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="16dp"
                 android:layout_marginEnd="16dp"
-                android:layout_marginBottom="16dp"
-                android:backgroundTint="#747272"
                 android:text="@string/dismiss"
-                android:textColor="@color/white"
+                android:textColor="@color/colorPrimary"
                 app:cornerRadius="20dp"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
@@ -119,9 +119,14 @@
                 android:layout_marginStart="16dp"
                 android:layout_marginEnd="16dp"
                 android:backgroundTint="#0C7FE4"
-                android:text="@string/mark_as_taken"
+                android:paddingStart="24dp"
+                android:paddingEnd="42dp"
+                android:text="@string/mark_as_used"
                 android:textColor="@color/white"
                 app:cornerRadius="20dp"
+                app:icon="@drawable/baseline_check_24"
+                app:iconGravity="textStart"
+                app:iconPadding="8dp"
                 app:layout_constraintBottom_toTopOf="@+id/btnDismiss"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent" />
@@ -131,7 +136,8 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:backgroundTint="@color/button_gray"
-                android:paddingLeft="16dp"
+                android:paddingStart="16dp"
+                android:paddingEnd="16dp"
                 android:text="@string/mute_sound"
                 app:cornerRadius="10dp"
                 app:icon="@drawable/baseline_volume_off_24"

@@ -5,7 +5,7 @@
     android:id="@+id/cl"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".fragments.TreatmentDurationFragment">
+    tools:context=".feature_alarms.presentation.fragments.TreatmentDurationFragment">
 
     <com.google.android.material.appbar.AppBarLayout
     android:id="@+id/appBar"

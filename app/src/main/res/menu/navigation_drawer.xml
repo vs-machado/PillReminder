@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    tools:showIn="navigation_view">
+
+    <group
+        android:checkableBehavior="single">
+        <item
+            android:title="@string/dashboard">
+            <menu>
+                <item
+                    android:id="@+id/home_item"
+                    android:title="@string/home"
+                    android:icon="@drawable/ic_home_selector"
+                    android:checkable="true"/>
+                <item
+                    android:id="@+id/mymedicines_item"
+                    android:title="@string/my_medicines"
+                    android:icon="@drawable/ic_medication_selector"
+                    android:checkable="true"/>
+            </menu>
+        </item>
+        <item android:title="@string/info">
+            <menu>
+                <item
+                    android:id="@+id/help_item"
+                    android:title="@string/help"
+                    android:icon="@drawable/ic_help_selector"
+                    android:checkable="true"/>
+                <item
+                    android:id="@+id/about_item"
+                    android:title="@string/about"
+                    android:icon="@drawable/ic_about_selector"
+                    android:checkable="true"/>
+            </menu>
+        </item>
+    </group>
+
+
+</menu>

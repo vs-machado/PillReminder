@@ -6,7 +6,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:fitsSystemWindows="true"
-    tools:context=".fragments.AddMedicinesFragment">
+    tools:context=".feature_alarms.presentation.fragments.AddMedicinesFragment">
 
     <LinearLayout
         android:id="@+id/llAddMedicines"

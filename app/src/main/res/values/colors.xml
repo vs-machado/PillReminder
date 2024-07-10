@@ -6,4 +6,8 @@
     <color name="fab">#1D8CED</color>
     <color name="red">#FF0000</color>
     <color name="button_gray">#747272</color>
+    <color name="gradient_end_color">#B4E6FF</color>
+    <color name="intro_text">#333333</color>
+    <color name="intro_text_blue">#0D3663</color>
+    <color name="dark_blue">#066C70</color>
 </resources>

@@ -9,23 +9,28 @@
     <uses-permission android:name="android.permission.FOREGROUND_SERVICE_SPECIAL_USE"/>
     <uses-permission android:name="android.permission.SYSTEM_ALERT_WINDOW"/>
     <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED" />
+    <uses-permission android:name="android.permission.REQUEST_IGNORE_BATTERY_OPTIMIZATIONS"/>
 
     <application
-        android:name=".alarmscheduler.AlarmApp"
-        android:allowBackup="true"
+        android:name="com.phoenix.pillreminder.feature_alarms.AlarmApp"
+        android:allowBackup="false"
         android:dataExtractionRules="@xml/data_extraction_rules"
         android:fullBackupContent="@xml/backup_rules"
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
-        android:theme="@style/Theme.PillReminder">
+        android:theme="@style/Theme.PillReminder"
+        android:enableOnBackInvokedCallback="true">
 
         <activity
-            android:name=".activity.AlarmTriggeredActivity"
+            android:name=".feature_alarms.presentation.activities.AlarmTriggeredActivity"
             android:exported="false" />
         <activity
-            android:name=".activity.MainActivity"
+            android:name=".feature_alarms.presentation.activities.MyAppIntro"
+            android:exported="false"/>
+        <activity
+            android:name=".feature_alarms.presentation.activities.MainActivity"
             android:exported="true"
             android:windowSoftInputMode="adjustResize">
             <intent-filter>
@@ -36,18 +41,26 @@
         </activity>
 
         <receiver
-            android:name=".alarmscheduler.AlarmReceiver"
-            android:exported="false">
+            android:name=".feature_alarms.presentation.AlarmReceiver"
+            android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.BOOT_COMPLETED"/>
+                <action android:name="Mark as used"/>
             </intent-filter>
          </receiver>
 
-        <service android:name = ".alarmscheduler.AlarmService"
+        <receiver
+            android:name=".feature_alarms.presentation.FollowUpAlarmReceiver"
+            android:exported="true">
+        </receiver>
+
+        <service android:name = ".feature_alarms.presentation.AlarmService"
             android:foregroundServiceType="specialUse">
+
             <property android:name="android.app.PROPERTY_SPECIAL_USE_FGS_SUBTYPE"
                 android:value="trigger_alarm_activity"/>
         </service>
+
     </application>
 
 </manifest>

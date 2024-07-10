@@ -4,6 +4,8 @@ plugins {
     id("androidx.navigation.safeargs.kotlin")
     id("com.google.devtools.ksp")
     id("kotlin-parcelize")
+    id("com.google.dagger.hilt.android")
+    id("kotlin-android")
 }
 
 android {
@@ -43,6 +45,8 @@ android {
 }
 
 dependencies {
+    implementation("androidx.test:core-ktx:1.5.0")
+    implementation("androidx.test.ext:junit-ktx:1.1.5")
     val navVersion = "2.7.5"
     val coreVersion = "1.12.0"
     val roomVersion = "2.6.1"
@@ -53,6 +57,9 @@ dependencies {
 
     //Activity
     implementation("androidx.activity:activity-ktx:$activityVersion")
+
+    //AppIntro
+    implementation("com.github.AppIntro:AppIntro:6.3.1")
 
     //Fragment
     implementation("androidx.fragment:fragment-ktx:$fragmentVersion")
@@ -78,11 +85,32 @@ dependencies {
     //WorkManager
     implementation("androidx.work:work-runtime-ktx:$workVersion")
 
+    //Dagger - Hilt
+    implementation("com.google.dagger:hilt-android:2.51.1")
+    ksp("androidx.hilt:hilt-compiler:1.2.0")
+    ksp("com.google.dagger:hilt-compiler:2.51.1")
+    implementation("androidx.hilt:hilt-work:1.2.0")
+    implementation("androidx.hilt:hilt-navigation-fragment:1.2.0")
+
     implementation("androidx.core:core-ktx:$coreVersion")
     implementation("androidx.appcompat:appcompat:1.6.1")
     implementation("com.google.android.material:material:1.10.0")
     implementation("androidx.constraintlayout:constraintlayout:2.1.4")
+    implementation("androidx.drawerlayout:drawerlayout:1.2.0")
+
+    //Tests
     testImplementation("junit:junit:4.13.2")
+    testImplementation("androidx.room:room-testing:$roomVersion")
+    testImplementation("org.jetbrains.kotlinx:kotlinx-coroutines-test:1.3.9")
+    testImplementation("androidx.lifecycle:lifecycle-viewmodel-ktx:$lifecycleVersion")
+    testImplementation("androidx.arch.core:core-testing:2.1.0")
+    testImplementation("androidx.lifecycle:lifecycle-livedata-ktx:$lifecycleVersion")
+    testImplementation("androidx.work:work-testing:$workVersion")
+    testImplementation("androidx.core:core-ktx:$coreVersion")
+    testImplementation("com.google.truth:truth:1.4.2")
     androidTestImplementation("androidx.test.ext:junit:1.1.5")
     androidTestImplementation("androidx.test.espresso:espresso-core:3.5.1")
+    androidTestImplementation("org.jetbrains.kotlinx:kotlinx-coroutines-test:1.3.9")
+    androidTestImplementation("com.google.truth:truth:1.4.2")
+    androidTestImplementation("androidx.arch.core:core-testing:2.2.0")
 }

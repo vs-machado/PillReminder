@@ -8,12 +8,13 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageButton
 import android.widget.TextView
+import androidx.cardview.widget.CardView
 import androidx.fragment.app.Fragment
 import com.phoenix.pillreminder.databinding.FragmentHelpBinding
 
 class HelpFragment : Fragment() {
     private lateinit var binding: FragmentHelpBinding
-    private var rotationAngle = 0
+    private val rotationAngles = mutableMapOf<ImageButton, Int>()
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -29,59 +30,36 @@ class HelpFragment : Fragment() {
         enableLayoutTransitions()
 
         binding.apply{
-            cvQuestion1.setOnClickListener {
-                toggleAnswerVisibility(tvAnswer1)
-                rotateIcon(ibQuestion1)
-            }
-            ibQuestion1.setOnClickListener {
-                toggleAnswerVisibility(tvAnswer1)
-                rotateIcon(ibQuestion1)
-            }
-
-            cvQuestion2.setOnClickListener {
-                toggleAnswerVisibility(tvAnswer2)
-                rotateIcon(ibQuestion2)
-            }
-            ibQuestion2.setOnClickListener {
-                toggleAnswerVisibility(tvAnswer2)
-                rotateIcon(ibQuestion2)
-            }
-
-            cvQuestion3.setOnClickListener {
-                toggleAnswerVisibility(tvAnswer3)
-                rotateIcon(ibQuestion3)
-            }
-            ibQuestion3.setOnClickListener {
-                toggleAnswerVisibility(tvAnswer3)
-                rotateIcon(ibQuestion3)
-            }
-
-            cvQuestion4.setOnClickListener {
-                toggleAnswerVisibility(tvAnswer4)
-                rotateIcon(ibQuestion4)
-            }
-            ibQuestion4.setOnClickListener {
-                toggleAnswerVisibility(tvAnswer4)
-                rotateIcon(ibQuestion4)
-            }
+            setupQuestionListener(cvQuestion1, tvAnswer1, ibQuestion1)
+            setupQuestionListener(cvQuestion2, tvAnswer2, ibQuestion2)
+            setupQuestionListener(cvQuestion3, tvAnswer3, ibQuestion3)
+            setupQuestionListener(cvQuestion4, tvAnswer4, ibQuestion4)
         }
 
     }
 
-    private fun toggleAnswerVisibility(text: TextView){
-        if (text.visibility == View.GONE) {
-            text.visibility = View.VISIBLE
-        } else {
-            text.visibility = View.GONE
+    private fun setupQuestionListener(cardView: CardView, textView: TextView, imageButton: ImageButton){
+        val clickListener = View.OnClickListener {
+            toggleAnswerVisibility(textView)
+            rotateIcon(imageButton)
         }
+        cardView.setOnClickListener(clickListener)
+        imageButton.setOnClickListener(clickListener)
+    }
+
+    private fun toggleAnswerVisibility(text: TextView) {
+        text.visibility = if (text.visibility == View.GONE) View.VISIBLE else View.GONE
     }
 
     private fun rotateIcon(imageButton: ImageButton){
-        val anim = ObjectAnimator.ofFloat(imageButton, "rotation", rotationAngle + 180f)
+        val currentAngle = rotationAngles.getOrDefault(imageButton, 0)
+        val newAngle = currentAngle + 180
+
+        val anim = ObjectAnimator.ofFloat(imageButton, "rotation", newAngle.toFloat())
         anim.duration = 300
         anim.start()
-        rotationAngle += 180
-        rotationAngle %= 360
+
+        rotationAngles[imageButton] = newAngle % 360
     }
 
     private fun enableLayoutTransitions(){

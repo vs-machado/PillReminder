@@ -40,7 +40,7 @@ import com.phoenix.pillreminder.databinding.LayoutSetPillboxReminderDialogBindin
 import com.phoenix.pillreminder.databinding.LayoutWarnAboutMedicineUsageHourBinding
 import com.phoenix.pillreminder.feature_alarms.domain.model.AlarmItem
 import com.phoenix.pillreminder.feature_alarms.domain.model.Medicine
-import com.phoenix.pillreminder.feature_alarms.domain.repository.AlarmScheduler
+import com.phoenix.pillreminder.feature_alarms.presentation.AlarmScheduler
 import com.phoenix.pillreminder.feature_alarms.domain.repository.MedicineRepository
 import com.phoenix.pillreminder.feature_alarms.presentation.AndroidAlarmScheduler
 import com.phoenix.pillreminder.feature_alarms.presentation.HideFabScrollListener

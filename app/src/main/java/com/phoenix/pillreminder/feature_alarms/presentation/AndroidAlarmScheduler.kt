@@ -11,7 +11,6 @@ import androidx.work.WorkManager
 import com.phoenix.pillreminder.feature_alarms.data.worker.PillboxReminderWorker
 import com.phoenix.pillreminder.feature_alarms.domain.model.AlarmItem
 import com.phoenix.pillreminder.feature_alarms.domain.model.Medicine
-import com.phoenix.pillreminder.feature_alarms.domain.repository.AlarmScheduler
 import com.phoenix.pillreminder.feature_alarms.domain.repository.MedicineRepository
 import dagger.hilt.android.qualifiers.ApplicationContext
 import kotlinx.coroutines.CoroutineScope

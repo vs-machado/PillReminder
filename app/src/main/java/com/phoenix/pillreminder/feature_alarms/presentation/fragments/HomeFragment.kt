@@ -3,15 +3,12 @@ package com.phoenix.pillreminder.feature_alarms.presentation.fragments
 import android.Manifest
 import android.app.Dialog
 import android.content.Context
-import android.content.Intent
 import android.content.pm.PackageManager
 import android.graphics.Color
 import android.graphics.drawable.ColorDrawable
-import android.net.Uri
 import android.os.Bundle
 import android.provider.Settings
 import android.text.format.DateFormat.is24HourFormat
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -31,41 +28,32 @@ import androidx.lifecycle.lifecycleScope
 import androidx.navigation.findNavController
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
-import androidx.work.WorkInfo
-import androidx.work.WorkManager
 import com.google.android.material.switchmaterial.SwitchMaterial
 import com.phoenix.pillreminder.R
 import com.phoenix.pillreminder.databinding.FragmentHomeBinding
 import com.phoenix.pillreminder.databinding.LayoutSetPillboxReminderDialogBinding
 import com.phoenix.pillreminder.databinding.LayoutWarnAboutMedicineUsageHourBinding
-import com.phoenix.pillreminder.feature_alarms.domain.model.AlarmItem
 import com.phoenix.pillreminder.feature_alarms.domain.model.Medicine
-import com.phoenix.pillreminder.feature_alarms.presentation.AlarmScheduler
 import com.phoenix.pillreminder.feature_alarms.domain.repository.MedicineRepository
 import com.phoenix.pillreminder.feature_alarms.presentation.AndroidAlarmScheduler
 import com.phoenix.pillreminder.feature_alarms.presentation.HideFabScrollListener
+import com.phoenix.pillreminder.feature_alarms.presentation.PermissionManager
 import com.phoenix.pillreminder.feature_alarms.presentation.adapter.RvMedicinesListAdapter
+import com.phoenix.pillreminder.feature_alarms.presentation.utils.CalendarUtils
 import com.phoenix.pillreminder.feature_alarms.presentation.viewmodels.HomeFragmentViewModel
 import com.phoenix.pillreminder.feature_alarms.presentation.viewmodels.MedicinesViewModel
 import dagger.hilt.android.AndroidEntryPoint
-import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
-import java.text.SimpleDateFormat
-import java.time.Instant
-import java.time.ZoneId
-import java.util.Calendar
 import java.util.Date
-import java.util.Locale
-import java.util.UUID
 import javax.inject.Inject
 
 @AndroidEntryPoint
 class HomeFragment: Fragment() {
 
-    @Inject
-    lateinit var repository: MedicineRepository
+    @Inject lateinit var repository: MedicineRepository
+    @Inject lateinit var alarmScheduler: AndroidAlarmScheduler
 
     private lateinit var binding: FragmentHomeBinding
     private lateinit var adapter: RvMedicinesListAdapter
@@ -102,11 +90,15 @@ class HomeFragment: Fragment() {
         val dontShowAgain = hfViewModel.getPermissionRequestPreferences()
 
         initRecyclerView(hfViewModel.getDate())
+
+        //SharedPreference verification to check or uncheck the switch
         binding.datePicker.findViewById<SwitchMaterial>(R.id.switchPillbox).isChecked = pillboxReminder
+
         requestPermissions(dontShowAgain)
 
+        //Updates the date picker and recyclerview
         binding.datePicker.onSelectionChanged = { date ->
-            CoroutineScope(Dispatchers.Main).launch{
+           viewLifecycleOwner.lifecycleScope.launch(Dispatchers.Main){
                 hfViewModel.setDate(date)
                 val medicines = withContext(Dispatchers.IO){
                     medicinesViewModel.getMedicines()
@@ -122,53 +114,52 @@ class HomeFragment: Fragment() {
 
 
         binding.datePicker.findViewById<SwitchMaterial>(R.id.switchPillbox).setOnCheckedChangeListener { _, isChecked ->
-            val alarmScheduler = AndroidAlarmScheduler(repository, requireContext())
-            val hourFormat = is24HourFormat(requireContext())
-
             if (isChecked) {
                 hfViewModel.setPillboxPreferences(true)
-
-                dialog = Dialog(this.requireContext())
-                dialog.requestWindowFeature(Window.FEATURE_NO_TITLE)
-                dialog.setCancelable(false)
-
-                val inflater = context?.getSystemService(Context.LAYOUT_INFLATER_SERVICE) as LayoutInflater
-                val binding = LayoutSetPillboxReminderDialogBinding.inflate(inflater)
-
-                dialog.setContentView(binding.root)
-                dialog.window?.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
-
-                var pillboxReminderHour: Int? = null
-                var pillboxReminderMinute: Int? = null
-
-                binding.tpDialogPillbox.setIs24HourView(hourFormat)
-
-                binding.tpDialogPillbox.setOnTimeChangedListener { _, hourOfDay, minute ->
-                    pillboxReminderHour = hourOfDay
-                    pillboxReminderMinute = minute
-                }
-
-                binding.btnSaveDialogPillbox.setOnClickListener {
-                    if(pillboxReminderHour != null && pillboxReminderMinute != null){
-                        Log.d("Alarm", "homefragment")
-                        alarmScheduler.schedulePillboxReminder(pillboxReminderHour!!,
-                            pillboxReminderMinute!!
-                        )
-                    }
-                    dialog.dismiss()
-                }
-
-                binding.btnCancelDialogPillbox.setOnClickListener {
-                    dialog.dismiss()
-                    uncheckSwitch()
-                }
-
-                dialog.show()
+                showPillboxReminderDialog()
             } else {
                 hfViewModel.setPillboxPreferences(false)
                 hfViewModel.cancelReminderNotifications(requireContext().applicationContext)
             }
         }
+    }
+
+    private fun showPillboxReminderDialog(){
+        val hourFormat = is24HourFormat(requireContext())
+
+        dialog = Dialog(this.requireContext())
+        dialog.requestWindowFeature(Window.FEATURE_NO_TITLE)
+        dialog.setCancelable(false)
+
+        val inflater = context?.getSystemService(Context.LAYOUT_INFLATER_SERVICE) as LayoutInflater
+        val binding = LayoutSetPillboxReminderDialogBinding.inflate(inflater)
+
+        dialog.setContentView(binding.root)
+        dialog.window?.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
+
+        var hours: Int? = null
+        var minutes: Int? = null
+
+        binding.tpDialogPillbox.setIs24HourView(hourFormat)
+
+        binding.tpDialogPillbox.setOnTimeChangedListener { _, hourOfDay, minute ->
+            hours = hourOfDay
+            minutes = minute
+        }
+
+        binding.btnSaveDialogPillbox.setOnClickListener {
+            if(hours != null && minutes != null){
+                hfViewModel.schedulePillboxReminder(hours!!, minutes!!)
+            }
+            dialog.dismiss()
+        }
+
+        binding.btnCancelDialogPillbox.setOnClickListener {
+            dialog.dismiss()
+            uncheckSwitch()
+        }
+
+        dialog.show()
     }
 
     private fun requestPermissions(dontShowAgain: Boolean){
@@ -196,12 +187,14 @@ class HomeFragment: Fragment() {
                         showWarningMedicineUsageDialog(selectedMedicine)
                     }
                     else{
-                        markMedicineUsage(selectedMedicine)
+                        hfViewModel.markMedicineUsage(selectedMedicine)
+                        displayMedicinesList(hfViewModel.getDate())
                     }
                 }
             },
             markMedicinesAsSkipped = {selectedMedicine ->
-                markMedicinesAsSkipped(selectedMedicine)
+                hfViewModel.markMedicinesAsSkipped(selectedMedicine)
+                displayMedicinesList(hfViewModel.getDate())
             }
         )
         binding.rvMedicinesList.adapter = adapter
@@ -265,61 +258,25 @@ class HomeFragment: Fragment() {
 
         tvMedicine.text = context?.getString(R.string.tv_alarm_and_hour, medicine.name, showTvAlarm(medicine.alarmHour, medicine.alarmMinute))
 
-        val alarmTime = Instant.ofEpochMilli(medicine.alarmInMillis).atZone(ZoneId.systemDefault()).toLocalDateTime()
-        val alarmScheduler : AlarmScheduler = AndroidAlarmScheduler(repository, requireContext())
-
-        val alarmItem = AlarmItem(
-            alarmTime,
-            medicine.name,
-            medicine.form,
-            medicine.quantity.toString(),
-            medicine.alarmHour.toString(),
-            medicine.alarmMinute.toString()
-        )
-
         btnDelete.setOnClickListener {
-            CoroutineScope(Dispatchers.Default).launch{
-                //Checks if the alarm was already triggered. If so, there is no need to cancel the broadcast.
-                if(medicine.alarmInMillis > System.currentTimeMillis()){
-                    alarmScheduler.cancelAlarm(alarmItem, false)
-                }
+            medicinesViewModel.apply{
+                viewLifecycleOwner.lifecycleScope.launch{
+                    //Cancel alarms if needed
+                    hfViewModel.cancelAlarm(medicine, false)
 
-                //Work cancel
-                val hasNextAlarm = medicinesViewModel.hasNextAlarmData(medicine.name, System.currentTimeMillis())
+                    withContext(Dispatchers.IO){
+                        //Work cancel
+                        hfViewModel.cancelWork(medicine, getWorkerID(medicine.name))
+                    }
 
-                if(!hasNextAlarm){
-                    hfViewModel.cancelWork(medicinesViewModel.getWorkerID(medicine.name), requireContext())
-                }
+                    //Database medicine deletion
+                    deleteMedicines(medicine)
 
-                /*
-                val firstMedicineOfTheDay = medicinesViewModel.getFirstMedicineOfTheDay(
-                    hfViewModel.getUserMidnightMillis()
-                )
-                val firstMedicineOfNextDay = medicinesViewModel.getFirstMedicineOfNextDay(
-                    hfViewModel.getNextDayMidnightMillis(System.currentTimeMillis())
-                )
-
-                if(userSetPillboxReminders && (medicine == firstMedicineOfNextDay
-                            || medicine == firstMedicineOfTheDay && medicine.alarmInMillis > System.currentTimeMillis() )){
-
-                    hfViewModel.cancelReminderNotifications(requireContext())
-                    medicinesViewModel.getFirstMedicineOfTheDay()
-                    alarmScheduler.schedulePillboxReminder()
-
-                }
-                else if (userSetPillboxReminders && medicine != firstMedicineOfNextDay){
-
-                }
-                else {
-                    hfViewModel.cancelReminderNotifications(requireContext())
-                }*/
-
-                medicinesViewModel.deleteMedicines(medicine)
-
-                withContext(Dispatchers.Main){
-                    displayMedicinesList(hfViewModel.getDate())
-                    dialog.dismiss()
-                    showToastAlarmDeleted()
+                    withContext(Dispatchers.Main){
+                        displayMedicinesList(hfViewModel.getDate())
+                        dialog.dismiss()
+                        showToastAlarmDeleted()
+                    }
                 }
             }
         }
@@ -344,39 +301,24 @@ class HomeFragment: Fragment() {
 
         tvMedicine.text = context?.getString(R.string.tv_medicine, medicine.name)
 
-        val alarmTime = Instant.ofEpochMilli(medicine.alarmInMillis).atZone(ZoneId.systemDefault()).toLocalDateTime()
-        val alarmScheduler : AlarmScheduler = AndroidAlarmScheduler(repository, requireContext())
-
-        val alarmItem = AlarmItem(
-            alarmTime,
-            medicine.name,
-            medicine.form,
-            medicine.quantity.toString(),
-            medicine.alarmHour.toString(),
-            medicine.alarmMinute.toString()
-        )
-
         btnDelete.setOnClickListener {
-            CoroutineScope(Dispatchers.Default).launch{
-                alarmScheduler.cancelAlarm(alarmItem, true)
+            hfViewModel.apply{
+                viewLifecycleOwner.lifecycleScope.launch{
+                    cancelAlarm(medicine, true)
 
-                val workRequestID = medicinesViewModel.getWorkerID(medicine.name)
+                    withContext(Dispatchers.IO){
+                        cancelWork(medicine, medicinesViewModel.getWorkerID(medicine.name))
+                    }
 
-                if(workRequestID != "noID"){
-                    val workRequestUUID = UUID.fromString(workRequestID)
-                    WorkManager.getInstance(requireContext().applicationContext).cancelWorkById(workRequestUUID)
-                }
+                    deleteAllMedicinesWithSameName(medicine.name)
 
-                val alarmsToDelete = medicinesViewModel.getAllMedicinesWithSameName(medicine.name)
-                medicinesViewModel.deleteAllSelectedMedicines(alarmsToDelete)
-
-                withContext(Dispatchers.Main){
-                    displayMedicinesList(hfViewModel.getDate())
-                    dialog.dismiss()
-                    showToastAlarmDeleted()
+                    withContext(Dispatchers.Main){
+                        displayMedicinesList(hfViewModel.getDate())
+                        dialog.dismiss()
+                        showToastAlarmDeleted()
+                    }
                 }
             }
-
         }
 
         btnCancel.setOnClickListener {
@@ -398,12 +340,14 @@ class HomeFragment: Fragment() {
         dialog.window?.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
 
         binding.btnMarkMedicineUsage.setOnClickListener {
-            markMedicineUsage(medicine)
+            hfViewModel.markMedicineUsage(medicine)
+            displayMedicinesList(hfViewModel.getDate())
             dialog.dismiss()
         }
 
         binding.btnSkipDose.setOnClickListener {
-            markMedicinesAsSkipped(medicine)
+            hfViewModel.markMedicinesAsSkipped(medicine)
+            displayMedicinesList(hfViewModel.getDate())
             dialog.dismiss()
         }
 
@@ -411,72 +355,7 @@ class HomeFragment: Fragment() {
     }
 
     private fun isNextToAnotherDoseHour(selectedMedicine: Medicine, callback: (Boolean) -> Unit){
-        val usageHour = selectedMedicine.alarmInMillis
-
-        CoroutineScope(Dispatchers.IO).launch{
-            val nextAlarmHour = medicinesViewModel.getNextAlarmData(selectedMedicine.name, selectedMedicine.alarmInMillis)?.alarmInMillis
-
-            withContext(Dispatchers.Main){
-                val intervalBetweenAlarms = nextAlarmHour?.minus(usageHour)
-
-                if(intervalBetweenAlarms != null){
-                    val closeToNextAlarm = (System.currentTimeMillis() - usageHour) > ((2.0/3.0) * intervalBetweenAlarms)
-                    val pastTheNextAlarmHour = System.currentTimeMillis() > nextAlarmHour
-
-                    //If user is next to the next alarm hour a warning will be displayed asking if he really wants to use the medicine
-                    if(closeToNextAlarm || pastTheNextAlarmHour){
-                        callback(true)
-                    } else{
-                        callback(false)
-                    }
-                }
-            }
-        }
-    }
-
-    private fun markMedicineUsage(medicine: Medicine){
-        medicine.medicineWasTaken = true
-        medicinesViewModel.updateMedicines(medicine)
-        displayMedicinesList(hfViewModel.getDate())
-    }
-
-    private fun markMedicinesAsSkipped(medicine: Medicine){
-        val alarmScheduler : AlarmScheduler = AndroidAlarmScheduler(repository, requireContext())
-        val alarmTime = Instant.ofEpochMilli(medicine.alarmInMillis).atZone(ZoneId.systemDefault()).toLocalDateTime()
-
-        val alarmItem = AlarmItem(
-            alarmTime,
-            medicine.name,
-            medicine.form,
-            medicine.quantity.toString(),
-            medicine.alarmHour.toString(),
-            medicine.alarmMinute.toString()
-        )
-
-        medicine.wasSkipped = true
-
-        CoroutineScope(Dispatchers.IO).launch{
-            medicinesViewModel.updateMedicines(medicine)
-
-            withContext(Dispatchers.Main){
-                /*Checks if the alarm was already triggered. If so, there is no need to cancel the broadcast.
-                cancelAlarm() will cancel the alarm and check if there is another alarm to be scheduled*/
-                if(medicine.alarmInMillis > System.currentTimeMillis()){
-                    alarmScheduler.cancelAlarm(alarmItem, false)
-                }
-            }
-
-            val hasNextAlarm = medicinesViewModel.hasNextAlarmData(medicine.name, System.currentTimeMillis())
-
-            withContext(Dispatchers.Main){
-                if(!hasNextAlarm){
-                    val workRequestID = UUID.fromString(medicinesViewModel.getWorkerID(medicine.name))
-                    WorkManager.getInstance(requireContext().applicationContext).cancelWorkById(workRequestID)
-                }
-
-                displayMedicinesList(hfViewModel.getDate())
-            }
-        }
+        hfViewModel.isNextToAnotherDoseHour(selectedMedicine, callback)
     }
 
     private fun showToastAlarmDeleted(){
@@ -493,22 +372,13 @@ class HomeFragment: Fragment() {
         val context = requireContext()
         when {
             is24HourFormat(context) -> {
-                return formatHour(alarmHour, alarmMinute, "HH:mm")
+                return CalendarUtils.formatHour(alarmHour, alarmMinute, "HH:mm")
             }
             !is24HourFormat(context) -> {
-                return formatHour(alarmHour, alarmMinute, "hh:mm a")
+                return CalendarUtils.formatHour(alarmHour, alarmMinute, "hh:mm a")
             }
         }
         return ""
-    }
-
-    private fun formatHour(hour: Int, minute: Int, pattern: String): String{
-        val calendar = Calendar.getInstance().apply {
-            set(Calendar.HOUR_OF_DAY, hour)
-            set(Calendar.MINUTE, minute)
-        }
-        val sdf = SimpleDateFormat(pattern, Locale.getDefault())
-        return sdf.format(calendar.time)
     }
 
     private fun setCreditsVisibility(){
@@ -519,15 +389,23 @@ class HomeFragment: Fragment() {
         binding.tvCredits.isVisible = false
     }
 
-    private fun requestOverlayPermission(){
-        if(!Settings.canDrawOverlays(requireContext())){
-            val overlayIntent = Intent(Settings.ACTION_MANAGE_OVERLAY_PERMISSION).apply{
-                addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
-                data = Uri.parse("package:${requireContext().packageName}")
+    private val requestPermissionLauncher = registerForActivityResult(ActivityResultContracts.RequestPermission()){ permissionGranted: Boolean ->
+        if(permissionGranted){
+            binding.fabAddMedicine.visibility = View.VISIBLE
+            binding.rvMedicinesList.visibility = View.VISIBLE
+        }
+        requestOverlayPermission(requireContext())
+    }
+
+    private fun requestOverlayPermission(context: Context){
+        PermissionManager.apply{
+            if(!canDrawOverlays(context)){
+                requestOverlayPermissionLauncher.launch(getOverlayPermissionIntent(context))
             }
-            requestOverlayPermissionLauncher.launch(overlayIntent)
         }
     }
+
+    private val requestOverlayPermissionLauncher = registerForActivityResult(ActivityResultContracts.StartActivityForResult()){}
 
     override fun onResume() {
         super.onResume()
@@ -535,16 +413,6 @@ class HomeFragment: Fragment() {
             adapter.setList(medicinesViewModel.getMedicines(), hfViewModel.getDate())
         }
     }
-
-    private val requestPermissionLauncher = registerForActivityResult(ActivityResultContracts.RequestPermission()){ permissionGranted: Boolean ->
-        if(permissionGranted){
-            binding.fabAddMedicine.visibility = View.VISIBLE
-            binding.rvMedicinesList.visibility = View.VISIBLE
-        }
-        requestOverlayPermission()
-    }
-
-    private val requestOverlayPermissionLauncher = registerForActivityResult(ActivityResultContracts.StartActivityForResult()){}
 
     override fun onPause() {
         super.onPause()
@@ -556,24 +424,10 @@ class HomeFragment: Fragment() {
 
         val switchPillbox = binding.datePicker.findViewById<SwitchMaterial>(R.id.switchPillbox)
 
-        Log.d("Worker", "${isWorkerActive()}")
-
-        //If user minimizes or closes the app with pillboxreminder dialog opened, the switch is unchecked
-        if(switchPillbox.isChecked && !isWorkerActive()){
+        //If user minimizes or closes the app with pillbox reminder dialog opened, the switch is unchecked
+        if(switchPillbox.isChecked && !hfViewModel.isWorkerActive()){
             switchPillbox.isChecked = false
         }
-    }
-
-    private fun isWorkerActive(): Boolean{
-        val workManager = WorkManager.getInstance(requireContext())
-        val workInfoList = workManager.getWorkInfosForUniqueWork("PillboxReminder").get()
-
-        for(workInfo in workInfoList){
-            if(workInfo.state == WorkInfo.State.ENQUEUED) {
-                return true
-            }
-        }
-        return false
     }
 
 }

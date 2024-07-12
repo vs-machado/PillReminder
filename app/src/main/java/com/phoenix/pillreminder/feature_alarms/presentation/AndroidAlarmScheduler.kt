@@ -121,23 +121,6 @@ class AndroidAlarmScheduler @Inject constructor(
     }
 
     override fun schedulePillboxReminder(hours: Int, minutes: Int) {
-        /*val intent = Intent(context, PillboxReminderReceiver::class.java)
-
-        val pendingIntent = PendingIntent.getBroadcast(
-            context,
-            pillboxRequestCode,
-            intent,
-            PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE
-        )
-
-        alarmManager.setRepeating(
-            AlarmManager.RTC_WAKEUP,
-            getTimeInMillisForAlarm(hours, minutes),
-            AlarmManager.INTERVAL_DAY,
-            pendingIntent
-        )*/
-        Log.d("Alarm", "alarmscheduler work creation")
-
         val workRequest = PeriodicWorkRequestBuilder<PillboxReminderWorker>(1, TimeUnit.DAYS)
             .setInitialDelay(getInitialDelay(hours,minutes), TimeUnit.MILLISECONDS)
             .build()

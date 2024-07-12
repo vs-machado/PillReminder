@@ -1,7 +1,10 @@
 package com.phoenix.pillreminder.feature_alarms.di
 
 import android.app.Application
+import android.content.Context
 import androidx.room.Room
+import androidx.work.WorkManager
+import androidx.work.impl.WorkManagerImpl
 import com.phoenix.pillreminder.feature_alarms.data.data_source.MedicineDatabase
 import com.phoenix.pillreminder.feature_alarms.data.repository.MedicineRepositoryImpl
 import com.phoenix.pillreminder.feature_alarms.domain.repository.MedicineRepository
@@ -31,5 +34,13 @@ object AppModule {
     fun provideMedicineRepository(db: MedicineDatabase): MedicineRepository{
         return MedicineRepositoryImpl(db.medicineDao())
     }
+
+
+    @Provides
+    @Singleton
+    fun provideWorkManager(context: Context): WorkManager{
+        return WorkManager.getInstance(context)
+    }
+
 
 }

@@ -27,7 +27,6 @@ import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.hilt.navigation.fragment.hiltNavGraphViewModels
-import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.findNavController
 import androidx.navigation.fragment.findNavController
@@ -41,11 +40,10 @@ import com.phoenix.pillreminder.databinding.LayoutSetPillboxReminderDialogBindin
 import com.phoenix.pillreminder.databinding.LayoutWarnAboutMedicineUsageHourBinding
 import com.phoenix.pillreminder.feature_alarms.domain.model.AlarmItem
 import com.phoenix.pillreminder.feature_alarms.domain.model.Medicine
-import com.phoenix.pillreminder.feature_alarms.domain.repository.AlarmScheduler
+import com.phoenix.pillreminder.feature_alarms.presentation.AlarmScheduler
 import com.phoenix.pillreminder.feature_alarms.domain.repository.MedicineRepository
 import com.phoenix.pillreminder.feature_alarms.presentation.AndroidAlarmScheduler
 import com.phoenix.pillreminder.feature_alarms.presentation.HideFabScrollListener
-import com.phoenix.pillreminder.feature_alarms.presentation.activities.MainActivity
 import com.phoenix.pillreminder.feature_alarms.presentation.adapter.RvMedicinesListAdapter
 import com.phoenix.pillreminder.feature_alarms.presentation.viewmodels.HomeFragmentViewModel
 import com.phoenix.pillreminder.feature_alarms.presentation.viewmodels.MedicinesViewModel
@@ -100,10 +98,8 @@ class HomeFragment: Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        val sharedPreferences = requireContext().getSharedPreferences("dont_show_again", Context.MODE_PRIVATE)
-        val sharedPreferencesPillbox =  requireContext().getSharedPreferences("pillbox_reminder", Context.MODE_PRIVATE)
-        val pillboxReminder = sharedPreferencesPillbox.getBoolean("pillbox_reminder", false)
-        val dontShowAgain = sharedPreferences.getBoolean("dont_show_again", false)
+        val pillboxReminder = hfViewModel.getPillboxPreferences()
+        val dontShowAgain = hfViewModel.getPermissionRequestPreferences()
 
         initRecyclerView(hfViewModel.getDate())
         binding.datePicker.findViewById<SwitchMaterial>(R.id.switchPillbox).isChecked = pillboxReminder
@@ -127,12 +123,10 @@ class HomeFragment: Fragment() {
 
         binding.datePicker.findViewById<SwitchMaterial>(R.id.switchPillbox).setOnCheckedChangeListener { _, isChecked ->
             val alarmScheduler = AndroidAlarmScheduler(repository, requireContext())
-            val editor = sharedPreferencesPillbox.edit()
             val hourFormat = is24HourFormat(requireContext())
 
             if (isChecked) {
-                editor.putBoolean("pillbox_reminder", true)
-                editor.apply()
+                hfViewModel.setPillboxPreferences(true)
 
                 dialog = Dialog(this.requireContext())
                 dialog.requestWindowFeature(Window.FEATURE_NO_TITLE)
@@ -171,8 +165,7 @@ class HomeFragment: Fragment() {
 
                 dialog.show()
             } else {
-                editor.putBoolean("pillbox_reminder", false)
-                editor.apply()
+                hfViewModel.setPillboxPreferences(false)
                 hfViewModel.cancelReminderNotifications(requireContext().applicationContext)
             }
         }
@@ -230,8 +223,7 @@ class HomeFragment: Fragment() {
     }
 
     private fun showOverlayAndNotificationPermissionDialog(){
-        val sharedPreferences = requireContext().getSharedPreferences("overlay_permission_prefs", Context.MODE_PRIVATE)
-        val dontShowAgain = sharedPreferences.getBoolean("dont_show_again", false)
+        val dontShowAgain = hfViewModel.getPermissionRequestPreferences()
 
         if (dontShowAgain){
             return
@@ -252,10 +244,7 @@ class HomeFragment: Fragment() {
         }
         dismissRequest.setOnClickListener {
             if(checkboxDontShowAgain.isChecked){
-                with(sharedPreferences.edit()){
-                    putBoolean("dont_show_again", true)
-                    apply()
-                }
+                hfViewModel.setPermissionRequestPreferences(true)
             }
             dialog.dismiss()
         }

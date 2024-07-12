@@ -1,7 +1,6 @@
 package com.phoenix.pillreminder.feature_alarms.presentation.viewmodels
 
 import android.content.Context
-import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
@@ -10,7 +9,7 @@ import androidx.work.WorkManager
 import com.phoenix.pillreminder.feature_alarms.data.worker.RescheduleWorker
 import com.phoenix.pillreminder.feature_alarms.domain.model.AlarmItem
 import com.phoenix.pillreminder.feature_alarms.domain.model.Medicine
-import com.phoenix.pillreminder.feature_alarms.domain.repository.AlarmScheduler
+import com.phoenix.pillreminder.feature_alarms.presentation.AlarmScheduler
 import com.phoenix.pillreminder.feature_alarms.domain.repository.MedicineRepository
 import com.phoenix.pillreminder.feature_alarms.presentation.AndroidAlarmScheduler
 import dagger.hilt.android.lifecycle.HiltViewModel

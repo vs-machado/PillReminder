@@ -1,4 +1,4 @@
-package com.phoenix.pillreminder.feature_alarms.domain.repository
+package com.phoenix.pillreminder.feature_alarms.presentation
 
 import com.phoenix.pillreminder.feature_alarms.domain.model.AlarmItem
 import com.phoenix.pillreminder.feature_alarms.domain.model.Medicine

@@ -31,7 +31,9 @@ class HomeFragmentViewModel @Inject constructor(
     private val workManager: WorkManager,
     @ApplicationContext private val appContext: Context
 ): ViewModel() {
+
     private var date: Date = Calendar.getInstance().time
+    private lateinit var workRequestID: UUID
 
     fun setDate(selectedDate: Date){
         date = selectedDate
@@ -121,7 +123,9 @@ class HomeFragmentViewModel @Inject constructor(
     }
 
     fun cancelWork(medicine: Medicine, workerID: String){
-        val workRequestID = UUID.fromString(workerID)
+        if(workerID != "noID"){
+            workRequestID = UUID.fromString(workerID)
+        }
 
         viewModelScope.launch(Dispatchers.IO) {
             val hasNextAlarm = repository.hasNextAlarmData(medicine.name, System.currentTimeMillis())

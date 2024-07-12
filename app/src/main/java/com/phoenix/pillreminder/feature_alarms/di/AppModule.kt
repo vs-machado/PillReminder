@@ -38,8 +38,8 @@ object AppModule {
 
     @Provides
     @Singleton
-    fun provideWorkManager(context: Context): WorkManager{
-        return WorkManager.getInstance(context)
+    fun provideWorkManager(app: Application): WorkManager{
+        return WorkManager.getInstance(app)
     }
 
 

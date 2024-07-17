@@ -11,20 +11,19 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
-import androidx.fragment.app.viewModels
 import androidx.hilt.navigation.fragment.hiltNavGraphViewModels
-import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.NavOptions
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.ui.AppBarConfiguration
 import androidx.navigation.ui.setupWithNavController
 import com.google.android.material.datepicker.MaterialDatePicker
 import com.phoenix.pillreminder.R
-import com.phoenix.pillreminder.feature_alarms.presentation.activities.MainActivity
 import com.phoenix.pillreminder.databinding.FragmentTreatmentDurationBinding
+import com.phoenix.pillreminder.feature_alarms.domain.util.MedicineFrequency
 import com.phoenix.pillreminder.feature_alarms.presentation.viewmodels.AlarmSettingsSharedViewModel
 import com.phoenix.pillreminder.feature_alarms.presentation.viewmodels.MedicinesViewModel
 import dagger.hilt.android.AndroidEntryPoint
+import java.lang.IllegalArgumentException
 
 @AndroidEntryPoint
 class TreatmentDurationFragment : Fragment(), ActivityCompat.OnRequestPermissionsResultCallback {
@@ -86,18 +85,18 @@ class TreatmentDurationFragment : Fragment(), ActivityCompat.OnRequestPermission
                             val workerID = createRescheduleWorker(requireContext().applicationContext)
 
                             when (getMedicineFrequency()){
-                                1 -> {
-                                    medicinesViewModel.insertMedicines(allAlarmsOfTreatment(1L, workerID))
+                                MedicineFrequency.EveryDay -> {
+                                    medicinesViewModel.insertMedicines(getAlarmsList(1L, workerID))
                                     createAlarmItemAndSchedule(requireActivity().applicationContext, 1L)
                                 }
-                                2 -> {
-                                    medicinesViewModel.insertMedicines(allAlarmsOfTreatment(2L, workerID))
+                                MedicineFrequency.EveryOtherDay -> {
+                                    medicinesViewModel.insertMedicines(getAlarmsList(2L, workerID))
                                     createAlarmItemAndSchedule(requireActivity().applicationContext, 2L)
                                 }
-                                /*
-                                "Specific days of the week" -> {
-                                    // Needs further implementation
+                                MedicineFrequency.SpecificDaysOfWeek -> {
+                                    medicinesViewModel.insertMedicines(getAlarmsListForSpecificDays(workerID))
                                 }
+                                /*
                                 "Every X days" -> {
                                     // Needs further implementation
                                 }
@@ -107,6 +106,9 @@ class TreatmentDurationFragment : Fragment(), ActivityCompat.OnRequestPermission
                                 "Every X months" -> {
                                     // Needs further implementation
                                 }*/
+                                else -> {
+                                    throw IllegalArgumentException("Invalid frequency")
+                                }
                             }
 
                             setNumberOfAlarms(1)
@@ -141,18 +143,19 @@ class TreatmentDurationFragment : Fragment(), ActivityCompat.OnRequestPermission
                 extractDateComponents(startDateMillis, endDateMillis, true)
 
                 when (getMedicineFrequency()){
-                    1 -> {
-                        medicinesViewModel.insertMedicines(allAlarmsOfTreatment(1L))
+                    MedicineFrequency.EveryDay -> {
+                        medicinesViewModel.insertMedicines(getAlarmsList(1L))
                         createAlarmItemAndSchedule(requireActivity().applicationContext, 1L)
                     }
-                    2 -> {
-                        medicinesViewModel.insertMedicines(allAlarmsOfTreatment(2L))
+                    MedicineFrequency.EveryOtherDay -> {
+                        medicinesViewModel.insertMedicines(getAlarmsList(2L))
                         createAlarmItemAndSchedule(requireActivity().applicationContext, 2L)
                     }
-                    /*
-                    "Specific days of the week" -> {
-                        // Needs further implementation
+                    MedicineFrequency.SpecificDaysOfWeek -> {
+                        medicinesViewModel.insertMedicines(getAlarmsListForSpecificDays())
+                        createAlarmItemAndSchedule(requireActivity().applicationContext)
                     }
+                    /*
                     "Every X days" -> {
                         // Needs further implementation
                     }
@@ -162,6 +165,9 @@ class TreatmentDurationFragment : Fragment(), ActivityCompat.OnRequestPermission
                     "Every X months" -> {
                         // Needs further implementation
                     }*/
+                    else -> {
+                        throw IllegalArgumentException("Invalid frequency")
+                    }
                 }
 
                 setNumberOfAlarms(1)

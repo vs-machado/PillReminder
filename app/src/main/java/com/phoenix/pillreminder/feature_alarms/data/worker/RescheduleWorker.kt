@@ -97,6 +97,7 @@ class RescheduleWorker @AssistedInject constructor(
                         medicineWasTaken,
                         false,
                         frequency,
+                        interval,
                         periodSet,
                         needsReschedule,
                         workerID

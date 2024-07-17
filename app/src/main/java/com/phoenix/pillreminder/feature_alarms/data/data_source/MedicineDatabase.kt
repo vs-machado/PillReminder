@@ -6,7 +6,7 @@ import androidx.room.Room
 import androidx.room.RoomDatabase
 import com.phoenix.pillreminder.feature_alarms.domain.model.Medicine
 
-@Database(entities = [Medicine::class], version = 8, exportSchema = false)
+@Database(entities = [Medicine::class], version = 9, exportSchema = false)
 abstract class MedicineDatabase : RoomDatabase() {
 
     abstract fun medicineDao(): MedicineDao

@@ -13,6 +13,8 @@ import androidx.navigation.ui.AppBarConfiguration
 import androidx.navigation.ui.setupWithNavController
 import com.phoenix.pillreminder.R
 import com.phoenix.pillreminder.databinding.FragmentFrequencyBinding
+import com.phoenix.pillreminder.feature_alarms.domain.util.DayOfWeek
+import com.phoenix.pillreminder.feature_alarms.domain.util.MedicineFrequency
 import com.phoenix.pillreminder.feature_alarms.presentation.viewmodels.AlarmSettingsSharedViewModel
 
 class FrequencyFragment : Fragment() {
@@ -51,43 +53,31 @@ class FrequencyFragment : Fragment() {
             // Check the user selected option and navigate to the next fragment
             lvFrequency.setOnItemClickListener { _, _, position, _ ->
                 checkSelectedOption(position)
-                findNavController().navigate(R.id.action_frequencyFragment_to_howManyPerDayFragment)
+
+                when(sharedViewModel.getMedicineFrequency()){
+                    MedicineFrequency.EveryDay, MedicineFrequency.EveryOtherDay -> {
+                        findNavController().navigate(R.id.action_frequencyFragment_to_howManyPerDayFragment)
+                    }
+                    MedicineFrequency.SpecificDaysOfWeek -> {
+                        findNavController().navigate(R.id.action_frequencyFragment_to_dayPickerFragment)
+                    }
+                    else -> {}
+                }
             }
 
         }
 
     }
     private fun checkSelectedOption(position: Int){
-        when (position){
-            0 -> {
-                sharedViewModel.setMedicineFrequency(1)
-            }
-
-            1 -> {
-                sharedViewModel.setMedicineFrequency(2)
-            }
-
-            2 -> {
-                // Needs to navigate to another fragment and receive user input
-                //Needs to calculate how many days has in the period
-                sharedViewModel.setMedicineFrequency(1) // Temporarily not working
-            }
-
-            3 -> {
-                // Needs to navigate to another fragment and receive user input
-                sharedViewModel.setMedicineFrequency(1) // Temporarily not working
-            }
-
-            4 -> {
-                // Needs to navigate to another fragment and receive user input
-                //Needs to calculate how many days has in the period
-                sharedViewModel.setMedicineFrequency(1) // Temporarily not working
-            }
-
-            5 -> {
-                //Needs to navigate to another fragment and receive user input
-                //Needs to calculate how many days has in the period
-                sharedViewModel.setMedicineFrequency(1) // Temporarily not working
+        sharedViewModel.apply{
+            when (position){
+                0 -> setMedicineFrequency(MedicineFrequency.EveryDay)
+                1 -> setMedicineFrequency(MedicineFrequency.EveryOtherDay)
+                2 -> setMedicineFrequency(MedicineFrequency.SpecificDaysOfWeek)
+                // 3 -> navigate to everyxdays
+                // 4 -> navigate to everyxweeks
+                // 5 -> navigate to everyxmonths
+                else -> throw IllegalArgumentException("Invalid position")
             }
         }
     }

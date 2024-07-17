@@ -25,7 +25,7 @@ object AppModule {
             app,
             MedicineDatabase::class.java,
             "medicine_data_database"
-        ).build()
+        ).fallbackToDestructiveMigration().build()
     }
 
 

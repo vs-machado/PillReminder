@@ -143,4 +143,12 @@
     <string name="set_pillbox_daily_refill_reminders">Set pillbox daily refill reminders</string>
     <string name="set_the_hour_that_you_wish_to_receive_n_daily_reminders">Set the hour at which you wish to receive\ndaily reminders:</string>
     <string name="save">Save</string>
+    <string name="select_medicine_usage_days">Select the medicine usage days:</string>
+    <string name="sun">Sun</string>
+    <string name="mon">Mon</string>
+    <string name="tue">Tue</string>
+    <string name="wed">Wed</string>
+    <string name="thu">Thu</string>
+    <string name="fri">Fri</string>
+    <string name="sat">Sat</string>
 </resources>

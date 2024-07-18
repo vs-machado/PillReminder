@@ -66,6 +66,8 @@ class AlarmSettingsSharedViewModel @Inject constructor(
 
     private lateinit var selectedDaysList: MutableSet<Int>
 
+    private var interval: Int = 0
+
     var position = 0
 
 
@@ -621,6 +623,14 @@ class AlarmSettingsSharedViewModel @Inject constructor(
 
     private fun setTreatmentPeriodInDays(){
         treatmentPeriodInDays = TimeUnit.MILLISECONDS.toDays(treatmentPeriodInMillis)
+    }
+
+    fun setInterval(interval: Int){
+        this.interval = interval
+    }
+
+    fun getInterval(): Int {
+        return interval
     }
 
 }

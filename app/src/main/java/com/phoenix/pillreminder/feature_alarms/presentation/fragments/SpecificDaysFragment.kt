@@ -33,15 +33,16 @@ class SpecificDaysFragment : Fragment() {
 
         binding.toolbar.setupWithNavController(navController, appBarConfiguration)
 
-        val list: MutableList<String> = mutableListOf(
-            "Sunday",
-            "Monday",
-            "Tuesday",
-            "Wednesday",
-            "Thursday",
-            "Friday",
-            "Saturday"
-        )
+        val list = listOf(
+            R.string.Sunday,
+            R.string.Monday,
+            R.string.Tuesday,
+            R.string.Wednesday,
+            R.string.Thursday,
+            R.string.Friday,
+            R.string.Saturday
+        ).map { requireContext().getString(it) }
+
         val arrayAdapter = DayPickerAdapter(requireContext(), list)
         binding.lvDayPicker.adapter = arrayAdapter
 

@@ -144,11 +144,17 @@
     <string name="set_the_hour_that_you_wish_to_receive_n_daily_reminders">Set the hour at which you wish to receive\ndaily reminders:</string>
     <string name="save">Save</string>
     <string name="select_medicine_usage_days">Select the medicine usage days:</string>
-    <string name="sun">Sun</string>
-    <string name="mon">Mon</string>
-    <string name="tue">Tue</string>
-    <string name="wed">Wed</string>
-    <string name="thu">Thu</string>
-    <string name="fri">Fri</string>
-    <string name="sat">Sat</string>
+    <string name="Sunday">Sunday</string>
+    <string name="Monday">Monday</string>
+    <string name="Tuesday">Tuesday</string>
+    <string name="Wednesday">Wednesday</string>
+    <string name="Thursday">Thursday</string>
+    <string name="Friday">Friday</string>
+    <string name="Saturday">Saturday</string>
+    <string name="select_the_medicine_interval">Select the medicine interval:</string>
+    <string name="days">days</string>
+    <string name="every">Every</string>
+    <string name="interval">interval</string>
+
+
 </resources>

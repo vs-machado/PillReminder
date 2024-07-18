@@ -83,6 +83,7 @@ class TreatmentDurationFragment : Fragment(), ActivityCompat.OnRequestPermission
 
                             // Catches the workerID to cancel it if needed. workerID will be stored in the database.
                             val workerID = createRescheduleWorker(requireContext().applicationContext)
+                            val interval = getInterval().toLong()
 
                             when (getMedicineFrequency()){
                                 MedicineFrequency.EveryDay -> {
@@ -95,11 +96,13 @@ class TreatmentDurationFragment : Fragment(), ActivityCompat.OnRequestPermission
                                 }
                                 MedicineFrequency.SpecificDaysOfWeek -> {
                                     medicinesViewModel.insertMedicines(getAlarmsListForSpecificDays(workerID))
+                                    createAlarmItemAndSchedule(requireActivity().applicationContext)
+                                }
+                                MedicineFrequency.EveryXDays -> {
+                                    medicinesViewModel.insertMedicines(getAlarmsList(interval, workerID))
+                                    createAlarmItemAndSchedule(requireActivity().applicationContext, interval)
                                 }
                                 /*
-                                "Every X days" -> {
-                                    // Needs further implementation
-                                }
                                 "Every X weeks" -> {
                                     // Needs further implementation
                                 }
@@ -139,6 +142,8 @@ class TreatmentDurationFragment : Fragment(), ActivityCompat.OnRequestPermission
                 val startDateMillis = selection.first
                 val endDateMillis = selection.second
 
+                val getInterval = sharedViewModel.getInterval().toLong()
+
                 //Extracts the treatment period and adds the user alarm hour to it in milliseconds
                 extractDateComponents(startDateMillis, endDateMillis, true)
 
@@ -155,11 +160,11 @@ class TreatmentDurationFragment : Fragment(), ActivityCompat.OnRequestPermission
                         medicinesViewModel.insertMedicines(getAlarmsListForSpecificDays())
                         createAlarmItemAndSchedule(requireActivity().applicationContext)
                     }
-                    /*
-                    "Every X days" -> {
-                        // Needs further implementation
+                    MedicineFrequency.EveryXDays -> {
+                        medicinesViewModel.insertMedicines(getAlarmsList(getInterval))
+                        createAlarmItemAndSchedule(requireActivity().applicationContext, getInterval)
                     }
-                    "Every X weeks" -> {
+                    /*"Every X weeks" -> {
                         // Needs further implementation
                     }
                     "Every X months" -> {

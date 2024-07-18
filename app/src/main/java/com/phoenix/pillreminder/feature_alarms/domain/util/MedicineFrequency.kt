@@ -1,11 +1,11 @@
 package com.phoenix.pillreminder.feature_alarms.domain.util
 
-sealed class MedicineFrequency(val interval: Int?) {
-    data object EveryDay: MedicineFrequency(null)
-    data object EveryOtherDay: MedicineFrequency(null)
-    data object SpecificDaysOfWeek: MedicineFrequency(null)
-    class EveryXDays(interval: Int): MedicineFrequency(interval)
-    class EveryXWeeks(interval: Int): MedicineFrequency(interval)
-    class EveryXMonths(interval: Int): MedicineFrequency(interval)
+sealed class MedicineFrequency {
+    data object EveryDay: MedicineFrequency()
+    data object EveryOtherDay: MedicineFrequency()
+    data object SpecificDaysOfWeek: MedicineFrequency()
+    data object EveryXDays: MedicineFrequency()
+    data object EveryXWeeks: MedicineFrequency()
+    data object EveryXMonths: MedicineFrequency()
 
 }

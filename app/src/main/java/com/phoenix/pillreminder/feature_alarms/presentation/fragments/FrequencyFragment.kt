@@ -61,7 +61,9 @@ class FrequencyFragment : Fragment() {
                     MedicineFrequency.SpecificDaysOfWeek -> {
                         findNavController().navigate(R.id.action_frequencyFragment_to_dayPickerFragment)
                     }
-                    else -> {}
+                    MedicineFrequency.EveryXDays, MedicineFrequency.EveryXWeeks, MedicineFrequency.EveryXMonths -> {
+                        findNavController().navigate(R.id.action_frequencyFragment_to_everyXPeriodFragment)
+                    }
                 }
             }
 
@@ -74,9 +76,9 @@ class FrequencyFragment : Fragment() {
                 0 -> setMedicineFrequency(MedicineFrequency.EveryDay)
                 1 -> setMedicineFrequency(MedicineFrequency.EveryOtherDay)
                 2 -> setMedicineFrequency(MedicineFrequency.SpecificDaysOfWeek)
-                // 3 -> navigate to everyxdays
-                // 4 -> navigate to everyxweeks
-                // 5 -> navigate to everyxmonths
+                3 -> setMedicineFrequency(MedicineFrequency.EveryXDays)
+                4 -> setMedicineFrequency(MedicineFrequency.EveryXWeeks)
+                5 -> setMedicineFrequency(MedicineFrequency.EveryXMonths)
                 else -> throw IllegalArgumentException("Invalid position")
             }
         }

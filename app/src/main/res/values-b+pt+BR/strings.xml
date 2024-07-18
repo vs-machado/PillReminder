@@ -150,4 +150,12 @@
     <string name="Thursday">Quinta-feira</string>
     <string name="Friday">Sexta-feira</string>
     <string name="Saturday">Sábado</string>
+    <string name="select_the_medicine_interval">Selecione o intervalo do remédio:</string>
+    <string name="days">dias</string>
+    <string name="weeks">semanas</string>
+    <string name="months">meses</string>
+    <string name="every">A cada</string>
+    <string name="interval">intervalo</string>
+    <string name="it_s_time_to_refill_your_pillbox">Recarregue seu porta comprimidos</string>
+    <string name="refill_your_pillbox_and_avoid_forgetting_to_take_your_medication">Recarregue e evite esquecer de usar o seu medicamento.</string>
 </resources>

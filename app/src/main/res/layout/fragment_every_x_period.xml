@@ -79,6 +79,9 @@
         android:text="@string/every"
         android:textSize="24sp"
         app:layout_constraintEnd_toStartOf="@+id/etInterval"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintHorizontal_chainStyle="packed"
+        app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="@+id/guideline5" />
 
     <androidx.constraintlayout.widget.Guideline
@@ -99,8 +102,9 @@
         android:importantForAutofill="no"
         android:inputType="number"
         android:textSize="24sp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toStartOf="@+id/tvPeriod"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toEndOf="@+id/textView10"
         app:layout_constraintTop_toTopOf="@+id/guideline5" />
 
     <TextView
@@ -111,6 +115,8 @@
         android:layout_marginTop="6dp"
         android:text="@string/days"
         android:textSize="24sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintStart_toEndOf="@+id/etInterval"
         app:layout_constraintTop_toTopOf="@+id/guideline5" />
 

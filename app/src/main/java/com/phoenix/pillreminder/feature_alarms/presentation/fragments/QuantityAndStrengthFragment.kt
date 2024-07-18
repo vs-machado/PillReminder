@@ -47,9 +47,7 @@ class QuantityAndStrengthFragment : Fragment() {
 
                 override fun onTextChanged(quantity: CharSequence?, start: Int, before: Int, count: Int) {
                     val inputIsFilled = quantity?.isNotBlank() ?: false
-                    val inputIsEmpty = !inputIsFilled
-
-                    setFabVisibility(inputIsEmpty, fabNext)
+                    fabNext.visibility = if(inputIsFilled) View.VISIBLE else View.INVISIBLE
                 }
 
                 override fun afterTextChanged(s: Editable?) {}
@@ -62,14 +60,6 @@ class QuantityAndStrengthFragment : Fragment() {
 
 
         }
-    }
-
-    private fun setFabVisibility(inputIsEmpty: Boolean, fabNext: FloatingActionButton){
-        if (inputIsEmpty){
-            fabNext.visibility = View.INVISIBLE
-            return
-        }
-        fabNext.visibility = View.VISIBLE
     }
 
     private fun setEditTextMedicineForm(medicineForm: String?){

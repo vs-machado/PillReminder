@@ -116,8 +116,9 @@ object NotificationUtils {
 
         createPillboxNotificationChannel(context)
 
-        val title = "It's time to refill your pillbox"
-        val text = "Refill your pillbox and avoid forgetting to take your medication."
+        val title = context.getString(R.string.it_s_time_to_refill_your_pillbox)
+        val text =
+            context.getString(R.string.refill_your_pillbox_and_avoid_forgetting_to_take_your_medication)
         Log.d("Alarm", "notificationutils")
 
         return notificationBuilder(context, pillboxReminderChannelId, pendingIntent, title, text)

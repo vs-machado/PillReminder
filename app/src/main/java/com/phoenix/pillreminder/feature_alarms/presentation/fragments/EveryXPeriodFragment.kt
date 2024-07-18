@@ -1,5 +1,6 @@
 package com.phoenix.pillreminder.feature_alarms.presentation.fragments
 
+import android.annotation.SuppressLint
 import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
@@ -13,6 +14,7 @@ import androidx.core.widget.addTextChangedListener
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.navigation.fragment.findNavController
+import com.google.android.material.floatingactionbutton.FloatingActionButton
 import com.phoenix.pillreminder.R
 import com.phoenix.pillreminder.databinding.FragmentEveryXPeriodBinding
 import com.phoenix.pillreminder.feature_alarms.domain.util.MedicineFrequency
@@ -40,9 +42,9 @@ class EveryXPeriodFragment: Fragment() {
 
             try{
                 when(sharedViewModel.getMedicineFrequency()){
-                    MedicineFrequency.EveryXDays -> tvPeriod.text = "days"
-                    MedicineFrequency.EveryXWeeks -> tvPeriod.text = "weeks"
-                    MedicineFrequency.EveryXMonths -> tvPeriod.text = "months"
+                    MedicineFrequency.EveryXDays -> tvPeriod.text = context?.getString(R.string.days)
+                    MedicineFrequency.EveryXWeeks -> tvPeriod.text = context?.getString(R.string.weeks)
+                    MedicineFrequency.EveryXMonths -> tvPeriod.text = context?.getString(R.string.months)
                     else -> {throw IllegalArgumentException("Invalid medicine frequency") }
                 }
             } catch (e: IllegalArgumentException){
@@ -55,7 +57,8 @@ class EveryXPeriodFragment: Fragment() {
                 override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {}
 
                 override fun onTextChanged(interval: CharSequence?, start: Int, before: Int, count: Int) {
-                    if(!interval.isNullOrBlank()) fabNext.visibility = View.VISIBLE else View.INVISIBLE
+                    val inputIsFilled = interval?.isNotBlank() ?: false
+                    fabNext.visibility = if(inputIsFilled) View.VISIBLE else View.INVISIBLE
                 }
 
                 override fun afterTextChanged(s: Editable?) {}
@@ -67,6 +70,14 @@ class EveryXPeriodFragment: Fragment() {
             }
         }
 
+    }
+
+    private fun setFabVisibility(inputIsEmpty: Boolean, fabNext: FloatingActionButton){
+        if (inputIsEmpty){
+            fabNext.visibility = View.INVISIBLE
+            return
+        }
+        fabNext.visibility = View.VISIBLE
     }
 
     override fun onResume() {

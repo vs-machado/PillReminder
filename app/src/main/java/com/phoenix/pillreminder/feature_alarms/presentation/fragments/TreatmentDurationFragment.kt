@@ -23,7 +23,6 @@ import com.phoenix.pillreminder.feature_alarms.domain.util.MedicineFrequency
 import com.phoenix.pillreminder.feature_alarms.presentation.viewmodels.AlarmSettingsSharedViewModel
 import com.phoenix.pillreminder.feature_alarms.presentation.viewmodels.MedicinesViewModel
 import dagger.hilt.android.AndroidEntryPoint
-import java.lang.IllegalArgumentException
 
 @AndroidEntryPoint
 class TreatmentDurationFragment : Fragment(), ActivityCompat.OnRequestPermissionsResultCallback {
@@ -71,13 +70,13 @@ class TreatmentDurationFragment : Fragment(), ActivityCompat.OnRequestPermission
                         0 -> {
                             showDateRangePickerAndCreateAlarm()
                         }
-                        /* User don't want to set a treatment period. The app will set a temporary treatment period (33 days). If user
-                        doesn't remove the alarm, it will be renewed in 32 days. */
+                        /* User don't want to set a treatment period. The app will set a temporary treatment period (search for
+                        setTemporaryTreatmentDate method on sharedViewModel). If user doesn't remove the alarm, it will be renewed.*/
                         1 -> {
                             setTemporaryPeriod()
 
                             val startDateMillis = System.currentTimeMillis()
-                            val endDateMillis = (startDateMillis + (33 * 86400000L))
+                            val endDateMillis = setTemporaryTreatmentEndDate(startDateMillis)
 
                             extractDateComponents(startDateMillis, endDateMillis, false)
 
@@ -98,19 +97,9 @@ class TreatmentDurationFragment : Fragment(), ActivityCompat.OnRequestPermission
                                     medicinesViewModel.insertMedicines(getAlarmsListForSpecificDays(workerID))
                                     createAlarmItemAndSchedule(requireActivity().applicationContext)
                                 }
-                                MedicineFrequency.EveryXDays -> {
+                                MedicineFrequency.EveryXDays, MedicineFrequency.EveryXWeeks, MedicineFrequency.EveryXMonths -> {
                                     medicinesViewModel.insertMedicines(getAlarmsList(interval, workerID))
                                     createAlarmItemAndSchedule(requireActivity().applicationContext, interval)
-                                }
-                                /*
-                                "Every X weeks" -> {
-                                    // Needs further implementation
-                                }
-                                "Every X months" -> {
-                                    // Needs further implementation
-                                }*/
-                                else -> {
-                                    throw IllegalArgumentException("Invalid frequency")
                                 }
                             }
 
@@ -160,18 +149,9 @@ class TreatmentDurationFragment : Fragment(), ActivityCompat.OnRequestPermission
                         medicinesViewModel.insertMedicines(getAlarmsListForSpecificDays())
                         createAlarmItemAndSchedule(requireActivity().applicationContext)
                     }
-                    MedicineFrequency.EveryXDays -> {
+                    MedicineFrequency.EveryXDays, MedicineFrequency.EveryXWeeks, MedicineFrequency.EveryXMonths -> {
                         medicinesViewModel.insertMedicines(getAlarmsList(getInterval))
                         createAlarmItemAndSchedule(requireActivity().applicationContext, getInterval)
-                    }
-                    /*"Every X weeks" -> {
-                        // Needs further implementation
-                    }
-                    "Every X months" -> {
-                        // Needs further implementation
-                    }*/
-                    else -> {
-                        throw IllegalArgumentException("Invalid frequency")
                     }
                 }
 

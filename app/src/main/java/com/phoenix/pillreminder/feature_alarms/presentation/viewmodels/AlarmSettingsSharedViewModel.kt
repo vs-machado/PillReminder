@@ -90,17 +90,21 @@ class AlarmSettingsSharedViewModel @Inject constructor(
         val frequency = medicineFrequency.toString()
         val periodSet = medicinePeriodSet
         val needsReschedule = medicineNeedsReschedule
-
         val alarms = mutableListOf<Medicine>()
 
+        val scheduleInterval = when(frequency){
+            "EveryXWeeks" -> { interval * 7 }
+            "EveryXMonths" -> { interval * 30 }
+            else -> { interval }
+        }
 
-        if(treatmentStartDate != 0L && treatmentEndDate != 0L){
+        if (treatmentStartDate != 0L && treatmentEndDate != 0L) {
             setTreatmentPeriodInMillis()
             setTreatmentPeriodInDays()
 
-            for (day in 0 .. treatmentPeriodInDays step interval){
+            for (day in 0..treatmentPeriodInDays step scheduleInterval) {
                 for (i in alarmHours.indices) {
-                    if((alarmInMillis[i] + (86400000 * day)) > System.currentTimeMillis()){
+                    if ((alarmInMillis[i] + (86400000 * day)) > System.currentTimeMillis()) {
                         alarms.add( // One day has 86400000 milliseconds
                             Medicine(
                                 0,
@@ -115,7 +119,7 @@ class AlarmSettingsSharedViewModel @Inject constructor(
                                 endDate,
                                 medicineWasTaken,
                                 false,
-                                frequency.toString(),
+                                frequency,
                                 interval,
                                 periodSet,
                                 needsReschedule,
@@ -150,12 +154,17 @@ class AlarmSettingsSharedViewModel @Inject constructor(
 
         val alarms = mutableListOf<Medicine>()
 
+        val scheduleInterval = when(frequency){
+            "EveryXWeeks" -> { interval * 7 }
+            "EveryXMonths" -> { interval * 30 }
+            else -> { interval }
+        }
 
         if(treatmentStartDate != 0L && treatmentEndDate != 0L){
             setTreatmentPeriodInMillis()
             setTreatmentPeriodInDays()
 
-            for (day in 0 .. treatmentPeriodInDays step interval){
+            for (day in 0 .. treatmentPeriodInDays step scheduleInterval){
                 for (i in alarmHours.indices) {
                     if((alarmInMillis[i] + (86400000 * day)) > System.currentTimeMillis()){
                         alarms.add( // One day has 86400000 milliseconds
@@ -172,7 +181,7 @@ class AlarmSettingsSharedViewModel @Inject constructor(
                                 endDate,
                                 medicineWasTaken,
                                 false,
-                                frequency.toString(),
+                                frequency,
                                 interval,
                                 periodSet,
                                 needsReschedule,
@@ -182,6 +191,7 @@ class AlarmSettingsSharedViewModel @Inject constructor(
                     }
                 }
             }
+
         }
 
         return alarms
@@ -235,13 +245,13 @@ class AlarmSettingsSharedViewModel @Inject constructor(
                                             alarmMinutes[i],
                                             treatmentStartDate,
                                             treatmentEndDate,
-                                            false,
-                                            false,
-                                            medicineFrequency.toString(),
-                                            0, // interval is no longer used
-                                            medicinePeriodSet,
-                                            medicineNeedsReschedule,
-                                            workerID.toString()
+                                            medicineWasTaken = false,
+                                            wasSkipped = false,
+                                            medicineFrequency = medicineFrequency.toString(),
+                                            interval = 0, // interval is no longer used
+                                            medicinePeriodSet = medicinePeriodSet,
+                                            medicineNeedsReschedule = medicineNeedsReschedule,
+                                            rescheduleWorkerID = workerID.toString()
                                         )
                                     )
                                 }
@@ -304,13 +314,13 @@ class AlarmSettingsSharedViewModel @Inject constructor(
                                             alarmMinutes[i],
                                             treatmentStartDate,
                                             treatmentEndDate,
-                                            false,
-                                            false,
-                                            medicineFrequency.toString(),
-                                            0,
-                                            medicinePeriodSet,
-                                            medicineNeedsReschedule,
-                                            "noID"
+                                            medicineWasTaken = false,
+                                            wasSkipped = false,
+                                            medicineFrequency = medicineFrequency.toString(),
+                                            interval = 0,
+                                            medicinePeriodSet = medicinePeriodSet,
+                                            medicineNeedsReschedule = medicineNeedsReschedule,
+                                            rescheduleWorkerID = "noID"
                                         )
                                     )
                                 }
@@ -328,12 +338,18 @@ class AlarmSettingsSharedViewModel @Inject constructor(
         val alarmScheduler : AlarmScheduler = AndroidAlarmScheduler(repository, context)
         var alarmScheduled = false
 
-        for(day in 0 .. getTreatmentPeriodInDays() step interval){
+        val scheduleInterval = when(getMedicineFrequency()){
+            MedicineFrequency.EveryXWeeks -> { interval * 7 }
+            MedicineFrequency.EveryXMonths -> { interval * 30 }
+            else -> { interval }
+        }
+
+        for(day in 0 .. getTreatmentPeriodInDays() step scheduleInterval){
             for(i in 0 until getAlarmHoursList().size){
                 if(getAlarmInMillis(i) > System.currentTimeMillis()){
                     val alarmItem = AlarmItem (
                         time = millisToDateTime(getAlarmInMillis(i)),
-                        medicineName = "${getMedicineName()}",
+                        medicineName = getMedicineName(),
                         medicineForm = "${getMedicineForm()}",
                         medicineQuantity = "${getMedicineQuantity()}",
                         alarmHour = "${getAlarmHour(i)}",
@@ -359,7 +375,7 @@ class AlarmSettingsSharedViewModel @Inject constructor(
             if(getAlarmInMillis(i) > System.currentTimeMillis()){
                 val alarmItem = AlarmItem(
                     time = millisToDateTime(getAlarmInMillis(i)),
-                    medicineName = "${getMedicineName()}",
+                    medicineName = getMedicineName(),
                     medicineForm = "${getMedicineForm()}",
                     medicineQuantity = "${getMedicineQuantity()}",
                     alarmHour = "${getAlarmHour(i)}",
@@ -457,10 +473,10 @@ class AlarmSettingsSharedViewModel @Inject constructor(
 
         // Set treatment start date
         calendarStart.timeInMillis = startDate
-        calendarStart.set(Calendar.HOUR_OF_DAY, alarmHour[0]!!)
-        calendarStart.set(Calendar.MINUTE, alarmMinute[0]!!)
-        calendarStart.set(Calendar.SECOND, 0)
-        calendarStart.set(Calendar.MILLISECOND, 0)
+        calendarStart.set(HOUR_OF_DAY, alarmHour[0]!!)
+        calendarStart.set(MINUTE, alarmMinute[0]!!)
+        calendarStart.set(SECOND, 0)
+        calendarStart.set(MILLISECOND, 0)
 
         var endAlarmHour = 0
         var endAlarmMinute = 0
@@ -475,10 +491,10 @@ class AlarmSettingsSharedViewModel @Inject constructor(
 
         // Set treatment end date
         calendarEnd.timeInMillis = endDate
-        calendarEnd.set(Calendar.HOUR_OF_DAY, endAlarmHour)
-        calendarEnd.set(Calendar.MINUTE, endAlarmMinute)
-        calendarEnd.set(Calendar.SECOND, 0)
-        calendarEnd.set(Calendar.MILLISECOND, 0)
+        calendarEnd.set(HOUR_OF_DAY, endAlarmHour)
+        calendarEnd.set(MINUTE, endAlarmMinute)
+        calendarEnd.set(SECOND, 0)
+        calendarEnd.set(MILLISECOND, 0)
 
         setTreatmentStartDate(calendarStart.timeInMillis)
         setTreatmentEndDate(calendarEnd.timeInMillis)
@@ -497,23 +513,30 @@ class AlarmSettingsSharedViewModel @Inject constructor(
 
         if (getTreatmentStartDate() != 0L) {
             userDate.timeInMillis = getTreatmentStartDate()
-            userDate.set(Calendar.HOUR_OF_DAY, alarmHour[i]!!)
-            userDate.set(Calendar.MINUTE, alarmMinute[i]!!)
-            userDate.set(Calendar.SECOND, 0)
-            userDate.set(Calendar.MILLISECOND, 0)
+            userDate.set(HOUR_OF_DAY, alarmHour[i]!!)
+            userDate.set(MINUTE, alarmMinute[i]!!)
+            userDate.set(SECOND, 0)
+            userDate.set(MILLISECOND, 0)
         } else {
-            userDate.set(Calendar.HOUR_OF_DAY, alarmHour[i]!!)
-            userDate.set(Calendar.MINUTE, alarmMinute[i]!!)
-            userDate.set(Calendar.SECOND, 0)
-            userDate.set(Calendar.MILLISECOND, 0)
+            userDate.set(HOUR_OF_DAY, alarmHour[i]!!)
+            userDate.set(MINUTE, alarmMinute[i]!!)
+            userDate.set(SECOND, 0)
+            userDate.set(MILLISECOND, 0)
         }
 
         return userDate.timeInMillis
     }
 
     fun createRescheduleWorker(context: Context): UUID {
-        val rescheduleRequest = PeriodicWorkRequestBuilder<RescheduleWorker>(32, TimeUnit.DAYS)
-            .setInitialDelay(32, TimeUnit.DAYS)
+        val repeatInterval = when(medicineFrequency){
+            MedicineFrequency.EveryDay, MedicineFrequency.SpecificDaysOfWeek,
+            MedicineFrequency.EveryOtherDay -> 32
+            MedicineFrequency.EveryXDays -> getInterval() * 6
+            MedicineFrequency.EveryXWeeks -> getInterval() * 13
+            MedicineFrequency.EveryXMonths -> getInterval() * 32
+        }
+        val rescheduleRequest = PeriodicWorkRequestBuilder<RescheduleWorker>(repeatInterval.toLong(), TimeUnit.DAYS)
+            .setInitialDelay(repeatInterval.toLong(), TimeUnit.DAYS)
             .build()
         val workManager = WorkManager.getInstance(context)
         workManager.enqueue(rescheduleRequest)
@@ -525,7 +548,7 @@ class AlarmSettingsSharedViewModel @Inject constructor(
         this.selectedDaysList = mutableList
     }
 
-    fun getSelectedDaysList(): MutableSet<Int>{
+    private fun getSelectedDaysList(): MutableSet<Int>{
         return selectedDaysList
     }
 
@@ -631,6 +654,19 @@ class AlarmSettingsSharedViewModel @Inject constructor(
 
     fun getInterval(): Int {
         return interval
+    }
+
+    fun setTemporaryTreatmentEndDate(startDateMillis: Long): Long {
+        // A day has 87400000 milliseconds
+        val repeatInterval = when(medicineFrequency){
+            MedicineFrequency.EveryDay, MedicineFrequency.SpecificDaysOfWeek,
+            MedicineFrequency.EveryOtherDay -> 33
+            MedicineFrequency.EveryXDays -> getInterval() * 7
+            MedicineFrequency.EveryXWeeks -> getInterval() * 14
+            MedicineFrequency.EveryXMonths -> getInterval() * 33
+        }
+
+        return (startDateMillis + (repeatInterval * 86400000L))
     }
 
 }

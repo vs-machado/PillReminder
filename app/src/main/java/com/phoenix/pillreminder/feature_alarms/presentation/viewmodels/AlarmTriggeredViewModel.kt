@@ -46,7 +46,7 @@ class AlarmTriggeredViewModel : ViewModel() {
             "liquid" ->  context.getString(R.string.take_liquid, medicineQuantity)
             "drop" -> context.getString(R.string.take_drops, medicineQuantity)
             "inhaler" -> context.getString(R.string.inhale, medicineQuantity)
-            "pomade" -> context.getString(R.string.apply_pomade, medicineQuantity)
+            "pomade" -> context.getString(R.string.apply_pomade)
             else -> {""}
         }
     }

@@ -1,0 +1,189 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:padding="16dp">
+
+    <TextView
+        android:id="@+id/tvAlarmsPerDay"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        android:text="Alarms per day"
+        android:textColor="@color/black"
+        android:textSize="24sp"
+        android:textStyle="bold"
+        app:layout_constraintStart_toStartOf="@+id/tvFrequencyMed"
+        app:layout_constraintTop_toBottomOf="@+id/tvFrequencyMed" />
+
+    <TextView
+        android:id="@+id/tvAlarmsQuantity"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="3 alarms"
+        android:textSize="16sp"
+        app:layout_constraintStart_toStartOf="@+id/tvAlarmsPerDay"
+        app:layout_constraintTop_toBottomOf="@+id/tvAlarmsPerDay" />
+
+    <TextView
+        android:id="@+id/tvFrequencyMed"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Every day"
+        android:textSize="16sp"
+        app:layout_constraintStart_toStartOf="@+id/tvFrequencyTitle"
+        app:layout_constraintTop_toBottomOf="@+id/tvFrequencyTitle" />
+
+    <TextView
+        android:id="@+id/tvFrequencyTitle"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        android:text="Frequency"
+        android:textColor="@color/black"
+        android:textSize="24sp"
+        android:textStyle="bold"
+        app:layout_constraintStart_toStartOf="@+id/tvQuantityMed"
+        app:layout_constraintTop_toBottomOf="@+id/tvQuantityMed" />
+
+    <TextView
+        android:id="@+id/tvTreatmentStatus"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Ongoing"
+        android:textSize="16sp"
+        app:layout_constraintStart_toStartOf="@+id/tvTreatmentStatusTitle"
+        app:layout_constraintTop_toBottomOf="@+id/tvTreatmentStatusTitle" />
+
+    <TextView
+        android:id="@+id/tvTreatmentEndDate"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="24/07/2024"
+        android:textSize="16sp"
+        app:layout_constraintStart_toStartOf="@+id/tvTreatmentEndDateTitle"
+        app:layout_constraintTop_toBottomOf="@+id/tvTreatmentEndDateTitle" />
+
+    <TextView
+        android:id="@+id/tvTreatmentStartDate"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="24/07/2024"
+        android:textSize="16sp"
+        app:layout_constraintStart_toStartOf="@+id/tvTreatmentStartDateTitle"
+        app:layout_constraintTop_toBottomOf="@+id/tvTreatmentStartDateTitle" />
+
+    <TextView
+        android:id="@+id/tvTreatmentEndDateTitle"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        android:text="Treatment end date"
+        android:textSize="24sp"
+        android:textStyle="bold"
+        app:layout_constraintStart_toStartOf="@+id/tvTreatmentStartDate"
+        app:layout_constraintTop_toBottomOf="@+id/tvTreatmentStartDate" />
+
+    <TextView
+        android:id="@+id/tvTreatmentStatusTitle"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        android:text="Treatment status"
+        android:textSize="24sp"
+        android:textStyle="bold"
+        app:layout_constraintStart_toStartOf="@+id/tvTreatmentEndDate"
+        app:layout_constraintTop_toBottomOf="@+id/tvTreatmentEndDate" />
+
+    <ImageView
+        android:id="@+id/imageView"
+        android:layout_width="85dp"
+        android:layout_height="78dp"
+        android:layout_gravity="center"
+        android:layout_marginStart="8dp"
+        android:src="@drawable/ic_ointment"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/textView12" />
+
+    <TextView
+        android:id="@+id/textView12"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="8dp"
+        android:text="Medicine"
+        android:textColor="@color/black"
+        android:textSize="30sp"
+        android:textStyle="bold"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/tvNameMed"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="32dp"
+        android:layout_marginTop="8dp"
+        android:gravity="end"
+        android:text="Ketoconazole"
+        android:textSize="24sp"
+        app:layout_constraintEnd_toEndOf="@+id/textView12"
+        app:layout_constraintStart_toEndOf="@+id/imageView"
+        app:layout_constraintTop_toBottomOf="@+id/textView12" />
+
+    <TextView
+        android:id="@+id/tvQuantityTitle"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="56dp"
+        android:text="Quantity"
+        android:textColor="@color/black"
+        android:textSize="24sp"
+        android:textStyle="bold"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/tvNameMed" />
+
+    <TextView
+        android:id="@+id/tvQuantityMed"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="1 application"
+        android:textSize="16sp"
+        app:layout_constraintStart_toStartOf="@+id/tvQuantityTitle"
+        app:layout_constraintTop_toBottomOf="@+id/tvQuantityTitle" />
+
+    <TextView
+        android:id="@+id/tvAlarmsHourTitle"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        android:text="Alarms hour"
+        android:textColor="@color/black"
+        android:textSize="24sp"
+        android:textStyle="bold"
+        app:layout_constraintStart_toStartOf="@+id/tvAlarmsQuantity"
+        app:layout_constraintTop_toBottomOf="@+id/tvAlarmsQuantity" />
+
+    <TextView
+        android:id="@+id/tvAlarmsHour"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="16:00, 18:00, 22:30"
+        android:textSize="16sp"
+        app:layout_constraintStart_toStartOf="@+id/tvAlarmsHourTitle"
+        app:layout_constraintTop_toBottomOf="@+id/tvAlarmsHourTitle" />
+
+    <TextView
+        android:id="@+id/tvTreatmentStartDateTitle"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        android:text="Treatment start date"
+        android:textSize="24sp"
+        android:textStyle="bold"
+        app:layout_constraintStart_toStartOf="@+id/tvAlarmsHour"
+        app:layout_constraintTop_toBottomOf="@+id/tvAlarmsHour" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>

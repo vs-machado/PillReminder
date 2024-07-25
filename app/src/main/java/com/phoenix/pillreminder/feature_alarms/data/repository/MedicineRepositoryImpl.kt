@@ -77,4 +77,8 @@ class MedicineRepositoryImpl (
     override fun getAllDistinctMedicines(): List<Medicine> {
         return dao.getAllDistinctMedicines()
     }
+
+    override suspend fun getAlarmTimesForMedicine(medicineName: String): List<String>{
+        return dao.getAlarmTimesForMedicine(medicineName)
+    }
 }

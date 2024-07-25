@@ -6,4 +6,12 @@
     <color name="fab">#1D8CED</color>
     <color name="red">#FF0000</color>
     <color name="button_gray">#747272</color>
+    <color name="gradient_end_color">#B4E6FF</color>
+    <color name="intro_text">#333333</color>
+    <color name="intro_text_blue">#0D3663</color>
+    <color name="dark_blue">#B43AA0E4</color>
+    <color name="light_green">#4AC384</color>
+    <color name="closer_to_white">#FFFEF7FF</color>
+    <color name="green">#278505</color>
+    <color name="white_ice">#FBFBFB</color>
 </resources>

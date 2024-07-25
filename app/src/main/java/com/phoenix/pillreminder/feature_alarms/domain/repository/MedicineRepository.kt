@@ -38,4 +38,6 @@ interface MedicineRepository {
     fun getAlarmsToRescheduleEveryMonth(medicineName: String, alarmsPerDay: Int): List<Medicine>
 
     fun getAllDistinctMedicines(): List<Medicine>
+
+    suspend fun getAlarmTimesForMedicine(medicineName: String): List<String>
 }

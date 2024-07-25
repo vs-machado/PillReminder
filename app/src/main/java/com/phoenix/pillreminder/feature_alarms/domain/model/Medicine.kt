@@ -1,9 +1,12 @@
 package com.phoenix.pillreminder.feature_alarms.domain.model
 
+import android.os.Parcelable
 import androidx.room.ColumnInfo
 import androidx.room.Entity
 import androidx.room.PrimaryKey
+import kotlinx.parcelize.Parcelize
 
+@Parcelize
 @Entity(tableName = "medicines_data_table")
 data class Medicine(
 
@@ -43,5 +46,5 @@ data class Medicine(
     @ColumnInfo(name = "reschedule_worker_id")
     var rescheduleWorkerID: String
 
-)
+) : Parcelable
 

@@ -20,15 +20,16 @@
         android:text="@string/hour"
         android:textSize="18sp" />
 
-    <androidx.cardview.widget.CardView
+    <com.google.android.material.card.MaterialCardView
         android:id="@+id/cvPills"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:elevation="50dp"
         app:cardCornerRadius="20dp"
-        app:cardElevation="1dp"
+        app:cardElevation="0dp"
         app:cardMaxElevation="1dp"
-        app:cardUseCompatPadding="true">
+        app:cardUseCompatPadding="true"
+        app:strokeWidth="0.4dp">
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:id="@+id/constraintLayout"
@@ -41,13 +42,13 @@
 
             <ImageView
                 android:id="@+id/ivMedicineType"
-                android:layout_width="80dp"
-                android:layout_height="70dp"
+                android:layout_width="70dp"
+                android:layout_height="60dp"
                 android:layout_marginStart="16dp"
+                android:contentDescription="@string/medicine_type_icon"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
-                app:srcCompat="@drawable/pill_black_and_white"
-                android:contentDescription="@string/medicine_type_icon" />
+                app:srcCompat="@drawable/pill_black_and_white" />
 
             <TextView
                 android:id="@+id/tvMedicineName"
@@ -78,10 +79,10 @@
                 android:layout_width="24dp"
                 android:layout_height="24dp"
                 android:layout_marginEnd="10dp"
+                android:contentDescription="@string/menu_with_medicine_options"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintTop_toTopOf="@+id/tvMedicineName"
-                app:srcCompat="@drawable/ic_more_vert"
-                android:contentDescription="@string/menu_with_medicine_options" />
+                app:srcCompat="@drawable/ic_more_vert" />
 
             <TextView
                 android:id="@+id/tvMedicineTaken"
@@ -113,6 +114,6 @@
 
         </androidx.constraintlayout.widget.ConstraintLayout>
 
-    </androidx.cardview.widget.CardView>
+    </com.google.android.material.card.MaterialCardView>
 
 </LinearLayout>

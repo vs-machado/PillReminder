@@ -6,6 +6,7 @@
         <item name="android:textColorSecondary">@color/white</item>
         <item name="android:colorControlActivated">@color/fab</item>
         <item name="navigationViewStyle">@style/Widget.App.NavigationView</item>
+        <item name="android:windowBackground">@color/white_ice</item>
     </style>
 
     <style name="Theme.PillReminder" parent="Base.Theme.PillReminder" />
@@ -49,5 +50,8 @@
         <item name="strokeWidth">1dp</item>
     </style>
 
+    <style name="SearchViewTheme" parent="">
+        <item name="android:textColorHint">@color/black</item>
+    </style>
 
 </resources>

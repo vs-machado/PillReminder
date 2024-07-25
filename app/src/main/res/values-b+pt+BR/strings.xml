@@ -158,4 +158,27 @@
     <string name="interval">intervalo</string>
     <string name="it_s_time_to_refill_your_pillbox">Recarregue seu porta comprimidos</string>
     <string name="refill_your_pillbox_and_avoid_forgetting_to_take_your_medication">Recarregue e evite esquecer de usar o seu medicamento.</string>
+    <string name="search_hint">Pesquise seus remédios</string>
+    <string name="details">Detalhes</string>
+    <string name="see_medicine_details">Ver detalhes do medicamento</string>
+    <string name="number_pills">%1$d comprimido(s)</string>
+    <string name="number_drops">%1$d gota(s)</string>
+    <string name="number_ml">%.2f mL</string>
+    <string name="number_application">1 aplicação</string>
+    <string name="number_inhalator">%.2f mg</string>
+    <string name="every_interval_days">A cada %1$d dias</string>
+    <string name="every_interval_weeks">A cada %1$d semanas</string>
+    <string name="every_interval_months">A cada %1$d meses</string>
+    <string name="quantity_alarms">%1$d alarmes</string>
+    <string name="ongoing">Em andamento</string>
+    <string name="hasn_started">Ainda não começou</string>
+    <string name="ended">Encerrado</string>
+    <string name="quantity_pills">Quantidade: %1$d comprimido(s)</string>
+    <string name="quantity_drops">Quantidade:%1$d gota(s)</string>
+    <string name="quantity_ml">Quantidade: %.2f mL</string>
+    <string name="quantity_application">Quantidade: 1 aplicação</string>
+    <string name="quantity_inhalator">Quantidade: %.2f mg</string>
+    <string name="ongoing_treatment">Tratamento em andamento</string>
+    <string name="treatment_ended">Treatment encerrado</string>
+    <string name="treatment_hasnt_started_yet">Treatmento ainda não começou</string>
 </resources>

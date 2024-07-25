@@ -136,7 +136,16 @@
         android:id="@+id/myMedicinesFragment"
         android:name="com.phoenix.pillreminder.feature_alarms.presentation.fragments.MyMedicinesFragment"
         android:label="@string/my_medicines"
-        tools:layout="@layout/fragment_my_medicines" />
+        tools:layout="@layout/fragment_my_medicines" >
+        <action
+            android:id="@+id/action_myMedicinesFragment_to_medicineDetailsFragment"
+            app:destination="@id/medicineDetailsFragment"
+            app:enterAnim="@anim/slide_in_right"
+            app:exitAnim="@anim/slide_out_left"
+            app:popEnterAnim="@anim/slide_in_left"
+            app:popExitAnim="@anim/slide_out_right">
+        </action>
+    </fragment>
     <fragment
         android:id="@+id/helpFragment"
         android:name="com.phoenix.pillreminder.feature_alarms.presentation.fragments.HelpFragment"
@@ -171,5 +180,13 @@
             app:exitAnim="@anim/slide_out_left"
             app:popEnterAnim="@anim/slide_in_left"
             app:popExitAnim="@anim/slide_out_right" />
+    </fragment>
+    <fragment
+        android:id="@+id/medicineDetailsFragment"
+        android:name="com.phoenix.pillreminder.feature_alarms.presentation.fragments.MedicineDetailsFragment"
+        android:label= "@string/details">
+        <argument
+            android:name="medicine"
+            app:argType="com.phoenix.pillreminder.feature_alarms.domain.model.Medicine" />
     </fragment>
 </navigation>

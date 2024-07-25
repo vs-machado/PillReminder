@@ -101,4 +101,12 @@ interface MedicineDao {
             "WHERE medicine_id = :id")
     fun getMedicineById(id: Int): Medicine?
 
+    @Query("""
+        SELECT DISTINCT printf('%02d:%02d', alarm_hour, alarm_minute) AS alarm_time
+        FROM medicines_data_table
+        WHERE name = :medicineName
+        ORDER BY alarm_hour, alarm_minute
+    """)
+    suspend fun getAlarmTimesForMedicine(medicineName: String): List<String>
+
 }

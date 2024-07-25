@@ -4,11 +4,19 @@
         <!-- Customize your light theme here. -->
         <item name="colorPrimary">@color/colorPrimary</item>
         <item name="android:textColorSecondary">@color/white</item>
+        <item name="android:colorControlActivated">@color/fab</item>
+        <item name="navigationViewStyle">@style/Widget.App.NavigationView</item>
+        <item name="android:windowBackground">@color/white_ice</item>
     </style>
+
     <style name="Theme.PillReminder" parent="Base.Theme.PillReminder" />
 
     <style name = "FabShapeStyle" parent = "ShapeAppearance.MaterialComponents.SmallComponent">
         <item name="cornerSize">50%</item>
+    </style>
+
+    <style name="ShapeAppearance.App.SmallComponent" parent="ShapeAppearance.MaterialComponents.SmallComponent">
+        <item name="cornerSize">20dp</item>
     </style>
 
     <style name = "DefaultNumberPickerTheme" parent= "Base.Theme.PillReminder">
@@ -17,6 +25,33 @@
 
     <style name = "TimePickerTheme" parent= "Base.Theme.PillReminder">
         <item name="colorControlNormal">@color/black</item>
+    </style>
+
+    <style name="ToolbarTitleTheme" parent="Widget.AppCompat.Toolbar">
+        <item name="titleTextColor">@color/white</item>
+    </style>
+
+    <style name="Widget.App.NavigationView" parent="Widget.Material3.NavigationView">
+        <item name="itemIconTint">@color/black</item>
+        <item name="itemTextColor">@color/black</item>
+        <item name="itemShapeFillColor">@color/nav_item_selected_background</item>
+        <item name="android:background">@color/white</item>
+    </style>
+
+    <style name="DayPickerButton" parent="Widget.MaterialComponents.Button.OutlinedButton">
+        <item name="android:layout_width">48dp</item>
+        <item name="android:layout_height">48dp</item>
+        <item name="android:insetTop">0dp</item>
+        <item name="android:insetBottom">0dp</item>
+        <item name="android:padding">0dp</item>
+        <item name="android:textSize">12sp</item>
+        <item name="cornerRadius">24dp</item>
+        <item name="strokeColor">@color/colorPrimary</item>
+        <item name="strokeWidth">1dp</item>
+    </style>
+
+    <style name="SearchViewTheme" parent="">
+        <item name="android:textColorHint">@color/black</item>
     </style>
 
 </resources>

@@ -1,5 +1,6 @@
 package com.phoenix.pillreminder.feature_alarms.presentation.viewmodels
 
+import androidx.lifecycle.LiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.phoenix.pillreminder.feature_alarms.domain.model.Medicine
@@ -55,6 +56,10 @@ class MedicinesViewModel @Inject constructor(
         return medicineRepository.getWorkerID(medicineName)
     }
 
+    fun getAllDistinctMedicines(): List<Medicine> {
+        return medicineRepository.getAllDistinctMedicines()
+    }
+
     fun getAllMedicinesWithSameName(medicineName: String): List<Medicine> {
         return medicineRepository.getAllMedicinesWithSameName(medicineName)
     }
@@ -83,6 +88,9 @@ class MedicinesViewModel @Inject constructor(
         }
     }
 
+    suspend fun getAlarmTimesForMedicine(medicineName: String): List<String> {
+        return medicineRepository.getAlarmTimesForMedicine(medicineName)
+    }
 
 
 }

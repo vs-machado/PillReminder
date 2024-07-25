@@ -159,6 +159,27 @@
     <string name="interval">interval</string>
     <string name="it_s_time_to_refill_your_pillbox">Refill your pillbox</string>
     <string name="refill_your_pillbox_and_avoid_forgetting_to_take_your_medication">Refill and avoid forgetting to take your medication.</string>
-
-
+    <string name="search_hint">Search registered medicines</string>
+    <string name="see_medicine_details">See medicine details</string>
+    <string name="details">Details</string>
+    <string name="number_pills">%1$d pill(s)</string>
+    <string name="number_drops">%1$d drop(s)</string>
+    <string name="number_ml">%.2f mL</string>
+    <string name="number_application">1 application</string>
+    <string name="number_inhalator">%.2f mg</string>
+    <string name="every_interval_days">Every %1$d days</string>
+    <string name="every_interval_weeks">Every %1$d weeks</string>
+    <string name="every_interval_months">Every %1$d months</string>
+    <string name="quantity_alarms">%1$d alarms</string>
+    <string name="ongoing">Ongoing</string>
+    <string name="hasn_started">It hasn\'t started yet</string>
+    <string name="ended">Ended</string>
+    <string name="quantity_pills">Quantity: %1$d pill(s)</string>
+    <string name="quantity_drops">Quantity:%1$d drop(s)</string>
+    <string name="quantity_ml">Quantity: %.2f mL</string>
+    <string name="quantity_application">Quantity: 1 application</string>
+    <string name="quantity_inhalator">Quantity: %.2f mg</string>
+    <string name="ongoing_treatment">Ongoing treatment</string>
+    <string name="treatment_ended">Treatment ended</string>
+    <string name="treatment_hasnt_started_yet">Treatment hasn\'t started yet</string>
 </resources>

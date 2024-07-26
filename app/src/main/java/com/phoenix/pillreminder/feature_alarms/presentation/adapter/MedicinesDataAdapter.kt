@@ -1,21 +1,14 @@
 package com.phoenix.pillreminder.feature_alarms.presentation.adapter
 
-import android.animation.LayoutTransition
-import android.animation.ObjectAnimator
 import android.content.Context
-import android.util.Log
 import android.view.LayoutInflater
-import android.view.View
 import android.view.ViewGroup
-import android.widget.ImageButton
-import android.widget.TextView
 import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
 import com.phoenix.pillreminder.R
 import com.phoenix.pillreminder.databinding.AdapterMedicinesDataBinding
 import com.phoenix.pillreminder.feature_alarms.domain.model.Medicine
-import com.phoenix.pillreminder.feature_alarms.presentation.utils.DateUtil
 
 class MedicinesDataAdapter(
     private val context: Context,

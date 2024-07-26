@@ -104,7 +104,7 @@
     <string name="menu_with_medicine_options">Menu with medicine options</string>
     <string name="welcome">Welcome!</string>
     <string name="app_explanation">Pill Reminder is an app to help you to keep track of your medicine doses.</string>
-    <string name="app_needs_permissions">...But first we need your permission.</string>
+    <string name="app_needs_permissions">…But first we need your permission.</string>
     <string name="notification_mandatory">"Sending notifications is mandatory for the proper functioning of the application."</string>
     <string name="pillbox_reminders">Pillbox reminders</string>
     <string name="click_on_pillbox">Click on the Pillbox refill reminders button and set a time to receive daily reminders.</string>
@@ -182,4 +182,16 @@
     <string name="ongoing_treatment">Ongoing treatment</string>
     <string name="treatment_ended">Treatment ended</string>
     <string name="treatment_hasnt_started_yet">Treatment hasn\'t started yet</string>
+    <string name="medicine_already_used">Medicine already used</string>
+    <string name="medicine_not_used_yet">Not used yet</string>
+    <string name="frequency">Frequency</string>
+    <string name="alarms_per_day">Alarms per day</string>
+    <string name="alarms_hour">Alarms hour</string>
+    <string name="treatment_start_date">Treatment start date</string>
+    <string name="treatment_end_date">Treatment end date</string>
+    <string name="treatment_status">Treatment status</string>
+    <string name="medicine_icon">Medicine icon</string>
+
+
+
 </resources>

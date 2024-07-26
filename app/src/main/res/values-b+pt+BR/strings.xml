@@ -179,6 +179,16 @@
     <string name="quantity_application">Quantidade: 1 aplicação</string>
     <string name="quantity_inhalator">Quantidade: %.2f mg</string>
     <string name="ongoing_treatment">Tratamento em andamento</string>
-    <string name="treatment_ended">Treatment encerrado</string>
-    <string name="treatment_hasnt_started_yet">Treatmento ainda não começou</string>
+    <string name="treatment_ended">Tratamento encerrado</string>
+    <string name="treatment_hasnt_started_yet">Tratamento ainda não começou</string>
+    <string name="medicine_already_used">Medicamento utilizado</string>
+    <string name="medicine_not_used_yet">Ainda não foi utilizado</string>
+    <string name="frequency">Frequência</string>
+    <string name="alarms_per_day">Alarmes por dia</string>
+    <string name="alarms_hour">Horário dos alarmes</string>
+    <string name="treatment_start_date">Data de início do tratamento</string>
+    <string name="treatment_end_date">Data de término do tratamento</string>
+    <string name="treatment_status">Status do tratamento</string>
+    <string name="medicine_icon">Ícone do medicamento</string>
+
 </resources>

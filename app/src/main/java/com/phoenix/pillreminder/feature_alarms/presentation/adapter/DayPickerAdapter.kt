@@ -49,7 +49,7 @@ class DayPickerAdapter(context: Context, private val days: List<String>):
             view.setBackgroundColor(ContextCompat.getColor(context, R.color.light_green))
             tvDay.setTextColor(ContextCompat.getColor(context, R.color.white))
         } else {
-            view.setBackgroundColor(ContextCompat.getColor(context, R.color.closer_to_white))
+            view.setBackgroundColor(ContextCompat.getColor(context, R.color.white_ice))
             tvDay.setTextColor(ContextCompat.getColor(context, R.color.black))
         }
     }

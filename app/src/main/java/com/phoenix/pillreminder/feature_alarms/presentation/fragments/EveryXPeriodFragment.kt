@@ -1,6 +1,5 @@
 package com.phoenix.pillreminder.feature_alarms.presentation.fragments
 
-import android.annotation.SuppressLint
 import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
@@ -10,7 +9,6 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
-import androidx.core.widget.addTextChangedListener
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.navigation.fragment.findNavController
@@ -20,6 +18,7 @@ import com.phoenix.pillreminder.databinding.FragmentEveryXPeriodBinding
 import com.phoenix.pillreminder.feature_alarms.domain.util.MedicineFrequency
 import com.phoenix.pillreminder.feature_alarms.presentation.viewmodels.AlarmSettingsSharedViewModel
 
+//Catches the interval of the medicine
 class EveryXPeriodFragment: Fragment() {
     private lateinit var binding: FragmentEveryXPeriodBinding
     private val sharedViewModel: AlarmSettingsSharedViewModel by activityViewModels()
@@ -38,8 +37,6 @@ class EveryXPeriodFragment: Fragment() {
         super.onViewCreated(view, savedInstanceState)
 
         binding.apply{
-            val interval = etInterval.text
-
             try{
                 when(sharedViewModel.getMedicineFrequency()){
                     MedicineFrequency.EveryXDays -> tvPeriod.text = context?.getString(R.string.days)
@@ -53,6 +50,7 @@ class EveryXPeriodFragment: Fragment() {
                 findNavController().popBackStack()
             }
 
+            // Hides fab button if the interval field is empty
             etInterval.addTextChangedListener(object: TextWatcher {
                 override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {}
 
@@ -64,20 +62,35 @@ class EveryXPeriodFragment: Fragment() {
                 override fun afterTextChanged(s: Editable?) {}
             })
 
+            // Saves the interval and navigates to the next fragment
             fabNext.setOnClickListener {
-                sharedViewModel.setInterval(interval.toString().toInt())
-                findNavController().navigate(R.id.action_everyXPeriodFragment_to_howManyPerDayFragment)
+                val interval = etInterval.text
+
+                try{
+                    val intervalInt = interval.toString().toInt()
+
+                    if(intervalInt == 0){
+                        Toast.makeText(
+                            context,
+                            "Interval cannot be zero. Please enter a valid interval.",
+                            Toast.LENGTH_LONG
+                        ).show()
+                        return@setOnClickListener
+                    }
+
+                    sharedViewModel.setInterval(intervalInt)
+                    findNavController().navigate(R.id.action_everyXPeriodFragment_to_howManyPerDayFragment)
+
+                } catch (e: NumberFormatException) {
+                    Toast.makeText(
+                        context,
+                        "Invalid input. Please enter a valid number.",
+                        Toast.LENGTH_LONG
+                    ).show()
+                }
             }
         }
 
-    }
-
-    private fun setFabVisibility(inputIsEmpty: Boolean, fabNext: FloatingActionButton){
-        if (inputIsEmpty){
-            fabNext.visibility = View.INVISIBLE
-            return
-        }
-        fabNext.visibility = View.VISIBLE
     }
 
     override fun onResume() {

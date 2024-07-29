@@ -187,11 +187,17 @@
     <string name="frequency">Frequency</string>
     <string name="alarms_per_day">Alarms per day</string>
     <string name="alarms_hour">Alarms hour</string>
+    <string name="Hour">Hour</string>
     <string name="treatment_start_date">Treatment start date</string>
     <string name="treatment_end_date">Treatment end date</string>
     <string name="treatment_status">Treatment status</string>
     <string name="medicine_icon">Medicine icon</string>
-
+    <string name="pill_quantity">%1$s pill(s)</string>
+    <string name="ml_quantity">%1$s mL</string>
+    <string name="drops_quantity">%1$s drop(s)</string>
+    <string name="inhale_quantity">%1$s mg</string>
+    <string name="pomade_quantity">1 application</string>
+    <string name="medicine_time">Medicine time!</string>
 
 
 </resources>

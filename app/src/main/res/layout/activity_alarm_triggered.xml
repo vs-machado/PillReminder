@@ -5,166 +5,185 @@
     android:id="@+id/text"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/colorPrimary"
+    android:background="@drawable/gradient_background_pill_intro"
     tools:context=".feature_alarms.presentation.activities.AlarmTriggeredActivity">
 
-    <androidx.cardview.widget.CardView
-        android:id="@+id/cardView"
-        android:layout_width="0dp"
-        android:layout_height="0dp"
-        android:layout_marginStart="16dp"
-        android:layout_marginTop="16dp"
-        android:layout_marginEnd="16dp"
-        android:layout_marginBottom="32dp"
-        app:cardCornerRadius="20dp"
-        app:layout_constraintBottom_toBottomOf="parent"
+    <TextView
+        android:id="@+id/textView19"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="24dp"
+        android:text="@string/medicine_time"
+        android:textColor="@color/white"
+        android:textSize="28dp"
+        android:textStyle="bold"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent">
+        app:layout_constraintTop_toBottomOf="@+id/imageView3" />
+
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/guideline6"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        app:layout_constraintGuide_percent="0.54" />
+
+    <com.google.android.material.card.MaterialCardView
+        android:id="@+id/materialCardView3"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="24dp"
+        android:layout_marginTop="16dp"
+        android:layout_marginEnd="24dp"
+        app:cardBackgroundColor="@color/white"
+        app:cardElevation="8dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/textView19">
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
-            android:layout_height="match_parent">
+            android:layout_height="wrap_content"
+            app:layout_constraintBottom_toTopOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/textView19"
+            app:layout_constraintVertical_bias="0.5">
 
-            <ImageView
-                android:id="@+id/ivAlarmTriggered"
-                android:layout_width="100dp"
-                android:layout_height="100dp"
+            <TextView
+                android:id="@+id/tvAlarmMedicineName"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="16dp"
                 android:layout_marginTop="16dp"
-                android:contentDescription="@string/alarm"
-                android:src="@drawable/ic_alarm"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintHorizontal_bias="0.498"
+                android:layout_marginEnd="16dp"
+                android:text="Ibuprofen"
+                android:textSize="24sp"
+                app:layout_constraintEnd_toStartOf="@+id/ivAlarmMedicineIcon"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />
-
-            <TextView
-                android:id="@+id/tvTimeToTakeMedicine"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="16dp"
-                android:text="@string/time_to_take_your_medicine"
-                android:textSize="20sp"
-                android:textStyle="bold"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/ivAlarmTriggered" />
-
-            <TextView
-                android:id="@+id/tvAlarmQuantity"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="8dp"
-                android:text="@string/take_2_pill_s"
-                android:textSize="20sp"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintHorizontal_bias="0.496"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/tvAlarmHourMedicine" />
 
             <ImageView
                 android:id="@+id/ivAlarmMedicineIcon"
                 android:layout_width="100dp"
-                android:layout_height="100dp"
-                android:layout_marginTop="24dp"
-                android:contentDescription="@string/medicine_type_icon"
-                android:src="@drawable/pill_black_and_white"
+                android:layout_height="80dp"
+                android:layout_marginTop="16dp"
+                android:layout_marginEnd="16dp"
+                android:contentDescription="@string/medicine_icon"
                 app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintHorizontal_bias="0.498"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/tvTimeToTakeMedicine" />
+                app:layout_constraintTop_toTopOf="parent"
+                app:srcCompat="@drawable/ic_dropper" />
 
             <TextView
-                android:id="@+id/tvAlarmMedicineName"
+                android:id="@+id/tv15"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="8dp"
-                android:text="@string/medicine_name"
-                android:textSize="20sp"
+                android:layout_marginStart="16dp"
+                android:layout_marginTop="16dp"
+                android:text="@string/quantity"
+                android:textSize="24sp"
                 android:textStyle="bold"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintHorizontal_bias="0.495"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/ivAlarmMedicineIcon" />
+                app:layout_constraintTop_toBottomOf="@+id/tvAlarmMedicineName" />
+
+            <TextView
+                android:id="@+id/tvAlarmQuantity"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="16dp"
+                android:text="1 pill"
+                android:textSize="20sp"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/tv15" />
+
+            <TextView
+                android:id="@+id/tv16"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="16dp"
+                android:layout_marginTop="16dp"
+                android:text="@string/Hour"
+                android:textSize="24sp"
+                android:textStyle="bold"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/tvAlarmQuantity" />
 
             <TextView
                 android:id="@+id/tvAlarmHourMedicine"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="8dp"
-                android:text="@string/_00_00"
+                android:layout_marginStart="16dp"
+                android:text="14:00"
                 android:textSize="20sp"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/tv16" />
+
+            <View
+                android:id="@+id/divider5"
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:layout_marginStart="16dp"
+                android:layout_marginTop="16dp"
+                android:layout_marginEnd="16dp"
+                android:background="?android:attr/listDivider"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/tvAlarmMedicineName" />
-
-            <com.google.android.material.button.MaterialButton
-                android:id="@+id/btnDismiss"
-                style="@style/Widget.Material3.Button.TextButton"
-                android:layout_width="320dp"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="16dp"
-                android:layout_marginEnd="16dp"
-                android:text="@string/dismiss"
-                android:textColor="@color/colorPrimary"
-                app:cornerRadius="20dp"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent" />
+                app:layout_constraintTop_toBottomOf="@+id/tvAlarmHourMedicine" />
 
             <com.google.android.material.button.MaterialButton
                 android:id="@+id/btnTaken"
-                android:layout_width="320dp"
+                android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="16dp"
-                android:layout_marginEnd="16dp"
-                android:backgroundTint="#0C7FE4"
-                android:paddingStart="24dp"
-                android:paddingEnd="42dp"
-                android:text="@string/mark_as_used"
-                android:textColor="@color/white"
-                app:cornerRadius="20dp"
-                app:icon="@drawable/baseline_check_24"
-                app:iconGravity="textStart"
-                app:iconPadding="8dp"
-                app:layout_constraintBottom_toTopOf="@+id/btnDismiss"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent" />
+                android:layout_marginTop="16dp"
+                android:text="@string/mark_medicine_usage"
+                android:textSize="16sp"
+                app:backgroundTint="#4870F4"
+                app:cornerRadius="8dp"
+                app:layout_constraintEnd_toEndOf="@+id/divider5"
+                app:layout_constraintStart_toStartOf="@+id/divider5"
+                app:layout_constraintTop_toBottomOf="@+id/divider5" />
 
             <com.google.android.material.button.MaterialButton
-                android:id="@+id/btnPause"
+                android:id="@+id/btnDismiss"
+                style="@style/Widget.Material3.Button.OutlinedButton"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="8dp"
+                android:layout_marginBottom="16dp"
+                android:text="@string/dismiss"
+                android:textColor="#4870F4"
+                android:textSize="16sp"
+                android:theme="@style/Theme.MaterialComponents"
+                app:cornerRadius="8dp"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="@+id/btnTaken"
+                app:layout_constraintStart_toStartOf="@+id/btnTaken"
+                app:layout_constraintTop_toBottomOf="@+id/btnTaken"
+                app:strokeColor="#4870F4"
+                app:strokeWidth="1dp" />
+
+            <TextView
+                android:id="@+id/textView2"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:backgroundTint="@color/button_gray"
-                android:paddingStart="16dp"
-                android:paddingEnd="16dp"
-                android:text="@string/mute_sound"
-                app:cornerRadius="10dp"
-                app:icon="@drawable/baseline_volume_off_24"
-                app:iconPadding="8dp"
-                app:iconSize="32dp"
-                app:iconTint="@color/white"
-                app:layout_constraintBottom_toTopOf="@+id/btnTaken"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/tvAlarmQuantity" />
+                android:layout_marginEnd="16dp"
+                android:layout_marginBottom="8dp"
+                android:text="@string/assets_designed_by_freepik"
+                android:textColor="@color/black"
+                android:textSize="12sp"
+                app:layout_constraintBottom_toTopOf="@+id/divider5"
+                app:layout_constraintEnd_toEndOf="parent" />
 
         </androidx.constraintlayout.widget.ConstraintLayout>
+    </com.google.android.material.card.MaterialCardView>
 
-    </androidx.cardview.widget.CardView>
-
-    <TextView
-        android:id="@+id/textView2"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="6dp"
-        android:layout_marginBottom="6dp"
-        android:text="@string/clock_icon_designed_by_bukeicon_assets_source_from_freepik"
-        android:textColor="@color/white"
-        android:textSize="12sp"
-        app:layout_constraintBottom_toBottomOf="parent"
+    <ImageView
+        android:id="@+id/imageView3"
+        android:layout_width="150dp"
+        android:layout_height="150dp"
+        android:layout_marginTop="32dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/cardView" />
+        app:layout_constraintTop_toTopOf="parent"
+        android:src="@drawable/ic_clock_activity" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

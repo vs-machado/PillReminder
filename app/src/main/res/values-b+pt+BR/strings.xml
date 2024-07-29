@@ -190,5 +190,11 @@
     <string name="treatment_end_date">Data de término do tratamento</string>
     <string name="treatment_status">Status do tratamento</string>
     <string name="medicine_icon">Ícone do medicamento</string>
-
+    <string name="Hour">Horário</string>
+    <string name="pill_quantity">%1$s comprimido(s)</string>
+    <string name="ml_quantity">%1$s mL</string>
+    <string name="drops_quantity">%1$s gota(s)</string>
+    <string name="inhale_quantity">%1$s mg</string>
+    <string name="pomade_quantity">1 aplicação</string>
+    <string name="medicine_time">Hora do medicamento!</string>
 </resources>

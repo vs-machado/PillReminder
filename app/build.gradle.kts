@@ -42,11 +42,15 @@ android {
     buildFeatures {
         viewBinding = true
     }
+    packaging{
+        resources.excludes.add("META-INF/*")
+    }
 }
 
 dependencies {
     implementation("androidx.test:core-ktx:1.5.0")
     implementation("androidx.test.ext:junit-ktx:1.1.5")
+    implementation("com.android.support:cardview-v7:28.0.0")
     val navVersion = "2.7.5"
     val coreVersion = "1.12.0"
     val roomVersion = "2.6.1"

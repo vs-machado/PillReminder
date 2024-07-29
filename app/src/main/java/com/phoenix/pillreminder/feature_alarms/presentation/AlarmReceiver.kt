@@ -39,7 +39,8 @@ class AlarmReceiver: BroadcastReceiver(), ActivityCompat.OnRequestPermissionsRes
         val actionString = context?.getString(R.string.mark_as_used)
         job = Job()
 
-        if(intent?.action == Intent.ACTION_BOOT_COMPLETED){
+        // Automatically reschedule alarms if user reboots the device or install an app update
+        if(intent?.action == Intent.ACTION_BOOT_COMPLETED || intent?.action == Intent.ACTION_MY_PACKAGE_REPLACED){
             if (context != null) {
                 rescheduleAlarmsOnBoot(context)
             }

@@ -41,10 +41,10 @@ class AlarmTriggeredViewModel : ViewModel() {
 
     fun checkMedicineForm(medicineForm: String, medicineQuantity: String, context: Context): String{
         return when(medicineForm){
-            "pill" -> context.getString(R.string.pill_quantity, medicineQuantity)
+            "pill" -> context.getString(R.string.pill_quantity, medicineQuantity.toFloat().toInt().toString())
             "injection" -> context.getString(R.string.ml_quantity, medicineQuantity)
             "liquid" ->  context.getString(R.string.ml_quantity, medicineQuantity)
-            "drop" -> context.getString(R.string.drops_quantity, medicineQuantity)
+            "drop" -> context.getString(R.string.drops_quantity, medicineQuantity.toFloat().toInt().toString())
             "inhaler" -> context.getString(R.string.inhale_quantity, medicineQuantity)
             "pomade" -> context.getString(R.string.pomade_quantity)
             else -> {""}

@@ -164,10 +164,7 @@ class HomeFragmentViewModel @Inject constructor(
         )
 
         viewModelScope.launch(Dispatchers.Default) {
-            //Checks if the alarm was already triggered. If so, there is no need to cancel the broadcast.
-            if(medicine.alarmInMillis > System.currentTimeMillis()){
-                alarmScheduler.cancelAlarm(alarmItem, cancelAll)
-            }
+            alarmScheduler.cancelAlarm(alarmItem, cancelAll)
         }
     }
 

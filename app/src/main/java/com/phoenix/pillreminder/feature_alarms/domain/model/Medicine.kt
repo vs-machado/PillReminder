@@ -27,6 +27,8 @@ data class Medicine(
     var alarmHour :Int,
     @ColumnInfo(name = "alarm_minute")
     var alarmMinute:Int,
+    @ColumnInfo(name = "selected_days_of_week")
+    var selectedDaysOfWeek: MutableSet<Int>?,
     @ColumnInfo(name = "start_date")
     var startDate: Long,
     @ColumnInfo(name = "end_date")

@@ -66,8 +66,22 @@ class MedicineDetailsFragment: Fragment() {
 
             when(medicine?.medicineFrequency){
                 "EveryDay" -> tvFrequencyMed.text = context?.getString(R.string.every_day)
-                //"SpecificDaysOfWeek" -> ""
-                "EveryOtherDay" ->  tvFrequencyMed.text = context?.getString(R.string.every_other_day)
+                "SpecificDaysOfWeek" -> {
+                    val daysOfWeek = listOf(
+                        context?.getString(R.string.Sunday),
+                        context?.getString(R.string.Monday),
+                        context?.getString(R.string.Tuesday),
+                        context?.getString(R.string.Wednesday),
+                        context?.getString(R.string.Thursday),
+                        context?.getString(R.string.Friday),
+                        context?.getString(R.string.Saturday),
+                    )
+
+                    // Convert the mutableSet to a sorted days of week list and join it with commas
+                    val selectedDays = medicine.selectedDaysOfWeek?.sorted()?.joinToString(separator = ", ") { daysOfWeek[it - 1] ?: "" }
+                    tvFrequencyMed.text = context?.getString(R.string.specific_days_of_week, selectedDays)
+                }
+                "EveryOtherDay" -> tvFrequencyMed.text = context?.getString(R.string.every_other_day)
                 "EveryXDays" -> tvFrequencyMed.text = context?.getString(R.string.every_interval_days, medicine.interval.toInt())
                 "EveryXWeeks" -> tvFrequencyMed.text = context?.getString(R.string.every_interval_weeks, medicine.interval.toInt())
                 "EveryXMonths" -> tvFrequencyMed.text = context?.getString(R.string.every_interval_months, medicine.interval.toInt())

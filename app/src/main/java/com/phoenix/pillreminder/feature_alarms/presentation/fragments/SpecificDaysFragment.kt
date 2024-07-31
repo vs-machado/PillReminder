@@ -15,6 +15,7 @@ import com.phoenix.pillreminder.databinding.FragmentSpecificDaysBinding
 import com.phoenix.pillreminder.feature_alarms.presentation.adapter.DayPickerAdapter
 import com.phoenix.pillreminder.feature_alarms.presentation.viewmodels.AlarmSettingsSharedViewModel
 
+// Used to specify the days of the week in which the medicine should be taken.
 class SpecificDaysFragment : Fragment() {
 
     private lateinit var binding: FragmentSpecificDaysBinding
@@ -46,6 +47,7 @@ class SpecificDaysFragment : Fragment() {
         val arrayAdapter = DayPickerAdapter(requireContext(), list)
         binding.lvDayPicker.adapter = arrayAdapter
 
+        // The selected days array list is 1 based. Position adjustment made in checkItemSelection method.
         binding.lvDayPicker.setOnItemClickListener{ _,_, position, _ ->
             val arrayNotEmpty = arrayAdapter.checkItemSelection(position)
             binding.fabNext.visibility = if(arrayNotEmpty) View.VISIBLE else View.INVISIBLE

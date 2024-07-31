@@ -71,6 +71,7 @@ class RescheduleWorker @AssistedInject constructor(
         val alarmsPerDay = medicine.alarmsPerDay
         val alarmHour = medicine.alarmHour
         val alarmMinute = medicine.alarmMinute
+        val selectedDaysOfWeek = medicine.selectedDaysOfWeek
         val startDate = medicine.startDate
         val endDate = medicine.endDate
         val medicineWasTaken = false
@@ -99,6 +100,7 @@ class RescheduleWorker @AssistedInject constructor(
                         alarmInMillis,
                         alarmHour,
                         alarmMinute,
+                        selectedDaysOfWeek,
                         startDate,
                         endDate,
                         medicineWasTaken,

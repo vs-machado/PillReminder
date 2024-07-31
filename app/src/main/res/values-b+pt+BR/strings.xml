@@ -197,4 +197,5 @@
     <string name="inhale_quantity">%1$s mg</string>
     <string name="pomade_quantity">1 aplicação</string>
     <string name="medicine_time">Hora do medicamento!</string>
+    <string name="specific_days_of_week">Dias específicos da semana:\n\n%1$s</string>
 </resources>

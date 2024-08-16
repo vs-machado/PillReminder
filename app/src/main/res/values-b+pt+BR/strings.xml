@@ -58,7 +58,7 @@
     <string name="please_set_the_tenth_medicine_alarm">Defina o horário do décimo alarme:</string>
     <string name="every_day">Todos os dias</string>
     <string name="every_other_day">De 2 em 2 dias</string>
-    <string name="specific_days_of_the_week">Em dias específicos da semana</string>
+    <string name="specific_days_of_the_week">Dias específicos</string>
     <string name="every_x_days">A cada X dias</string>
     <string name="every_x_weeks">A cada X semanas</string>
     <string name="every_x_months">A cada X meses</string>
@@ -186,8 +186,8 @@
     <string name="frequency">Frequência</string>
     <string name="alarms_per_day">Alarmes por dia</string>
     <string name="alarms_hour">Horário dos alarmes</string>
-    <string name="treatment_start_date">Data de início do tratamento</string>
-    <string name="treatment_end_date">Data de término do tratamento</string>
+    <string name="treatment_start_date">Início do tratamento</string>
+    <string name="treatment_end_date">Término do tratamento</string>
     <string name="treatment_status">Status do tratamento</string>
     <string name="medicine_icon">Ícone do medicamento</string>
     <string name="Hour">Horário</string>
@@ -198,4 +198,35 @@
     <string name="pomade_quantity">1 aplicação</string>
     <string name="medicine_time">Hora do medicamento!</string>
     <string name="specific_days_of_week">Dias específicos da semana:\n\n%1$s</string>
+    <string name="edit">Editar medicamento</string>
+    <string name="alarms_per_day_details">Alarmes por dia:\n\n%1$d alarme(s)</string>
+    <string name="undefined">Indefinido</string>
+    <string name="select_at_least_1_day">Você precisa selecionar pelo menos 1 dia da semana</string>
+    <string name="treatment_end_date_error">A data de encerramento do tratamento deve ser após a data de início. Tente novamente.</string>
+    <string name="changes_saved">As alterações foram salvas</string>
+    <string name="medicine_form">Forma do medicamento</string>
+    <string name="medicine_frequency">Frequência do medicamento</string>
+    <string name="select_treatment_end_date">Selecione a data de término do tratamento:</string>
+    <string name="select_usage_days">Selecione os dias de uso do medicamento:</string>
+    <string name="select_alarm_hour">Selecione o horário do alarme:</string>
+    <string name="Every">A cada</string>
+    <string name="edit_medicine">Editar medicamento</string>
+
+    <string-array name="medicine_forms">
+        <item>Comprimido</item>
+        <item>Injeção</item>
+        <item>Líquido</item>
+        <item>Gotas</item>
+        <item>Inalante</item>
+        <item>Pomada</item>
+    </string-array>
+
+    <string-array name="medicine_frequency">
+        <item>Todos os dias</item>
+        <item>De 2 em 2 dias</item>
+        <item>Dias específicos</item>
+        <item>A cada X dias</item>
+        <item>A cada X semanas</item>
+        <item>A cada X meses</item>
+    </string-array>
 </resources>

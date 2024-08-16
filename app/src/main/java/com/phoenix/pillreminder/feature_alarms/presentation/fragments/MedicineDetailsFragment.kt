@@ -12,10 +12,12 @@ import com.phoenix.pillreminder.databinding.FragmentMedicineDetailsBinding
 import com.phoenix.pillreminder.feature_alarms.domain.model.Medicine
 import com.phoenix.pillreminder.feature_alarms.presentation.utils.DateUtil
 import com.phoenix.pillreminder.feature_alarms.presentation.viewmodels.MedicinesViewModel
+import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 
+@AndroidEntryPoint
 class MedicineDetailsFragment: Fragment() {
     private lateinit var binding: FragmentMedicineDetailsBinding
     private val medicinesViewModel: MedicinesViewModel by hiltNavGraphViewModels(R.id.nav_graph)

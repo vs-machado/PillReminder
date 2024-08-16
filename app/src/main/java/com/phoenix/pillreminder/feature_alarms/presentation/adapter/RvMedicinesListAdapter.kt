@@ -21,7 +21,8 @@ private const val HOUR_12_FORMAT = "hh:mm a"
 class RvMedicinesListAdapter (private val showDeleteAlarmDialog: (Medicine) -> Unit,
                               private val showDeleteAllAlarmsDialog: (Medicine) -> Unit,
                               private val markMedicineUsage: (Medicine) -> Unit,
-                              private val markMedicinesAsSkipped: (Medicine) -> Unit) : RecyclerView.Adapter<MyViewHolder>() {
+                              private val markMedicinesAsSkipped: (Medicine) -> Unit,
+                              private val goToEditMedicines: (Medicine) -> Unit) : RecyclerView.Adapter<MyViewHolder>() {
 
     private val medicineList = ArrayList<Medicine>()
 
@@ -37,7 +38,7 @@ class RvMedicinesListAdapter (private val showDeleteAlarmDialog: (Medicine) -> U
     }
 
     override fun onBindViewHolder(holder: MyViewHolder, position: Int) {
-        holder.bind(medicineList[position], holder, showDeleteAlarmDialog, showDeleteAllAlarmsDialog, markMedicineUsage, markMedicinesAsSkipped)
+        holder.bind(medicineList[position], holder, showDeleteAlarmDialog, showDeleteAllAlarmsDialog, markMedicineUsage, markMedicinesAsSkipped, goToEditMedicines)
     }
 
     fun setList(medicines: List<Medicine>, selectedDate: Date){
@@ -69,7 +70,14 @@ class RvMedicinesListAdapter (private val showDeleteAlarmDialog: (Medicine) -> U
 class MyViewHolder(private val medicinesBinding: AdapterListMedicinesBinding):RecyclerView.ViewHolder(medicinesBinding.root){
 
 
-    fun bind(medicine: Medicine, holder: MyViewHolder, showDeleteAlarmDialog: (Medicine) -> Unit, showDeleteAllAlarmsDialog: (Medicine) -> Unit, markMedicineUsage: (Medicine) -> Unit, markMedicinesAsSkipped: (Medicine) -> Unit){
+    fun bind(medicine: Medicine,
+             holder: MyViewHolder,
+             showDeleteAlarmDialog: (Medicine) -> Unit,
+             showDeleteAllAlarmsDialog: (Medicine) -> Unit,
+             markMedicineUsage: (Medicine) -> Unit,
+             markMedicinesAsSkipped: (Medicine) -> Unit,
+             goToEditMedicines: (Medicine) -> Unit){
+
         val context = holder.itemView.context
         val currentTimeInMillis = System.currentTimeMillis()
 
@@ -157,6 +165,10 @@ class MyViewHolder(private val medicinesBinding: AdapterListMedicinesBinding):Re
                        }
                        R.id.menu3 -> {
                            markMedicinesAsSkipped(medicine)
+                           true
+                       }
+                       R.id.menu4 -> {
+                           goToEditMedicines(medicine)
                            true
                        }
                        else -> false

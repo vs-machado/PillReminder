@@ -40,6 +40,7 @@ import com.phoenix.pillreminder.feature_alarms.presentation.HideFabScrollListene
 import com.phoenix.pillreminder.feature_alarms.presentation.PermissionManager
 import com.phoenix.pillreminder.feature_alarms.presentation.adapter.RvMedicinesListAdapter
 import com.phoenix.pillreminder.feature_alarms.presentation.utils.CalendarUtils
+import com.phoenix.pillreminder.feature_alarms.presentation.viewmodels.AlarmSettingsSharedViewModel
 import com.phoenix.pillreminder.feature_alarms.presentation.viewmodels.HomeFragmentViewModel
 import com.phoenix.pillreminder.feature_alarms.presentation.viewmodels.MedicinesViewModel
 import dagger.hilt.android.AndroidEntryPoint
@@ -58,6 +59,7 @@ class HomeFragment: Fragment() {
     private lateinit var binding: FragmentHomeBinding
     private lateinit var adapter: RvMedicinesListAdapter
     private val medicinesViewModel: MedicinesViewModel by hiltNavGraphViewModels(R.id.nav_graph)
+    private val sharedViewModel: AlarmSettingsSharedViewModel by hiltNavGraphViewModels(R.id.nav_graph)
     private var toast: Toast? = null
     private val hfViewModel: HomeFragmentViewModel by viewModels()
     private lateinit var dialog: Dialog
@@ -175,13 +177,13 @@ class HomeFragment: Fragment() {
      private fun initRecyclerView(dateToFilter: Date){
         binding.rvMedicinesList.layoutManager = LinearLayoutManager(activity)
         adapter = RvMedicinesListAdapter(
-            showDeleteAlarmDialog = {selectedMedicine: Medicine ->
+            showDeleteAlarmDialog = { selectedMedicine: Medicine ->
                 showDeleteAlarmDialog(selectedMedicine)
             },
-            showDeleteAllAlarmsDialog = {selectedMedicine: Medicine ->
+            showDeleteAllAlarmsDialog = { selectedMedicine: Medicine ->
                 showDeleteAllAlarmsDialog(selectedMedicine)
             },
-            markMedicineUsage = {selectedMedicine: Medicine ->
+            markMedicineUsage = { selectedMedicine: Medicine ->
                 isNextToAnotherDoseHour(selectedMedicine) { result ->
                     if(result){
                         showWarningMedicineUsageDialog(selectedMedicine)
@@ -192,9 +194,13 @@ class HomeFragment: Fragment() {
                     }
                 }
             },
-            markMedicinesAsSkipped = {selectedMedicine ->
+            markMedicinesAsSkipped = { selectedMedicine ->
                 hfViewModel.markMedicinesAsSkipped(selectedMedicine)
                 displayMedicinesList(hfViewModel.getDate())
+            },
+            goToEditMedicines = { selectedMedicine ->
+                val action = HomeFragmentDirections.actionHomeFragmentToEditMedicinesFragment(selectedMedicine)
+                findNavController().navigate(action)
             }
         )
         binding.rvMedicinesList.adapter = adapter
@@ -264,10 +270,8 @@ class HomeFragment: Fragment() {
                     //Cancel alarms if needed
                     hfViewModel.cancelAlarm(medicine, false)
 
-                    withContext(Dispatchers.IO){
-                        //Work cancel
-                        hfViewModel.cancelWork(medicine, getWorkerID(medicine.name))
-                    }
+                    //Work cancel
+                    sharedViewModel.cancelWork(medicine)
 
                     //Database medicine deletion
                     deleteMedicines(medicine)
@@ -305,15 +309,11 @@ class HomeFragment: Fragment() {
             hfViewModel.apply{
                 viewLifecycleOwner.lifecycleScope.launch{
                     cancelAlarm(medicine, true)
-
-                    withContext(Dispatchers.IO){
-                        cancelWork(medicine, medicinesViewModel.getWorkerID(medicine.name))
-                    }
-
+                    sharedViewModel.cancelWork(medicine)
                     deleteAllMedicinesWithSameName(medicine.name)
 
                     withContext(Dispatchers.Main){
-                        displayMedicinesList(hfViewModel.getDate())
+                        displayMedicinesList(getDate())
                         dialog.dismiss()
                         showToastAlarmDeleted()
                     }

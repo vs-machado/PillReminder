@@ -9,8 +9,11 @@ import android.widget.TextView
 import androidx.core.content.ContextCompat
 import com.phoenix.pillreminder.R
 
-class DayPickerAdapter(context: Context, private val days: List<String>):
-    ArrayAdapter<String>(context, R.layout.adapter_day_picker, days) {
+class DayPickerAdapter(
+    context: Context,
+    private val days: List<String>,
+    private val backgroundColor: Int
+): ArrayAdapter<String>(context, R.layout.adapter_day_picker, days) {
 
     private val selectedItems = mutableSetOf<Int>()
 
@@ -49,7 +52,7 @@ class DayPickerAdapter(context: Context, private val days: List<String>):
             view.setBackgroundColor(ContextCompat.getColor(context, R.color.light_green))
             tvDay.setTextColor(ContextCompat.getColor(context, R.color.white))
         } else {
-            view.setBackgroundColor(ContextCompat.getColor(context, R.color.white_ice))
+            view.setBackgroundColor(backgroundColor)
             tvDay.setTextColor(ContextCompat.getColor(context, R.color.black))
         }
     }

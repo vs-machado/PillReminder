@@ -58,7 +58,7 @@
     <string name="please_set_the_tenth_medicine_alarm">Please, set the tenth medicine alarm:</string>
     <string name="every_day">Every day</string>
     <string name="every_other_day">Every other day</string>
-    <string name="specific_days_of_the_week">Specific days of the week</string>
+    <string name="specific_days_of_the_week">Specific days of week</string>
     <string name="every_x_days">Every X days</string>
     <string name="every_x_weeks">Every X weeks</string>
     <string name="every_x_months">Every X months</string>
@@ -199,6 +199,36 @@
     <string name="pomade_quantity">1 application</string>
     <string name="medicine_time">Medicine time!</string>
     <string name="specific_days_of_week">Specific days of week:\n\n%1$s</string>
+    <string name="edit">Edit medicine</string>
+    <string name="alarms_per_day_details">Alarms per day:\n\n%1$d alarm(s)</string>
+    <string name="undefined">Undefined</string>
+    <string name="select_at_least_1_day">You must select at least 1 day of the week.</string>
+    <string name="treatment_end_date_error">The treatment end date must be after the start date. Try again.</string>
+    <string name="changes_saved">The changes were saved</string>
+    <string name="medicine_form">Medicine form</string>
+    <string name="medicine_frequency">Medicine frequency</string>
+    <string name="select_treatment_end_date">Select the treatment end date:</string>
+    <string name="select_usage_days">Select the medicine usage days:</string>
+    <string name="select_alarm_hour">Select the alarm hour:</string>
+    <string name="Every">Every</string>
+    <string name="edit_medicine">Edit medicine</string>
 
+    <string-array name="medicine_forms">
+        <item>Pill</item>
+        <item>Injection</item>
+        <item>Liquid</item>
+        <item>Drops</item>
+        <item>Inhaler</item>
+        <item>Pomade</item>
+    </string-array>
+
+    <string-array name="medicine_frequency">
+        <item>Every day</item>
+        <item>Every other day</item>
+        <item>Specific days of week</item>
+        <item>Every X days</item>
+        <item>Every X weeks</item>
+        <item>Every X months</item>
+    </string-array>
 
 </resources>

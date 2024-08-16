@@ -79,7 +79,7 @@ class AlarmHourFragment : Fragment() {
 
                     if (currentAlarmNumber.value!! > getAlarmsPerDay()) {
                         //Clear the remaining positions of the alarm array
-                        clearAlarmArray()
+                        clearRemainingAlarmArrayPositions()
                         findNavController().navigate(R.id.action_alarmHourFragment_to_treatmentDurationFragment)
                     }
                 }

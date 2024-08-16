@@ -1,6 +1,5 @@
 package com.phoenix.pillreminder.feature_alarms.presentation.viewmodels
 
-import androidx.lifecycle.LiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.phoenix.pillreminder.feature_alarms.domain.model.Medicine
@@ -88,9 +87,27 @@ class MedicinesViewModel @Inject constructor(
         }
     }
 
+    fun removeRemainingAlarms(medicine: Medicine) = viewModelScope.launch {
+        withContext(Dispatchers.IO){
+            val medicinesToDelete = medicineRepository.getAlarmsAfterProvidedMillis(medicine.name, System.currentTimeMillis())
+            medicineRepository.deleteAllSelectedMedicines(medicinesToDelete)
+        }
+    }
+
     suspend fun getAlarmTimesForMedicine(medicineName: String): List<String> {
         return medicineRepository.getAlarmTimesForMedicine(medicineName)
     }
 
+    suspend fun getAlarmsAfterProvidedMillis(medicineName: String, millis: Long): List<Medicine>{
+        return withContext(Dispatchers.IO){
+            medicineRepository.getAlarmsAfterProvidedMillis(medicineName, millis)
+        }
+    }
+
+    suspend fun getAlarmTimeSinceMidnight(medicineName: String): Long {
+        return withContext(Dispatchers.IO){
+            medicineRepository.getAlarmTimeSinceMidnight(medicineName)
+        }
+    }
 
 }

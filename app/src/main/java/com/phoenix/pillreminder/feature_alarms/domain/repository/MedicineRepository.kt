@@ -1,9 +1,6 @@
 package com.phoenix.pillreminder.feature_alarms.domain.repository
 
 import androidx.lifecycle.LiveData
-import androidx.room.Delete
-import androidx.room.Query
-import androidx.room.Update
 import com.phoenix.pillreminder.feature_alarms.domain.model.Medicine
 
 interface MedicineRepository {
@@ -15,7 +12,13 @@ interface MedicineRepository {
 
     suspend fun deleteAllSelectedMedicines(medicines: List<Medicine>)
 
+    suspend fun getAlarmsAfterProvidedMillis(medicineName: String, millis: Long): List<Medicine>
+
+    suspend fun getAlarmTimeSinceMidnight(medicineName: String): Long
+
     fun getAllMedicines(): LiveData<List<Medicine>>
+
+    suspend fun getAllAlarmsMillis(medicineName: String, millis: Long): List<Long>
 
     fun getAllMedicinesWithSameName(medicineName: String): List<Medicine>
 

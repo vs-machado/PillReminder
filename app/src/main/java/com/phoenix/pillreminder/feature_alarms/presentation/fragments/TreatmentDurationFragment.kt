@@ -105,6 +105,7 @@ class TreatmentDurationFragment : Fragment(), ActivityCompat.OnRequestPermission
 
                             setNumberOfAlarms(1)
                             clearTreatmentPeriod()
+                            clearAlarmArray()
 
                             Toast.makeText(requireContext(),
                                 getString(R.string.alarms_successfully_created),
@@ -157,6 +158,7 @@ class TreatmentDurationFragment : Fragment(), ActivityCompat.OnRequestPermission
 
                 setNumberOfAlarms(1)
                 clearTreatmentPeriod()
+                clearAlarmArray()
 
                 Toast.makeText(requireContext(),
                     getString(R.string.alarms_successfully_created),

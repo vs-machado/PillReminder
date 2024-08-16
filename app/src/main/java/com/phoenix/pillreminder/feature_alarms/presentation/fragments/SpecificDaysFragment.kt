@@ -5,6 +5,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.navigation.fragment.findNavController
@@ -44,7 +45,11 @@ class SpecificDaysFragment : Fragment() {
             R.string.Saturday
         ).map { requireContext().getString(it) }
 
-        val arrayAdapter = DayPickerAdapter(requireContext(), list)
+        val arrayAdapter = DayPickerAdapter(
+            requireContext(),
+            list,
+            ContextCompat.getColor(requireContext(), R.color.white_ice)
+        )
         binding.lvDayPicker.adapter = arrayAdapter
 
         // The selected days array list is 1 based. Position adjustment made in checkItemSelection method.

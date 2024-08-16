@@ -2,6 +2,7 @@ package com.phoenix.pillreminder.feature_alarms.di
 
 import android.app.Application
 import android.content.Context
+import android.view.LayoutInflater
 import androidx.room.Room
 import androidx.work.WorkManager
 import androidx.work.impl.WorkManagerImpl
@@ -28,19 +29,16 @@ object AppModule {
         ).fallbackToDestructiveMigration().build()
     }
 
-
     @Provides
     @Singleton
     fun provideMedicineRepository(db: MedicineDatabase): MedicineRepository{
         return MedicineRepositoryImpl(db.medicineDao())
     }
 
-
     @Provides
     @Singleton
     fun provideWorkManager(app: Application): WorkManager{
         return WorkManager.getInstance(app)
     }
-
 
 }

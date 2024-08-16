@@ -7,9 +7,13 @@ import android.view.MenuItem
 import androidx.appcompat.app.ActionBarDrawerToggle
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.app.AppCompatDelegate
+import androidx.core.view.GravityCompat
+import androidx.navigation.findNavController
 import androidx.navigation.fragment.NavHostFragment
 import androidx.navigation.ui.AppBarConfiguration
+import androidx.navigation.ui.navigateUp
 import androidx.navigation.ui.setupActionBarWithNavController
+import androidx.navigation.ui.setupWithNavController
 import com.phoenix.pillreminder.R
 import com.phoenix.pillreminder.databinding.ActivityMainBinding
 import com.phoenix.pillreminder.feature_alarms.domain.repository.MedicineRepository
@@ -29,10 +33,6 @@ class MainActivity: AppCompatActivity() {
         super.onCreate(savedInstanceState)
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
-
-        toggle = ActionBarDrawerToggle(this, binding.dlMainActivity, R.string.open, R.string.close)
-        binding.dlMainActivity.addDrawerListener(toggle)
-        toggle.syncState()
 
         setSupportActionBar(binding.appBarMain.toolbarHome)
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
@@ -91,14 +91,17 @@ class MainActivity: AppCompatActivity() {
         val navHostFragment = supportFragmentManager.findFragmentById(R.id.fragmentContainerView3) as NavHostFragment
         val navController = navHostFragment.navController
 
-        return navController.navigateUp() || super.onSupportNavigateUp()
-    }
-
-    override fun onOptionsItemSelected(item: MenuItem): Boolean {
-        if(toggle.onOptionsItemSelected(item)){
-            return true
+        return when {
+            binding.dlMainActivity.isDrawerOpen(GravityCompat.START) -> {
+                binding.dlMainActivity.closeDrawer(GravityCompat.START)
+                true
+            }
+            navController.currentDestination?.id == R.id.homeFragment -> {
+                binding.dlMainActivity.openDrawer(GravityCompat.START)
+                true
+            }
+            else -> navController.navigateUp(appBarConfiguration) || super.onSupportNavigateUp()
         }
-        return super.onOptionsItemSelected(item)
     }
 
     private fun isTutorialShown(): Boolean {

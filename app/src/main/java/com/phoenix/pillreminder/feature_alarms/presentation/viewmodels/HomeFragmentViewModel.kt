@@ -122,22 +122,6 @@ class HomeFragmentViewModel @Inject constructor(
         return false
     }
 
-    fun cancelWork(medicine: Medicine, workerID: String){
-        if(workerID != "noID"){
-            workRequestID = UUID.fromString(workerID)
-        }
-
-        viewModelScope.launch(Dispatchers.IO) {
-            val hasNextAlarm = repository.hasNextAlarmData(medicine.name, System.currentTimeMillis())
-
-            withContext(Dispatchers.Default){
-                if(!hasNextAlarm && workerID != "noID"){
-                    workManager.cancelWorkById(workRequestID)
-                }
-            }
-        }
-    }
-
     fun deleteAllMedicinesWithSameName(name: String){
         viewModelScope.launch(Dispatchers.IO){
             val alarmsToDelete = repository.getAllMedicinesWithSameName(name)

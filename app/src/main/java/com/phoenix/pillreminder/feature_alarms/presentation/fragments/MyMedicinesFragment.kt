@@ -14,16 +14,16 @@ import com.phoenix.pillreminder.R
 import com.phoenix.pillreminder.databinding.FragmentMyMedicinesBinding
 import com.phoenix.pillreminder.feature_alarms.presentation.adapter.MedicinesDataAdapter
 import com.phoenix.pillreminder.feature_alarms.presentation.viewmodels.MedicinesViewModel
-import com.phoenix.pillreminder.feature_alarms.presentation.viewmodels.MyMedicinesViewModel
+import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 
+@AndroidEntryPoint
 class MyMedicinesFragment : Fragment() {
     private lateinit var binding: FragmentMyMedicinesBinding
     private lateinit var adapter: MedicinesDataAdapter
     private val medicinesViewModel: MedicinesViewModel by hiltNavGraphViewModels(R.id.nav_graph)
-    private val myMedicinesViewModel: MyMedicinesViewModel by hiltNavGraphViewModels(R.id.nav_graph)
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,

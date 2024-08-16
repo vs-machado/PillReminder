@@ -13,7 +13,6 @@ import androidx.navigation.ui.AppBarConfiguration
 import androidx.navigation.ui.setupWithNavController
 import com.phoenix.pillreminder.R
 import com.phoenix.pillreminder.databinding.FragmentFrequencyBinding
-import com.phoenix.pillreminder.feature_alarms.domain.util.DayOfWeek
 import com.phoenix.pillreminder.feature_alarms.domain.util.MedicineFrequency
 import com.phoenix.pillreminder.feature_alarms.presentation.viewmodels.AlarmSettingsSharedViewModel
 

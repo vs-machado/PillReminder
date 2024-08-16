@@ -59,4 +59,12 @@
         <item name="strokeWidth">1dp</item>
     </style>
 
+    <style name="TimePicker" parent="Theme.AppCompat.Light.Dialog">
+        <item name="android:timePickerStyle">@style/SpinnerTimePicker</item>
+        <item name="android:colorButtonNormal">@color/colorPrimary</item>
+    </style>
+
+    <style name = "SpinnerTimePicker" parent="@style/Widget.MaterialComponents.TimePicker">
+        <item name="android:timePickerMode">spinner</item>
+    </style>
 </resources>

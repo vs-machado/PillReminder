@@ -26,6 +26,13 @@
         <action
             android:id="@+id/action_homeFragment_to_aboutFragment"
             app:destination="@id/aboutFragment" />
+        <action
+            android:id="@+id/action_homeFragment_to_editMedicinesFragment"
+            app:destination="@id/editMedicinesFragment"
+            app:enterAnim="@anim/slide_in_up"
+            app:exitAnim="@anim/slide_out_up"
+            app:popEnterAnim="@anim/slide_in_down"
+            app:popExitAnim="@anim/slide_out_down" />
     </fragment>
     <fragment
         android:id="@+id/addMedicinesFragment"
@@ -187,6 +194,14 @@
         android:label= "@string/details">
         <argument
             android:name="medicine"
+            app:argType="com.phoenix.pillreminder.feature_alarms.domain.model.Medicine" />
+    </fragment>
+    <fragment
+        android:id="@+id/editMedicinesFragment"
+        android:name="com.phoenix.pillreminder.feature_alarms.presentation.fragments.EditMedicinesFragment"
+        android:label="@string/edit_medicine" >
+        <argument
+            android:name="edit_medicine"
             app:argType="com.phoenix.pillreminder.feature_alarms.domain.model.Medicine" />
     </fragment>
 </navigation>

@@ -1,12 +1,15 @@
 package com.phoenix.pillreminder.feature_alarms.presentation.viewmodels
 
 import android.content.Context
+import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
 import androidx.work.PeriodicWorkRequestBuilder
 import androidx.work.WorkManager
 import com.phoenix.pillreminder.feature_alarms.data.worker.RescheduleWorker
+import com.phoenix.pillreminder.feature_alarms.domain.model.AlarmHour
 import com.phoenix.pillreminder.feature_alarms.domain.model.AlarmItem
 import com.phoenix.pillreminder.feature_alarms.domain.model.Medicine
 import com.phoenix.pillreminder.feature_alarms.domain.util.MedicineFrequency
@@ -14,6 +17,10 @@ import com.phoenix.pillreminder.feature_alarms.presentation.AlarmScheduler
 import com.phoenix.pillreminder.feature_alarms.domain.repository.MedicineRepository
 import com.phoenix.pillreminder.feature_alarms.presentation.AndroidAlarmScheduler
 import dagger.hilt.android.lifecycle.HiltViewModel
+import dagger.hilt.android.qualifiers.ApplicationContext
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 import java.time.Instant
 import java.time.LocalDateTime
 import java.time.ZoneId
@@ -33,7 +40,8 @@ import javax.inject.Inject
 
 @HiltViewModel
 class AlarmSettingsSharedViewModel @Inject constructor(
-    private val repository: MedicineRepository
+    private val repository: MedicineRepository,
+    private val workManager: WorkManager
 ) : ViewModel() {
     private var medicineName = ""
 
@@ -70,6 +78,7 @@ class AlarmSettingsSharedViewModel @Inject constructor(
 
     var position = 0
 
+    private lateinit var workRequestID: UUID
 
     init{
         _currentAlarmNumber.value = 1
@@ -409,11 +418,16 @@ class AlarmSettingsSharedViewModel @Inject constructor(
         alarmHour[position] = hourOfDay
         alarmMinute[position] = minute
     }
-    fun clearAlarmArray(){
+    fun clearRemainingAlarmArrayPositions(){
         for(i in currentAlarmNumber.value!! - 1 until alarmHour.indices.last){
             alarmHour[i] = null
             alarmMinute[i] = null
         }
+    }
+
+    fun clearAlarmArray(){
+        alarmHour = Array(10){null}
+        alarmMinute = Array(10){null}
     }
 
     fun extractDateComponents(firstDate: Long, secondDate: Long, userSetPeriod: Boolean){
@@ -463,6 +477,10 @@ class AlarmSettingsSharedViewModel @Inject constructor(
                 _medicineForm.value = "pomade"
             }
         }
+    }
+
+    fun setMedicineForm(medicineForm: String){
+        _medicineForm.value = medicineForm
     }
 
     //Getters and setters
@@ -548,6 +566,32 @@ class AlarmSettingsSharedViewModel @Inject constructor(
         return rescheduleRequest.id
     }
 
+    fun cancelWork(medicine: Medicine){
+        val workerID = medicine.rescheduleWorkerID
+
+        if(workerID != "noID"){
+            workRequestID = UUID.fromString(workerID)
+        }
+
+        viewModelScope.launch(Dispatchers.IO) {
+            val hasNextAlarm = repository.hasNextAlarmData(medicine.name, System.currentTimeMillis())
+
+            withContext(Dispatchers.Default){
+                if(!hasNextAlarm && workerID != "noID"){
+                    workManager.cancelWorkById(workRequestID)
+                }
+            }
+        }
+    }
+    
+    fun convertTimeListToArrays(timeList: List<AlarmHour>){
+        timeList.forEachIndexed{ index, timeString ->
+            val (hour, minute) = timeString.alarmHour.split(':').map(String::toInt)
+            alarmHour[index] = hour
+            alarmMinute[index] = minute
+        }
+    }
+
     fun setSelectedDaysList(mutableList: MutableSet<Int>){
         this.selectedDaysList = mutableList
     }
@@ -565,10 +609,10 @@ class AlarmSettingsSharedViewModel @Inject constructor(
         medicinePeriodSet = true
         medicineNeedsReschedule = false
     }
-    private fun setTreatmentStartDate(date: Long){
+    fun setTreatmentStartDate(date: Long){
         treatmentStartDate = date
     }
-    private fun setTreatmentEndDate(date: Long){
+    fun setTreatmentEndDate(date: Long){
         treatmentEndDate = date
     }
     fun setMedicineName(userInput: String){
@@ -607,11 +651,11 @@ class AlarmSettingsSharedViewModel @Inject constructor(
         return medicineFrequency
     }
 
-    private fun getAlarmHoursList(): List<Int>{
+    fun getAlarmHoursList(): List<Int>{
         return alarmHour.toList().filterNotNull()
     }
 
-    private fun getAlarmMinutesList(): List<Int>{
+    fun getAlarmMinutesList(): List<Int>{
         return alarmMinute.toList().filterNotNull()
     }
 
@@ -660,6 +704,10 @@ class AlarmSettingsSharedViewModel @Inject constructor(
         return interval
     }
 
+    fun getTreatmentEndDate(): Long{
+        return treatmentEndDate
+    }
+
     fun setTemporaryTreatmentEndDate(startDateMillis: Long): Long {
         // A day has 87400000 milliseconds
         val repeatInterval = when(medicineFrequency){
@@ -672,5 +720,4 @@ class AlarmSettingsSharedViewModel @Inject constructor(
 
         return (startDateMillis + (repeatInterval * 86400000L))
     }
-
 }

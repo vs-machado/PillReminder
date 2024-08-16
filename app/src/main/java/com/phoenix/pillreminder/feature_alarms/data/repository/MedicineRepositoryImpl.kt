@@ -24,8 +24,20 @@ class MedicineRepositoryImpl (
         dao.deleteAllSelectedMedicines(medicines)
     }
 
+    override suspend fun getAlarmsAfterProvidedMillis(medicineName: String, millis: Long): List<Medicine> {
+        return dao.getAlarmsAfterProvidedMillis(medicineName, millis)
+    }
+
+    override suspend fun getAlarmTimeSinceMidnight(medicineName: String): Long{
+        return dao.getAlarmTimeSinceMidnight(medicineName)
+    }
+
     override fun getAllMedicines(): LiveData<List<Medicine>> {
         return dao.getAllMedicines()
+    }
+
+    override suspend fun getAllAlarmsMillis(medicineName: String, millis: Long): List<Long> {
+        return dao.getAllAlarmsMillis(medicineName, millis)
     }
 
     override fun getAllMedicinesWithSameName(medicineName: String): List<Medicine> {

@@ -23,8 +23,19 @@ interface MedicineDao {
     @Delete
     suspend fun deleteAllSelectedMedicines(medicines: List<Medicine>)
 
+    @Query("SELECT * FROM medicines_data_table WHERE name = :medicineName AND alarm_in_millis > :millis ORDER BY alarm_in_millis ASC")
+    suspend fun getAlarmsAfterProvidedMillis(medicineName: String, millis: Long): List<Medicine>
+
+    @Query("""SELECT (alarm_in_millis - (alarm_in_millis / 86400000) * 86400000) as time_since_midnight
+            FROM medicines_data_table
+            WHERE name = :medicineName""")
+    suspend fun getAlarmTimeSinceMidnight(medicineName: String): Long
+
     @Query("SELECT * FROM medicines_data_table")
     fun getAllMedicines():LiveData<List<Medicine>>
+
+    @Query("SELECT alarm_in_millis FROM medicines_data_table WHERE name = :medicineName AND alarm_in_millis > :millis ORDER BY alarm_in_millis ASC")
+    suspend fun getAllAlarmsMillis(medicineName: String, millis: Long): List<Long>
 
     @Query("SELECT *" +
             "FROM medicines_data_table " +

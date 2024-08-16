@@ -13,4 +13,12 @@ object CalendarUtils {
         val sdf = SimpleDateFormat(pattern, Locale.getDefault())
         return sdf.format(calendar.time)
     }
+
+    fun formatMillisToString(millis: Long, pattern: String): String{
+        val calendar = Calendar.getInstance().apply{
+            timeInMillis = millis
+        }
+        val sdf = SimpleDateFormat(pattern, Locale.getDefault())
+        return sdf.format(calendar.time)
+    }
 }

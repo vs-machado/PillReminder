@@ -1,6 +1,7 @@
 package com.phoenix.pillreminder.feature_alarms.presentation.fragments
 
 import android.Manifest
+import android.animation.ObjectAnimator
 import android.app.Dialog
 import android.content.Context
 import android.content.pm.PackageManager
@@ -9,7 +10,9 @@ import android.graphics.drawable.ColorDrawable
 import android.os.Bundle
 import android.provider.Settings
 import android.text.format.DateFormat.is24HourFormat
+import android.view.GestureDetector
 import android.view.LayoutInflater
+import android.view.MotionEvent
 import android.view.View
 import android.view.ViewGroup
 import android.view.Window
@@ -47,8 +50,10 @@ import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
+import java.util.Calendar
 import java.util.Date
 import javax.inject.Inject
+import kotlin.math.abs
 
 @AndroidEntryPoint
 class HomeFragment: Fragment() {
@@ -63,6 +68,7 @@ class HomeFragment: Fragment() {
     private var toast: Toast? = null
     private val hfViewModel: HomeFragmentViewModel by viewModels()
     private lateinit var dialog: Dialog
+    private lateinit var gestureDetector: GestureDetector
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -92,6 +98,8 @@ class HomeFragment: Fragment() {
         val dontShowAgain = hfViewModel.getPermissionRequestPreferences()
 
         initRecyclerView(hfViewModel.getDate())
+        setupGestureDetector()
+        setupSwipeListener()
 
         //SharedPreference verification to check or uncheck the switch
         binding.datePicker.findViewById<SwitchMaterial>(R.id.switchPillbox).isChecked = pillboxReminder
@@ -113,7 +121,6 @@ class HomeFragment: Fragment() {
         binding.fabAddMedicine.setOnClickListener {
             it.findNavController().navigate(R.id.action_homeFragment_to_addMedicinesFragment)
         }
-
 
         binding.datePicker.findViewById<SwitchMaterial>(R.id.switchPillbox).setOnCheckedChangeListener { _, isChecked ->
             if (isChecked) {
@@ -406,6 +413,68 @@ class HomeFragment: Fragment() {
     }
 
     private val requestOverlayPermissionLauncher = registerForActivityResult(ActivityResultContracts.StartActivityForResult()){}
+
+    private fun setupGestureDetector() {
+        gestureDetector = GestureDetector(requireContext(), object : GestureDetector.SimpleOnGestureListener() {
+            private val SWIPE_THRESHOLD = 100
+            private val SWIPE_VELOCITY_THRESHOLD = 100
+
+            override fun onFling(e1: MotionEvent?, e2: MotionEvent, velocityX: Float, velocityY: Float): Boolean {
+                val diffX = e2.x - (e1?.x ?: 0f)
+                val diffY = e2.y - (e1?.y ?: 0f)
+                if (abs(diffX) > abs(diffY) &&
+                    abs(diffX) > SWIPE_THRESHOLD &&
+                    abs(velocityX) > SWIPE_VELOCITY_THRESHOLD) {
+                    if (diffX > 0) {
+                        // Swipe right
+                        updateDateAndMedicines(-1)
+                    } else {
+                        // Swipe left
+                        updateDateAndMedicines(1)
+                    }
+                    return true
+                }
+                return false
+            }
+        })
+    }
+
+    private fun setupSwipeListener() {
+        binding.swipeRefreshLayout.isRefreshing = false
+        binding.swipeRefreshLayout.isEnabled = false
+        binding.rvMedicinesList.setOnTouchListener { _, event ->
+            gestureDetector.onTouchEvent(event)
+            false
+        }
+    }
+
+    private fun updateDateAndMedicines(days: Int) {
+        viewLifecycleOwner.lifecycleScope.launch {
+            val newDate = Calendar.getInstance().apply {
+                time = hfViewModel.getDate()
+                add(Calendar.DAY_OF_MONTH, days)
+            }.time
+
+            hfViewModel.setDate(newDate)
+            binding.datePicker.setSelection(newDate)
+
+            val medicines = withContext(Dispatchers.IO) {
+                medicinesViewModel.getMedicines()
+            }
+
+            // Apply swipe animation
+            val animator = if (days > 0) {
+                ObjectAnimator.ofFloat(binding.rvMedicinesList, View.TRANSLATION_X, binding.rvMedicinesList.width.toFloat(), 0f)
+            } else {
+                ObjectAnimator.ofFloat(binding.rvMedicinesList, View.TRANSLATION_X, -binding.rvMedicinesList.width.toFloat(), 0f)
+            }
+
+            animator.duration = 200
+            animator.start()
+
+            adapter.setList(medicines, newDate)
+        }
+    }
 
     override fun onResume() {
         super.onResume()

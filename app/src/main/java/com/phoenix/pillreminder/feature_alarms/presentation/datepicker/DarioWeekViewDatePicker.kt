@@ -1,21 +1,26 @@
 package com.phoenix.pillreminder.feature_alarms.presentation.datepicker
 
 import android.content.Context
+import android.gesture.Gesture
 import android.text.SpannableString
 import android.text.format.DateUtils
 import android.text.style.UnderlineSpan
 import android.util.AttributeSet
+import android.view.GestureDetector
+import android.view.MotionEvent
 import android.view.View
 import android.widget.ImageView
 import android.widget.TextView
 import androidx.appcompat.widget.AppCompatImageButton
 import androidx.constraintlayout.widget.ConstraintLayout
+import androidx.core.view.GestureDetectorCompat
 import com.phoenix.pillreminder.R
 import java.text.DateFormat
 import java.text.DateFormatSymbols
 import java.util.Calendar
 import java.util.Date
 import java.util.Locale
+import kotlin.math.abs
 
 class DarioWeekViewDatePicker @JvmOverloads constructor(
     context: Context,
@@ -23,6 +28,7 @@ class DarioWeekViewDatePicker @JvmOverloads constructor(
     defStyle: Int = 0,
     defStyleRes: Int = 0,
 ): ConstraintLayout(context, attrs, defStyle, defStyleRes) {
+    private lateinit var gestureDetector: GestureDetector
 
     companion object {
         private fun isSameDay(date1: Date, date2: Date): Boolean {
@@ -133,9 +139,10 @@ class DarioWeekViewDatePicker @JvmOverloads constructor(
         todayText.setOnClickListener { setToday() }
 
         setSelection(selectedDate)
+        setupGestureDetector()
     }
 
-    private fun setSelection(date: Date) {
+    fun setSelection(date: Date) {
         selectedDate = date
 
         // update long text for selected day
@@ -221,4 +228,34 @@ class DarioWeekViewDatePicker @JvmOverloads constructor(
     }
 
     private fun setToday() = setSelection(Calendar.getInstance().time)
+
+    private fun setupGestureDetector() {
+        gestureDetector = GestureDetector(context, object : GestureDetector.SimpleOnGestureListener() {
+            private val SWIPE_THRESHOLD = 100
+            private val SWIPE_VELOCITY_THRESHOLD = 100
+
+            override fun onFling(e1: MotionEvent?, e2: MotionEvent, velocityX: Float, velocityY: Float): Boolean {
+                val diffX = e2.x - (e1?.x ?: 0f)
+                if (Math.abs(diffX) > SWIPE_THRESHOLD && Math.abs(velocityX) > SWIPE_VELOCITY_THRESHOLD) {
+                    if (diffX > 0) {
+                        // Swipe right
+                        addDays(-1)
+                    } else {
+                        // Swipe left
+                        addDays(1)
+                    }
+                    return true
+                }
+                return false
+            }
+        })
+    }
+
+    override fun onTouchEvent(event: MotionEvent): Boolean {
+        return if (gestureDetector.onTouchEvent(event)) {
+            true
+        } else {
+            super.onTouchEvent(event)
+        }
+    }
 }

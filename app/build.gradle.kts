@@ -102,6 +102,9 @@ dependencies {
     implementation("androidx.constraintlayout:constraintlayout:2.1.4")
     implementation("androidx.drawerlayout:drawerlayout:1.2.0")
 
+    // Swipe refresh layout
+    implementation("androidx.swiperefreshlayout:swiperefreshlayout:1.1.0")
+
     //Tests
     testImplementation("junit:junit:4.13.2")
     testImplementation("org.mockito:mockito-core:5.2.1")

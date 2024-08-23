@@ -9,4 +9,8 @@ interface SharedPreferencesRepository {
     fun getPermissionRequestPreferences(): Boolean
 
     fun getPillboxPreferences(): Boolean
+
+    fun setAlarmReschedulePreferences(boolean: Boolean)
+
+    fun getAlarmReschedulePreferences(): Boolean
 }

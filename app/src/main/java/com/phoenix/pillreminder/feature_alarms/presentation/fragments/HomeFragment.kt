@@ -4,12 +4,14 @@ import android.Manifest
 import android.animation.ObjectAnimator
 import android.app.Dialog
 import android.content.Context
+import android.content.Intent
 import android.content.pm.PackageManager
 import android.graphics.Color
 import android.graphics.drawable.ColorDrawable
 import android.os.Bundle
 import android.provider.Settings
 import android.text.format.DateFormat.is24HourFormat
+import android.util.Log
 import android.view.GestureDetector
 import android.view.LayoutInflater
 import android.view.MotionEvent
@@ -39,6 +41,8 @@ import com.phoenix.pillreminder.databinding.LayoutSetPillboxReminderDialogBindin
 import com.phoenix.pillreminder.databinding.LayoutWarnAboutMedicineUsageHourBinding
 import com.phoenix.pillreminder.feature_alarms.domain.model.Medicine
 import com.phoenix.pillreminder.feature_alarms.domain.repository.MedicineRepository
+import com.phoenix.pillreminder.feature_alarms.domain.repository.SharedPreferencesRepository
+import com.phoenix.pillreminder.feature_alarms.presentation.AlarmReceiver
 import com.phoenix.pillreminder.feature_alarms.presentation.HideFabScrollListener
 import com.phoenix.pillreminder.feature_alarms.presentation.PermissionManager
 import com.phoenix.pillreminder.feature_alarms.presentation.adapter.RvMedicinesListAdapter
@@ -59,6 +63,8 @@ import kotlin.math.abs
 class HomeFragment: Fragment() {
 
     @Inject lateinit var repository: MedicineRepository
+    @Inject lateinit var sharedPreferencesRepository: SharedPreferencesRepository
+    @Inject lateinit var alarmReceiver: AlarmReceiver
 
     private lateinit var binding: FragmentHomeBinding
     private lateinit var adapter: RvMedicinesListAdapter
@@ -93,42 +99,17 @@ class HomeFragment: Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        val pillboxReminder = hfViewModel.getPillboxPreferences()
         val dontShowAgain = hfViewModel.getPermissionRequestPreferences()
 
         initRecyclerView(hfViewModel.getDate())
         setupGestureDetector()
         setupSwipeListener()
-
-        //SharedPreference verification to check or uncheck the switch
-        binding.datePicker.findViewById<SwitchMaterial>(R.id.switchPillbox).isChecked = pillboxReminder
-
+        checkAndRescheduleAlarms() // Reschedule alarms if app was uninstalled previously and it has a backup
         requestPermissions(dontShowAgain)
-
-        //Updates the date picker and recyclerview
-        binding.datePicker.onSelectionChanged = { date ->
-           viewLifecycleOwner.lifecycleScope.launch(Dispatchers.Main){
-                hfViewModel.setDate(date)
-                val medicines = withContext(Dispatchers.IO){
-                    medicinesViewModel.getMedicines()
-                }
-                adapter.setList(medicines, hfViewModel.getDate())
-            }
-        }
-
+        setupDatePicker()
 
         binding.fabAddMedicine.setOnClickListener {
             it.findNavController().navigate(R.id.action_homeFragment_to_addMedicinesFragment)
-        }
-
-        binding.datePicker.findViewById<SwitchMaterial>(R.id.switchPillbox).setOnCheckedChangeListener { _, isChecked ->
-            if (isChecked) {
-                hfViewModel.setPillboxPreferences(true)
-                showPillboxReminderDialog()
-            } else {
-                hfViewModel.setPillboxPreferences(false)
-                hfViewModel.cancelReminderNotifications(requireContext().applicationContext)
-            }
         }
     }
 
@@ -168,6 +149,48 @@ class HomeFragment: Fragment() {
         }
 
         dialog.show()
+    }
+
+    private fun setupDatePicker(){
+        val pillboxReminder = hfViewModel.getPillboxPreferences()
+
+        //SharedPreference verification to check or uncheck the switch
+        binding.datePicker.findViewById<SwitchMaterial>(R.id.switchPillbox).isChecked = pillboxReminder
+
+        //Updates the date picker and recyclerview
+        binding.datePicker.onSelectionChanged = { date ->
+            viewLifecycleOwner.lifecycleScope.launch(Dispatchers.Main){
+                hfViewModel.setDate(date)
+                val medicines = withContext(Dispatchers.IO){
+                    medicinesViewModel.getMedicines()
+                }
+                adapter.setList(medicines, hfViewModel.getDate())
+            }
+        }
+        binding.datePicker.findViewById<SwitchMaterial>(R.id.switchPillbox).setOnCheckedChangeListener { _, isChecked ->
+            if (isChecked) {
+                hfViewModel.setPillboxPreferences(true)
+                showPillboxReminderDialog()
+            } else {
+                hfViewModel.setPillboxPreferences(false)
+                hfViewModel.cancelReminderNotifications(requireContext().applicationContext)
+            }
+        }
+    }
+
+    //If user has a app backup and reinstalls the app the alarms will be rescheduled at startup
+    private fun checkAndRescheduleAlarms(){
+        val alarmsRescheduled = sharedPreferencesRepository.getAlarmReschedulePreferences()
+        Log.d("debug", "alarms rescheduled: $alarmsRescheduled")
+        if (!alarmsRescheduled) {
+            val intent = Intent(requireContext(), AlarmReceiver::class.java)
+            intent.addCategory(Intent.CATEGORY_DEFAULT)
+            intent.action = "com.phoenix.pillreminder.RESCHEDULEBACKUPALARMS"
+            context?.sendBroadcast(intent)
+
+            // Set the flag to true
+            sharedPreferencesRepository.setAlarmReschedulePreferences(true)
+        }
     }
 
     private fun requestPermissions(dontShowAgain: Boolean){

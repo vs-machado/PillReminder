@@ -4,13 +4,13 @@ import android.app.NotificationManager
 import android.content.BroadcastReceiver
 import android.content.Context
 import android.content.Intent
+import android.util.Log
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import com.phoenix.pillreminder.R
 import com.phoenix.pillreminder.feature_alarms.domain.model.AlarmItem
 import com.phoenix.pillreminder.feature_alarms.domain.repository.MedicineRepository
 import dagger.hilt.android.AndroidEntryPoint
-import dagger.hilt.android.qualifiers.ApplicationContext
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
@@ -25,10 +25,8 @@ import kotlin.coroutines.CoroutineContext
 @AndroidEntryPoint
 class AlarmReceiver: BroadcastReceiver(), ActivityCompat.OnRequestPermissionsResultCallback, CoroutineScope {
 
-    @Inject
-    lateinit var repository: MedicineRepository
-
     private lateinit var job: Job
+    @Inject lateinit var repository: MedicineRepository
 
     override val coroutineContext: CoroutineContext
         get() = Dispatchers.Default + job
@@ -40,9 +38,10 @@ class AlarmReceiver: BroadcastReceiver(), ActivityCompat.OnRequestPermissionsRes
         job = Job()
 
         // Automatically reschedule alarms if user reboots the device or install an app update
-        if(intent?.action == Intent.ACTION_BOOT_COMPLETED || intent?.action == Intent.ACTION_MY_PACKAGE_REPLACED){
+        if(intent?.action == Intent.ACTION_BOOT_COMPLETED || intent?.action == Intent.ACTION_MY_PACKAGE_REPLACED || intent?.action == "com.phoenix.pillreminder.RESCHEDULEBACKUPALARMS"){
+            Log.d("debug", "action triggered")
             if (context != null) {
-                rescheduleAlarmsOnBoot(context)
+                rescheduleAlarms(context)
             }
             return
         }
@@ -101,11 +100,12 @@ class AlarmReceiver: BroadcastReceiver(), ActivityCompat.OnRequestPermissionsRes
         ContextCompat.startForegroundService(context!!, serviceIntent)
     }
 
-    private fun rescheduleAlarmsOnBoot(context: Context) {
+    private fun rescheduleAlarms(context: Context) {
         job = Job()
 
         launch{
             val medicineAlarmsToSchedule = repository.getAlarmsToRescheduleAfterReboot(System.currentTimeMillis())
+            Log.d("debug", "medicinealarmstoschedule: $medicineAlarmsToSchedule")
             val alarmScheduler = AndroidAlarmScheduler(repository, context)
 
             medicineAlarmsToSchedule.forEach{ medicine ->

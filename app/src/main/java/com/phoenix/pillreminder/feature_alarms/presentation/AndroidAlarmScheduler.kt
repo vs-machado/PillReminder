@@ -33,6 +33,7 @@ class AndroidAlarmScheduler @Inject constructor(
         val intent = Intent(appContext, AlarmReceiver::class.java).apply {
             putExtra("ALARM_ITEM", item)
         }
+        Log.d("debug", "intent: $intent")
 
         // Checks if is possible to schedule exact alarms before calling the schedule method
         if(!alarmManager.canScheduleExactAlarms()){
@@ -121,7 +122,7 @@ class AndroidAlarmScheduler @Inject constructor(
             alarmHour = medicine.alarmHour.toString(),
             alarmMinute = medicine.alarmMinute.toString()
         )
-
+        Log.d("debug", "alarmitem: $alarmItem")
         alarmItem.let(alarmScheduler::scheduleAlarm)
     }
 

@@ -213,6 +213,7 @@
     <string name="Every">Every</string>
     <string name="edit_medicine">Edit medicine</string>
     <string name="end_treatment">End treatment</string>
+    <string name="are_you_sure_end_treatment">Are you sure you want to stop treatment for the following medication?\n\nThe upcoming alarms will be deleted.\n\nMedication: %1$s</string>
 
     <string-array name="medicine_forms">
         <item>Pill</item>

@@ -42,25 +42,12 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="16dp"
                 android:gravity="center"
-                android:text="Are you sure you want to end the treatment for the following medicine?\n\nThe upcoming alarms will be deleted."
+                android:text="@string/are_you_sure_end_treatment"
                 android:textSize="16sp"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintHorizontal_bias="0.482"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/tvEndTreatment" />
-
-            <TextView
-                android:id="@+id/tvMedicineAndHour"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="16dp"
-                android:gravity="center"
-                android:text="Medicine: [medicine name]"
-                android:textSize="16sp"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintHorizontal_bias="0.493"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/tvYouSure" />
 
             <Button
                 android:id="@+id/btnEndTreatment"
@@ -69,14 +56,14 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="24dp"
                 android:layout_marginBottom="8dp"
-                android:text="End treatment"
+                android:text="@string/end_treatment"
                 android:textColor="#d24141"
                 app:cornerRadius="20dp"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintHorizontal_bias="0.5"
                 app:layout_constraintStart_toEndOf="@+id/btnCancel"
-                app:layout_constraintTop_toBottomOf="@+id/tvMedicineAndHour" />
+                app:layout_constraintTop_toBottomOf="@+id/tvYouSure" />
 
 
             <Button

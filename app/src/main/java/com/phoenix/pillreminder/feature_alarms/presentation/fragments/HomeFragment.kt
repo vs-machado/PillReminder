@@ -374,6 +374,8 @@ class HomeFragment: Fragment() {
         dialog.setContentView(binding.root)
         dialog.window?.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
 
+        binding.tvYouSure.text = context?.getString(R.string.are_you_sure_end_treatment, medicine.name)
+
         binding.btnEndTreatment.setOnClickListener {
             viewLifecycleOwner.lifecycleScope.launch(Dispatchers.Main){
                 medicinesViewModel.endTreatment(medicine).join()

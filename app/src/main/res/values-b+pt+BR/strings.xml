@@ -212,6 +212,7 @@
     <string name="Every">A cada</string>
     <string name="edit_medicine">Editar medicamento</string>
     <string name="end_treatment">Encerrar tratamento</string>
+    <string name="are_you_sure_end_treatment">Tem certeza de que deseja interromper o tratamento do seguinte medicamento?\n\nFuturos alarmes serão cancelados.\n\nMedicamento: %1$s</string>
 
     <string-array name="medicine_forms">
         <item>Comprimido</item>

@@ -10,7 +10,7 @@ import com.phoenix.pillreminder.feature_alarms.domain.model.AlarmItem
 import com.phoenix.pillreminder.feature_alarms.domain.model.Medicine
 import com.phoenix.pillreminder.feature_alarms.domain.repository.MedicineRepository
 import com.phoenix.pillreminder.feature_alarms.domain.repository.SharedPreferencesRepository
-import com.phoenix.pillreminder.feature_alarms.presentation.AndroidAlarmScheduler
+import com.phoenix.pillreminder.feature_alarms.presentation.AlarmScheduler
 import dagger.hilt.android.lifecycle.HiltViewModel
 import dagger.hilt.android.qualifiers.ApplicationContext
 import kotlinx.coroutines.Dispatchers
@@ -26,14 +26,13 @@ import javax.inject.Inject
 @HiltViewModel
 class HomeFragmentViewModel @Inject constructor(
     private val spRepository: SharedPreferencesRepository,
-    private val alarmScheduler: AndroidAlarmScheduler,
+    private val alarmScheduler: AlarmScheduler,
     private val repository: MedicineRepository,
     private val workManager: WorkManager,
     @ApplicationContext private val appContext: Context
 ): ViewModel() {
 
     private var date: Date = Calendar.getInstance().time
-    private lateinit var workRequestID: UUID
 
     fun setDate(selectedDate: Date){
         date = selectedDate
@@ -122,12 +121,11 @@ class HomeFragmentViewModel @Inject constructor(
         return false
     }
 
-    fun deleteAllMedicinesWithSameName(name: String){
-        viewModelScope.launch(Dispatchers.IO){
+    fun deleteAllMedicinesWithSameName(name: String) =  viewModelScope.launch(Dispatchers.IO){
             val alarmsToDelete = repository.getAllMedicinesWithSameName(name)
             repository.deleteAllSelectedMedicines(alarmsToDelete)
-        }
     }
+//14:10
 
     fun cancelReminderNotifications(context: Context){
         WorkManager.getInstance(context).cancelUniqueWork("PillboxReminder")

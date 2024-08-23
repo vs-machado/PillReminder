@@ -86,19 +86,19 @@ class TreatmentDurationFragment : Fragment(), ActivityCompat.OnRequestPermission
 
                             when (getMedicineFrequency()){
                                 MedicineFrequency.EveryDay -> {
-                                    medicinesViewModel.insertMedicines(getAlarmsList(1L, workerID))
+                                    medicinesViewModel.insertMedicines(getAlarmsList(1L, workerID, null))
                                     createAlarmItemAndSchedule(requireActivity().applicationContext, 1L)
                                 }
                                 MedicineFrequency.EveryOtherDay -> {
-                                    medicinesViewModel.insertMedicines(getAlarmsList(2L, workerID))
+                                    medicinesViewModel.insertMedicines(getAlarmsList(2L, workerID, null))
                                     createAlarmItemAndSchedule(requireActivity().applicationContext, 2L)
                                 }
                                 MedicineFrequency.SpecificDaysOfWeek -> {
-                                    medicinesViewModel.insertMedicines(getAlarmsListForSpecificDays(workerID))
+                                    medicinesViewModel.insertMedicines(getAlarmsListForSpecificDays(workerID, null))
                                     createAlarmItemAndSchedule(requireActivity().applicationContext)
                                 }
                                 MedicineFrequency.EveryXDays, MedicineFrequency.EveryXWeeks, MedicineFrequency.EveryXMonths -> {
-                                    medicinesViewModel.insertMedicines(getAlarmsList(interval, workerID))
+                                    medicinesViewModel.insertMedicines(getAlarmsList(interval, workerID, null))
                                     createAlarmItemAndSchedule(requireActivity().applicationContext, interval)
                                 }
                             }
@@ -139,19 +139,19 @@ class TreatmentDurationFragment : Fragment(), ActivityCompat.OnRequestPermission
 
                 when (getMedicineFrequency()){
                     MedicineFrequency.EveryDay -> {
-                        medicinesViewModel.insertMedicines(getAlarmsList(1L))
+                        medicinesViewModel.insertMedicines(getAlarmsList(1L, null))
                         createAlarmItemAndSchedule(requireActivity().applicationContext, 1L)
                     }
                     MedicineFrequency.EveryOtherDay -> {
-                        medicinesViewModel.insertMedicines(getAlarmsList(2L))
+                        medicinesViewModel.insertMedicines(getAlarmsList(2L, null))
                         createAlarmItemAndSchedule(requireActivity().applicationContext, 2L)
                     }
                     MedicineFrequency.SpecificDaysOfWeek -> {
-                        medicinesViewModel.insertMedicines(getAlarmsListForSpecificDays())
+                        medicinesViewModel.insertMedicines(getAlarmsListForSpecificDays(null))
                         createAlarmItemAndSchedule(requireActivity().applicationContext)
                     }
                     MedicineFrequency.EveryXDays, MedicineFrequency.EveryXWeeks, MedicineFrequency.EveryXMonths -> {
-                        medicinesViewModel.insertMedicines(getAlarmsList(getInterval))
+                        medicinesViewModel.insertMedicines(getAlarmsList(getInterval, null))
                         createAlarmItemAndSchedule(requireActivity().applicationContext, getInterval)
                     }
                 }

@@ -85,7 +85,7 @@ class AlarmSettingsSharedViewModel @Inject constructor(
     }
 
     // Used with medicine frequency every day or every other day with treatment period set.
-    fun getAlarmsList(interval: Long): List<Medicine> {
+    fun getAlarmsList(interval: Long, editTimestamp: Long?): List<Medicine> {
         val name = medicineName
         val quantity = getMedicineQuantity()
         val form = getMedicineForm()
@@ -134,7 +134,14 @@ class AlarmSettingsSharedViewModel @Inject constructor(
                                 periodSet,
                                 needsReschedule,
                                 "noID"
-                            )
+                            ).let { medicine ->
+                                // Adds an edit timestamp when user edit medicines. Used to filter the medicine alarms list in editmedicinesfragment.
+                                if(editTimestamp != null){
+                                    medicine.copy(lastEdited = editTimestamp)
+                                } else {
+                                    medicine
+                                }
+                            }
                         )
                     }
                 }
@@ -147,7 +154,7 @@ class AlarmSettingsSharedViewModel @Inject constructor(
     // If user does not specify the treatment period,
     // a worker will be used to reinsert the medicines in the database
     // used with medicine frequency every day or every other day
-    fun getAlarmsList(interval: Long, workerID: UUID): List<Medicine> {
+    fun getAlarmsList(interval: Long, workerID: UUID, editTimestamp: Long?): List<Medicine> {
         val name = medicineName
         val quantity = getMedicineQuantity()
         val form = getMedicineForm()
@@ -197,7 +204,14 @@ class AlarmSettingsSharedViewModel @Inject constructor(
                                 periodSet,
                                 needsReschedule,
                                 workerID.toString()
-                            )
+                            ).let { medicine ->
+                                // Adds an edit timestamp when user edit medicines. Used to filter the medicine alarms list in editmedicinesfragment.
+                                if(editTimestamp != null){
+                                    medicine.copy(lastEdited = editTimestamp)
+                                } else {
+                                    medicine
+                                }
+                            }
                         )
                     }
                 }
@@ -209,7 +223,7 @@ class AlarmSettingsSharedViewModel @Inject constructor(
     }
 
     // Used with medicine frequency Specific days of week
-    fun getAlarmsListForSpecificDays(workerID: UUID): List<Medicine> {
+    fun getAlarmsListForSpecificDays(workerID: UUID, editTimestamp: Long?): List<Medicine> {
         val alarms = mutableListOf<Medicine>()
         val selectedDays = getSelectedDaysList()
         val processedDays = mutableSetOf<Long>()
@@ -264,7 +278,14 @@ class AlarmSettingsSharedViewModel @Inject constructor(
                                             medicinePeriodSet = medicinePeriodSet,
                                             medicineNeedsReschedule = medicineNeedsReschedule,
                                             rescheduleWorkerID = workerID.toString()
-                                        )
+                                        ).let { medicine ->
+                                            // Adds an edit timestamp when user edit medicines. Used to filter the medicine alarms list in editmedicinesfragment.
+                                            if(editTimestamp != null){
+                                                medicine.copy(lastEdited = editTimestamp)
+                                            } else {
+                                                medicine
+                                            }
+                                        }
                                     )
                                 }
                             }
@@ -279,7 +300,7 @@ class AlarmSettingsSharedViewModel @Inject constructor(
     }
 
     // Same as above, but without worker
-    fun getAlarmsListForSpecificDays(): List<Medicine> {
+    fun getAlarmsListForSpecificDays(editTimestamp: Long?): List<Medicine> {
         val alarms = mutableListOf<Medicine>()
         val selectedDays = getSelectedDaysList()
         val processedDays = mutableSetOf<Long>()
@@ -334,7 +355,14 @@ class AlarmSettingsSharedViewModel @Inject constructor(
                                             medicinePeriodSet = medicinePeriodSet,
                                             medicineNeedsReschedule = medicineNeedsReschedule,
                                             rescheduleWorkerID = "noID"
-                                        )
+                                        ).let { medicine ->
+                                            // Adds an edit timestamp when user edit medicines. Used to filter the medicine alarms list in editmedicinesfragment.
+                                            if(editTimestamp != null){
+                                                medicine.copy(lastEdited = editTimestamp)
+                                            } else {
+                                                medicine
+                                            }
+                                        }
                                     )
                                 }
                             }

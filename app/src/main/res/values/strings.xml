@@ -212,6 +212,7 @@
     <string name="select_alarm_hour">Select the alarm hour:</string>
     <string name="Every">Every</string>
     <string name="edit_medicine">Edit medicine</string>
+    <string name="end_treatment">End treatment</string>
 
     <string-array name="medicine_forms">
         <item>Pill</item>

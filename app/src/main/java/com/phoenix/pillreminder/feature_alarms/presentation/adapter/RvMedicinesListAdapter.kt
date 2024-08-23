@@ -22,7 +22,8 @@ class RvMedicinesListAdapter (private val showDeleteAlarmDialog: (Medicine) -> U
                               private val showDeleteAllAlarmsDialog: (Medicine) -> Unit,
                               private val markMedicineUsage: (Medicine) -> Unit,
                               private val markMedicinesAsSkipped: (Medicine) -> Unit,
-                              private val goToEditMedicines: (Medicine) -> Unit) : RecyclerView.Adapter<MyViewHolder>() {
+                              private val goToEditMedicines: (Medicine) -> Unit,
+                              private val showEndTreatmentDialog: (Medicine) -> Unit) : RecyclerView.Adapter<MyViewHolder>() {
 
     private val medicineList = ArrayList<Medicine>()
 
@@ -38,7 +39,8 @@ class RvMedicinesListAdapter (private val showDeleteAlarmDialog: (Medicine) -> U
     }
 
     override fun onBindViewHolder(holder: MyViewHolder, position: Int) {
-        holder.bind(medicineList[position], holder, showDeleteAlarmDialog, showDeleteAllAlarmsDialog, markMedicineUsage, markMedicinesAsSkipped, goToEditMedicines)
+        holder.bind(medicineList[position], holder, showDeleteAlarmDialog, showDeleteAllAlarmsDialog,
+            markMedicineUsage, markMedicinesAsSkipped, goToEditMedicines, showEndTreatmentDialog)
     }
 
     fun setList(medicines: List<Medicine>, selectedDate: Date){
@@ -76,7 +78,8 @@ class MyViewHolder(private val medicinesBinding: AdapterListMedicinesBinding):Re
              showDeleteAllAlarmsDialog: (Medicine) -> Unit,
              markMedicineUsage: (Medicine) -> Unit,
              markMedicinesAsSkipped: (Medicine) -> Unit,
-             goToEditMedicines: (Medicine) -> Unit){
+             goToEditMedicines: (Medicine) -> Unit,
+             showEndTreatmentDialog: (Medicine) -> Unit){
 
         val context = holder.itemView.context
         val currentTimeInMillis = System.currentTimeMillis()
@@ -169,6 +172,10 @@ class MyViewHolder(private val medicinesBinding: AdapterListMedicinesBinding):Re
                        }
                        R.id.menu4 -> {
                            goToEditMedicines(medicine)
+                           true
+                       }
+                       R.id.menu5 -> {
+                           showEndTreatmentDialog(medicine)
                            true
                        }
                        else -> false

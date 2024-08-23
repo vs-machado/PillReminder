@@ -2,17 +2,22 @@ package com.phoenix.pillreminder.feature_alarms.presentation.viewmodels
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.phoenix.pillreminder.feature_alarms.domain.model.AlarmItem
 import com.phoenix.pillreminder.feature_alarms.domain.model.Medicine
 import com.phoenix.pillreminder.feature_alarms.domain.repository.MedicineRepository
+import com.phoenix.pillreminder.feature_alarms.presentation.AlarmScheduler
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
+import java.time.Instant
+import java.time.ZoneId
 import javax.inject.Inject
 
 @HiltViewModel
 class MedicinesViewModel @Inject constructor(
-    private val medicineRepository: MedicineRepository
+    private val medicineRepository: MedicineRepository,
+    private val alarmScheduler: AlarmScheduler
 ): ViewModel() {
 
     val medicines = medicineRepository.getAllMedicines()
@@ -94,8 +99,8 @@ class MedicinesViewModel @Inject constructor(
         }
     }
 
-    suspend fun getAlarmTimesForMedicine(medicineName: String): List<String> {
-        return medicineRepository.getAlarmTimesForMedicine(medicineName)
+    suspend fun getAlarmTimesForMedicine(medicineName: String, cutoffTime: Long): List<String> {
+        return medicineRepository.getAlarmTimesForMedicine(medicineName, cutoffTime)
     }
 
     suspend fun getAlarmsAfterProvidedMillis(medicineName: String, millis: Long): List<Medicine>{
@@ -107,6 +112,38 @@ class MedicinesViewModel @Inject constructor(
     suspend fun getAlarmTimeSinceMidnight(medicineName: String): Long {
         return withContext(Dispatchers.IO){
             medicineRepository.getAlarmTimeSinceMidnight(medicineName)
+        }
+    }
+
+    suspend fun getMedicineEditTimestamp(medicineName: String): Long{
+        return withContext(Dispatchers.IO){
+            medicineRepository.getMedicineEditTimestamp(medicineName)
+        }
+    }
+
+    suspend fun getMillisList(medicineName: String, alarmsPerDay: Int): List<Long>{
+        return withContext(Dispatchers.IO){
+            medicineRepository.getDailyAlarms(medicineName, alarmsPerDay)
+        }
+    }
+
+    suspend fun endTreatment(medicine: Medicine) = viewModelScope.launch {
+        val alarmTime = Instant.ofEpochMilli(medicine.alarmInMillis).atZone(ZoneId.systemDefault()).toLocalDateTime()
+
+        val alarmItem = AlarmItem(
+            alarmTime,
+            medicine.name,
+            medicine.form,
+            medicine.quantity.toString(),
+            medicine.alarmHour.toString(),
+            medicine.alarmMinute.toString()
+        )
+
+        alarmScheduler.cancelAlarm(alarmItem, true)
+
+        withContext(Dispatchers.IO){
+            medicineRepository.updateMedicinesActiveStatus(medicine.name, System.currentTimeMillis(), false)
+            medicineRepository.deleteUpcomingAlarms(medicine.name, System.currentTimeMillis())
         }
     }
 

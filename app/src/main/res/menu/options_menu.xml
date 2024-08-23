@@ -14,4 +14,7 @@
     <item
         android:id="@+id/menu2"
         android:title="@string/delete_all_alarms" />
+    <item
+        android:id="@+id/menu5"
+        android:title="@string/end_treatment" />
 </menu>

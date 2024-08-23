@@ -7,7 +7,7 @@ import androidx.room.RoomDatabase
 import androidx.room.TypeConverters
 import com.phoenix.pillreminder.feature_alarms.domain.model.Medicine
 
-@Database(entities = [Medicine::class], version = 10, exportSchema = false)
+@Database(entities = [Medicine::class], version = 13, exportSchema = false)
 @TypeConverters(Converters::class)
 abstract class MedicineDatabase : RoomDatabase() {
 

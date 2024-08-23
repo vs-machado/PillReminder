@@ -102,10 +102,12 @@ class MedicineDetailsFragment: Fragment() {
                     else -> context?.getString(R.string.ended)
                 }
 
-                viewLifecycleOwner.lifecycleScope.launch{
+                viewLifecycleOwner.lifecycleScope.launch(Dispatchers.Main){
                     val result = withContext(Dispatchers.IO){
-                        medicinesViewModel.getAlarmTimesForMedicine(medicine.name)
+                        val cutoffTime = medicinesViewModel.getMedicineEditTimestamp(medicine.name)
+                        medicinesViewModel.getAlarmTimesForMedicine(medicine.name, cutoffTime)
                     }
+
                     // Concatenates all the different alarm hours for the same medicine in a string
                     tvAlarmsHour.text = result.joinToString(", ")
                 }

@@ -16,9 +16,8 @@ object ViewModelModule {
     @Provides
     @Singleton
     fun provideEditMedicinesViewModel(
-        repository: MedicineRepository,
         alarmScheduler: AndroidAlarmScheduler
     ): EditMedicinesViewModel{
-        return EditMedicinesViewModel(repository, alarmScheduler)
+        return EditMedicinesViewModel(alarmScheduler)
     }
 }

@@ -1,17 +1,17 @@
 package com.phoenix.pillreminder.feature_alarms.presentation.viewmodels
 
+import android.content.Context
+import android.text.format.DateFormat
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.phoenix.pillreminder.feature_alarms.domain.model.AlarmHour
 import com.phoenix.pillreminder.feature_alarms.domain.model.AlarmItem
 import com.phoenix.pillreminder.feature_alarms.domain.model.Medicine
-import com.phoenix.pillreminder.feature_alarms.domain.repository.MedicineRepository
 import com.phoenix.pillreminder.feature_alarms.presentation.AndroidAlarmScheduler
 import com.phoenix.pillreminder.feature_alarms.presentation.utils.CalendarUtils
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
-import kotlinx.coroutines.withContext
 import java.text.SimpleDateFormat
 import java.time.Instant
 import java.time.LocalTime
@@ -24,31 +24,18 @@ import javax.inject.Inject
 
 @HiltViewModel
 class EditMedicinesViewModel @Inject constructor(
-    private val repository: MedicineRepository,
     private val alarmScheduler: AndroidAlarmScheduler
 ): ViewModel() {
 
-    suspend fun getMillisList(medicineName: String): List<Long>{
-        return withContext(Dispatchers.IO){
-            repository.getAllAlarmsMillis(medicineName, System.currentTimeMillis())
-        }
+    fun convertMillisToAlarmHourList(context: Context, millisList: List<Long>): List<AlarmHour>{
+        val is24HourFormat = DateFormat.is24HourFormat(context)
+        val pattern = if(is24HourFormat) "HH:mm" else "hh:mm a"
+
+        return millisList
+            .distinct()
+            .sortedBy { normalizeMillisToTimeOfDay(it) }
+            .map{ AlarmHour(CalendarUtils.formatMillisToString(it, pattern)) }
     }
-
-    fun convertMillisToAlarmHourList(longList: List<Long>, pattern: String): List<AlarmHour>{
-        // A set is used to avoid repeated hours (because different millis can lead to the same day hour.)
-        val uniqueAlarmStrings = mutableSetOf<String>()
-
-        return longList.mapNotNull{ millis ->
-            val dateString = CalendarUtils.formatMillisToString(millis, pattern)
-
-            if(uniqueAlarmStrings.add(dateString)){
-                AlarmHour(dateString)
-            } else {
-                null
-            }
-        }
-    }
-
 
     fun resetCalendarHourToMidnight(millis: Long, timeZone: TimeZone): Long {
         val timeZoneOffset = timeZone.getOffset(millis)
@@ -61,6 +48,14 @@ class EditMedicinesViewModel @Inject constructor(
         }
 
         return date.timeInMillis
+    }
+
+    private fun normalizeMillisToTimeOfDay(millis: Long): Long {
+        val calendar = Calendar.getInstance().apply { timeInMillis = millis }
+        return (calendar.get(Calendar.HOUR_OF_DAY) * 3600000L +
+                calendar.get(Calendar.MINUTE) * 60000L +
+                calendar.get(Calendar.SECOND) * 1000L +
+                calendar.get(Calendar.MILLISECOND))
     }
 
     // It sums the selected alarm milliseconds to the selected date millis. This is used to set
@@ -109,5 +104,7 @@ class EditMedicinesViewModel @Inject constructor(
         val sdf = SimpleDateFormat(format, Locale.getDefault())
         return sdf.format(calendar.time)
     }
+
+
 
 }

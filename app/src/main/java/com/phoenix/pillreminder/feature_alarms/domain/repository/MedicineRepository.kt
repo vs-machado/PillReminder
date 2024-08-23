@@ -8,9 +8,13 @@ interface MedicineRepository {
 
     suspend fun updateMedicine(medicine: Medicine)
 
+    suspend fun updateMedicinesActiveStatus(medicineName: String, currentTimeMillis: Long, isActive: Boolean)
+
     suspend fun deleteMedicine(medicine: Medicine)
 
     suspend fun deleteAllSelectedMedicines(medicines: List<Medicine>)
+
+    suspend fun deleteUpcomingAlarms(medicineName: String, currentTimeMillis: Long)
 
     suspend fun getAlarmsAfterProvidedMillis(medicineName: String, millis: Long): List<Medicine>
 
@@ -18,7 +22,9 @@ interface MedicineRepository {
 
     fun getAllMedicines(): LiveData<List<Medicine>>
 
-    suspend fun getAllAlarmsMillis(medicineName: String, millis: Long): List<Long>
+    suspend fun getDailyAlarms(medicineName: String, alarmsPerDay: Int): List<Long>
+
+    suspend fun getMedicineEditTimestamp(medicineName: String): Long
 
     fun getAllMedicinesWithSameName(medicineName: String): List<Medicine>
 
@@ -42,5 +48,5 @@ interface MedicineRepository {
 
     fun getAllDistinctMedicines(): List<Medicine>
 
-    suspend fun getAlarmTimesForMedicine(medicineName: String): List<String>
+    suspend fun getAlarmTimesForMedicine(medicineName: String, cutoffTime: Long): List<String>
 }

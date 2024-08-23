@@ -211,6 +211,7 @@
     <string name="select_alarm_hour">Selecione o horário do alarme:</string>
     <string name="Every">A cada</string>
     <string name="edit_medicine">Editar medicamento</string>
+    <string name="end_treatment">Encerrar tratamento</string>
 
     <string-array name="medicine_forms">
         <item>Comprimido</item>

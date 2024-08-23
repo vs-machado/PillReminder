@@ -46,7 +46,11 @@ data class Medicine(
     @ColumnInfo(name = "needs_reschedule")
     var medicineNeedsReschedule: Boolean,
     @ColumnInfo(name = "reschedule_worker_id")
-    var rescheduleWorkerID: String
+    var rescheduleWorkerID: String,
+    @ColumnInfo(name = "last_edited")
+    var lastEdited: Long = 0L,
+    @ColumnInfo(name = "is_active")
+    var isActive: Boolean = true
 
 ) : Parcelable
 

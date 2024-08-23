@@ -34,11 +34,11 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.google.android.material.switchmaterial.SwitchMaterial
 import com.phoenix.pillreminder.R
 import com.phoenix.pillreminder.databinding.FragmentHomeBinding
+import com.phoenix.pillreminder.databinding.LayoutEndTreatmentDialogBinding
 import com.phoenix.pillreminder.databinding.LayoutSetPillboxReminderDialogBinding
 import com.phoenix.pillreminder.databinding.LayoutWarnAboutMedicineUsageHourBinding
 import com.phoenix.pillreminder.feature_alarms.domain.model.Medicine
 import com.phoenix.pillreminder.feature_alarms.domain.repository.MedicineRepository
-import com.phoenix.pillreminder.feature_alarms.presentation.AndroidAlarmScheduler
 import com.phoenix.pillreminder.feature_alarms.presentation.HideFabScrollListener
 import com.phoenix.pillreminder.feature_alarms.presentation.PermissionManager
 import com.phoenix.pillreminder.feature_alarms.presentation.adapter.RvMedicinesListAdapter
@@ -59,7 +59,6 @@ import kotlin.math.abs
 class HomeFragment: Fragment() {
 
     @Inject lateinit var repository: MedicineRepository
-    @Inject lateinit var alarmScheduler: AndroidAlarmScheduler
 
     private lateinit var binding: FragmentHomeBinding
     private lateinit var adapter: RvMedicinesListAdapter
@@ -208,6 +207,9 @@ class HomeFragment: Fragment() {
             goToEditMedicines = { selectedMedicine ->
                 val action = HomeFragmentDirections.actionHomeFragmentToEditMedicinesFragment(selectedMedicine)
                 findNavController().navigate(action)
+            },
+            showEndTreatmentDialog = { selectedMedicine ->
+                showEndTreatmentDialog(selectedMedicine)
             }
         )
         binding.rvMedicinesList.adapter = adapter
@@ -317,7 +319,7 @@ class HomeFragment: Fragment() {
                 viewLifecycleOwner.lifecycleScope.launch{
                     cancelAlarm(medicine, true)
                     sharedViewModel.cancelWork(medicine)
-                    deleteAllMedicinesWithSameName(medicine.name)
+                    deleteAllMedicinesWithSameName(medicine.name).join()
 
                     withContext(Dispatchers.Main){
                         displayMedicinesList(getDate())
@@ -355,6 +357,32 @@ class HomeFragment: Fragment() {
         binding.btnSkipDose.setOnClickListener {
             hfViewModel.markMedicinesAsSkipped(medicine)
             displayMedicinesList(hfViewModel.getDate())
+            dialog.dismiss()
+        }
+
+        dialog.show()
+    }
+
+    private fun showEndTreatmentDialog(medicine: Medicine){
+        dialog = Dialog(this.requireContext())
+        dialog.requestWindowFeature(Window.FEATURE_NO_TITLE)
+        dialog.setCancelable(false)
+
+        val inflater = context?.getSystemService(Context.LAYOUT_INFLATER_SERVICE) as LayoutInflater
+        val binding = LayoutEndTreatmentDialogBinding.inflate(inflater)
+
+        dialog.setContentView(binding.root)
+        dialog.window?.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
+
+        binding.btnEndTreatment.setOnClickListener {
+            viewLifecycleOwner.lifecycleScope.launch(Dispatchers.Main){
+                medicinesViewModel.endTreatment(medicine).join()
+                displayMedicinesList(hfViewModel.getDate())
+                dialog.dismiss()
+            }
+        }
+
+        binding.btnCancel.setOnClickListener {
             dialog.dismiss()
         }
 
@@ -479,7 +507,8 @@ class HomeFragment: Fragment() {
     override fun onResume() {
         super.onResume()
         lifecycleScope.launch(Dispatchers.Main){
-            adapter.setList(medicinesViewModel.getMedicines(), hfViewModel.getDate())
+            val currentDate = Date(System.currentTimeMillis())
+            adapter.setList(medicinesViewModel.getMedicines(), currentDate)
         }
     }
 

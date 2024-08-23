@@ -17,8 +17,14 @@ interface MedicineDao {
     @Update
     suspend fun updateMedicine(medicine: Medicine)
 
+    @Query("UPDATE medicines_data_table SET is_active = :isActive WHERE name = :medicineName AND alarm_in_millis <= :currentTimeMillis")
+    suspend fun updateMedicinesActiveStatus(medicineName: String, currentTimeMillis: Long, isActive: Boolean)
+
     @Delete
     suspend fun deleteMedicine(medicine: Medicine)
+
+    @Query("DELETE FROM medicines_data_table WHERE name = :medicineName AND alarm_in_millis > :currentTimeMillis")
+    suspend fun deleteUpcomingAlarms(medicineName: String, currentTimeMillis: Long)
 
     @Delete
     suspend fun deleteAllSelectedMedicines(medicines: List<Medicine>)
@@ -34,8 +40,18 @@ interface MedicineDao {
     @Query("SELECT * FROM medicines_data_table")
     fun getAllMedicines():LiveData<List<Medicine>>
 
-    @Query("SELECT alarm_in_millis FROM medicines_data_table WHERE name = :medicineName AND alarm_in_millis > :millis ORDER BY alarm_in_millis ASC")
-    suspend fun getAllAlarmsMillis(medicineName: String, millis: Long): List<Long>
+    @Query("SELECT DISTINCT alarm_in_millis FROM medicines_data_table WHERE " +
+            "name = :medicineName AND last_edited = (" +
+            "    SELECT MAX(last_edited) FROM medicines_data_table " +
+            "    WHERE name = :medicineName" +
+            ") AND is_active = true " +
+            "ORDER BY alarm_in_millis ASC " +
+            "LIMIT :alarmsPerDay")
+    suspend fun getDailyAlarms(medicineName: String, alarmsPerDay: Int): List<Long>
+
+    @Query("SELECT last_edited FROM medicines_data_table " +
+            "WHERE name = :medicineName AND is_active = true ORDER BY last_edited DESC LIMIT 1")
+    suspend fun getMedicineEditTimestamp(medicineName: String): Long
 
     @Query("SELECT *" +
             "FROM medicines_data_table " +
@@ -45,7 +61,7 @@ interface MedicineDao {
     @Query("SELECT * FROM medicines_data_table")
     fun getMedicines(): List<Medicine>
 
-    @Query("SELECT reschedule_worker_id FROM medicines_data_table WHERE name = :medicineName")
+    @Query("SELECT reschedule_worker_id FROM medicines_data_table WHERE name = :medicineName AND is_active = true")
     fun getWorkerID(medicineName: String): String
 
     @Query("SELECT * "+
@@ -115,9 +131,9 @@ interface MedicineDao {
     @Query("""
         SELECT DISTINCT printf('%02d:%02d', alarm_hour, alarm_minute) AS alarm_time
         FROM medicines_data_table
-        WHERE name = :medicineName
+        WHERE name = :medicineName AND last_edited >= :cutoffTime
         ORDER BY alarm_hour, alarm_minute
     """)
-    suspend fun getAlarmTimesForMedicine(medicineName: String): List<String>
+    suspend fun getAlarmTimesForMedicine(medicineName: String, cutoffTime: Long): List<String>
 
 }

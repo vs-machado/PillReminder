@@ -11,9 +11,7 @@ import android.media.AudioAttributes
 import android.net.Uri
 import android.os.Build
 import android.provider.Settings
-import android.util.Log
 import androidx.core.app.NotificationCompat
-import androidx.core.content.ContextCompat
 import com.phoenix.pillreminder.R
 import com.phoenix.pillreminder.feature_alarms.domain.model.AlarmItem
 import com.phoenix.pillreminder.feature_alarms.presentation.AlarmReceiver
@@ -200,12 +198,26 @@ object NotificationUtils {
 
     private fun checkMedicineForm(medicineForm: String, medicineQuantity: String, context: Context): String{
         return when(medicineForm){
-            "pill" -> context.getString(R.string.take_pill, medicineQuantity)
-            "injection" -> context.getString(R.string.take_injection, medicineQuantity)
-            "liquid" ->  context.getString(R.string.take_liquid, medicineQuantity)
-            "drop" -> context.getString(R.string.take_drops, medicineQuantity)
-            "inhaler" -> context.getString(R.string.inhale, medicineQuantity)
-            "pomade" -> context.getString(R.string.apply_pomade)
+            "pill" -> {
+                val quantity = medicineQuantity.toFloatOrNull()?.toInt().toString()
+                context.getString(R.string.take_pill, quantity)
+            }
+            "injection" -> {
+                context.getString(R.string.take_injection, medicineQuantity)
+            }
+            "liquid" -> {
+                context.getString(R.string.take_liquid, medicineQuantity)
+            }
+            "drop" -> {
+                val quantity = medicineQuantity.toFloatOrNull()?.toInt().toString()
+                context.getString(R.string.take_drops, quantity)
+            }
+            "inhaler" -> {
+                context.getString(R.string.inhale, medicineQuantity)
+            }
+            "pomade" -> {
+                context.getString(R.string.apply_pomade)
+            }
             else -> {""}
         }
     }

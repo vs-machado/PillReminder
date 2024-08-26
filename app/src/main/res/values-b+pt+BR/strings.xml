@@ -30,7 +30,7 @@
     <string name="take_pill">Tomar %1$s comprimido(s)</string>
     <string name="take_injection">Injetar %1$s mL</string>
     <string name="take_liquid">Tomar %1$s mL</string>
-    <string name="take_drops">Tomar %1$s gota(s)</string>
+    <string name="take_drops">Utilizar %1$s gota(s)</string>
     <string name="inhale">Inalar %1$s mg</string>
     <string name="apply_pomade">1 aplicação</string>
     <string name="delete_alarm">Deletar alarme?</string>

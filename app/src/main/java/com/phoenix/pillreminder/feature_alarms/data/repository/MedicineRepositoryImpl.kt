@@ -16,6 +16,18 @@ class MedicineRepositoryImpl (
         dao.updateMedicine(medicine)
     }
 
+    override suspend fun updateExpiredMedicines(
+        treatmentID: String,
+        name: String,
+        quantity: Float,
+        form: String,
+        endDate: Long,
+        frequency: String,
+        currentTime: Long
+    ) {
+        dao.updateExpiredMedicines(treatmentID, name, quantity, form, endDate, frequency, currentTime)
+    }
+
     override suspend fun deleteMedicine(medicine: Medicine) {
         dao.deleteMedicine(medicine)
     }

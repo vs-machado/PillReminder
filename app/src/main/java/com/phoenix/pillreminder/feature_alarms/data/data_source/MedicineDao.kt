@@ -20,6 +20,12 @@ interface MedicineDao {
     @Query("UPDATE medicines_data_table SET is_active = :isActive WHERE name = :medicineName AND alarm_in_millis <= :currentTimeMillis")
     suspend fun updateMedicinesActiveStatus(medicineName: String, currentTimeMillis: Long, isActive: Boolean)
 
+    @Query("UPDATE medicines_data_table SET name = :name, quantity = :quantity, form = :form, end_date = :endDate, " +
+            "frequency = :frequency, is_active = false " +
+            "WHERE treatment_id = :treatmentID AND name = :name AND alarm_in_millis < :currentTime")
+    suspend fun updateExpiredMedicines(treatmentID: String, name: String, quantity: Float, form: String,
+                                       endDate: Long, frequency: String, currentTime: Long)
+
     @Delete
     suspend fun deleteMedicine(medicine: Medicine)
 

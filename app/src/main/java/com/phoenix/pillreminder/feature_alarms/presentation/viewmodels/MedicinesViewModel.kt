@@ -5,6 +5,7 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.phoenix.pillreminder.feature_alarms.domain.model.AlarmItem
+import com.phoenix.pillreminder.feature_alarms.domain.model.ExpiredMedicinesInfo
 import com.phoenix.pillreminder.feature_alarms.domain.model.Medicine
 import com.phoenix.pillreminder.feature_alarms.domain.repository.MedicineRepository
 import com.phoenix.pillreminder.feature_alarms.presentation.AlarmScheduler
@@ -83,6 +84,20 @@ class MedicinesViewModel @Inject constructor(
     fun updateMedicines(medicine: Medicine) = viewModelScope.launch{
         withContext(Dispatchers.IO){
             medicineRepository.updateMedicine(medicine)
+        }
+    }
+
+    suspend fun updateExpiredMedicines(info: ExpiredMedicinesInfo) = viewModelScope.launch {
+        withContext(Dispatchers.IO){
+            medicineRepository.updateExpiredMedicines(
+                info.treatmentID,
+                info.name,
+                info.quantity,
+                info.form,
+                info.endDate,
+                info.frequency,
+                info.currentTime
+            )
         }
     }
 

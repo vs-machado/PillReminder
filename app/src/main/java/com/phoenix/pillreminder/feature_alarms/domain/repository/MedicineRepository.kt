@@ -10,6 +10,9 @@ interface MedicineRepository {
 
     suspend fun updateMedicinesActiveStatus(medicineName: String, currentTimeMillis: Long, isActive: Boolean)
 
+    suspend fun updateExpiredMedicines(treatmentID: String, name: String, quantity: Float, form: String, endDate: Long, frequency: String,
+                                       currentTime: Long)
+
     suspend fun deleteMedicine(medicine: Medicine)
 
     suspend fun deleteAllSelectedMedicines(medicines: List<Medicine>)

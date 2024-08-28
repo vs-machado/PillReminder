@@ -11,6 +11,7 @@ import androidx.work.WorkManager
 import com.phoenix.pillreminder.feature_alarms.data.worker.RescheduleWorker
 import com.phoenix.pillreminder.feature_alarms.domain.model.AlarmHour
 import com.phoenix.pillreminder.feature_alarms.domain.model.AlarmItem
+import com.phoenix.pillreminder.feature_alarms.domain.model.ExpiredMedicinesInfo
 import com.phoenix.pillreminder.feature_alarms.domain.model.Medicine
 import com.phoenix.pillreminder.feature_alarms.domain.util.MedicineFrequency
 import com.phoenix.pillreminder.feature_alarms.presentation.AlarmScheduler
@@ -73,6 +74,7 @@ class AlarmSettingsSharedViewModel @Inject constructor(
     private var medicineNeedsReschedule = false
 
     private lateinit var selectedDaysList: MutableSet<Int>
+    private lateinit var treatmentID: String
 
     private var interval: Int = 0
 
@@ -85,7 +87,7 @@ class AlarmSettingsSharedViewModel @Inject constructor(
     }
 
     // Used with medicine frequency every day or every other day with treatment period set.
-    fun getAlarmsList(interval: Long, editTimestamp: Long?): List<Medicine> {
+    fun getAlarmsList(interval: Long, editTimestamp: Long?, generateTreatmentID: Boolean): List<Medicine> {
         val name = medicineName
         val quantity = getMedicineQuantity()
         val form = getMedicineForm()
@@ -100,7 +102,10 @@ class AlarmSettingsSharedViewModel @Inject constructor(
         val periodSet = medicinePeriodSet
         val needsReschedule = medicineNeedsReschedule
         val alarms = mutableListOf<Medicine>()
-        val treatmentID = UUID.randomUUID().toString()
+        val treatmentID = when(generateTreatmentID){
+            true -> { UUID.randomUUID().toString() }
+            false -> { getTreatmentID() }
+        }
 
         val scheduleInterval = when(frequency){
             "EveryXWeeks" -> { interval * 7 }
@@ -158,7 +163,7 @@ class AlarmSettingsSharedViewModel @Inject constructor(
     // If user does not specify the treatment period,
     // a worker will be used to reinsert the medicines in the database
     // used with medicine frequency every day or every other day
-    fun getAlarmsList(interval: Long, workerID: UUID, editTimestamp: Long?): List<Medicine> {
+    fun getAlarmsList(interval: Long, workerID: UUID, editTimestamp: Long?, generateTreatmentID: Boolean): List<Medicine> {
         val name = medicineName
         val quantity = getMedicineQuantity()
         val form = getMedicineForm()
@@ -172,7 +177,11 @@ class AlarmSettingsSharedViewModel @Inject constructor(
         val frequency = medicineFrequency.toString()
         val periodSet = medicinePeriodSet
         val needsReschedule = medicineNeedsReschedule
-        val treatmentID = UUID.randomUUID().toString()
+        val treatmentID = when(generateTreatmentID){
+            true -> { UUID.randomUUID().toString() }
+            false -> { getTreatmentID() }
+        }
+
 
         val alarms = mutableListOf<Medicine>()
 
@@ -231,11 +240,15 @@ class AlarmSettingsSharedViewModel @Inject constructor(
     }
 
     // Used with medicine frequency Specific days of week
-    fun getAlarmsListForSpecificDays(workerID: UUID, editTimestamp: Long?): List<Medicine> {
+    fun getAlarmsListForSpecificDays(workerID: UUID, editTimestamp: Long?, generateTreatmentID: Boolean): List<Medicine> {
         val alarms = mutableListOf<Medicine>()
         val selectedDays = getSelectedDaysList()
         val processedDays = mutableSetOf<Long>()
-        val treatmentID = UUID.randomUUID().toString()
+        val treatmentID = when(generateTreatmentID){
+            true -> { UUID.randomUUID().toString() }
+            false -> { getTreatmentID() }
+        }
+
 
         if (treatmentStartDate != 0L && treatmentEndDate != 0L) {
             val calendar = Calendar.getInstance()
@@ -312,11 +325,15 @@ class AlarmSettingsSharedViewModel @Inject constructor(
     }
 
     // Same as above, but without worker
-    fun getAlarmsListForSpecificDays(editTimestamp: Long?): List<Medicine> {
+    fun getAlarmsListForSpecificDays(editTimestamp: Long?, generateTreatmentID: Boolean): List<Medicine> {
         val alarms = mutableListOf<Medicine>()
         val selectedDays = getSelectedDaysList()
         val processedDays = mutableSetOf<Long>()
-        val treatmentID = UUID.randomUUID().toString()
+        val treatmentID = when(generateTreatmentID){
+            true -> { UUID.randomUUID().toString() }
+            false -> { getTreatmentID() }
+        }
+
 
         if (treatmentStartDate != 0L && treatmentEndDate != 0L) {
             val calendar = Calendar.getInstance()
@@ -423,6 +440,14 @@ class AlarmSettingsSharedViewModel @Inject constructor(
         }
     }
 
+    fun setTreatmentID(treatmentID: String) {
+        this.treatmentID = treatmentID
+    }
+
+    fun getTreatmentID(): String {
+        return treatmentID
+    }
+
     //Used with frequency specific days of week
     fun createAlarmItemAndSchedule(context: Context){
         val alarmScheduler : AlarmScheduler = AndroidAlarmScheduler(repository, context)
@@ -445,6 +470,18 @@ class AlarmSettingsSharedViewModel @Inject constructor(
                 }
             }
         }
+    }
+
+    fun getExpiredMedicinesUpdatedInfo(medicine: Medicine): ExpiredMedicinesInfo {
+        return ExpiredMedicinesInfo(
+            medicine.treatmentID,
+            getMedicineName(),
+            getMedicineQuantity(),
+            getMedicineForm().toString(),
+            getTreatmentEndDate(),
+            getMedicineFrequency().toString(),
+            System.currentTimeMillis()
+        )
     }
 
     fun resetCurrentAlarmNumber(){

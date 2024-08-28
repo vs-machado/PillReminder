@@ -6,7 +6,6 @@ import android.graphics.Color
 import android.graphics.drawable.ColorDrawable
 import android.os.Bundle
 import android.text.format.DateFormat.is24HourFormat
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -270,6 +269,7 @@ class EditMedicinesFragment: Fragment() {
                 setMedicineForm(medicineForm)
                 setMedicineQuantity(quantity)
                 setNumberOfAlarms(alarmsPerDay!!)
+                setTreatmentID(medicine.treatmentID)
 
                 when(inputFrequency){
                     context?.getString(R.string.every_day) -> setMedicineFrequency(MedicineFrequency.EveryDay)
@@ -284,6 +284,10 @@ class EditMedicinesFragment: Fragment() {
             alarmSettingsSharedViewModel.apply {
                 val cutoffTime = System.currentTimeMillis()
 
+                // The info will update the medicine name, quantity, form, endDate and frequency in alarms already triggered.
+                // Useful to properly display the medicine data in MyMedicinesFragment and MedicineDetailsFragment.
+                val expiredMedicinesUpdatedInfo = medicine?.let{ getExpiredMedicinesUpdatedInfo(it) }
+
                 when(medicine?.medicinePeriodSet){
                     true -> {
                         extractDateComponents(medicine.startDate, getTreatmentEndDate(), true)
@@ -291,39 +295,45 @@ class EditMedicinesFragment: Fragment() {
                         val interval = getInterval().toLong()
 
                         viewLifecycleOwner.lifecycleScope.launch(Dispatchers.Main) {
-                            when(inputFrequency){
-                                context?.getString(R.string.every_day) -> {
-                                    medicinesViewModel.removeRemainingAlarms(medicine)
-                                    editMedicinesViewModel.cancelAlarm(medicine, true)
-                                    medicinesViewModel.insertMedicines(getAlarmsList(1L, cutoffTime))
-                                    withContext(Dispatchers.Default){
-                                        createAlarmItemAndSchedule(requireActivity().applicationContext, 1L)
+                            if(expiredMedicinesUpdatedInfo != null) {
+                                when(inputFrequency){
+                                    context?.getString(R.string.every_day) -> {
+                                        medicinesViewModel.updateExpiredMedicines(expiredMedicinesUpdatedInfo)
+                                        medicinesViewModel.removeRemainingAlarms(medicine)
+                                        editMedicinesViewModel.cancelAlarm(medicine, true)
+                                        medicinesViewModel.insertMedicines(getAlarmsList(1L, cutoffTime, false))
+                                        withContext(Dispatchers.Default){
+                                            createAlarmItemAndSchedule(requireActivity().applicationContext, 1L)
+                                        }
                                     }
-                                }
-                                context?.getString(R.string.every_other_day) -> {
-                                    medicinesViewModel.removeRemainingAlarms(medicine)
-                                    editMedicinesViewModel.cancelAlarm(medicine, true)
-                                    medicinesViewModel.insertMedicines(getAlarmsList(2L, cutoffTime))
-                                    withContext(Dispatchers.Default){
-                                        createAlarmItemAndSchedule(requireActivity().applicationContext, 2L)
+                                    context?.getString(R.string.every_other_day) -> {
+                                        medicinesViewModel.updateExpiredMedicines(expiredMedicinesUpdatedInfo)
+                                        medicinesViewModel.removeRemainingAlarms(medicine)
+                                        editMedicinesViewModel.cancelAlarm(medicine, true)
+                                        medicinesViewModel.insertMedicines(getAlarmsList(2L, cutoffTime, false))
+                                        withContext(Dispatchers.Default){
+                                            createAlarmItemAndSchedule(requireActivity().applicationContext, 2L)
+                                        }
                                     }
-                                }
-                                context?.getString(R.string.specific_days_of_the_week) -> {
-                                    medicinesViewModel.removeRemainingAlarms(medicine)
-                                    editMedicinesViewModel.cancelAlarm(medicine, true)
-                                    medicinesViewModel.insertMedicines(getAlarmsListForSpecificDays(cutoffTime))
-                                    withContext(Dispatchers.Default){
-                                        createAlarmItemAndSchedule(requireActivity().applicationContext)
+                                    context?.getString(R.string.specific_days_of_the_week) -> {
+                                        medicinesViewModel.updateExpiredMedicines(expiredMedicinesUpdatedInfo)
+                                        medicinesViewModel.removeRemainingAlarms(medicine)
+                                        editMedicinesViewModel.cancelAlarm(medicine, true)
+                                        medicinesViewModel.insertMedicines(getAlarmsListForSpecificDays(cutoffTime, false))
+                                        withContext(Dispatchers.Default){
+                                            createAlarmItemAndSchedule(requireActivity().applicationContext)
+                                        }
                                     }
-                                }
-                                context?.getString(R.string.every_x_days),
-                                context?.getString(R.string.every_x_weeks),
-                                context?.getString(R.string.every_x_months) -> {
-                                    medicinesViewModel.removeRemainingAlarms(medicine)
-                                    editMedicinesViewModel.cancelAlarm(medicine, true)
-                                    medicinesViewModel.insertMedicines(getAlarmsList(getInterval().toLong(), cutoffTime))
-                                    withContext(Dispatchers.Default){
-                                        createAlarmItemAndSchedule(requireActivity().applicationContext, interval)
+                                    context?.getString(R.string.every_x_days),
+                                    context?.getString(R.string.every_x_weeks),
+                                    context?.getString(R.string.every_x_months) -> {
+                                        medicinesViewModel.updateExpiredMedicines(expiredMedicinesUpdatedInfo)
+                                        medicinesViewModel.removeRemainingAlarms(medicine)
+                                        editMedicinesViewModel.cancelAlarm(medicine, true)
+                                        medicinesViewModel.insertMedicines(getAlarmsList(getInterval().toLong(), cutoffTime, false))
+                                        withContext(Dispatchers.Default){
+                                            createAlarmItemAndSchedule(requireActivity().applicationContext, interval)
+                                        }
                                     }
                                 }
                             }
@@ -337,43 +347,49 @@ class EditMedicinesFragment: Fragment() {
                         val interval = getInterval().toLong()
 
                         viewLifecycleOwner.lifecycleScope.launch(Dispatchers.Main) {
-                            when(inputFrequency){
-                                context?.getString(R.string.every_day) -> {
-                                    medicinesViewModel.removeRemainingAlarms(medicine)
-                                    alarmSettingsSharedViewModel.cancelWork(medicine)
-                                    editMedicinesViewModel.cancelAlarm(medicine, true)
-                                    medicinesViewModel.insertMedicines(getAlarmsList(1L, workerID, cutoffTime))
-                                    withContext(Dispatchers.Default){
-                                        createAlarmItemAndSchedule(requireActivity().applicationContext, 1L)
+                            if(expiredMedicinesUpdatedInfo != null) {
+                                when(inputFrequency){
+                                    context?.getString(R.string.every_day) -> {
+                                        medicinesViewModel.updateExpiredMedicines(expiredMedicinesUpdatedInfo)
+                                        medicinesViewModel.removeRemainingAlarms(medicine)
+                                        alarmSettingsSharedViewModel.cancelWork(medicine)
+                                        editMedicinesViewModel.cancelAlarm(medicine, true)
+                                        medicinesViewModel.insertMedicines(getAlarmsList(1L, workerID, cutoffTime, false))
+                                        withContext(Dispatchers.Default){
+                                            createAlarmItemAndSchedule(requireActivity().applicationContext, 1L)
+                                        }
                                     }
-                                }
-                                context?.getString(R.string.every_other_day) -> {
-                                    medicinesViewModel.removeRemainingAlarms(medicine)
-                                    alarmSettingsSharedViewModel.cancelWork(medicine)
-                                    editMedicinesViewModel.cancelAlarm(medicine, true)
-                                    medicinesViewModel.insertMedicines(getAlarmsList(2L, workerID, cutoffTime))
-                                    withContext(Dispatchers.Default){
-                                        createAlarmItemAndSchedule(requireActivity().applicationContext, 2L)
+                                    context?.getString(R.string.every_other_day) -> {
+                                        medicinesViewModel.updateExpiredMedicines(expiredMedicinesUpdatedInfo)
+                                        medicinesViewModel.removeRemainingAlarms(medicine)
+                                        alarmSettingsSharedViewModel.cancelWork(medicine)
+                                        editMedicinesViewModel.cancelAlarm(medicine, true)
+                                        medicinesViewModel.insertMedicines(getAlarmsList(2L, workerID, cutoffTime, false))
+                                        withContext(Dispatchers.Default){
+                                            createAlarmItemAndSchedule(requireActivity().applicationContext, 2L)
+                                        }
                                     }
-                                }
-                                context?.getString(R.string.specific_days_of_the_week) -> {
-                                    medicinesViewModel.removeRemainingAlarms(medicine)
-                                    alarmSettingsSharedViewModel.cancelWork(medicine)
-                                    editMedicinesViewModel.cancelAlarm(medicine, true)
-                                    medicinesViewModel.insertMedicines(getAlarmsListForSpecificDays(workerID, cutoffTime))
-                                    withContext(Dispatchers.Default){
-                                        createAlarmItemAndSchedule(requireActivity().applicationContext)
+                                    context?.getString(R.string.specific_days_of_the_week) -> {
+                                        medicinesViewModel.updateExpiredMedicines(expiredMedicinesUpdatedInfo)
+                                        medicinesViewModel.removeRemainingAlarms(medicine)
+                                        alarmSettingsSharedViewModel.cancelWork(medicine)
+                                        editMedicinesViewModel.cancelAlarm(medicine, true)
+                                        medicinesViewModel.insertMedicines(getAlarmsListForSpecificDays(workerID, cutoffTime, false))
+                                        withContext(Dispatchers.Default){
+                                            createAlarmItemAndSchedule(requireActivity().applicationContext)
+                                        }
                                     }
-                                }
-                                context?.getString(R.string.every_x_days),
-                                context?.getString(R.string.every_x_weeks),
-                                context?.getString(R.string.every_x_months) -> {
-                                    medicinesViewModel.removeRemainingAlarms(medicine)
-                                    alarmSettingsSharedViewModel.cancelWork(medicine)
-                                    editMedicinesViewModel.cancelAlarm(medicine, true)
-                                    medicinesViewModel.insertMedicines(getAlarmsList(interval, workerID,cutoffTime))
-                                    withContext(Dispatchers.Default){
-                                        createAlarmItemAndSchedule(requireActivity().applicationContext, interval)
+                                    context?.getString(R.string.every_x_days),
+                                    context?.getString(R.string.every_x_weeks),
+                                    context?.getString(R.string.every_x_months) -> {
+                                        medicinesViewModel.updateExpiredMedicines(expiredMedicinesUpdatedInfo)
+                                        medicinesViewModel.removeRemainingAlarms(medicine)
+                                        alarmSettingsSharedViewModel.cancelWork(medicine)
+                                        editMedicinesViewModel.cancelAlarm(medicine, true)
+                                        medicinesViewModel.insertMedicines(getAlarmsList(interval, workerID, cutoffTime, false))
+                                        withContext(Dispatchers.Default){
+                                            createAlarmItemAndSchedule(requireActivity().applicationContext, interval)
+                                        }
                                     }
                                 }
                             }

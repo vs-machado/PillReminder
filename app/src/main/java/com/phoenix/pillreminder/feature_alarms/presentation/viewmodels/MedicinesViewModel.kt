@@ -1,5 +1,7 @@
 package com.phoenix.pillreminder.feature_alarms.presentation.viewmodels
 
+import androidx.lifecycle.LiveData
+import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.phoenix.pillreminder.feature_alarms.domain.model.AlarmItem
@@ -21,6 +23,10 @@ class MedicinesViewModel @Inject constructor(
 ): ViewModel() {
 
     val medicines = medicineRepository.getAllMedicines()
+
+    private val _lastAlarm = MutableLiveData<Medicine>()
+    val lastAlarm: LiveData<Medicine>
+        get() = _lastAlarm
 
     suspend fun getMedicines(): List<Medicine>{
         return withContext(Dispatchers.IO){
@@ -60,8 +66,8 @@ class MedicinesViewModel @Inject constructor(
         return medicineRepository.getWorkerID(medicineName)
     }
 
-    fun getAllDistinctMedicines(): List<Medicine> {
-        return medicineRepository.getAllDistinctMedicines()
+    fun getLastAlarmFromAllDistinctMedicines(): List<Medicine> {
+        return medicineRepository.getLastAlarmFromAllDistinctMedicines()
     }
 
     fun getAllMedicinesWithSameName(medicineName: String): List<Medicine> {
@@ -99,8 +105,8 @@ class MedicinesViewModel @Inject constructor(
         }
     }
 
-    suspend fun getAlarmTimesForMedicine(medicineName: String, cutoffTime: Long): List<String> {
-        return medicineRepository.getAlarmTimesForMedicine(medicineName, cutoffTime)
+    suspend fun getAlarmTimesForMedicine(medicineName: String, cutoffTime: Long, treatmentID: String): List<String> {
+        return medicineRepository.getAlarmTimesForMedicine(medicineName, cutoffTime, treatmentID)
     }
 
     suspend fun getAlarmsAfterProvidedMillis(medicineName: String, millis: Long): List<Medicine>{

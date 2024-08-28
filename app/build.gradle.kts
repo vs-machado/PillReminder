@@ -118,6 +118,7 @@ dependencies {
     testImplementation("androidx.core:core-ktx:$coreVersion")
     testImplementation("com.google.truth:truth:1.4.2")
     testImplementation("com.google.dagger:hilt-android-testing:2.51.1")
+    testImplementation("org.robolectric:robolectric:4.13")
     kspTest("com.google.dagger:hilt-compiler:2.51.1")
 
     androidTestImplementation("androidx.test.ext:junit:1.1.5")

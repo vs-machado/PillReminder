@@ -60,7 +60,6 @@ class AlarmReceiver: BroadcastReceiver(), ActivityCompat.OnRequestPermissionsRes
         launch {
             val alarmScheduler = context?.let { AndroidAlarmScheduler(repository, it) }
 
-
             //Example: If interval between alarms is equal to 1 hour a notification will be sent after 15 minutes if user don't mark the medicine as used
             if(alarmItem?.time != null) {
                 val alarmItemMillis = localDateTimeToMillis(alarmItem.time)
@@ -69,16 +68,19 @@ class AlarmReceiver: BroadcastReceiver(), ActivityCompat.OnRequestPermissionsRes
 
                 if(medicine != null){
                     alarmScheduler?.scheduleFollowUpAlarm(medicine, alarmItem, followUpTime)
+
+                    //When an alarm is received by system the next alarm is automatically scheduled
+                    val medicineData =
+                        alarmItem.let { repository.getNextAlarmData(it.medicineName, System.currentTimeMillis()) }
+                    if (medicineData?.alarmInMillis != null) {
+                        alarmScheduler?.scheduleNextAlarm(medicineData)
+                        return@launch
+                    }
+
+                    // When there's no remaining alarms to be scheduled the treatment period has ended
+                    repository.updateMedicinesActiveStatus(medicine.name, System.currentTimeMillis(), false)
                 }
             }
-
-            //When an alarm is received by system the next alarm is automatically scheduled
-            val medicineData = alarmItem?.let { repository.getNextAlarmData(it.medicineName, System.currentTimeMillis()) }
-            if (medicineData?.alarmInMillis != null) {
-                alarmScheduler?.scheduleNextAlarm(medicineData)
-            }
-
-
         }
 
         startAlarmService(context, intent)

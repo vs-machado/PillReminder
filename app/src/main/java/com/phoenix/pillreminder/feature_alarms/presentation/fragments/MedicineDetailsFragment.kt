@@ -97,15 +97,15 @@ class MedicineDetailsFragment: Fragment() {
                 tvTreatmentEndDate.text = DateUtil.millisToDateString("", medicine.endDate)
 
                 tvTreatmentStatus.text = when {
-                    System.currentTimeMillis() < medicine.startDate -> context?.getString(R.string.hasn_started)
-                    System.currentTimeMillis() <= medicine.endDate -> context?.getString(R.string.ongoing)
+                    System.currentTimeMillis() < medicine.startDate && medicine.isActive -> context?.getString(R.string.hasn_started)
+                    System.currentTimeMillis() <= medicine.endDate && medicine.isActive -> context?.getString(R.string.ongoing)
                     else -> context?.getString(R.string.ended)
                 }
 
                 viewLifecycleOwner.lifecycleScope.launch(Dispatchers.Main){
                     val result = withContext(Dispatchers.IO){
                         val cutoffTime = medicinesViewModel.getMedicineEditTimestamp(medicine.name)
-                        medicinesViewModel.getAlarmTimesForMedicine(medicine.name, cutoffTime)
+                        medicinesViewModel.getAlarmTimesForMedicine(medicine.name, cutoffTime, medicine.treatmentID)
                     }
 
                     // Concatenates all the different alarm hours for the same medicine in a string

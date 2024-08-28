@@ -128,7 +128,7 @@ class MedicinesDataAdapter(
     }
 
     private fun isTreatmentOngoing(medicine: Medicine): Boolean{
-        return System.currentTimeMillis() in medicine.startDate..medicine.endDate
+        return (System.currentTimeMillis() in medicine.startDate..medicine.endDate) && medicine.isActive
     }
 }
 

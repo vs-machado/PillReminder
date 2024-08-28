@@ -50,7 +50,9 @@ data class Medicine(
     @ColumnInfo(name = "last_edited")
     var lastEdited: Long = 0L,
     @ColumnInfo(name = "is_active")
-    var isActive: Boolean = true
+    var isActive: Boolean = true,
+    @ColumnInfo(name = "treatment_id")
+    var treatmentID: String
 
 ) : Parcelable
 

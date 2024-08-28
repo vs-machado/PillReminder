@@ -67,7 +67,7 @@ class MyMedicinesFragment : Fragment() {
     private fun displayMedicinesList(filter: String?){
         viewLifecycleOwner.lifecycleScope.launch {
             val medicines = withContext(Dispatchers.IO) {
-                medicinesViewModel.getAllDistinctMedicines()
+                medicinesViewModel.getLastAlarmFromAllDistinctMedicines()
             }
             adapter.setAlarmsAndList(medicines, filter)
         }

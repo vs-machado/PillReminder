@@ -100,6 +100,7 @@ class AlarmSettingsSharedViewModel @Inject constructor(
         val periodSet = medicinePeriodSet
         val needsReschedule = medicineNeedsReschedule
         val alarms = mutableListOf<Medicine>()
+        val treatmentID = UUID.randomUUID().toString()
 
         val scheduleInterval = when(frequency){
             "EveryXWeeks" -> { interval * 7 }
@@ -133,7 +134,10 @@ class AlarmSettingsSharedViewModel @Inject constructor(
                                 interval,
                                 periodSet,
                                 needsReschedule,
-                                "noID"
+                                "noID",
+                                0L,
+                                true,
+                                treatmentID
                             ).let { medicine ->
                                 // Adds an edit timestamp when user edit medicines. Used to filter the medicine alarms list in editmedicinesfragment.
                                 if(editTimestamp != null){
@@ -168,6 +172,7 @@ class AlarmSettingsSharedViewModel @Inject constructor(
         val frequency = medicineFrequency.toString()
         val periodSet = medicinePeriodSet
         val needsReschedule = medicineNeedsReschedule
+        val treatmentID = UUID.randomUUID().toString()
 
         val alarms = mutableListOf<Medicine>()
 
@@ -203,7 +208,10 @@ class AlarmSettingsSharedViewModel @Inject constructor(
                                 interval,
                                 periodSet,
                                 needsReschedule,
-                                workerID.toString()
+                                workerID.toString(),
+                                0L,
+                                true,
+                                treatmentID
                             ).let { medicine ->
                                 // Adds an edit timestamp when user edit medicines. Used to filter the medicine alarms list in editmedicinesfragment.
                                 if(editTimestamp != null){
@@ -227,6 +235,7 @@ class AlarmSettingsSharedViewModel @Inject constructor(
         val alarms = mutableListOf<Medicine>()
         val selectedDays = getSelectedDaysList()
         val processedDays = mutableSetOf<Long>()
+        val treatmentID = UUID.randomUUID().toString()
 
         if (treatmentStartDate != 0L && treatmentEndDate != 0L) {
             val calendar = Calendar.getInstance()
@@ -277,7 +286,10 @@ class AlarmSettingsSharedViewModel @Inject constructor(
                                             interval = 0, // interval is no longer used
                                             medicinePeriodSet = medicinePeriodSet,
                                             medicineNeedsReschedule = medicineNeedsReschedule,
-                                            rescheduleWorkerID = workerID.toString()
+                                            rescheduleWorkerID = workerID.toString(),
+                                            0L,
+                                            true,
+                                            treatmentID
                                         ).let { medicine ->
                                             // Adds an edit timestamp when user edit medicines. Used to filter the medicine alarms list in editmedicinesfragment.
                                             if(editTimestamp != null){
@@ -304,6 +316,7 @@ class AlarmSettingsSharedViewModel @Inject constructor(
         val alarms = mutableListOf<Medicine>()
         val selectedDays = getSelectedDaysList()
         val processedDays = mutableSetOf<Long>()
+        val treatmentID = UUID.randomUUID().toString()
 
         if (treatmentStartDate != 0L && treatmentEndDate != 0L) {
             val calendar = Calendar.getInstance()
@@ -354,7 +367,10 @@ class AlarmSettingsSharedViewModel @Inject constructor(
                                             interval = 0,
                                             medicinePeriodSet = medicinePeriodSet,
                                             medicineNeedsReschedule = medicineNeedsReschedule,
-                                            rescheduleWorkerID = "noID"
+                                            rescheduleWorkerID = "noID",
+                                            0L,
+                                            true,
+                                            treatmentID
                                         ).let { medicine ->
                                             // Adds an edit timestamp when user edit medicines. Used to filter the medicine alarms list in editmedicinesfragment.
                                             if(editTimestamp != null){

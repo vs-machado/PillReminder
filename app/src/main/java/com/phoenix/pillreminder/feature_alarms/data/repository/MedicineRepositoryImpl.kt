@@ -95,8 +95,8 @@ class MedicineRepositoryImpl (
         return dao.deleteUpcomingAlarms(medicineName, currentTimeMillis)
     }
 
-    override fun getAllDistinctMedicines(): List<Medicine> {
-        return dao.getAllDistinctMedicines()
+    override fun getLastAlarmFromAllDistinctMedicines(): List<Medicine> {
+        return dao.getLastAlarmFromAllDistinctMedicines()
     }
 
     override suspend fun updateMedicinesActiveStatus(
@@ -107,7 +107,7 @@ class MedicineRepositoryImpl (
         return dao.updateMedicinesActiveStatus(medicineName, currentTimeMillis, isActive)
     }
 
-    override suspend fun getAlarmTimesForMedicine(medicineName: String, cutoffTime: Long): List<String>{
-        return dao.getAlarmTimesForMedicine(medicineName, cutoffTime)
+    override suspend fun getAlarmTimesForMedicine(medicineName: String, cutoffTime: Long, treatmentID: String): List<String>{
+        return dao.getAlarmTimesForMedicine(medicineName, cutoffTime, treatmentID)
     }
 }

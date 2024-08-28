@@ -24,19 +24,11 @@ class FakeMedicineRepository(
         TODO("Not yet implemented")
     }
 
-    override suspend fun getAllAlarmsMillis(medicineName: String): List<Long> {
-        return medicinesList.filter{ it.name == medicineName}.map{it.alarmInMillis}
-    }
-
     override suspend fun getFirstMedicineOfNextDay(nextDayInMillis: Long): Medicine? {
         TODO("Not yet implemented")
     }
 
     override suspend fun getFirstMedicineOfTheDay(millis: Long): Medicine? {
-        TODO("Not yet implemented")
-    }
-
-    override suspend fun getAlarmTimesForMedicine(medicineName: String): List<String> {
         TODO("Not yet implemented")
     }
 
@@ -127,11 +119,43 @@ class FakeMedicineRepository(
             .take(alarmsPerDay)
     }
 
-    override fun getAllDistinctMedicines(): List<Medicine> {
-        return medicinesList
-            .groupBy { it.name }
-            .mapValues { (_, medicines) -> medicines.first() }
-            .values.toList()
+//     fun getAllDistinctMedicines(): List<Medicine> {
+//        return medicinesList
+//            .groupBy { it.name }
+//            .mapValues { (_, medicines) -> medicines.first() }
+//            .values.toList()
+//    }
+
+    override suspend fun updateMedicinesActiveStatus(
+        medicineName: String,
+        currentTimeMillis: Long,
+        isActive: Boolean
+    ) {
+        TODO("Not yet implemented")
+    }
+
+    override suspend fun getAlarmTimesForMedicine(
+        medicineName: String,
+        cutoffTime: Long,
+        treatmentID: String
+    ): List<String> {
+        TODO("Not yet implemented")
+    }
+
+    override suspend fun deleteUpcomingAlarms(medicineName: String, currentTimeMillis: Long) {
+        TODO("Not yet implemented")
+    }
+
+    override suspend fun getDailyAlarms(medicineName: String, alarmsPerDay: Int): List<Long> {
+        TODO("Not yet implemented")
+    }
+
+    override suspend fun getMedicineEditTimestamp(medicineName: String): Long {
+        TODO("Not yet implemented")
+    }
+
+    override fun getLastAlarmFromAllDistinctMedicines(): List<Medicine> {
+        TODO("Not yet implemented")
     }
 }
 

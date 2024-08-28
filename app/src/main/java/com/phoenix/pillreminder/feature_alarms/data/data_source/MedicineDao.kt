@@ -120,8 +120,9 @@ interface MedicineDao {
     @Query("SELECT * " +
             "FROM medicines_data_table " +
             "WHERE medicine_id IN " +
-            "(SELECT MIN (medicine_id) FROM medicines_data_table GROUP BY name)")
-    fun getAllDistinctMedicines(): List<Medicine>
+            "(SELECT MAX (medicine_id) FROM medicines_data_table " +
+            "GROUP BY name, treatment_id) ")
+    fun getLastAlarmFromAllDistinctMedicines(): List<Medicine>
 
     @Query("SELECT * " +
             "FROM medicines_data_table " +
@@ -131,9 +132,12 @@ interface MedicineDao {
     @Query("""
         SELECT DISTINCT printf('%02d:%02d', alarm_hour, alarm_minute) AS alarm_time
         FROM medicines_data_table
-        WHERE name = :medicineName AND last_edited >= :cutoffTime
+        WHERE name = :medicineName AND last_edited >= :cutoffTime AND treatment_id = :treatmentID
         ORDER BY alarm_hour, alarm_minute
     """)
-    suspend fun getAlarmTimesForMedicine(medicineName: String, cutoffTime: Long): List<String>
+    suspend fun getAlarmTimesForMedicine(medicineName: String, cutoffTime: Long, treatmentID: String): List<String>
+
+    @Query("SELECT * FROM medicines_data_table WHERE name = :medicineName AND treatment_id = :treatmentID AND is_active = true ORDER BY alarm_in_millis DESC LIMIT 1")
+    suspend fun getLastAlarm(medicineName: String, treatmentID: String): Medicine
 
 }

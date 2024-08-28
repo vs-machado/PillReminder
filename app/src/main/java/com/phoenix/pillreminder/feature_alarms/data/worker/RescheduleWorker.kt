@@ -25,7 +25,7 @@ class RescheduleWorker @AssistedInject constructor(
 
     override suspend fun doWork(): Result {
 
-        val distinctMedicines = repository.getAllDistinctMedicines()
+        val distinctMedicines = repository.getLastAlarmFromAllDistinctMedicines()
         val alarmScheduler = AndroidAlarmScheduler(repository, applicationContext)
 
         val alarmsToReschedule = distinctMedicines.flatMap{ medicine ->
@@ -79,6 +79,8 @@ class RescheduleWorker @AssistedInject constructor(
         val periodSet = medicine.medicinePeriodSet
         val needsReschedule = medicine.medicineNeedsReschedule
         val workerID = medicine.rescheduleWorkerID
+        val lastEdited = medicine.lastEdited
+        val treatmentID = medicine.treatmentID
 
         val scheduleInterval = when(frequency){
             "EveryXWeeks" -> { interval * 7 }
@@ -109,7 +111,10 @@ class RescheduleWorker @AssistedInject constructor(
                         scheduleInterval,
                         periodSet,
                         needsReschedule,
-                        workerID
+                        workerID,
+                        lastEdited,
+                        true,
+                        treatmentID
                     )
                 )
             }

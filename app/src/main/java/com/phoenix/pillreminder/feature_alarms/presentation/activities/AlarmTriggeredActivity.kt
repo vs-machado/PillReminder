@@ -68,12 +68,14 @@ class AlarmTriggeredActivity: AppCompatActivity() {
                         }
                         val intent = Intent(applicationContext, MainActivity::class.java)
                         startActivity(intent)
+                        finish()
                     }
 
                     btnDismiss.setOnClickListener {
                         //stopMediaPlayer()
                         val intent = Intent(applicationContext, MainActivity::class.java)
                         startActivity(intent)
+                        finish()
                     }
                 }
             }

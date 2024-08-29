@@ -1,6 +1,8 @@
 package com.phoenix.pillreminder.feature_alarms.presentation.fragments
 
 import android.Manifest
+import android.animation.Animator
+import android.animation.AnimatorListenerAdapter
 import android.animation.ObjectAnimator
 import android.app.Dialog
 import android.content.Context
@@ -108,6 +110,7 @@ class HomeFragment: Fragment() {
         requestPermissions(dontShowAgain)
         setupDatePicker()
 
+
         binding.fabAddMedicine.setOnClickListener {
             it.findNavController().navigate(R.id.action_homeFragment_to_addMedicinesFragment)
         }
@@ -160,6 +163,7 @@ class HomeFragment: Fragment() {
         //Updates the date picker and recyclerview
         binding.datePicker.onSelectionChanged = { date ->
             viewLifecycleOwner.lifecycleScope.launch(Dispatchers.Main){
+                showFab()
                 hfViewModel.setDate(date)
                 val medicines = withContext(Dispatchers.IO){
                     medicinesViewModel.getMedicines()
@@ -251,6 +255,18 @@ class HomeFragment: Fragment() {
 
     private fun uncheckSwitch(){
         binding.datePicker.findViewById<SwitchMaterial>(R.id.switchPillbox).isChecked = false
+    }
+
+    private fun showFab(){
+        binding.fabAddMedicine.animate()
+            .alpha(1f)
+            .setDuration(200)
+            .setListener(object : AnimatorListenerAdapter() {
+                override fun onAnimationStart(animation: Animator) {
+                    super.onAnimationStart(animation)
+                    binding.fabAddMedicine.visibility = View.VISIBLE
+                }
+            })
     }
 
     private fun showOverlayAndNotificationPermissionDialog(){

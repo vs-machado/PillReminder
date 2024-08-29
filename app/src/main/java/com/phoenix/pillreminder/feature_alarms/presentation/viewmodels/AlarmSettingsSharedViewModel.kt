@@ -724,7 +724,7 @@ class AlarmSettingsSharedViewModel @Inject constructor(
         return alarmsPerDay
     }
 
-    private fun getMedicineForm(): String? {
+    fun getMedicineForm(): String? {
         return medicineForm.value
     }
 

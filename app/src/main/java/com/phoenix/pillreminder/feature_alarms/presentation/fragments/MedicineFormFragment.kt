@@ -49,6 +49,13 @@ class MedicineFormFragment : Fragment() {
             // Check the user selected option and navigate to the next fragment
             lvMedForm.setOnItemClickListener { _, it, position, _ ->
                 sharedViewModel.saveMedicineForm(position)
+
+                if(sharedViewModel.getMedicineForm() == "pomade") {
+                    sharedViewModel.setMedicineQuantity(1F) // Pomade don't need to specify quantity
+                    it.findNavController().navigate(R.id.action_medicineFormFragment_to_frequencyFragment)
+                    return@setOnItemClickListener
+                }
+
                 it.findNavController().navigate(R.id.action_medicineFormFragment_to_quantityAndStrengthFragment)
             }
 

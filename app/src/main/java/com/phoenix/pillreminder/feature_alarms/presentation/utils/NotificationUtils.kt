@@ -42,7 +42,7 @@ object NotificationUtils {
                 return notificationBuilder(context, channelId, pendingIntent,
                     context.getString(R.string.time_to_take_your_medicine),
                     context.getString(R.string.do_not_forget_to_mark_the_medicine_as_taken, item.medicineName,
-                        checkMedicineForm(item.medicineForm, item.medicineQuantity, context)))
+                        checkMedicineForm(item.medicineForm, item.medicineQuantity, item.doseUnit, context)))
             }
             false -> {
                 /* If user does not give overlay permissions he will mark medicine as used through an action button in notification.
@@ -67,7 +67,7 @@ object NotificationUtils {
 
                 val title = context.getString(R.string.time_to_take_your_medicine)
                 val text = context.getString(R.string.do_not_forget_to_mark_the_medicine_as_taken, item.medicineName, checkMedicineForm(item.medicineForm,
-                    item.medicineQuantity, context))
+                    item.medicineQuantity, item.doseUnit, context))
 
                 return notificationBuilderWithActionButtons(
                     context, channelId, pendingIntent, title, text,
@@ -97,7 +97,7 @@ object NotificationUtils {
 
          val title = context.getString(R.string.did_you_forget_to_use_your_medicine, item.medicineName)
          val text = context.getString(R.string.do_not_forget_to_mark_the_medicine_as_used, checkMedicineForm(item.medicineForm,
-             item.medicineQuantity, context))
+             item.medicineQuantity, item.doseUnit, context))
 
         return notificationBuilderWithActionButtons(
             context, followUpChannelId, pendingIntent, title, text,
@@ -196,14 +196,21 @@ object NotificationUtils {
             .build()
     }
 
-    private fun checkMedicineForm(medicineForm: String, medicineQuantity: String, context: Context): String{
+    private fun checkMedicineForm(medicineForm: String, medicineQuantity: String, doseUnit: String, context: Context): String{
         return when(medicineForm){
             "pill" -> {
                 val quantity = medicineQuantity.toFloatOrNull()?.toInt().toString()
                 context.getString(R.string.take_pill, quantity)
             }
             "injection" -> {
-                context.getString(R.string.take_injection, medicineQuantity)
+                when(doseUnit) {
+                    "mL" -> context.getString(R.string.take_injection_ml, medicineQuantity)
+                    "syringe" -> {
+                        val quantity = medicineQuantity.toFloatOrNull()?.toInt().toString()
+                        context.getString(R.string.take_injection_syringe, quantity)
+                    }
+                    else -> throw IllegalArgumentException("Illegal doseUnit value provided")
+                }
             }
             "liquid" -> {
                 context.getString(R.string.take_liquid, medicineQuantity)
@@ -213,7 +220,15 @@ object NotificationUtils {
                 context.getString(R.string.take_drops, quantity)
             }
             "inhaler" -> {
-                context.getString(R.string.inhale, medicineQuantity)
+                when(doseUnit){
+                    "mg" -> context.getString(R.string.inhale_mg, medicineQuantity)
+                    "puff" -> {
+                        medicineQuantity.toFloatOrNull()?.toInt().toString()
+                        context.getString(R.string.inhale_puff, medicineQuantity)
+                    }
+                    "mL" -> context.getString(R.string.inhale_mL, medicineQuantity)
+                    else -> throw IllegalArgumentException("Illegal doseUnit value provided")
+                }
             }
             "pomade" -> {
                 context.getString(R.string.apply_pomade)

@@ -81,6 +81,7 @@ class AndroidAlarmScheduler @Inject constructor(
                                 alarmAlreadyScheduled.name,
                                 alarmAlreadyScheduled.form,
                                 alarmAlreadyScheduled.quantity.toString(),
+                                alarmAlreadyScheduled.unit,
                                 alarmAlreadyScheduled.alarmHour.toString(),
                                 alarmAlreadyScheduled.alarmMinute.toString()
                             )
@@ -119,6 +120,7 @@ class AndroidAlarmScheduler @Inject constructor(
             medicineName = medicine.name,
             medicineForm = medicine.form,
             medicineQuantity = medicine.quantity.toString(),
+            doseUnit = medicine.unit,
             alarmHour = medicine.alarmHour.toString(),
             alarmMinute = medicine.alarmMinute.toString()
         )

@@ -28,10 +28,13 @@
     <string name="delete_all">Deletar todos</string>
 
     <string name="take_pill">Tomar %1$s comprimido(s)</string>
-    <string name="take_injection">Injetar %1$s mL</string>
+    <string name="take_injection_ml">Injetar %1$s mL</string>
+    <string name="take_injection_syringe">Injetar %1$s seringa(s)</string>
     <string name="take_liquid">Tomar %1$s mL</string>
     <string name="take_drops">Utilizar %1$s gota(s)</string>
-    <string name="inhale">Inalar %1$s mg</string>
+    <string name="inhale_mg">Inalar %1$s mg</string>
+    <string name="inhale_puff">%1$s inalações</string>
+    <string name="inhale_mL">Inalar %1$s mL</string>
     <string name="apply_pomade">1 aplicação</string>
     <string name="delete_alarm">Deletar alarme?</string>
     <string name="medicine_name_n_hh_mm">[Nome do remédio] \n [HH:MM]</string>
@@ -174,8 +177,16 @@
     <string name="hasn_started">Ainda não começou</string>
     <string name="ended">Encerrado</string>
     <string name="quantity_pills">Quantidade: %1$d comprimido(s)</string>
-    <string name="quantity_drops">Quantidade:%1$d gota(s)</string>
+    <string name="quantity_drops">Quantidade: %1$d gota(s)</string>
     <string name="quantity_ml">Quantidade: %.2f mL</string>
+    <string name="quantity_syringe">Quantidade: %1$d seringa(s)</string>
+
+    <plurals name="quantity_puffs">
+        <item quantity="one">Quantidade: %1$d inalação</item>
+        <item quantity="other">Quantidade: %1$d inalações</item>
+        <item quantity="many">Quantidade: %1$d inalações</item>
+    </plurals>
+
     <string name="quantity_application">Quantidade: 1 aplicação</string>
     <string name="quantity_inhalator">Quantidade: %.2f mg</string>
     <string name="ongoing_treatment">Tratamento em andamento</string>
@@ -213,6 +224,13 @@
     <string name="edit_medicine">Editar medicamento</string>
     <string name="end_treatment">Encerrar tratamento</string>
     <string name="are_you_sure_end_treatment">Tem certeza de que deseja interromper o tratamento do seguinte medicamento?\n\nFuturos alarmes serão cancelados.\n\nMedicamento: %1$s</string>
+    <string name="mL">mL</string>
+    <string name="syringe">seringa</string>
+    <string name="puff">inalação</string>
+    <string name="mg">mg</string>
+    <string name="pill_unit">comprimido</string>
+    <string name="drop">gota</string>
+    <string name="application">aplicação</string>
 
     <string-array name="medicine_forms">
         <item>Comprimido</item>
@@ -230,5 +248,16 @@
         <item>A cada X dias</item>
         <item>A cada X semanas</item>
         <item>A cada X meses</item>
+    </string-array>
+
+    <string-array name="units_injection">
+        <item>mL</item>
+        <item>seringa</item>
+    </string-array>
+
+    <string-array name="units_inhaler">
+        <item>mL</item>
+        <item>mg</item>
+        <item>inalação</item>
     </string-array>
 </resources>

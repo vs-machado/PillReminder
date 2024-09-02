@@ -51,6 +51,7 @@ class RescheduleWorker @AssistedInject constructor(
                     medicineName = medicine.name,
                     medicineForm = medicine.form,
                     medicineQuantity = medicine.quantity.toString(),
+                    doseUnit = medicine.unit,
                     alarmHour = medicine.alarmHour.toString(),
                     alarmMinute = medicine.alarmMinute.toString()
                 )
@@ -67,6 +68,7 @@ class RescheduleWorker @AssistedInject constructor(
         val alarms = mutableListOf<Medicine>()
         val name = medicine.name
         val quantity = medicine.quantity
+        val doseUnit = medicine.unit
         val form = medicine.form
         val alarmsPerDay = medicine.alarmsPerDay
         val alarmHour = medicine.alarmHour
@@ -97,6 +99,7 @@ class RescheduleWorker @AssistedInject constructor(
                         0,
                         name,
                         quantity,
+                        doseUnit,
                         form,
                         alarmsPerDay,
                         alarmInMillis,

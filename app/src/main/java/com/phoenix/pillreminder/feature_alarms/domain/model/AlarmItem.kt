@@ -10,6 +10,7 @@ data class AlarmItem(
     val medicineName: String,
     val medicineForm: String,
     val medicineQuantity: String,
+    val doseUnit: String,
     val alarmHour: String,
     val alarmMinute: String
 ): Parcelable

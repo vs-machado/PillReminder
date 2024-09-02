@@ -54,7 +54,10 @@ class MedicineDetailsFragment: Fragment() {
                 }
                 "injection" -> {
                     imageView.setImageResource(R.drawable.ic_injection)
-                    tvQuantityMed.text = context?.getString(R.string.number_ml, medicine.quantity)
+                    when(medicine.unit){
+                        "syringe" -> tvQuantityMed.text = context?.getString(R.string.quantity_syringe, medicine.quantity.toInt())
+                        "mL" -> tvQuantityMed.text = context?.getString(R.string.number_ml, medicine.quantity)
+                    }
                 }
                 "liquid" -> {
                     imageView.setImageResource(R.drawable.ic_liquid)
@@ -62,7 +65,11 @@ class MedicineDetailsFragment: Fragment() {
                 }
                 "inhaler" -> {
                     imageView.setImageResource(R.drawable.ic_inhalator)
-                    tvQuantityMed.text = context?.getString(R.string.number_inhalator, medicine.quantity)
+                    when(medicine.unit){
+                        "mg" -> tvQuantityMed.text = context?.getString(R.string.quantity_inhalator, medicine.quantity)
+                        "puff" -> tvQuantityMed.text = context?.resources?.getQuantityString(R.plurals.quantity_puffs, medicine.quantity.toInt(), medicine.quantity.toInt())
+                        "mL" -> tvQuantityMed.text = context?.getString(R.string.quantity_ml, medicine.quantity)
+                    }
                 }
             }
 

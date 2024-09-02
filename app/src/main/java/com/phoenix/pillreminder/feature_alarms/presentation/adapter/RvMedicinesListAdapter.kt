@@ -111,14 +111,46 @@ class MyViewHolder(private val medicinesBinding: AdapterListMedicinesBinding):Re
 
             tvMedicineName.text = medicine.name
 
-
             when(medicine.form){
-                "pill" -> tvQuantity.text = context.getString(R.string.take_pill, medicine.quantity.toInt().toString())
-                "injection" -> tvQuantity.text = context.getString(R.string.take_injection, medicine.quantity.toString())
-                "liquid" -> tvQuantity.text = context.getString(R.string.take_liquid, medicine.quantity.toString())
-                "drop" -> tvQuantity.text = context.getString(R.string.take_drops, medicine.quantity.toInt().toString())
-                "inhaler" -> tvQuantity.text = context.getString(R.string.inhale, medicine.quantity.toString())
-                "pomade" -> tvQuantity.text = context.getString(R.string.apply_pomade)
+                "pill" -> {
+                    val quantity = medicine.quantity.toInt().toString()
+                    tvQuantity.text = context.getString(R.string.take_pill, quantity)
+                }
+                "injection" -> {
+                    when(medicine.unit) {
+                        "mL" -> {
+                            tvQuantity.text = context.getString(R.string.take_injection_ml, medicine.quantity.toString())
+                        }
+                        "syringe" -> {
+                            val quantity = medicine.quantity.toInt().toString()
+                            tvQuantity.text = context.getString(R.string.take_injection_syringe, quantity)
+                        }
+                    }
+                }
+                "liquid" -> {
+                    tvQuantity.text = context.getString(R.string.take_liquid, medicine.quantity.toString())
+                }
+                "drop" -> {
+                    val quantity = medicine.quantity.toInt().toString()
+                    tvQuantity.text = context.getString(R.string.take_drops, quantity)
+                }
+                "inhaler" -> {
+                    when(medicine.unit){
+                        "mg" -> {
+                            tvQuantity.text = context.getString(R.string.inhale_mg, medicine.quantity.toString())
+                        }
+                        "puff" -> {
+                            val quantity = medicine.quantity.toInt().toString()
+                            tvQuantity.text = context.getString(R.string.inhale_puff, quantity)
+                        }
+                        "mL" -> {
+                            tvQuantity.text = context.getString(R.string.inhale_mL, medicine.quantity.toString())
+                        }
+                    }
+                }
+                "pomade" -> {
+                    tvQuantity.text = context.getString(R.string.apply_pomade)
+                }
             }
 
             when(medicine.medicineWasTaken){

@@ -28,10 +28,13 @@
     <string name="delete_all">Delete all</string>
 
     <string name="take_pill">Take %1$s pill(s)</string>
-    <string name="take_injection">Inject %1$s mL</string>
+    <string name="take_injection_ml">Inject %1$s mL</string>
+    <string name="take_injection_syringe">Inject %1$s syringe(s)</string>
     <string name="take_liquid">Use %1$s mL</string>
     <string name="take_drops">Take %1$s drop(s)</string>
-    <string name="inhale">Take %1$s mg</string>
+    <string name="inhale_mg">Inhale %1$s mg</string>
+    <string name="inhale_puff">Take %1$s puff(s)</string>
+    <string name="inhale_mL">Inhale %1$s mL</string>
     <string name="apply_pomade">1 application</string>
     <string name="delete_alarm">Delete alarm?</string>
     <string name="medicine_name_n_hh_mm">[Medicine name] \n [HH:MM]</string>
@@ -175,8 +178,15 @@
     <string name="hasn_started">It hasn\'t started yet</string>
     <string name="ended">Ended</string>
     <string name="quantity_pills">Quantity: %1$d pill(s)</string>
-    <string name="quantity_drops">Quantity:%1$d drop(s)</string>
+    <string name="quantity_drops">Quantity: %1$d drop(s)</string>
     <string name="quantity_ml">Quantity: %.2f mL</string>
+    <string name="quantity_syringe">Quantity: %1$d syringe(s)</string>
+
+    <plurals name="quantity_puffs">
+        <item quantity="one">Quantity: %1$d puff</item>
+        <item quantity="other">Quantity: %1$d puffs</item>
+    </plurals>
+
     <string name="quantity_application">Quantity: 1 application</string>
     <string name="quantity_inhalator">Quantity: %.2f mg</string>
     <string name="ongoing_treatment">Ongoing treatment</string>
@@ -214,6 +224,13 @@
     <string name="edit_medicine">Edit medicine</string>
     <string name="end_treatment">End treatment</string>
     <string name="are_you_sure_end_treatment">Are you sure you want to stop treatment for the following medication?\n\nThe upcoming alarms will be deleted.\n\nMedication: %1$s</string>
+    <string name="mL">mL</string>
+    <string name="syringe">syringe</string>
+    <string name="puff">puff</string>
+    <string name="mg">mg</string>
+    <string name="pill_unit">pill</string>
+    <string name="drop">drop</string>
+    <string name="application">application</string>
 
     <string-array name="medicine_forms">
         <item>Pill</item>
@@ -222,6 +239,17 @@
         <item>Drops</item>
         <item>Inhaler</item>
         <item>Pomade</item>
+    </string-array>
+
+    <string-array name="units_injection">
+        <item>mL</item>
+        <item>syringe</item>
+    </string-array>
+
+    <string-array name="units_inhaler">
+        <item>mL</item>
+        <item>mg</item>
+        <item>puff</item>
     </string-array>
 
     <string-array name="medicine_frequency">

@@ -14,6 +14,7 @@ import android.widget.ArrayAdapter
 import android.widget.TextView
 import android.widget.Toast
 import androidx.core.content.ContextCompat
+import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.hilt.navigation.fragment.hiltNavGraphViewModels
 import androidx.lifecycle.lifecycleScope
@@ -60,14 +61,9 @@ class EditMedicinesFragment: Fragment() {
         savedInstanceState: Bundle?
     ): View {
         binding = FragmentEditMedicinesBinding.inflate(layoutInflater)
+        val medicine = arguments?.getParcelable("edit_medicine", Medicine::class.java)
 
-        val medicineForms = resources.getStringArray(R.array.medicine_forms)
-        val formsArrayAdapter = ArrayAdapter(requireContext(), R.layout.dropdown_item, medicineForms)
-        binding.acTvMedicineForm.setAdapter(formsArrayAdapter)
-
-        val medicineFrequencies = resources.getStringArray(R.array.medicine_frequency)
-        val frequenciesArrayAdapter = ArrayAdapter(requireContext(), R.layout.dropdown_item, medicineFrequencies)
-        binding.acTvMedicineFrequency.setAdapter(frequenciesArrayAdapter)
+        medicine?.let { setupAdapters(it) }
 
         return binding.root
     }
@@ -126,6 +122,7 @@ class EditMedicinesFragment: Fragment() {
                 alarmSettingsSharedViewModel.setInterval(medicine.interval.toInt())
                 alarmSettingsSharedViewModel.setTreatmentStartDate(medicine.startDate)
                 alarmSettingsSharedViewModel.setTreatmentEndDate(medicine.endDate)
+                alarmSettingsSharedViewModel.setDoseUnit(medicine.unit)
                 alarmSettingsSharedViewModel.setMedicineForm(medicine.form)
 
 
@@ -208,6 +205,7 @@ class EditMedicinesFragment: Fragment() {
             when(medicine?.medicineFrequency){
                 "EveryDay" -> acTvMedicineFrequency.setText(context?.getString(R.string.every_day), false)
                 "EveryOtherDay" -> acTvMedicineFrequency.setText(context?.getString(R.string.every_other_day), false)
+                "SpecificDaysOfWeek" -> acTvMedicineFrequency.setText(context?.getString(R.string.specific_days_of_the_week), false)
                 "EveryXDays" -> acTvMedicineFrequency.setText(context?.getString(R.string.every_x_days), false)
                 "EveryXWeeks" -> acTvMedicineFrequency.setText(context?.getString(R.string.every_x_weeks), false)
                 "EveryXMonths" -> acTvMedicineFrequency.setText(context?.getString(R.string.every_x_months), false)
@@ -248,6 +246,7 @@ class EditMedicinesFragment: Fragment() {
         tvSave?.setOnClickListener {
             val inputFrequency = binding.acTvMedicineFrequency.text.toString()
             val medicineName = binding.tietMedicineName.text.toString()
+            var doseUnit = ""
 
             val medicineForm = when(binding.acTvMedicineForm.text.toString()){
                 context?.getString(R.string.pill) -> "pill"
@@ -260,6 +259,14 @@ class EditMedicinesFragment: Fragment() {
                 else -> throw IllegalArgumentException("Invalid argument")
             }
 
+            if(binding.acTvDoseUnit.isVisible){
+                doseUnit = binding.acTvDoseUnit.text.toString()
+            } else {
+                if (medicine != null) {
+                    doseUnit = medicine.unit
+                }
+            }
+
             val quantity = binding.tietQuantity.text.toString().toFloat()
             val alarmsPerDay = medicine?.alarmsPerDay // Needs to allow user to change it
 
@@ -267,6 +274,7 @@ class EditMedicinesFragment: Fragment() {
             alarmSettingsSharedViewModel.apply {
                 setMedicineName(medicineName)
                 setMedicineForm(medicineForm)
+                setDoseUnit(doseUnit)
                 setMedicineQuantity(quantity)
                 setNumberOfAlarms(alarmsPerDay!!)
                 setTreatmentID(medicine.treatmentID)
@@ -576,6 +584,50 @@ class EditMedicinesFragment: Fragment() {
         }
 
         dialog.show()
+    }
+
+    private fun setupAdapters(medicine: Medicine){
+        val medicineForms = resources.getStringArray(R.array.medicine_forms)
+        val formsArrayAdapter = ArrayAdapter(requireContext(), R.layout.dropdown_item, medicineForms)
+        binding.acTvMedicineForm.setAdapter(formsArrayAdapter)
+
+        val medicineFrequencies = resources.getStringArray(R.array.medicine_frequency)
+        val frequenciesArrayAdapter = ArrayAdapter(requireContext(), R.layout.dropdown_item, medicineFrequencies)
+        binding.acTvMedicineFrequency.setAdapter(frequenciesArrayAdapter)
+
+        when(medicine.form){
+            "pill" ->  tvStrengthVisible()
+            "drop" -> tvStrengthVisible()
+            "pomade" -> tvStrengthVisible()
+            "injection" -> tilDoseUnitVisible(medicine, "injection")
+            "liquid" -> tvStrengthVisible()
+            "inhaler" -> tilDoseUnitVisible(medicine, "inhaler")
+        }
+    }
+
+    private fun tvStrengthVisible(){
+        binding.tvStrength.visibility = View.VISIBLE
+        binding.tilDoseUnit.visibility = View.INVISIBLE
+    }
+
+    private fun tilDoseUnitVisible(medicine: Medicine, form: String) {
+        binding.tvStrength.visibility = View.INVISIBLE
+        binding.tilDoseUnit.visibility = View.VISIBLE
+
+        when(form){
+            "injection" -> {
+                val doseUnit = resources.getStringArray(R.array.units_injection)
+                val formsArrayAdapter = ArrayAdapter(requireContext(), R.layout.dropdown_item, doseUnit)
+                binding.acTvDoseUnit.setAdapter(formsArrayAdapter)
+                binding.acTvDoseUnit.setText(medicine.unit, false)
+            }
+            "inhaler" -> {
+                val doseUnit = resources.getStringArray(R.array.units_inhaler)
+                val formsArrayAdapter = ArrayAdapter(requireContext(), R.layout.dropdown_item, doseUnit)
+                binding.acTvDoseUnit.setAdapter(formsArrayAdapter)
+                binding.acTvDoseUnit.setText(medicine.unit, false)
+            }
+        }
     }
 
     override fun onPause() {

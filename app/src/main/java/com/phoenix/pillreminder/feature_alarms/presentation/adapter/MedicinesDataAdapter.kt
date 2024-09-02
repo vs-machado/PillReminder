@@ -82,7 +82,10 @@ class MedicinesDataAdapter(
                     }
                     "injection" -> {
                         ivMedicineType.setImageResource(R.drawable.ic_injection)
-                        tvQuantityStrength.text = context.getString(R.string.quantity_ml, medicine.quantity)
+                        when(medicine.unit){
+                            "mL" -> tvQuantityStrength.text = context.getString(R.string.quantity_ml, medicine.quantity)
+                            "syringe" -> tvQuantityStrength.text = context.getString(R.string.quantity_syringe, medicine.quantity.toInt())
+                        }
                     }
                     "drop" -> {
                         ivMedicineType.setImageResource(R.drawable.ic_dropper)
@@ -90,7 +93,11 @@ class MedicinesDataAdapter(
                     }
                     "inhaler" -> {
                         ivMedicineType.setImageResource(R.drawable.ic_inhalator)
-                        tvQuantityStrength.text = context.getString(R.string.quantity_inhalator, medicine.quantity)
+                        when(medicine.unit){
+                            "mg" -> tvQuantityStrength.text = context.getString(R.string.quantity_inhalator, medicine.quantity)
+                            "puff" -> tvQuantityStrength.text = context.resources.getQuantityString(R.plurals.quantity_puffs, medicine.quantity.toInt(), medicine.quantity.toInt())
+                            "mL" -> tvQuantityStrength.text = context.getString(R.string.quantity_ml, medicine.quantity)
+                        }
                     }
                     "liquid" -> {
                         ivMedicineType.setImageResource(R.drawable.ic_liquid)

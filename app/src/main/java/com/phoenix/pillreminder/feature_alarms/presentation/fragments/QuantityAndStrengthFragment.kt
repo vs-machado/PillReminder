@@ -13,7 +13,6 @@ import androidx.navigation.findNavController
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.ui.AppBarConfiguration
 import androidx.navigation.ui.setupWithNavController
-import com.google.android.material.floatingactionbutton.FloatingActionButton
 import com.phoenix.pillreminder.R
 import com.phoenix.pillreminder.databinding.FragmentQuantityAndStrengthBinding
 import com.phoenix.pillreminder.feature_alarms.presentation.viewmodels.AlarmSettingsSharedViewModel
@@ -34,6 +33,8 @@ class QuantityAndStrengthFragment : Fragment() {
         val navController = findNavController()
         val appBarConfiguration = AppBarConfiguration(navController.graph)
         val sharedViewModel: AlarmSettingsSharedViewModel by activityViewModels()
+        val medicineForm = sharedViewModel.getMedicineForm()
+        var selectedValue: String
 
         binding.apply{
             toolbar.setupWithNavController(navController, appBarConfiguration)
@@ -53,8 +54,55 @@ class QuantityAndStrengthFragment : Fragment() {
                 override fun afterTextChanged(s: Editable?) {}
             })
 
+            // Number picker is visible, allowing user to select the units of measurement
+            if(medicineForm == "injection" || medicineForm == "inhaler"){
+                npQuantity.visibility = View.VISIBLE
+                tvForm.visibility = View.INVISIBLE
+
+                var stringArray = emptyArray<String>()
+
+                stringArray = when (medicineForm) {
+                    "injection" -> stringArray + arrayOf(
+                        requireContext().getString(R.string.mL),
+                        requireContext().getString(R.string.syringe)
+                    )
+
+                    "inhaler" -> stringArray + arrayOf(
+                        requireContext().getString(R.string.puff),
+                        requireContext().getString(R.string.mL),
+                        requireContext().getString(R.string.mg)
+                    )
+                    else -> throw IllegalArgumentException("Invalid medicine form")
+                }
+
+                npQuantity.minValue = 0
+                npQuantity.maxValue = stringArray.size - 1
+                npQuantity.displayedValues = stringArray
+
+                // Initialize selected value with first array element
+                selectedValue = stringArray[0]
+
+                npQuantity.setOnValueChangedListener { _, _, newVal ->
+                    selectedValue = stringArray[newVal]
+                }
+
+            } else {
+                // Number picker is invisible, user don't need to change the medication unit
+                npQuantity.visibility = View.INVISIBLE
+                tvForm.visibility = View.VISIBLE
+
+                selectedValue = when(medicineForm){
+                    "pill" -> "pill"
+                    "drop" -> "drop"
+                    "pomade" -> "application"
+                    "liquid" -> "mL"
+                    else -> throw IllegalArgumentException("Invalid medicine form")
+                }
+            }
+
             fabNext.setOnClickListener {
                 sharedViewModel.setMedicineQuantity(etQuantity.text.toString().toFloat())
+                sharedViewModel.setDoseUnit(selectedValue)
                 it.findNavController().navigate(R.id.action_quantityAndStrengthFragment_to_frequencyFragment)
             }
 

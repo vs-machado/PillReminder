@@ -1,7 +1,6 @@
 package com.phoenix.pillreminder.feature_alarms.presentation.viewmodels
 
 import android.content.Context
-import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
@@ -13,12 +12,11 @@ import com.phoenix.pillreminder.feature_alarms.domain.model.AlarmHour
 import com.phoenix.pillreminder.feature_alarms.domain.model.AlarmItem
 import com.phoenix.pillreminder.feature_alarms.domain.model.ExpiredMedicinesInfo
 import com.phoenix.pillreminder.feature_alarms.domain.model.Medicine
+import com.phoenix.pillreminder.feature_alarms.domain.repository.MedicineRepository
 import com.phoenix.pillreminder.feature_alarms.domain.util.MedicineFrequency
 import com.phoenix.pillreminder.feature_alarms.presentation.AlarmScheduler
-import com.phoenix.pillreminder.feature_alarms.domain.repository.MedicineRepository
 import com.phoenix.pillreminder.feature_alarms.presentation.AndroidAlarmScheduler
 import dagger.hilt.android.lifecycle.HiltViewModel
-import dagger.hilt.android.qualifiers.ApplicationContext
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
@@ -53,6 +51,8 @@ class AlarmSettingsSharedViewModel @Inject constructor(
 
     private var _medicineForm = MutableLiveData("")
     val medicineForm: LiveData<String> = _medicineForm
+
+    private lateinit var doseUnit: String
 
     private var medicineQuantity = 0F
     private lateinit var medicineFrequency: MedicineFrequency
@@ -90,6 +90,7 @@ class AlarmSettingsSharedViewModel @Inject constructor(
     fun getAlarmsList(interval: Long, editTimestamp: Long?, generateTreatmentID: Boolean): List<Medicine> {
         val name = medicineName
         val quantity = getMedicineQuantity()
+        val doseUnit = getDoseUnit()
         val form = getMedicineForm()
         val alarmsPerDay = getAlarmsPerDay()
         val alarmInMillis = getAlarmInMillisList()
@@ -125,6 +126,7 @@ class AlarmSettingsSharedViewModel @Inject constructor(
                                 0,
                                 name,
                                 quantity,
+                                doseUnit,
                                 form!!,
                                 alarmsPerDay,
                                 alarmInMillis[i] + (86400000 * day),
@@ -166,6 +168,7 @@ class AlarmSettingsSharedViewModel @Inject constructor(
     fun getAlarmsList(interval: Long, workerID: UUID, editTimestamp: Long?, generateTreatmentID: Boolean): List<Medicine> {
         val name = medicineName
         val quantity = getMedicineQuantity()
+        val doseUnit = getDoseUnit()
         val form = getMedicineForm()
         val alarmsPerDay = getAlarmsPerDay()
         val alarmInMillis = getAlarmInMillisList()
@@ -203,6 +206,7 @@ class AlarmSettingsSharedViewModel @Inject constructor(
                                 0,
                                 name,
                                 quantity,
+                                doseUnit,
                                 form!!,
                                 alarmsPerDay,
                                 alarmInMillis[i] + (86400000 * day),
@@ -285,6 +289,7 @@ class AlarmSettingsSharedViewModel @Inject constructor(
                                             0,
                                             medicineName,
                                             getMedicineQuantity(),
+                                            getDoseUnit(),
                                             getMedicineForm()!!,
                                             alarmsPerDay,
                                             alarmCalendar.timeInMillis,
@@ -370,6 +375,7 @@ class AlarmSettingsSharedViewModel @Inject constructor(
                                             0,
                                             medicineName,
                                             getMedicineQuantity(),
+                                            getDoseUnit(),
                                             getMedicineForm()!!,
                                             alarmsPerDay,
                                             alarmCalendar.timeInMillis,
@@ -426,6 +432,7 @@ class AlarmSettingsSharedViewModel @Inject constructor(
                         medicineName = getMedicineName(),
                         medicineForm = "${getMedicineForm()}",
                         medicineQuantity = "${getMedicineQuantity()}",
+                        doseUnit = getDoseUnit(),
                         alarmHour = "${getAlarmHour(i)}",
                         alarmMinute = "${getAlarmMinute(i)}"
                     )
@@ -460,6 +467,7 @@ class AlarmSettingsSharedViewModel @Inject constructor(
                     medicineName = getMedicineName(),
                     medicineForm = "${getMedicineForm()}",
                     medicineQuantity = "${getMedicineQuantity()}",
+                    doseUnit = getDoseUnit(),
                     alarmHour = "${getAlarmHour(i)}",
                     alarmMinute = "${getAlarmMinute(i)}"
                 )
@@ -718,6 +726,14 @@ class AlarmSettingsSharedViewModel @Inject constructor(
 
     private fun getTreatmentStartDate(): Long{
         return treatmentStartDate
+    }
+
+    fun setDoseUnit(unit: String){
+        this.doseUnit = unit
+    }
+
+    fun getDoseUnit(): String {
+        return this.doseUnit
     }
 
     fun getAlarmsPerDay(): Int{

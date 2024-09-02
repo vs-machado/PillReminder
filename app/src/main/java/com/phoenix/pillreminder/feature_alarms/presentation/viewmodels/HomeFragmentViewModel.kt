@@ -62,6 +62,7 @@ class HomeFragmentViewModel @Inject constructor(
             medicine.name,
             medicine.form,
             medicine.quantity.toString(),
+            medicine.unit,
             medicine.alarmHour.toString(),
             medicine.alarmMinute.toString()
         )
@@ -141,6 +142,7 @@ class HomeFragmentViewModel @Inject constructor(
             medicine.name,
             medicine.form,
             medicine.quantity.toString(),
+            medicine.unit,
             medicine.alarmHour.toString(),
             medicine.alarmMinute.toString()
         )

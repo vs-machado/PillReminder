@@ -17,6 +17,8 @@ data class Medicine(
     var name:String,
     @ColumnInfo(name = "quantity")
     var quantity:Float,
+    @ColumnInfo(name = "dose_unit")
+    var unit: String,
     @ColumnInfo(name = "form")
     var form:String,
     @ColumnInfo(name = "alarms_per_day")

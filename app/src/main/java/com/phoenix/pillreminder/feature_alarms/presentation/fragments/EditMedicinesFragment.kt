@@ -635,4 +635,8 @@ class EditMedicinesFragment: Fragment() {
         (activity as MainActivity).findViewById<TextView>(R.id.tvSave).visibility = View.GONE
     }
 
+    override fun onResume(){
+        super.onResume()
+        (activity as MainActivity).findViewById<TextView>(R.id.tvSave).visibility = View.VISIBLE
+    }
 }

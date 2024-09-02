@@ -52,6 +52,7 @@ class MedicineFormFragment : Fragment() {
 
                 if(sharedViewModel.getMedicineForm() == "pomade") {
                     sharedViewModel.setMedicineQuantity(1F) // Pomade don't need to specify quantity
+                    sharedViewModel.setDoseUnit("application")
                     it.findNavController().navigate(R.id.action_medicineFormFragment_to_frequencyFragment)
                     return@setOnItemClickListener
                 }

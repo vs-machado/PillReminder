@@ -198,7 +198,6 @@
     <string name="medicine_icon">Medicine icon</string>
     <string name="pill_quantity">%1$s pill(s)</string>
     <string name="ml_quantity">%1$s mL</string>
-    <string name="drops_quantity">%1$s drop(s)</string>
     <string name="inhale_quantity">%1$s mg</string>
     <string name="pomade_quantity">1 application</string>
     <string name="medicine_time">Medicine time!</string>

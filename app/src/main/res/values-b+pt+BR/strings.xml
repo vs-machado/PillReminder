@@ -73,7 +73,7 @@
     <string name="inhaler">Inalante</string>
     <string name="pomade">Pomada</string>
     <string name="channel_for_reminding_users_to_take_their_medicines">Canal para lembrar os usuários de tomarem seus remédios</string>
-    <string name="time_to_take_your_medicine">Hora de usar o seu remédio!</string>
+    <string name="time_to_use_your_medicine">Hora de usar o seu remédio!</string>
     <string name="did_you_forget_to_use_your_medicine">Você se esqueceu de usar %1$s?</string>
     <string name="do_not_forget_to_mark_the_medicine_as_used">Não esqueça de marcar a utilização do medicamento.\n%1$s</string>
     <string name="do_not_forget_to_mark_the_medicine_as_taken">Remédio: %1$s\n%2$s</string>
@@ -161,7 +161,7 @@
     <string name="every">A cada</string>
     <string name="interval">intervalo</string>
     <string name="it_s_time_to_refill_your_pillbox">Recarregue seu porta comprimidos</string>
-    <string name="refill_your_pillbox_and_avoid_forgetting_to_take_your_medication">Recarregue e evite esquecer de usar o seu medicamento.</string>
+    <string name="refill_your_pillbox_and_avoid_forgetting_to_use_your_medication">Recarregue e evite esquecer de usar o seu medicamento.</string>
     <string name="search_hint">Pesquise seus remédios</string>
     <string name="details">Detalhes</string>
     <string name="see_medicine_details">Ver detalhes do medicamento</string>
@@ -269,9 +269,9 @@
     </plurals>
 
     <plurals name="take_drops">
-        <item quantity="one">Tome %1$d gota</item>
-        <item quantity="other">Tome %1$d gotas</item>
-        <item quantity="many">Tome %1$d gotas</item>
+        <item quantity="one">Use %1$d gota</item>
+        <item quantity="other">Use %1$d gotas</item>
+        <item quantity="many">Use %1$d gotas</item>
     </plurals>
 
     <plurals name="inhale_puff">

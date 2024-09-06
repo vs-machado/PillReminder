@@ -73,7 +73,7 @@
     <string name="inhaler">Inhaler</string>
     <string name="pomade">Pomade</string>
     <string name="channel_for_reminding_users_to_take_their_medicines">Channel for reminding users to take their medicines</string>
-    <string name="time_to_take_your_medicine">Time to take your medicine!</string>
+    <string name="time_to_use_your_medicine">Time to use your medicine!</string>
     <string name="did_you_forget_to_use_your_medicine">Did you forget to use %1$s?</string>
     <string name="do_not_forget_to_mark_the_medicine_as_used">Do not forget to mark the medicine as used.\n%1$s</string>
     <string name="do_not_forget_to_mark_the_medicine_as_taken">Medicine: %1$s\n%2$s</string>
@@ -162,7 +162,7 @@
     <string name="every">Every</string>
     <string name="interval">interval</string>
     <string name="it_s_time_to_refill_your_pillbox">Refill your pillbox</string>
-    <string name="refill_your_pillbox_and_avoid_forgetting_to_take_your_medication">Refill and avoid forgetting to take your medication.</string>
+    <string name="refill_your_pillbox_and_avoid_forgetting_to_use_your_medication">Refill and avoid forgetting to use your medication.</string>
     <string name="search_hint">Search registered medicines</string>
     <string name="see_medicine_details">See medicine details</string>
     <string name="details">Details</string>
@@ -238,8 +238,8 @@
     </plurals>
 
     <plurals name="take_drops">
-        <item quantity="one">Take %1$d drop</item>
-        <item quantity="other">Take %1$d drops</item>
+        <item quantity="one">Use %1$d drop</item>
+        <item quantity="other">Use %1$d drops</item>
     </plurals>
 
     <plurals name="inhale_puff">

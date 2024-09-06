@@ -157,7 +157,7 @@ class MyViewHolder(private val medicinesBinding: AdapterListMedicinesBinding):Re
                 true -> {
                     tvMedicineTaken.isVisible = true
 
-                    if(medicine.form == "pomade" || medicine.form == "inhaler" || medicine.form == "injection" || medicine.form == "drops"){
+                    if(medicine.form == "pomade" || medicine.form == "inhaler" || medicine.form == "injection" || medicine.form == "drops" || medicine.form == "liquid"){
                         tvMedicineTaken.text = context.getString(R.string.medicine_already_used)
                     } else{
                         tvMedicineTaken.text = context.getString(R.string.medicine_already_taken)
@@ -173,7 +173,7 @@ class MyViewHolder(private val medicinesBinding: AdapterListMedicinesBinding):Re
                                 context.getString(R.string.medicine_skipped)
                         }
                         false -> {
-                            if(medicine.form == "pomade" || medicine.form == "inhaler" || medicine.form == "injection" || medicine.form == "drops"){
+                            if(medicine.form == "pomade" || medicine.form == "inhaler" || medicine.form == "injection" || medicine.form == "drops" || medicine.form == "liquid"){
                                 tvMedicineTaken.text = context.getString(R.string.medicine_not_used_yet)
                             } else{
                                 tvMedicineTaken.text = context.getString(R.string.medicine_not_taken_yet)

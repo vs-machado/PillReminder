@@ -40,7 +40,7 @@ object NotificationUtils {
                 createNotificationChannel(context, alarmUri)
 
                 return notificationBuilder(context, channelId, pendingIntent,
-                    context.getString(R.string.time_to_take_your_medicine),
+                    context.getString(R.string.time_to_use_your_medicine),
                     context.getString(R.string.do_not_forget_to_mark_the_medicine_as_taken, item.medicineName,
                         checkMedicineForm(item.medicineForm, item.medicineQuantity, item.doseUnit, context)))
             }
@@ -65,7 +65,7 @@ object NotificationUtils {
 
                 createNotificationChannel(context, alarmUri)
 
-                val title = context.getString(R.string.time_to_take_your_medicine)
+                val title = context.getString(R.string.time_to_use_your_medicine)
                 val text = context.getString(R.string.do_not_forget_to_mark_the_medicine_as_taken, item.medicineName, checkMedicineForm(item.medicineForm,
                     item.medicineQuantity, item.doseUnit, context))
 
@@ -116,7 +116,7 @@ object NotificationUtils {
 
         val title = context.getString(R.string.it_s_time_to_refill_your_pillbox)
         val text =
-            context.getString(R.string.refill_your_pillbox_and_avoid_forgetting_to_take_your_medication)
+            context.getString(R.string.refill_your_pillbox_and_avoid_forgetting_to_use_your_medication)
 
         return notificationBuilder(context, pillboxReminderChannelId, pendingIntent, title, text)
     }

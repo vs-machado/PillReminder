@@ -234,13 +234,13 @@
                 <com.google.android.material.textfield.TextInputLayout
                     android:id="@+id/tilDoseUnit"
                     style="@style/Widget.Material3.TextInputLayout.OutlinedBox.ExposedDropdownMenu"
-                    android:layout_width="120dp"
+                    android:layout_width="140dp"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center">
 
                     <com.google.android.material.textfield.MaterialAutoCompleteTextView
                         android:id="@+id/acTvDoseUnit"
-                        android:layout_width="120dp"
+                        android:layout_width="140dp"
                         android:layout_height="wrap_content"
                         android:inputType="none" />
                 </com.google.android.material.textfield.TextInputLayout>

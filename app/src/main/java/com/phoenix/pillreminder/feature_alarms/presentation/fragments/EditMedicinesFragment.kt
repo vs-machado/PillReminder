@@ -6,6 +6,7 @@ import android.graphics.Color
 import android.graphics.drawable.ColorDrawable
 import android.os.Bundle
 import android.text.format.DateFormat.is24HourFormat
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -177,7 +178,7 @@ class EditMedicinesFragment: Fragment() {
             when(medicine?.form){
                 "pill" -> {
                     acTvMedicineForm.setText(context?.getString(R.string.pill), false)
-                    tvStrength.text = ""
+                    tvStrength.text = requireContext().getString(R.string.pills)
                 }
                 "drop" -> {
                     acTvMedicineForm.setText(context?.getString(R.string.Drops), false)
@@ -185,7 +186,7 @@ class EditMedicinesFragment: Fragment() {
                 }
                 "pomade" -> {
                     acTvMedicineForm.setText(context?.getString(R.string.pomade), false)
-                    tvStrength.text = ""
+                    tvStrength.text = requireContext().getString(R.string.application)
                 }
                 "injection" -> {
                     acTvMedicineForm.setText(context?.getString(R.string.injection), false)
@@ -603,6 +604,9 @@ class EditMedicinesFragment: Fragment() {
             "liquid" -> tvStrengthVisible()
             "inhaler" -> tilDoseUnitVisible(medicine, "inhaler")
         }
+
+        val tvstrengthtext = binding.tvStrength.text.toString()
+        Log.d("tvstrength", tvstrengthtext)
     }
 
     private fun tvStrengthVisible(){

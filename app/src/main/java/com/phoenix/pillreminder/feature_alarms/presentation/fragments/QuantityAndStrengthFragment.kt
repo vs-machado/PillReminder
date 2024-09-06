@@ -51,7 +51,15 @@ class QuantityAndStrengthFragment : Fragment() {
                     fabNext.visibility = if(inputIsFilled) View.VISIBLE else View.INVISIBLE
                 }
 
-                override fun afterTextChanged(s: Editable?) {}
+                override fun afterTextChanged(s: Editable?) {
+                    val count = s.toString().toIntOrNull() ?: 0
+
+                    when(medicineForm){
+                        "pill" -> binding.tvForm.text = resources.getQuantityString(R.plurals.pills, count)
+                        "drop" -> binding.tvForm.text = resources.getQuantityString(R.plurals.drops, count)
+                        "inhaler" -> binding.tvForm.text = resources.getQuantityString(R.plurals.puffs, count)
+                    }
+                }
             })
 
             // Number picker is visible, allowing user to select the units of measurement
@@ -60,30 +68,40 @@ class QuantityAndStrengthFragment : Fragment() {
                 tvForm.visibility = View.INVISIBLE
 
                 var stringArray = emptyArray<String>()
+                selectedValue = ""
 
-                stringArray = when (medicineForm) {
-                    "injection" -> stringArray + arrayOf(
-                        requireContext().getString(R.string.mL),
-                        requireContext().getString(R.string.syringe)
-                    )
-
-                    "inhaler" -> stringArray + arrayOf(
-                        requireContext().getString(R.string.puff),
-                        requireContext().getString(R.string.mL),
-                        requireContext().getString(R.string.mg)
-                    )
-                    else -> throw IllegalArgumentException("Invalid medicine form")
+                when(medicineForm){
+                    "injection" -> {
+                        stringArray += arrayOf(
+                            requireContext().getString(R.string.mL),
+                            requireContext().getString(R.string.syringe)
+                        )
+                        // Initialize selected value with first array element
+                        selectedValue = "mL"
+                    }
+                    "inhaler" -> {
+                        stringArray += arrayOf(
+                            requireContext().getString(R.string.puff),
+                            requireContext().getString(R.string.mL),
+                            requireContext().getString(R.string.mg)
+                        )
+                        // Initialize selected value with first array element
+                        selectedValue = "puff"
+                    }
                 }
 
                 npQuantity.minValue = 0
                 npQuantity.maxValue = stringArray.size - 1
                 npQuantity.displayedValues = stringArray
 
-                // Initialize selected value with first array element
-                selectedValue = stringArray[0]
-
                 npQuantity.setOnValueChangedListener { _, _, newVal ->
-                    selectedValue = stringArray[newVal]
+                    selectedValue = when(stringArray[newVal]) {
+                        requireContext().getString(R.string.mL) -> "mL"
+                        requireContext().getString(R.string.syringe) -> "syringe"
+                        requireContext().getString(R.string.puff) -> "puff"
+                        requireContext().getString(R.string.mg) -> "mg"
+                        else -> throw IllegalArgumentException("Invalid medicine form")
+                    }
                 }
 
             } else {

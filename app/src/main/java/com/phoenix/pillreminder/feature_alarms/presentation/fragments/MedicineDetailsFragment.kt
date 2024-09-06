@@ -42,11 +42,11 @@ class MedicineDetailsFragment: Fragment() {
             when(medicine?.form){
                 "pill" -> {
                     imageView.setImageResource(R.drawable.ic_pill_coloured)
-                    tvQuantityMed.text = context?.getString(R.string.number_pills, medicine.quantity.toInt())
+                    tvQuantityMed.text = context?.resources?.getQuantityString(R.plurals.pills_quantity, medicine.quantity.toInt(), medicine.quantity.toInt())
                 }
                 "drop" -> {
                     imageView.setImageResource(R.drawable.ic_dropper)
-                    tvQuantityMed.text = context?.getString(R.string.number_drops, medicine.quantity.toInt())
+                    tvQuantityMed.text = context?.resources?.getQuantityString(R.plurals.drops_quantity, medicine.quantity.toInt(), medicine.quantity.toInt())
                 }
                 "pomade" -> {
                     imageView.setImageResource(R.drawable.ic_ointment)
@@ -55,7 +55,10 @@ class MedicineDetailsFragment: Fragment() {
                 "injection" -> {
                     imageView.setImageResource(R.drawable.ic_injection)
                     when(medicine.unit){
-                        "syringe" -> tvQuantityMed.text = context?.getString(R.string.quantity_syringe, medicine.quantity.toInt())
+                        "syringe" ->  {
+                            val quantity = medicine.quantity.toInt()
+                            tvQuantityMed.text = context?.resources?.getQuantityString(R.plurals.syringe_quantity, quantity, quantity)
+                        }
                         "mL" -> tvQuantityMed.text = context?.getString(R.string.number_ml, medicine.quantity)
                     }
                 }
@@ -67,7 +70,7 @@ class MedicineDetailsFragment: Fragment() {
                     imageView.setImageResource(R.drawable.ic_inhalator)
                     when(medicine.unit){
                         "mg" -> tvQuantityMed.text = context?.getString(R.string.quantity_inhalator, medicine.quantity)
-                        "puff" -> tvQuantityMed.text = context?.resources?.getQuantityString(R.plurals.quantity_puffs, medicine.quantity.toInt(), medicine.quantity.toInt())
+                        "puff" -> tvQuantityMed.text = context?.resources?.getQuantityString(R.plurals.puffs_quantity, medicine.quantity.toInt(), medicine.quantity.toInt())
                         "mL" -> tvQuantityMed.text = context?.getString(R.string.quantity_ml, medicine.quantity)
                     }
                 }

@@ -181,12 +181,6 @@
     <string name="quantity_ml">Quantidade: %.2f mL</string>
     <string name="quantity_syringe">Quantidade: %1$d seringa(s)</string>
 
-    <plurals name="quantity_puffs">
-        <item quantity="one">Quantidade: %1$d inalação</item>
-        <item quantity="other">Quantidade: %1$d inalações</item>
-        <item quantity="many">Quantidade: %1$d inalações</item>
-    </plurals>
-
     <string name="quantity_application">Quantidade: 1 aplicação</string>
     <string name="quantity_inhalator">Quantidade: %.2f mg</string>
     <string name="ongoing_treatment">Tratamento em andamento</string>
@@ -204,7 +198,6 @@
     <string name="Hour">Horário</string>
     <string name="pill_quantity">%1$s comprimido(s)</string>
     <string name="ml_quantity">%1$s mL</string>
-    <string name="drops_quantity">%1$s gota(s)</string>
     <string name="inhale_quantity">%1$s mg</string>
     <string name="pomade_quantity">1 aplicação</string>
     <string name="medicine_time">Hora do medicamento!</string>
@@ -260,4 +253,113 @@
         <item>mg</item>
         <item>inalação</item>
     </string-array>
+
+    <plurals name="take_pill">
+        <item quantity="one">Tome %1$d comprimido</item>
+        <item quantity="other">Tome %1$d comprimidos</item>
+        <item quantity="many">Tome %1$d comprimidos</item>
+    </plurals>
+
+    <plurals name="take_injection_syringe">
+        <item quantity="one">Injete %1$d seringa</item>
+        <item quantity="other">Injete %1$d seringas</item>
+        <item quantity="many">Injete %1$d seringas</item>
+    </plurals>
+
+    <plurals name="take_drops">
+        <item quantity="one">Tome %1$d gota</item>
+        <item quantity="other">Tome %1$d gotas</item>
+        <item quantity="many">Tome %1$d gotas</item>
+    </plurals>
+
+    <plurals name="inhale_puff">
+        <item quantity="one">Faça %1$d inalação</item>
+        <item quantity="other">Faça %1$d inalações</item>
+        <item quantity="many">Faça %1$d inalações</item>
+    </plurals>
+
+    <plurals name="pills">
+        <item quantity="one">comprimido</item>
+        <item quantity="other">comprimidos</item>
+        <item quantity="many">comprimidos</item>
+    </plurals>
+
+    <plurals name="drops">
+        <item quantity="one">gota</item>
+        <item quantity="other">gotas</item>
+        <item quantity="many">gotas</item>
+    </plurals>
+
+    <plurals name="puffs">
+        <item quantity="one">inalação</item>
+        <item quantity="other">inalações</item>
+        <item quantity="many">inalações</item>
+    </plurals>
+
+    <plurals name="pills_quantity">
+        <item quantity="one">%1$d comprimido</item>
+        <item quantity="other">%1$d comprimidos</item>
+        <item quantity="many">%1$d comprimidos</item>
+    </plurals>
+
+    <plurals name="syringe_quantity">
+        <item quantity="one">%1$d seringa</item>
+        <item quantity="other">%1$d seringas</item>
+        <item quantity="many">%1$d seringas</item>
+    </plurals>
+
+    <plurals name="pill_quantity">
+        <item quantity="one">%1$s comprimido</item>
+        <item quantity="other">%1$s comprimidos</item>
+        <item quantity="many">%1$s comprimidos</item>
+    </plurals>
+
+    <plurals name="puffs_quantity">
+        <item quantity="one">%1$d inalação</item>
+        <item quantity="other">%1$d inalações</item>
+        <item quantity="many">%1$d inalações</item>
+    </plurals>
+
+    <plurals name="drops_quantity">
+        <item quantity="one">%1$s gota</item>
+        <item quantity="other">%1$s gotas</item>
+        <item quantity="many">%1$s gotas</item>
+    </plurals>
+
+    <plurals name="quantity_pills">
+        <item quantity="one">Quantidade: %1$d comprimido</item>
+        <item quantity="other">Quantidade: %1$d comprimidos</item>
+        <item quantity="many">Quantidade: %1$d comprimidos</item>
+    </plurals>
+
+    <plurals name="quantity_drops">
+        <item quantity="one">Quantidade: %1$d gota</item>
+        <item quantity="other">Quantidade: %1$d gotas</item>
+        <item quantity="many">Quantidade: %1$d gotas</item>
+    </plurals>
+
+    <plurals name="quantity_syringe">
+        <item quantity="one">Quantidade: %1$d seringa</item>
+        <item quantity="other">Quantidade: %1$d seringas</item>
+        <item quantity="many">Quantidade: %1$d seringas</item>
+    </plurals>
+
+    <plurals name="quantity_pill">
+        <item quantity="one">Quantidade: %1$s comprimido</item>
+        <item quantity="other">Quantidade: %1$s comprimidos</item>
+        <item quantity="many">Quantidade: %1$s comprimidos</item>
+    </plurals>
+
+    <plurals name="quantity_puffs">
+        <item quantity="one">Quantidade: %1$d inalação</item>
+        <item quantity="other">Quantidade: %1$d inalações</item>
+        <item quantity="many">Quantidade: %1$d inalações</item>
+    </plurals>
+
+    <plurals name="alarms_per_day_details">
+        <item quantity="one">Alarmes por dia:\n\n%1$d alarme</item>
+        <item quantity="other">Alarmes por dia:\n\n%1$d alarmes</item>
+        <item quantity="many">Alarmes por dia:\n\n%1$d alarmes</item>
+    </plurals>
+
 </resources>

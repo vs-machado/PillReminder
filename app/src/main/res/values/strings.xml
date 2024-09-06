@@ -180,13 +180,6 @@
     <string name="quantity_pills">Quantity: %1$d pill(s)</string>
     <string name="quantity_drops">Quantity: %1$d drop(s)</string>
     <string name="quantity_ml">Quantity: %.2f mL</string>
-    <string name="quantity_syringe">Quantity: %1$d syringe(s)</string>
-
-    <plurals name="quantity_puffs">
-        <item quantity="one">Quantity: %1$d puff</item>
-        <item quantity="other">Quantity: %1$d puffs</item>
-    </plurals>
-
     <string name="quantity_application">Quantity: 1 application</string>
     <string name="quantity_inhalator">Quantity: %.2f mg</string>
     <string name="ongoing_treatment">Ongoing treatment</string>
@@ -231,6 +224,99 @@
     <string name="pill_unit">pill</string>
     <string name="drop">drop</string>
     <string name="application">application</string>
+
+    <string name="quantity_syringe">Quantity: %1$d syringe(s)</string>
+
+    <plurals name="take_pill">
+        <item quantity="one">Take %1$d pill</item>
+        <item quantity="other">Take %1$d pills</item>
+    </plurals>
+
+    <plurals name="take_injection_syringe">
+        <item quantity="one">Inject %1$d syringe</item>
+        <item quantity="other">Inject %1$d syringes</item>
+    </plurals>
+
+    <plurals name="take_drops">
+        <item quantity="one">Take %1$d drop</item>
+        <item quantity="other">Take %1$d drops</item>
+    </plurals>
+
+    <plurals name="inhale_puff">
+        <item quantity="one">Take %1$d puff</item>
+        <item quantity="other">Take %1$d puffs</item>
+    </plurals>
+
+    <plurals name="pills">
+        <item quantity="one">pill</item>
+        <item quantity="other">pills</item>
+    </plurals>
+
+    <plurals name="drops">
+        <item quantity="one">drop</item>
+        <item quantity="other">drops</item>
+    </plurals>
+
+
+    <plurals name="puffs">
+        <item quantity="one">puff</item>
+        <item quantity="other">puffs</item>
+    </plurals>
+
+    <plurals name="pills_quantity">
+        <item quantity="one">%1$d pill</item>
+        <item quantity="other">%1$d pills</item>
+    </plurals>
+
+    <plurals name="drops_quantity">
+        <item quantity="one">%1$d drop</item>
+        <item quantity="other">%1$d drops</item>
+    </plurals>
+
+    <plurals name="syringe_quantity">
+        <item quantity="one">%1$d syringe</item>
+        <item quantity="other">%1$d syringes</item>
+    </plurals>
+
+    <plurals name="pill_quantity">
+        <item quantity="one">%1$s pill</item>
+        <item quantity="other">%1$s pills</item>
+    </plurals>
+
+    <plurals name="puffs_quantity">
+        <item quantity="one">%1$d puff</item>
+        <item quantity="other">%1$d puffs</item>
+    </plurals>
+
+    <plurals name="quantity_pills">
+        <item quantity="one">Quantity: %1$d pill</item>
+        <item quantity="other">Quantity: %1$d pills</item>
+    </plurals>
+
+    <plurals name="quantity_drops">
+        <item quantity="one">Quantity: %1$d drop</item>
+        <item quantity="other">Quantity: %1$d drops</item>
+    </plurals>
+
+    <plurals name="quantity_syringe">
+        <item quantity="one">Quantity: %1$d syringe</item>
+        <item quantity="other">Quantity: %1$d syringes</item>
+    </plurals>
+
+    <plurals name="quantity_pill">
+        <item quantity="one">Quantity: %1$s pill</item>
+        <item quantity="other">Quantity: %1$s pills</item>
+    </plurals>
+
+    <plurals name="quantity_puffs">
+        <item quantity="one">Quantity: %1$d puff</item>
+        <item quantity="other">Quantity: %1$d puffs</item>
+    </plurals>
+
+    <plurals name="alarms_per_day_details">
+        <item quantity="one">Alarms per day:\n\n%1$d alarm</item>
+        <item quantity="other">Alarms per day:\n\n%1$d alarms</item>
+    </plurals>
 
     <string-array name="medicine_forms">
         <item>Pill</item>

@@ -74,7 +74,8 @@ class MedicinesDataAdapter(
                 when(medicine.form){
                     "pill" -> {
                         ivMedicineType.setImageResource(R.drawable.ic_pill_coloured)
-                        tvQuantityStrength.text = context.getString(R.string.quantity_pills, medicine.quantity.toInt())
+                        val quantity = medicine.quantity.toInt()
+                        tvQuantityStrength.text = context.resources.getQuantityString(R.plurals.quantity_pills, quantity, quantity)
                     }
                     "pomade" -> {
                         ivMedicineType.setImageResource(R.drawable.ic_ointment)
@@ -82,20 +83,27 @@ class MedicinesDataAdapter(
                     }
                     "injection" -> {
                         ivMedicineType.setImageResource(R.drawable.ic_injection)
-                        when(medicine.unit){
+                        when(medicine.unit) {
                             "mL" -> tvQuantityStrength.text = context.getString(R.string.quantity_ml, medicine.quantity)
-                            "syringe" -> tvQuantityStrength.text = context.getString(R.string.quantity_syringe, medicine.quantity.toInt())
+                            "syringe" -> {
+                                val quantity = medicine.quantity.toInt()
+                                tvQuantityStrength.text = context.resources.getQuantityString(R.plurals.quantity_syringe, quantity, quantity)
+                            }
                         }
                     }
                     "drop" -> {
                         ivMedicineType.setImageResource(R.drawable.ic_dropper)
-                        tvQuantityStrength.text = context.getString(R.string.quantity_drops, medicine.quantity.toInt())
+                        val quantity = medicine.quantity.toInt()
+                        tvQuantityStrength.text = context.resources.getQuantityString(R.plurals.quantity_drops, quantity, quantity)
                     }
                     "inhaler" -> {
                         ivMedicineType.setImageResource(R.drawable.ic_inhalator)
-                        when(medicine.unit){
+                        when(medicine.unit) {
                             "mg" -> tvQuantityStrength.text = context.getString(R.string.quantity_inhalator, medicine.quantity)
-                            "puff" -> tvQuantityStrength.text = context.resources.getQuantityString(R.plurals.quantity_puffs, medicine.quantity.toInt(), medicine.quantity.toInt())
+                            "puff" -> {
+                                val quantity = medicine.quantity.toInt()
+                                tvQuantityStrength.text = context.resources.getQuantityString(R.plurals.quantity_puffs, quantity, quantity)
+                            }
                             "mL" -> tvQuantityStrength.text = context.getString(R.string.quantity_ml, medicine.quantity)
                         }
                     }

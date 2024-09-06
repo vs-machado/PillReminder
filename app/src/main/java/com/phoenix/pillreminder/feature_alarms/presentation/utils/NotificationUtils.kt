@@ -196,18 +196,18 @@ object NotificationUtils {
             .build()
     }
 
-    private fun checkMedicineForm(medicineForm: String, medicineQuantity: String, doseUnit: String, context: Context): String{
-        return when(medicineForm){
+    private fun checkMedicineForm(medicineForm: String, medicineQuantity: String, doseUnit: String, context: Context): String {
+        return when(medicineForm) {
             "pill" -> {
-                val quantity = medicineQuantity.toFloatOrNull()?.toInt().toString()
-                context.getString(R.string.take_pill, quantity)
+                val quantity = medicineQuantity.toFloatOrNull()?.toInt() ?: 0
+                context.resources.getQuantityString(R.plurals.take_pill, quantity, quantity)
             }
             "injection" -> {
                 when(doseUnit) {
                     "mL" -> context.getString(R.string.take_injection_ml, medicineQuantity)
                     "syringe" -> {
-                        val quantity = medicineQuantity.toFloatOrNull()?.toInt().toString()
-                        context.getString(R.string.take_injection_syringe, quantity)
+                        val quantity = medicineQuantity.toFloatOrNull()?.toInt() ?: 0
+                        context.resources.getQuantityString(R.plurals.take_injection_syringe, quantity, quantity)
                     }
                     else -> throw IllegalArgumentException("Illegal doseUnit value provided")
                 }
@@ -216,15 +216,15 @@ object NotificationUtils {
                 context.getString(R.string.take_liquid, medicineQuantity)
             }
             "drop" -> {
-                val quantity = medicineQuantity.toFloatOrNull()?.toInt().toString()
-                context.getString(R.string.take_drops, quantity)
+                val quantity = medicineQuantity.toFloatOrNull()?.toInt() ?: 0
+                context.resources.getQuantityString(R.plurals.take_drops, quantity, quantity)
             }
             "inhaler" -> {
-                when(doseUnit){
+                when(doseUnit) {
                     "mg" -> context.getString(R.string.inhale_mg, medicineQuantity)
                     "puff" -> {
-                        medicineQuantity.toFloatOrNull()?.toInt().toString()
-                        context.getString(R.string.inhale_puff, medicineQuantity)
+                        val quantity = medicineQuantity.toFloatOrNull()?.toInt() ?: 0
+                        context.resources.getQuantityString(R.plurals.inhale_puff, quantity, quantity)
                     }
                     "mL" -> context.getString(R.string.inhale_mL, medicineQuantity)
                     else -> throw IllegalArgumentException("Illegal doseUnit value provided")
@@ -233,7 +233,7 @@ object NotificationUtils {
             "pomade" -> {
                 context.getString(R.string.apply_pomade)
             }
-            else -> {""}
+            else -> ""
         }
     }
 }

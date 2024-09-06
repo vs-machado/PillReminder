@@ -39,7 +39,7 @@ class AlarmTriggeredActivity: AppCompatActivity() {
         /*mediaPlayer = MediaPlayer.create(this, R.raw.alarm_sound)
         mediaPlayer?.isLooping = true
         mediaPlayer?.start()*/
-        medicinesViewModel = ViewModelProvider(this).get(MedicinesViewModel::class.java)
+        medicinesViewModel = ViewModelProvider(this)[MedicinesViewModel::class.java]
 
         binding.apply{
             val alarmItem = if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU){
@@ -52,7 +52,7 @@ class AlarmTriggeredActivity: AppCompatActivity() {
                 alarmItem?.apply{
                     tvAlarmMedicineName.text = medicineName
                     tvAlarmHourMedicine.text = checkDateFormat(alarmHour.toInt(), alarmMinute.toInt(), context = applicationContext)
-                    tvAlarmQuantity.text = checkMedicineForm(medicineForm, medicineQuantity, context = applicationContext)
+                    tvAlarmQuantity.text = checkMedicineForm(medicineForm, medicineQuantity, doseUnit, context = applicationContext)
 
                     ivAlarmMedicineIcon.setImageResource(setMedicineImageView(medicineForm))
 

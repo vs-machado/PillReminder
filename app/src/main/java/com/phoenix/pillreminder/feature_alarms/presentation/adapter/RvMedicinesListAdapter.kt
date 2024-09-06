@@ -113,8 +113,8 @@ class MyViewHolder(private val medicinesBinding: AdapterListMedicinesBinding):Re
 
             when(medicine.form){
                 "pill" -> {
-                    val quantity = medicine.quantity.toInt().toString()
-                    tvQuantity.text = context.getString(R.string.take_pill, quantity)
+                    val quantity = medicine.quantity.toInt()
+                    tvQuantity.text = context.resources.getQuantityString(R.plurals.take_pill, quantity, quantity)
                 }
                 "injection" -> {
                     when(medicine.unit) {
@@ -122,8 +122,8 @@ class MyViewHolder(private val medicinesBinding: AdapterListMedicinesBinding):Re
                             tvQuantity.text = context.getString(R.string.take_injection_ml, medicine.quantity.toString())
                         }
                         "syringe" -> {
-                            val quantity = medicine.quantity.toInt().toString()
-                            tvQuantity.text = context.getString(R.string.take_injection_syringe, quantity)
+                            val quantity = medicine.quantity.toInt()
+                            tvQuantity.text = context.resources.getQuantityString(R.plurals.take_injection_syringe, quantity, quantity)
                         }
                     }
                 }
@@ -131,8 +131,8 @@ class MyViewHolder(private val medicinesBinding: AdapterListMedicinesBinding):Re
                     tvQuantity.text = context.getString(R.string.take_liquid, medicine.quantity.toString())
                 }
                 "drop" -> {
-                    val quantity = medicine.quantity.toInt().toString()
-                    tvQuantity.text = context.getString(R.string.take_drops, quantity)
+                    val quantity = medicine.quantity.toInt()
+                    tvQuantity.text = context.resources.getQuantityString(R.plurals.take_drops, quantity, quantity)
                 }
                 "inhaler" -> {
                     when(medicine.unit){
@@ -140,8 +140,8 @@ class MyViewHolder(private val medicinesBinding: AdapterListMedicinesBinding):Re
                             tvQuantity.text = context.getString(R.string.inhale_mg, medicine.quantity.toString())
                         }
                         "puff" -> {
-                            val quantity = medicine.quantity.toInt().toString()
-                            tvQuantity.text = context.getString(R.string.inhale_puff, quantity)
+                            val quantity = medicine.quantity.toInt()
+                            tvQuantity.text = context.resources.getQuantityString(R.plurals.inhale_puff, quantity, quantity)
                         }
                         "mL" -> {
                             tvQuantity.text = context.getString(R.string.inhale_mL, medicine.quantity.toString())

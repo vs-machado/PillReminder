@@ -86,6 +86,7 @@
     <string name="medicine_not_taken_yet">Ainda não foi tomado</string>
     <string name="medicine_skipped">Dose pulada.</string>
     <string name="quantity">Quantidade</string>
+    <string name="dose_quantity">Quantidade por dose</string>
     <string name="set_the_quantity_per_dosage">Insira a quantidade por dose:</string>
     <string name="this_app_heavily_depends_on_user_overlay_and_notification_permissions_to_properly_work">O aplicativo depende fortemente das permissões do usuário de sobreposição e notificação para funcionar corretamente. </string>
     <string name="the_app_must_not_be_used_without_these_permissions">A permissão de envio de notificações é obrigatória para o bom funcionamento do aplicativo.\n\n A concessão da permissão de sobreposição de tela é opcional. </string>

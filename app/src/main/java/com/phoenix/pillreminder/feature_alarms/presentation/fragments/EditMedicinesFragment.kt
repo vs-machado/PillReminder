@@ -619,13 +619,20 @@ class EditMedicinesFragment: Fragment() {
                 val doseUnit = resources.getStringArray(R.array.units_injection)
                 val formsArrayAdapter = ArrayAdapter(requireContext(), R.layout.dropdown_item, doseUnit)
                 binding.acTvDoseUnit.setAdapter(formsArrayAdapter)
-                binding.acTvDoseUnit.setText(medicine.unit, false)
+                when(medicine.unit){
+                    "mL" -> binding.acTvDoseUnit.setText(getString(R.string.mL), false)
+                    "syringe" -> binding.acTvDoseUnit.setText(getString(R.string.syringe), false)
+                }
             }
             "inhaler" -> {
                 val doseUnit = resources.getStringArray(R.array.units_inhaler)
                 val formsArrayAdapter = ArrayAdapter(requireContext(), R.layout.dropdown_item, doseUnit)
                 binding.acTvDoseUnit.setAdapter(formsArrayAdapter)
-                binding.acTvDoseUnit.setText(medicine.unit, false)
+                when(medicine.unit){
+                    "mg" -> binding.acTvDoseUnit.setText(getString(R.string.mgs), false)
+                    "puff" -> binding.acTvDoseUnit.setText(getString(R.string.puff), false)
+                    "mL" -> binding.acTvDoseUnit.setText(getString(R.string.mL), false)
+                }
             }
         }
     }

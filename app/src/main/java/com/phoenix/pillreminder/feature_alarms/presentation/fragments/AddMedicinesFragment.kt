@@ -48,7 +48,7 @@ class AddMedicinesFragment : Fragment() {
         val navController = findNavController()
         val appBarConfiguration = AppBarConfiguration(navController.graph)
         val sharedViewModel: AlarmSettingsSharedViewModel by activityViewModels()
-        val medicineName = binding.tietMedicineName.text
+        var medName = binding.tietMedicineName.text
 
         binding.apply {
             toolbarAddMedicines.setupWithNavController(navController, appBarConfiguration)
@@ -63,6 +63,7 @@ class AddMedicinesFragment : Fragment() {
                     val inputIsEmpty = !inputIsFilled
 
                     setFabVisibility(inputIsEmpty, fabNext, tilMedicineName)
+                    medName = binding.tietMedicineName.text
                 }
 
                 override fun afterTextChanged(s: Editable?) {}
@@ -70,7 +71,7 @@ class AddMedicinesFragment : Fragment() {
 
             fabNext.setOnClickListener {
                 // Save medicine name input by user
-                sharedViewModel.setMedicineName(medicineName.toString())
+                sharedViewModel.setMedicineName(medName.toString())
                 it.findNavController().navigate(R.id.action_addMedicinesFragment_to_medicineFormFragment)
             }
 

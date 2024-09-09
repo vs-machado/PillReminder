@@ -14,14 +14,20 @@ import android.view.Window
 import android.widget.ArrayAdapter
 import android.widget.TextView
 import android.widget.Toast
+import android.widget.Toolbar
 import androidx.core.content.ContextCompat
+import androidx.core.view.WindowInsetsControllerCompat
 import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.hilt.navigation.fragment.hiltNavGraphViewModels
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
+import androidx.navigation.ui.AppBarConfiguration
+import androidx.navigation.ui.setupWithNavController
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.google.android.material.datepicker.MaterialDatePicker
+import com.google.android.material.floatingactionbutton.FloatingActionButton
 import com.google.android.material.textfield.MaterialAutoCompleteTextView
 import com.phoenix.pillreminder.R
 import com.phoenix.pillreminder.databinding.FragmentEditMedicinesBinding
@@ -63,8 +69,19 @@ class EditMedicinesFragment: Fragment() {
     ): View {
         binding = FragmentEditMedicinesBinding.inflate(layoutInflater)
         val medicine = arguments?.getParcelable("edit_medicine", Medicine::class.java)
-
         medicine?.let { setupAdapters(it) }
+
+        // Sets the notification bar color to blue and white text on notifications
+        requireActivity().window.statusBarColor = resources.getColor(R.color.colorPrimary, null)
+        WindowInsetsControllerCompat(requireActivity().window, requireActivity().window.decorView).isAppearanceLightStatusBars = false
+
+        requireActivity().findViewById<FloatingActionButton>(R.id.fabAddMedicine).visibility = View.GONE
+
+        val toolbar = requireActivity().findViewById<androidx.appcompat.widget.Toolbar>(R.id.toolbarHome)
+        toolbar.visibility = View.VISIBLE
+
+        val bottomNavigationView = requireActivity().findViewById<BottomNavigationView>(R.id.bottom_navigation)
+        bottomNavigationView.visibility = View.GONE
 
         return binding.root
     }
@@ -75,9 +92,8 @@ class EditMedicinesFragment: Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-
-        val tvSave = activity?.findViewById<TextView>(R.id.tvSave)
-        tvSave?.visibility = View.VISIBLE
+        val tvSave = requireActivity().findViewById<TextView>(R.id.tvSave)
+        tvSave.visibility = View.VISIBLE
 
         val medicine = arguments?.getParcelable("edit_medicine", Medicine::class.java)
 
@@ -244,7 +260,7 @@ class EditMedicinesFragment: Fragment() {
             }
         }
 
-        tvSave?.setOnClickListener {
+        tvSave.setOnClickListener {
             val inputFrequency = binding.acTvMedicineFrequency.text.toString()
             val medicineName = binding.tietMedicineName.text.toString()
             var doseUnit = ""

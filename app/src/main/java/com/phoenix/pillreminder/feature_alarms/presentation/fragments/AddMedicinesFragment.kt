@@ -38,7 +38,6 @@ class AddMedicinesFragment : Fragment() {
         requireActivity().findViewById<View>(R.id.divider).visibility = View.GONE
         requireActivity().findViewById<FloatingActionButton>(R.id.fabAddMedicine).visibility = View.GONE
 
-
         // Inflate the layout for this fragment
         return binding.root
     }

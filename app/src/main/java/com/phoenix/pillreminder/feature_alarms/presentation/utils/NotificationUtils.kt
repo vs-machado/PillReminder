@@ -116,7 +116,7 @@ object NotificationUtils {
 
         val title = context.getString(R.string.it_s_time_to_refill_your_pillbox)
         val text =
-            context.getString(R.string.refill_your_pillbox_and_avoid_forgetting_to_use_your_medication)
+            context.getString(R.string.refill_your_pillbox_and_avoid_forgetting_to_use_your_medicine)
 
         return notificationBuilder(context, pillboxReminderChannelId, pendingIntent, title, text)
     }

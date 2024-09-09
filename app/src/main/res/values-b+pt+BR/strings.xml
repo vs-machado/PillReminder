@@ -129,8 +129,8 @@
     <string name="about_me">Sobre mim</string>
     <string name="email">Email: vinicius.s.machado@protonmail.com</string>
     <string name="frequent_questions">Perguntas frequentes</string>
-    <string name="how_do_i_delete_a_medication">Como eu deleto um medicamento?</string>
-    <string name="answer_how_do_i_delete_a_medication">Clique no ícone ⋮ no canto direito do medicamento que você deseja deletar e selecione Deletar ou Deletar todos.</string>
+    <string name="how_do_i_delete_a_medicine">Como eu deleto um medicamento?</string>
+    <string name="answer_how_do_i_delete_a_medicine">Clique no ícone ⋮ no canto direito do medicamento que você deseja deletar e selecione Deletar ou Deletar todos.</string>
     <string name="how_do_i_skip_a_dose">Como eu pulo uma dose?</string>
     <string name="answer_how_do_i_skip_a_dose">Clique no ícone ⋮ no canto direito do medicamento que você deseja pular a dose e selecione a opção Pular dose.</string>
     <string name="i_m_not_receiving_alarms">Eu não estou recebendo alarmes.</string>
@@ -161,7 +161,7 @@
     <string name="every">A cada</string>
     <string name="interval">intervalo</string>
     <string name="it_s_time_to_refill_your_pillbox">Recarregue seu porta comprimidos</string>
-    <string name="refill_your_pillbox_and_avoid_forgetting_to_use_your_medication">Recarregue e evite esquecer de usar o seu medicamento.</string>
+    <string name="refill_your_pillbox_and_avoid_forgetting_to_use_your_medicine">Recarregue e evite esquecer de usar o seu medicamento.</string>
     <string name="search_hint">Pesquise seus remédios</string>
     <string name="details">Detalhes</string>
     <string name="see_medicine_details">Ver detalhes do medicamento</string>

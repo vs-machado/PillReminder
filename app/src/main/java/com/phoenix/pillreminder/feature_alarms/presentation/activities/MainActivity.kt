@@ -8,6 +8,7 @@ import androidx.appcompat.app.ActionBarDrawerToggle
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.app.AppCompatDelegate
 import androidx.core.view.GravityCompat
+import androidx.fragment.app.Fragment
 import androidx.navigation.findNavController
 import androidx.navigation.fragment.NavHostFragment
 import androidx.navigation.ui.AppBarConfiguration
@@ -17,6 +18,9 @@ import androidx.navigation.ui.setupWithNavController
 import com.phoenix.pillreminder.R
 import com.phoenix.pillreminder.databinding.ActivityMainBinding
 import com.phoenix.pillreminder.feature_alarms.domain.repository.MedicineRepository
+import com.phoenix.pillreminder.feature_alarms.presentation.fragments.HelpFragment
+import com.phoenix.pillreminder.feature_alarms.presentation.fragments.HomeFragment
+import com.phoenix.pillreminder.feature_alarms.presentation.fragments.MyMedicinesFragment
 import dagger.hilt.android.AndroidEntryPoint
 import javax.inject.Inject
 
@@ -26,7 +30,6 @@ class MainActivity: AppCompatActivity() {
     lateinit var repository: MedicineRepository
 
     private lateinit var binding: ActivityMainBinding
-    private lateinit var toggle: ActionBarDrawerToggle
     private lateinit var appBarConfiguration: AppBarConfiguration
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -34,73 +37,59 @@ class MainActivity: AppCompatActivity() {
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
+        setupToolbar()
+        setupNavigation()
+        AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO) // disables night mode
+        checkAndShowTutorial()
+    }
+
+    private fun setupToolbar() {
         setSupportActionBar(binding.appBarMain.toolbarHome)
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
+    }
 
+    private fun setupNavigation(){
         val navHostFragment = supportFragmentManager.findFragmentById(R.id.fragmentContainerView3) as NavHostFragment
         val navController = navHostFragment.navController
 
-        appBarConfiguration = AppBarConfiguration(
-            setOf(
-                R.id.homeFragment
-            ), binding.dlMainActivity
-        )
-
+        appBarConfiguration = AppBarConfiguration(setOf(R.id.homeFragment))
         setupActionBarWithNavController(navController, appBarConfiguration)
+        binding.bottomNavigation.setupWithNavController(navController)
 
-        binding.navigationView.setNavigationItemSelectedListener {menuItem ->
+        binding.bottomNavigation.setOnItemSelectedListener { menuItem ->
             when(menuItem.itemId){
-                R.id.home_item -> {
+                R.id.bottom_home -> {
                     navController.navigate(R.id.homeFragment)
+                    true
                 }
-                R.id.mymedicines_item -> {
-                   navController.navigate(R.id.myMedicinesFragment)
+                R.id.bottom_medicines -> {
+                    navController.navigate(R.id.myMedicinesFragment)
+                    true
                 }
-                R.id.help_item -> {
+                R.id.bottom_help -> {
                     navController.navigate(R.id.helpFragment)
+                    true
                 }
-                R.id.about_item -> {
-                    navController.navigate(R.id.aboutFragment)
-                }
-            }
-
-            menuItem.isChecked = true
-            binding.dlMainActivity.close()
-            true
-
-        }
-
-        navController.addOnDestinationChangedListener{ _, destination, _ ->
-            when(destination.id){
-                R.id.homeFragment -> binding.navigationView.setCheckedItem(R.id.home_item)
-                R.id.myMedicinesFragment -> binding.navigationView.setCheckedItem(R.id.mymedicines_item)
-                R.id.helpFragment -> binding.navigationView.setCheckedItem(R.id.help_item)
-                R.id.aboutFragment -> binding.navigationView.setCheckedItem(R.id.about_item)
+                else -> return@setOnItemSelectedListener false
             }
         }
 
-        AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO)
-
-        if(!isTutorialShown()){
-            startActivity(Intent(this, MyAppIntro::class.java))
-            markTutorialAsShown()
+        navController.addOnDestinationChangedListener { _, destination, _ ->
+            binding.bottomNavigation.menu.findItem(
+                when (destination.id) {
+                    R.id.homeFragment -> R.id.bottom_home
+                    R.id.myMedicinesFragment -> R.id.bottom_medicines
+                    R.id.helpFragment -> R.id.bottom_help
+                    else -> return@addOnDestinationChangedListener
+                }
+            ).isChecked = true
         }
     }
 
-    override fun onSupportNavigateUp(): Boolean {
-        val navHostFragment = supportFragmentManager.findFragmentById(R.id.fragmentContainerView3) as NavHostFragment
-        val navController = navHostFragment.navController
-
-        return when {
-            binding.dlMainActivity.isDrawerOpen(GravityCompat.START) -> {
-                binding.dlMainActivity.closeDrawer(GravityCompat.START)
-                true
-            }
-            navController.currentDestination?.id == R.id.homeFragment -> {
-                binding.dlMainActivity.openDrawer(GravityCompat.START)
-                true
-            }
-            else -> navController.navigateUp(appBarConfiguration) || super.onSupportNavigateUp()
+    private fun checkAndShowTutorial(){
+        if(!isTutorialShown()){
+            startActivity(Intent(this, MyAppIntro::class.java))
+            markTutorialAsShown()
         }
     }
 

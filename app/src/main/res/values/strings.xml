@@ -118,10 +118,10 @@
     <string name="close">Close</string>
     <string name="granting_screen_overlay_permission_is_optional">Granting screen overlay permission is optional.\n\nIt\'s recommended if you often don\'t see your notifications.</string>
     <string name="permission_request">Permission request</string>
-    <string name="features_text">• Schedule alarms to remind users about their medications.\n• Receive notifications
-    if the user does not mark a medication as used in the application.\n• Allow users to set a treatment period or
-        receive alarms until the medication is deleted.\n• Receive notifications after setting a daily pillbox refill reminder.
-        \n• Warn users if they attempt to mark a medication as used close to the next dose time.</string>
+    <string name="features_text">• Schedule alarms to remind users about their medicines.\n• Receive notifications
+    if the user does not mark a medicine as used in the application.\n• Allow users to set a treatment period or
+        receive alarms until the medicine is deleted.\n• Receive notifications after setting a daily pillbox refill reminder.
+        \n• Warn users if they attempt to mark a medicine as used close to the next dose time.</string>
     <string name="about_us_text">Application developed by Vinícius Santos as his final project for his bachelor\'s degree in Computer Engineering.</string>
     <string name="contact_me">Contact me</string>
     <string name="pill_reminder">Pill Reminder</string>
@@ -130,14 +130,14 @@
     <string name="about_me">About me</string>
     <string name="email">Email: vinicius.s.machado@protonmail.com</string>
     <string name="frequent_questions">Frequent questions</string>
-    <string name="how_do_i_delete_a_medication">How do I delete a medication?</string>
-    <string name="answer_how_do_i_delete_a_medication">Click the ⋮ icon at the right corner of the medication you want to delete, then select Delete or Delete all.</string>
+    <string name="how_do_i_delete_a_medicine">How do I delete a medicine?</string>
+    <string name="answer_how_do_i_delete_a_medicine">Click the ⋮ icon at the right corner of the medicine you want to delete, then select Delete or Delete all.</string>
     <string name="how_do_i_skip_a_dose">How do I skip a dose?</string>
-    <string name="answer_how_do_i_skip_a_dose">Click the ⋮ icon at the right corner of the medication you want to skip the dose, then select Skip dose option.</string>
+    <string name="answer_how_do_i_skip_a_dose">Click the ⋮ icon at the right corner of the medicine you want to skip the dose, then select Skip dose option.</string>
     <string name="i_m_not_receiving_alarms">I\'m not receiving alarms.</string>
     <string name="answer_i_m_not_receiving_alarms"><![CDATA[It is necessary to check if the app permissions to send notifications were granted or not. Sometimes when you don\'t open an app in a while, the phone automatically remove notifications permissions.\n\nGo to Settings > Apps > Pill Reminder > Permissions and click on any not allowed permission to grant it.]]></string>
     <string name="medicine_not_appearing_everyday_even_if_i_don_t_set_a_treatment_period">Medicine not appearing everyday even if I don\'t set a treatment period</string>
-    <string name="answer_medicine_not_appearing_everyday_even_if_i_don_t_set_a_treatment_period">This is normal. A medication without treatment period will be eventually reinserted in the app after a month.</string>
+    <string name="answer_medicine_not_appearing_everyday_even_if_i_don_t_set_a_treatment_period">This is normal. A medicine without treatment period will be eventually reinserted in the app after a month.</string>
     <string name="dashboard">Dashboard</string>
     <string name="home">Home</string>
     <string name="my_medicines">My medicines</string>
@@ -162,7 +162,7 @@
     <string name="every">Every</string>
     <string name="interval">interval</string>
     <string name="it_s_time_to_refill_your_pillbox">Refill your pillbox</string>
-    <string name="refill_your_pillbox_and_avoid_forgetting_to_use_your_medication">Refill and avoid forgetting to use your medication.</string>
+    <string name="refill_your_pillbox_and_avoid_forgetting_to_use_your_medicine">Refill and avoid forgetting to use your medicine.</string>
     <string name="search_hint">Search registered medicines</string>
     <string name="see_medicine_details">See medicine details</string>
     <string name="details">Details</string>
@@ -216,7 +216,7 @@
     <string name="Every">Every</string>
     <string name="edit_medicine">Edit medicine</string>
     <string name="end_treatment">End treatment</string>
-    <string name="are_you_sure_end_treatment">Are you sure you want to stop treatment for the following medication?\n\nThe upcoming alarms will be deleted.\n\nMedication: %1$s</string>
+    <string name="are_you_sure_end_treatment">Are you sure you want to stop treatment for the following medicine?\n\nThe upcoming alarms will be deleted.\n\nMedicine: %1$s</string>
     <string name="mL">mL</string>
     <string name="syringe">syringe</string>
     <string name="puff">puff</string>

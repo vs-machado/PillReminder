@@ -70,9 +70,9 @@ class MyAppIntro: AppIntro2() {
             isColorTransitionsEnabled = true
 
             setProgressIndicator()
-            setNavBarColor(R.color.gradient_end_color)
             setNavBarColorRes(R.color.gradient_end_color)
-
+            showStatusBar(true)
+            setStatusBarColorRes(R.color.gradient_end_color)
 
             askForPermissions(
                 permissions = arrayOf(Manifest.permission.POST_NOTIFICATIONS),

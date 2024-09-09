@@ -27,6 +27,7 @@ import android.widget.Toast
 import androidx.activity.addCallback
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.core.content.ContextCompat
+import androidx.core.view.WindowInsetsControllerCompat
 import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
@@ -35,6 +36,8 @@ import androidx.lifecycle.lifecycleScope
 import androidx.navigation.findNavController
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.google.android.material.bottomnavigation.BottomNavigationView
+import com.google.android.material.floatingactionbutton.FloatingActionButton
 import com.google.android.material.switchmaterial.SwitchMaterial
 import com.phoenix.pillreminder.R
 import com.phoenix.pillreminder.databinding.FragmentHomeBinding
@@ -100,20 +103,20 @@ class HomeFragment: Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-
         val dontShowAgain = hfViewModel.getPermissionRequestPreferences()
+        val fab = requireActivity().findViewById<FloatingActionButton>(R.id.fabAddMedicine)
 
-        initRecyclerView(hfViewModel.getDate())
+        initRecyclerView(hfViewModel.getDate(), fab)
         setupGestureDetector()
         setupSwipeListener()
         checkAndRescheduleAlarms() // Reschedule alarms if app was uninstalled previously and it has a backup
-        requestPermissions(dontShowAgain)
-        setupDatePicker()
+        requestPermissions(dontShowAgain, fab)
+        setupDatePicker(fab)
 
-
-        binding.fabAddMedicine.setOnClickListener {
-            it.findNavController().navigate(R.id.action_homeFragment_to_addMedicinesFragment)
+        fab.setOnClickListener {
+            findNavController().navigate(R.id.action_homeFragment_to_addMedicinesFragment)
         }
+
     }
 
     private fun showPillboxReminderDialog(){
@@ -154,7 +157,7 @@ class HomeFragment: Fragment() {
         dialog.show()
     }
 
-    private fun setupDatePicker(){
+    private fun setupDatePicker(fab: FloatingActionButton){
         val pillboxReminder = hfViewModel.getPillboxPreferences()
 
         //SharedPreference verification to check or uncheck the switch
@@ -163,7 +166,7 @@ class HomeFragment: Fragment() {
         //Updates the date picker and recyclerview
         binding.datePicker.onSelectionChanged = { date ->
             viewLifecycleOwner.lifecycleScope.launch(Dispatchers.Main){
-                showFab()
+                showFab(fab)
                 hfViewModel.setDate(date)
                 val medicines = withContext(Dispatchers.IO){
                     medicinesViewModel.getMedicines()
@@ -197,17 +200,17 @@ class HomeFragment: Fragment() {
         }
     }
 
-    private fun requestPermissions(dontShowAgain: Boolean){
+    private fun requestPermissions(dontShowAgain: Boolean, fab: FloatingActionButton){
         if(ContextCompat.checkSelfPermission(requireContext(), Manifest.permission.POST_NOTIFICATIONS) == PackageManager.PERMISSION_GRANTED){
             binding.rvMedicinesList.visibility = View.VISIBLE
-            binding.fabAddMedicine.visibility = View.VISIBLE
+            fab.visibility = View.VISIBLE
         }
         if(!Settings.canDrawOverlays(requireContext()) && !dontShowAgain){
-            showOverlayAndNotificationPermissionDialog()
+            showOverlayAndNotificationPermissionDialog(fab)
         }
     }
 
-     private fun initRecyclerView(dateToFilter: Date){
+     private fun initRecyclerView(dateToFilter: Date, fab: FloatingActionButton){
         binding.rvMedicinesList.layoutManager = LinearLayoutManager(activity)
         adapter = RvMedicinesListAdapter(
             showDeleteAlarmDialog = { selectedMedicine: Medicine ->
@@ -242,14 +245,14 @@ class HomeFragment: Fragment() {
         binding.rvMedicinesList.adapter = adapter
          displayMedicinesList(dateToFilter)
 
-         val hideFabScrollListener = HideFabScrollListener(binding.fabAddMedicine)
+         val hideFabScrollListener = HideFabScrollListener(fab)
          binding.rvMedicinesList.addOnScrollListener(hideFabScrollListener)
     }
 
     private fun displayMedicinesList(dateToFilter: Date){
         medicinesViewModel.medicines.observe(viewLifecycleOwner) {
             adapter.setList(it, dateToFilter)
-            setCreditsVisibility()
+            //setCreditsVisibility()
         }
     }
 
@@ -257,19 +260,19 @@ class HomeFragment: Fragment() {
         binding.datePicker.findViewById<SwitchMaterial>(R.id.switchPillbox).isChecked = false
     }
 
-    private fun showFab(){
-        binding.fabAddMedicine.animate()
+    private fun showFab(fab: FloatingActionButton){
+        fab.animate()
             .alpha(1f)
             .setDuration(200)
             .setListener(object : AnimatorListenerAdapter() {
                 override fun onAnimationStart(animation: Animator) {
                     super.onAnimationStart(animation)
-                    binding.fabAddMedicine.visibility = View.VISIBLE
+                    fab.visibility = View.VISIBLE
                 }
             })
     }
 
-    private fun showOverlayAndNotificationPermissionDialog(){
+    private fun showOverlayAndNotificationPermissionDialog(fab: FloatingActionButton){
         val dontShowAgain = hfViewModel.getPermissionRequestPreferences()
 
         if (dontShowAgain){
@@ -287,7 +290,7 @@ class HomeFragment: Fragment() {
         val checkboxDontShowAgain: CheckBox = dialog.findViewById(R.id.cbDontShowAgain)
 
         requestPermission.setOnClickListener {
-            requestPermissionLauncher.launch(Manifest.permission.POST_NOTIFICATIONS)
+            requestPermissionLauncher(fab).launch(Manifest.permission.POST_NOTIFICATIONS)
         }
         dismissRequest.setOnClickListener {
             if(checkboxDontShowAgain.isChecked){
@@ -457,17 +460,17 @@ class HomeFragment: Fragment() {
         return ""
     }
 
-    private fun setCreditsVisibility(){
-        if(binding.rvMedicinesList.adapter?.itemCount!! > 0){
-            binding.tvCredits.isVisible = true
-            return
-        }
-        binding.tvCredits.isVisible = false
-    }
+//    private fun setCreditsVisibility(){
+//        if(binding.rvMedicinesList.adapter?.itemCount!! > 0){
+//            binding.tvCredits.isVisible = true
+//            return
+//        }
+//        binding.tvCredits.isVisible = false
+//    }
 
-    private val requestPermissionLauncher = registerForActivityResult(ActivityResultContracts.RequestPermission()){ permissionGranted: Boolean ->
+    private fun requestPermissionLauncher(fab: FloatingActionButton) = registerForActivityResult(ActivityResultContracts.RequestPermission()){ permissionGranted: Boolean ->
         if(permissionGranted){
-            binding.fabAddMedicine.visibility = View.VISIBLE
+            fab.visibility = View.VISIBLE
             binding.rvMedicinesList.visibility = View.VISIBLE
         }
         requestOverlayPermission(requireContext())
@@ -547,10 +550,26 @@ class HomeFragment: Fragment() {
 
     override fun onResume() {
         super.onResume()
+
+        // Makes the toolbar invisible if user goes back during medication registration.
+        val toolbar = requireActivity().findViewById<androidx.appcompat.widget.Toolbar>(R.id.toolbarHome)
+        toolbar.visibility = View.GONE
+
+        // The next fragment changes the notification bar to blue. This resets the bar to the white color.
+        requireActivity().window.statusBarColor = resources.getColor(R.color.white_ice, null)
+        WindowInsetsControllerCompat(requireActivity().window, requireActivity().window.decorView).isAppearanceLightStatusBars = true
+        WindowInsetsControllerCompat(requireActivity().window, requireActivity().window.decorView).isAppearanceLightNavigationBars = true
+
+        requireActivity().findViewById<BottomNavigationView>(R.id.bottom_navigation).visibility = View.VISIBLE
+        requireActivity().findViewById<View>(R.id.divider).visibility = View.VISIBLE
+
+        // Updates the medicines list.
         lifecycleScope.launch(Dispatchers.Main){
             val currentDate = Date(System.currentTimeMillis())
             adapter.setList(medicinesViewModel.getMedicines(), currentDate)
         }
+
+
     }
 
     override fun onPause() {

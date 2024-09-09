@@ -5,11 +5,20 @@
         <item name="colorPrimary">@color/colorPrimary</item>
         <item name="android:textColorSecondary">@color/white</item>
         <item name="android:colorControlActivated">@color/fab</item>
+        <item name="android:statusBarColor">@color/white_ice</item>
+        <item name="android:navigationBarColor">@color/white_ice</item>
+        <item name="colorPrimaryVariant">@color/fab</item>
         <item name="navigationViewStyle">@style/Widget.App.NavigationView</item>
         <item name="android:windowBackground">@color/white_ice</item>
+        <item name="android:windowLightStatusBar">true</item>
+        <item name="android:windowLightNavigationBar">true</item>
     </style>
 
     <style name="Theme.PillReminder" parent="Base.Theme.PillReminder" />
+
+    <style name="App.Custom.Indicator" parent="Widget.Material3.BottomNavigationView.ActiveIndicator">
+        <item name ="android:color">@color/transparent_blue</item>
+    </style>
 
     <style name = "FabShapeStyle" parent = "ShapeAppearance.MaterialComponents.SmallComponent">
         <item name="cornerSize">50%</item>

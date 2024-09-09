@@ -3,7 +3,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
+    android:layout_height="wrap_content"
     android:paddingTop="16dp">
 
     <androidx.appcompat.widget.AppCompatImageButton
@@ -22,12 +22,11 @@
         android:id="@+id/arrowRight"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginEnd="14dp"
         android:background="?attr/selectableItemBackgroundBorderless"
         android:padding="10dp"
         android:src="@drawable/ic_weekday_chevron_right"
         app:layout_constraintBottom_toBottomOf="@+id/arrowLeft"
-        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintEnd_toEndOf="@+id/scrollDays"
         app:layout_constraintTop_toTopOf="@+id/arrowLeft" />
 
     <HorizontalScrollView
@@ -41,8 +40,9 @@
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:id="@+id/daysContainer"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content">
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal">
 
             <androidx.constraintlayout.widget.ConstraintLayout
                 android:id="@+id/block1"
@@ -51,6 +51,8 @@
                 android:background="@android:color/transparent"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toStartOf="@+id/block2"
+                app:layout_constraintHorizontal_bias="0.5"
+                app:layout_constraintHorizontal_chainStyle="packed"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent">
 
@@ -95,6 +97,7 @@
                 android:background="@drawable/selected_day_bg"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toStartOf="@+id/block3"
+                app:layout_constraintHorizontal_bias="0.5"
                 app:layout_constraintStart_toEndOf="@+id/block1"
                 app:layout_constraintTop_toTopOf="parent">
 
@@ -139,6 +142,7 @@
                 android:background="@android:color/transparent"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toStartOf="@+id/block4"
+                app:layout_constraintHorizontal_bias="0.5"
                 app:layout_constraintStart_toEndOf="@+id/block2"
                 app:layout_constraintTop_toTopOf="parent">
 
@@ -183,6 +187,7 @@
                 android:background="@android:color/transparent"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toStartOf="@+id/block5"
+                app:layout_constraintHorizontal_bias="0.5"
                 app:layout_constraintStart_toEndOf="@+id/block3"
                 app:layout_constraintTop_toTopOf="parent">
 
@@ -227,6 +232,7 @@
                 android:background="@android:color/transparent"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toStartOf="@+id/block6"
+                app:layout_constraintHorizontal_bias="0.5"
                 app:layout_constraintStart_toEndOf="@+id/block4"
                 app:layout_constraintTop_toTopOf="parent">
 
@@ -271,6 +277,7 @@
                 android:background="@android:color/transparent"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toStartOf="@+id/block7"
+                app:layout_constraintHorizontal_bias="0.5"
                 app:layout_constraintStart_toEndOf="@+id/block5"
                 app:layout_constraintTop_toTopOf="parent">
 
@@ -358,9 +365,9 @@
         android:id="@+id/switchPillbox"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="26dp"
+        android:layout_marginStart="8dp"
         android:text="@string/pillbox_reminders"
-        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintStart_toStartOf="@+id/scrollDays"
         app:layout_constraintTop_toBottomOf="@+id/scrollDays"
         tools:layout_conversion_absoluteHeight="48dp"
         tools:layout_conversion_absoluteWidth="184dp" />

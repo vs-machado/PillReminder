@@ -10,6 +10,8 @@ import androidx.hilt.navigation.fragment.hiltNavGraphViewModels
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.google.android.material.bottomnavigation.BottomNavigationView
+import com.google.android.material.floatingactionbutton.FloatingActionButton
 import com.phoenix.pillreminder.R
 import com.phoenix.pillreminder.databinding.FragmentMyMedicinesBinding
 import com.phoenix.pillreminder.feature_alarms.presentation.adapter.MedicinesDataAdapter
@@ -30,6 +32,7 @@ class MyMedicinesFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View? {
         binding = FragmentMyMedicinesBinding.inflate(layoutInflater)
+        requireActivity().findViewById<FloatingActionButton>(R.id.fabAddMedicine).visibility = View.GONE
         // Inflate the layout for this fragment
         return binding.root
     }

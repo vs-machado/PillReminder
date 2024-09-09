@@ -24,6 +24,7 @@
                 android:layout_height="50dp"
                 android:background="@color/colorPrimary"
                 android:elevation="4dp"
+                android:visibility="gone"
                 app:layout_constraintTop_toTopOf="parent"
                 app:navigationIcon="@drawable/baseline_menu_24" />
 

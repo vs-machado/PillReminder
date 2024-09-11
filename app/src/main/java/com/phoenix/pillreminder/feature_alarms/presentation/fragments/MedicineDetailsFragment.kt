@@ -7,6 +7,7 @@ import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.hilt.navigation.fragment.hiltNavGraphViewModels
 import androidx.lifecycle.lifecycleScope
+import com.google.android.material.floatingactionbutton.FloatingActionButton
 import com.phoenix.pillreminder.R
 import com.phoenix.pillreminder.databinding.FragmentMedicineDetailsBinding
 import com.phoenix.pillreminder.feature_alarms.domain.model.Medicine
@@ -28,6 +29,7 @@ class MedicineDetailsFragment: Fragment() {
         savedInstanceState: Bundle?
     ): View {
         binding = FragmentMedicineDetailsBinding.inflate(layoutInflater)
+        requireActivity().findViewById<FloatingActionButton>(R.id.fabAddMedicine).visibility = View.GONE
         return binding.root
     }
 

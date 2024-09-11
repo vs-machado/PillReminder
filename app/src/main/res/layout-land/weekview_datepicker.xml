@@ -368,7 +368,6 @@
         app:layout_constraintBottom_toBottomOf="@+id/scrollDays"
         app:layout_constraintEnd_toStartOf="@+id/scrollDays"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
         tools:layout_conversion_absoluteHeight="48dp"
         tools:layout_conversion_absoluteWidth="184dp" />
 
@@ -386,5 +385,14 @@
         app:layout_constraintStart_toEndOf="@+id/scrollDays"
         app:layout_constraintTop_toTopOf="parent"
         tools:text="Today" />
+
+    <TextView
+        android:id="@+id/selectedDayText"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:gravity="start"
+        android:text="TextView"
+        app:layout_constraintBottom_toTopOf="@+id/switchPillbox"
+        app:layout_constraintStart_toStartOf="@+id/switchPillbox" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

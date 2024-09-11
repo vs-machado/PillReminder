@@ -7,7 +7,6 @@
     android:background="#FFFFFF"
     android:backgroundTint="#FBFBFB"
     android:orientation="vertical"
-    android:paddingTop="8dp"
     android:paddingBottom="8dp">
 
     <TextView
@@ -18,7 +17,7 @@
         android:layout_weight="1"
         android:gravity="center"
         android:text="@string/hour"
-        android:textSize="18sp" />
+        android:textSize="16sp" />
 
     <com.google.android.material.card.MaterialCardView
         android:id="@+id/cvPills"
@@ -56,6 +55,7 @@
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="16dp"
+                android:layout_marginTop="2dp"
                 android:layout_marginEnd="48dp"
                 android:text="@string/name_of_the_medicine"
                 android:textSize="16sp"
@@ -98,19 +98,19 @@
             <Button
                 android:id="@+id/btnMarkUsage"
                 style="@style/Widget.Material3.Button.IconButton.Filled.Tonal"
-                android:layout_width="0dp"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="8dp"
-                android:layout_marginTop="8dp"
+                android:layout_marginStart="-8dp"
+                android:layout_marginTop="4dp"
                 android:backgroundTint="#4CAF50"
                 android:text="@string/mark_as_used"
                 android:textColor="@color/white"
-                android:visibility="visible"
+                android:visibility="gone"
                 app:icon="@drawable/baseline_check_24"
                 app:iconPadding="4dp"
                 app:iconTint="@color/white"
                 app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintStart_toEndOf="@+id/ivMedicineType"
+                app:layout_constraintStart_toStartOf="@+id/tvMedicineTaken"
                 app:layout_constraintTop_toBottomOf="@+id/tvMedicineTaken" />
 
         </androidx.constraintlayout.widget.ConstraintLayout>

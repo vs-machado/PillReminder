@@ -28,12 +28,10 @@ import androidx.activity.addCallback
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.core.content.ContextCompat
 import androidx.core.view.WindowInsetsControllerCompat
-import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.hilt.navigation.fragment.hiltNavGraphViewModels
 import androidx.lifecycle.lifecycleScope
-import androidx.navigation.findNavController
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.google.android.material.bottomnavigation.BottomNavigationView
@@ -206,7 +204,7 @@ class HomeFragment: Fragment() {
             fab.visibility = View.VISIBLE
         }
         if(!Settings.canDrawOverlays(requireContext()) && !dontShowAgain){
-            showOverlayAndNotificationPermissionDialog(fab)
+            showOverlayAndNotificationPermissionDialog()
         }
     }
 
@@ -272,7 +270,7 @@ class HomeFragment: Fragment() {
             })
     }
 
-    private fun showOverlayAndNotificationPermissionDialog(fab: FloatingActionButton){
+    private fun showOverlayAndNotificationPermissionDialog(){
         val dontShowAgain = hfViewModel.getPermissionRequestPreferences()
 
         if (dontShowAgain){
@@ -290,7 +288,7 @@ class HomeFragment: Fragment() {
         val checkboxDontShowAgain: CheckBox = dialog.findViewById(R.id.cbDontShowAgain)
 
         requestPermission.setOnClickListener {
-            requestPermissionLauncher(fab).launch(Manifest.permission.POST_NOTIFICATIONS)
+            requestPermissionLauncher.launch(Manifest.permission.POST_NOTIFICATIONS)
         }
         dismissRequest.setOnClickListener {
             if(checkboxDontShowAgain.isChecked){
@@ -468,8 +466,9 @@ class HomeFragment: Fragment() {
 //        binding.tvCredits.isVisible = false
 //    }
 
-    private fun requestPermissionLauncher(fab: FloatingActionButton) = registerForActivityResult(ActivityResultContracts.RequestPermission()){ permissionGranted: Boolean ->
+    private val requestPermissionLauncher = registerForActivityResult(ActivityResultContracts.RequestPermission()){ permissionGranted: Boolean ->
         if(permissionGranted){
+            val fab = requireActivity().findViewById<FloatingActionButton>(R.id.fabAddMedicine)
             fab.visibility = View.VISIBLE
             binding.rvMedicinesList.visibility = View.VISIBLE
         }

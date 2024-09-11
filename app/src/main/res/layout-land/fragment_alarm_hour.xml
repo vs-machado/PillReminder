@@ -2,13 +2,13 @@
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/frameLayout"
+    android:id="@+id/clAlarmHour"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".feature_alarms.presentation.fragments.FrequencyFragment">
+    tools:context=".feature_alarms.presentation.fragments.AlarmHourFragment">
 
     <com.google.android.material.appbar.AppBarLayout
-        android:id="@+id/appBarFrequency"
+        android:id="@+id/appBar"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         app:layout_constraintEnd_toEndOf="parent"
@@ -16,23 +16,24 @@
         app:layout_constraintTop_toTopOf="parent">
 
         <androidx.appcompat.widget.Toolbar
-            android:id="@+id/toolbarFrequency"
+            android:id="@+id/toolbar"
             android:layout_width="match_parent"
             android:layout_height="50dp"
             android:background="@color/colorPrimary"
             android:elevation="4dp" />
 
         <com.google.android.material.tabs.TabLayout
-            android:id="@+id/clSecondaryToolbar"
+            android:id="@+id/tlAlarmHour"
             android:layout_width="match_parent"
-            android:layout_height="110dp"
+            android:layout_height="100dp"
             android:background="@color/colorPrimary"
             android:contentDescription="."
             tools:ignore="HardcodedText" />
+
     </com.google.android.material.appbar.AppBarLayout>
 
     <ImageView
-        android:id="@+id/ivClock"
+        android:id="@+id/ivClock3"
         android:layout_width="30dp"
         android:layout_height="30dp"
         android:layout_marginStart="32dp"
@@ -43,34 +44,58 @@
         app:layout_constraintTop_toTopOf="parent" />
 
     <TextView
-        android:id="@+id/tvFrequency"
+        android:id="@+id/tvAlarmHour"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="32dp"
         android:layout_marginTop="16dp"
-        android:contentDescription="@string/how_often_do_you_take_it"
-        android:text="@string/how_often_do_you_take_it"
+        android:contentDescription=""
+        android:text="@string/please_insert_the_medicine_alarm_hour"
         android:textColor="@color/white"
         android:textSize="20sp"
         android:textStyle="bold"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/ivClock" />
+        app:layout_constraintTop_toBottomOf="@+id/ivClock3" />
 
-    <androidx.appcompat.widget.LinearLayoutCompat
-        android:id="@+id/llFrequency"
-        android:layout_width="match_parent"
-        android:layout_height="0dp"
+    <TimePicker
+        android:id="@+id/tpAlarm"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:theme="@style/TimePickerTheme"
+        android:timePickerMode="spinner"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.496"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/appBarFrequency"
-        tools:ignore="VisualLintBounds">
+        app:layout_constraintTop_toBottomOf="@+id/appBar" />
 
-        <ListView
-            android:id="@+id/lvFrequency"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:padding="32dp" />
-    </androidx.appcompat.widget.LinearLayoutCompat>
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/guideline2"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        app:layout_constraintGuide_percent="0.5" />
+
+    <com.google.android.material.floatingactionbutton.FloatingActionButton
+        android:id="@+id/fabNext"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="16dp"
+        android:layout_marginBottom="16dp"
+        android:contentDescription="@string/goes_to_the_next_page"
+        app:backgroundTint="@color/fab"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:srcCompat="@drawable/arrow_right_white"
+        app:tint="@color/white">
+
+    </com.google.android.material.floatingactionbutton.FloatingActionButton>
+
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/guideline3"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        app:layout_constraintGuide_percent="0.5116279" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

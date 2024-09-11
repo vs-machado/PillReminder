@@ -1,10 +1,8 @@
 package com.phoenix.pillreminder.feature_alarms.presentation.datepicker
 
 import android.content.Context
-import android.gesture.Gesture
 import android.text.SpannableString
 import android.text.format.DateUtils
-import android.text.style.UnderlineSpan
 import android.util.AttributeSet
 import android.view.GestureDetector
 import android.view.MotionEvent
@@ -13,16 +11,12 @@ import android.widget.ImageView
 import android.widget.TextView
 import androidx.appcompat.widget.AppCompatImageButton
 import androidx.constraintlayout.widget.ConstraintLayout
-import androidx.core.view.GestureDetectorCompat
-import androidx.fragment.app.Fragment
-import com.google.android.material.floatingactionbutton.FloatingActionButton
 import com.phoenix.pillreminder.R
 import java.text.DateFormat
 import java.text.DateFormatSymbols
 import java.util.Calendar
 import java.util.Date
 import java.util.Locale
-import kotlin.math.abs
 
 class DarioWeekViewDatePicker @JvmOverloads constructor(
     context: Context,
@@ -151,7 +145,7 @@ class DarioWeekViewDatePicker @JvmOverloads constructor(
         val dateFormat = DateFormat.getDateInstance(DateFormat.LONG, Locale.getDefault())
 
         if (isToday(date)) {
-            todayText.visibility = View.GONE
+            todayText.visibility = View.INVISIBLE
             val formattedDate =  DateUtils.getRelativeTimeSpanString(selectedDate.time, System.currentTimeMillis(), DateUtils.DAY_IN_MILLIS, DateUtils.FORMAT_SHOW_WEEKDAY or DateUtils.FORMAT_ABBREV_WEEKDAY)
             selectedDayText.text = context.getString(R.string.today_date, formattedDate)
         }

@@ -17,7 +17,7 @@
     <style name="Theme.PillReminder" parent="Base.Theme.PillReminder" />
 
     <style name="App.Custom.Indicator" parent="Widget.Material3.BottomNavigationView.ActiveIndicator">
-        <item name ="android:color">@color/black</item>
+        <item name ="android:color">@color/transparent_blue</item>
     </style>
 
 

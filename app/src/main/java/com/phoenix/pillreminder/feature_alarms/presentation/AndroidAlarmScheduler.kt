@@ -124,7 +124,7 @@ class AndroidAlarmScheduler @Inject constructor(
             alarmHour = medicine.alarmHour.toString(),
             alarmMinute = medicine.alarmMinute.toString()
         )
-        Log.d("debug", "alarmitem: $alarmItem")
+        Log.d("alarmItem", "schedulenextalarm alarmitem: $alarmItem")
         alarmItem.let(alarmScheduler::scheduleAlarm)
     }
 

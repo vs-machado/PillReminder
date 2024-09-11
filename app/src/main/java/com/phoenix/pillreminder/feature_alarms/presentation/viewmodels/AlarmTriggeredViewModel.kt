@@ -2,6 +2,7 @@ package com.phoenix.pillreminder.feature_alarms.presentation.viewmodels
 
 import android.content.Context
 import android.text.format.DateFormat
+import android.util.Log
 import androidx.lifecycle.ViewModel
 import com.phoenix.pillreminder.R
 import com.phoenix.pillreminder.feature_alarms.domain.model.AlarmItem
@@ -39,7 +40,10 @@ class AlarmTriggeredViewModel : ViewModel() {
     }
 
     fun checkMedicineForm(medicineForm: String, doseUnit: String, medicineQuantity: String, context: Context): String{
+        Log.d("alarmItem", "medicineQuantityString: $medicineQuantity")
         val quantity = medicineQuantity.toFloatOrNull()?.toInt() ?: 0
+        Log.d("alarmItem", "quantity parsed: $quantity")
+
         return when(medicineForm){
             "pill" -> context.resources.getQuantityString(R.plurals.pill_quantity, quantity, quantity)
             "injection" -> {

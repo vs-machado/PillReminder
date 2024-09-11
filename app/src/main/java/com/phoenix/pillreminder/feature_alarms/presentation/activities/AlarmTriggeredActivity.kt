@@ -3,6 +3,7 @@ package com.phoenix.pillreminder.feature_alarms.presentation.activities
 import android.content.Intent
 import android.os.Build
 import android.os.Bundle
+import android.util.Log
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.app.AppCompatDelegate
@@ -47,12 +48,13 @@ class AlarmTriggeredActivity: AppCompatActivity() {
             }else{
                 intent?.getParcelableExtra("ALARM_ITEM")
             }
+            Log.d("alarmItem", "alarmtriggeredactivity: $alarmItem")
 
             viewModel.apply{
                 alarmItem?.apply{
                     tvAlarmMedicineName.text = medicineName
                     tvAlarmHourMedicine.text = checkDateFormat(alarmHour.toInt(), alarmMinute.toInt(), context = applicationContext)
-                    tvAlarmQuantity.text = checkMedicineForm(medicineForm, medicineQuantity, doseUnit, context = applicationContext)
+                    tvAlarmQuantity.text = checkMedicineForm(medicineForm, doseUnit, medicineQuantity, context = applicationContext)
 
                     ivAlarmMedicineIcon.setImageResource(setMedicineImageView(medicineForm))
 

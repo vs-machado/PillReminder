@@ -29,7 +29,7 @@ class MedicineDaoTest {
     private lateinit var database: MedicineDatabase
     private lateinit var dao: MedicineDao
 
-    val medicinesList = listOf(Medicine(1,
+    private val medicinesList = listOf(Medicine(1,
         "a",
         3f,
         "pill",
@@ -37,14 +37,17 @@ class MedicineDaoTest {
         123456789L,
         21,
         55,
+        null,
         123456789L,
         987654321L,
-        false,
-        false,
-        1,
+        medicineWasTaken = false,
+        wasSkipped = false,
+        medicineFrequency = "Every day",
+        interval = 1L,
         medicinePeriodSet = true,
         medicineNeedsReschedule = false,
-        "noID"),
+        rescheduleWorkerID = "noID", lastEdited = 0L, isActive = true, treatmentID = ""
+    ),
         Medicine(2,
             "a",
             4f,
@@ -53,14 +56,16 @@ class MedicineDaoTest {
             123456785L,
             20,
             33,
+            null,
             123456788L,
             887654321L,
-            false,
-            false,
-            1,
+            medicineWasTaken = false,
+            wasSkipped = false,
+            medicineFrequency = "Every day",
+            interval = 1L,
             medicinePeriodSet = true,
             medicineNeedsReschedule = false,
-            "noID"),
+            rescheduleWorkerID = "noID", lastEdited = 0L, isActive = true, treatmentID = "",),
         Medicine(3,
             "a",
             2f,
@@ -69,14 +74,16 @@ class MedicineDaoTest {
             123436785L,
             15,
             33,
+            null,
             113456788L,
             837654321L,
-            false,
-            false,
-            1,
+            medicineWasTaken = false,
+            wasSkipped = false,
+            medicineFrequency = "Every day",
+            interval = 1L,
             medicinePeriodSet = true,
             medicineNeedsReschedule = false,
-            "noID"))
+            rescheduleWorkerID = "noID", lastEdited = 0L, isActive = true, treatmentID = "",))
 
     @Before
     fun setup(){
@@ -102,14 +109,17 @@ class MedicineDaoTest {
             123456789L,
             21,
             55,
+            null,
             123456789L,
             987654321L,
-            false,
-            false,
-            1,
+            medicineWasTaken = false,
+            wasSkipped = false,
+            medicineFrequency = "Every day",
+            interval = 1L,
             medicinePeriodSet = true,
             medicineNeedsReschedule = false,
-            "noID")
+            rescheduleWorkerID = "noID", lastEdited = 0L, isActive = true, treatmentID = ""
+        )
 
         val medicinesList = listOf(medicine)
         val emptyDb = dao.getMedicines()
@@ -130,14 +140,17 @@ class MedicineDaoTest {
             123456789L,
             21,
             55,
+            null,
             123456789L,
             987654321L,
-            false,
-            false,
-            1,
+            medicineWasTaken = false,
+            wasSkipped = false,
+            medicineFrequency = "Every day",
+            interval = 1L,
             medicinePeriodSet = true,
             medicineNeedsReschedule = false,
-            "noID")
+            rescheduleWorkerID = "noID", lastEdited = 0L, isActive = true, treatmentID = ""
+        )
 
         val medicinesList = listOf(medicine)
 
@@ -151,14 +164,16 @@ class MedicineDaoTest {
             123456789L,
             22,
             55,
+            null,
             123456789L,
             987654321L,
-            false,
-            false,
-            1,
+            medicineWasTaken = false,
+            wasSkipped = false,
+            medicineFrequency = "Every day",
+            interval = 1L,
             medicinePeriodSet = true,
             medicineNeedsReschedule = false,
-            "noID"
+            rescheduleWorkerID = "noID", lastEdited = 0L, isActive = true, treatmentID = ""
         )
 
         dao.updateMedicine(updatedMedicine)
@@ -177,14 +192,17 @@ class MedicineDaoTest {
             123456789L,
             21,
             55,
+            null,
             123456789L,
             987654321L,
-            false,
-            false,
-            1,
+            medicineWasTaken = false,
+            wasSkipped = false,
+            medicineFrequency = "Every day",
+            interval = 1L,
             medicinePeriodSet = true,
             medicineNeedsReschedule = false,
-            "noID")
+            rescheduleWorkerID = "noID", lastEdited = 0L, isActive = true, treatmentID = ""
+        )
 
         val medicinesList = listOf(medicine)
         dao.insertMedicines(medicinesList)
@@ -212,14 +230,17 @@ class MedicineDaoTest {
             123436785L,
             15,
             33,
+            null,
             113456788L,
             837654321L,
-            false,
-            false,
-            1,
+            medicineWasTaken = false,
+            wasSkipped = false,
+            medicineFrequency = "Every day",
+            interval = 1L,
             medicinePeriodSet = true,
             medicineNeedsReschedule = false,
-            "noID"))
+            rescheduleWorkerID = "noID", lastEdited = 0L, isActive = true, treatmentID = ""
+        ))
 
         dao.insertMedicines(medicineItem)
 
@@ -252,14 +273,17 @@ class MedicineDaoTest {
             123456789L,
             21,
             55,
+                null,
             123456789L,
             987654321L,
-            false,
-                false,
-            1,
+                medicineWasTaken = false,
+                wasSkipped = false,
+                medicineFrequency = "Every day",
+                interval = 1L,
             medicinePeriodSet = true,
             medicineNeedsReschedule = false,
-            "a"),
+                rescheduleWorkerID = "a", lastEdited = 0L, isActive = true, treatmentID = ""
+            ),
             Medicine(5,
                 "rgsejuiho8",
                 3f,
@@ -268,14 +292,17 @@ class MedicineDaoTest {
                 123456789L,
                 21,
                 55,
+                null,
                 123456789L,
                 987654321L,
-                false,
-                false,
-                1,
+                medicineWasTaken = false,
+                wasSkipped = false,
+                medicineFrequency = "Every day",
+                interval = 1L,
                 medicinePeriodSet = true,
                 medicineNeedsReschedule = false,
-                "b"),
+                rescheduleWorkerID = "b", lastEdited = 0L, isActive = true, treatmentID = ""
+            ),
             Medicine(6,
                 "gorjei",
                 3f,
@@ -284,14 +311,17 @@ class MedicineDaoTest {
                 123456789L,
                 21,
                 55,
+                null,
                 123456789L,
                 987654321L,
-                false,
-                false,
-                1,
+                medicineWasTaken = false,
+                wasSkipped = false,
+                medicineFrequency = "Every day",
+                interval = 1L,
                 medicinePeriodSet = true,
                 medicineNeedsReschedule = false,
-                "c"))
+                rescheduleWorkerID = "c", lastEdited = 0L, isActive = true, treatmentID = ""
+            ))
 
         dao.insertMedicines(medicinesWithAnotherNames)
         val medicinesWithSameName = dao.getAllMedicinesWithSameName("a")
@@ -319,14 +349,17 @@ class MedicineDaoTest {
                 123456789L,
                 21,
                 55,
+                null,
                 123456789L,
                 987654321L,
-                false,
-                false,
-                1,
+                medicineWasTaken = false,
+                wasSkipped = false,
+                medicineFrequency = "Every day",
+                interval = 1L,
                 medicinePeriodSet = true,
                 medicineNeedsReschedule = false,
-                "a"),
+                rescheduleWorkerID = "a", lastEdited = 0L, isActive = true, treatmentID = ""
+            ),
             Medicine(5,
                 "rgsejuiho8",
                 3f,
@@ -335,14 +368,17 @@ class MedicineDaoTest {
                 123456789L,
                 21,
                 55,
+                null,
                 123456789L,
                 987654321L,
-                false,
-                false,
-                1,
+                medicineWasTaken = false,
+                wasSkipped = false,
+                medicineFrequency = "Every day",
+                interval = 1L,
                 medicinePeriodSet = true,
                 medicineNeedsReschedule = false,
-                "b"),
+                rescheduleWorkerID = "b", lastEdited = 0L, isActive = true, treatmentID = ""
+            ),
             Medicine(6,
                 "gorjei",
                 3f,
@@ -351,14 +387,17 @@ class MedicineDaoTest {
                 123456789L,
                 21,
                 55,
+                null,
                 123456789L,
                 987654321L,
-                false,
-                false,
-                1,
+                medicineWasTaken = false,
+                wasSkipped = false,
+                medicineFrequency = "Every day",
+                interval = 1L,
                 medicinePeriodSet = true,
                 medicineNeedsReschedule = false,
-                "c"))
+                rescheduleWorkerID = "c", lastEdited = 0L, isActive = true, treatmentID = ""
+            ))
         dao.insertMedicines(medicinesWithDifferentWorkerID)
 
         val workerID = dao.getWorkerID("a")
@@ -375,14 +414,17 @@ class MedicineDaoTest {
             123456789L,
             21,
             55,
+            null,
             123456789L,
             987654321L,
-            false,
-            false,
-            1,
+            medicineWasTaken = false,
+            wasSkipped = false,
+            medicineFrequency = "Every day",
+            interval = 1L,
             medicinePeriodSet = true,
             medicineNeedsReschedule = false,
-            "noID")
+            rescheduleWorkerID = "noID", lastEdited = 0L, isActive = true, treatmentID = ""
+        )
 
         val medicine2 = Medicine(2,
             "a",
@@ -392,14 +434,17 @@ class MedicineDaoTest {
             123456785L,
             20,
             33,
+            null,
             123456788L,
             887654321L,
-            false,
-            false,
-            1,
+            medicineWasTaken = false,
+            wasSkipped = false,
+            medicineFrequency = "Every day",
+            interval = 1L,
             medicinePeriodSet = true,
             medicineNeedsReschedule = false,
-            "noID")
+            rescheduleWorkerID = "noID", lastEdited = 0L, isActive = true, treatmentID = ""
+        )
 
         dao.insertMedicines(listOf(medicine1, medicine2))
 
@@ -419,14 +464,17 @@ class MedicineDaoTest {
             123456789L,
             21,
             55,
+            null,
             123456789L,
             987654321L,
-            false,
-            false,
-            1,
+            medicineWasTaken = false,
+            wasSkipped = false,
+            medicineFrequency = "Every day",
+            interval = 1L,
             medicinePeriodSet = true,
             medicineNeedsReschedule = false,
-            "noID")
+            rescheduleWorkerID = "noID", lastEdited = 0L, isActive = true, treatmentID = ""
+        )
 
         val medicine2 = Medicine(2,
             "a",
@@ -436,14 +484,17 @@ class MedicineDaoTest {
             123456791L,
             20,
             33,
+            null,
             123456788L,
             887654321L,
-            false,
-            false,
-            1,
+            medicineWasTaken = false,
+            wasSkipped = false,
+            medicineFrequency = "Every day",
+            interval = 1L,
             medicinePeriodSet = true,
             medicineNeedsReschedule = false,
-            "noID")
+            rescheduleWorkerID = "noID", lastEdited = 0L, isActive = true, treatmentID = ""
+        )
         val medicine3 = Medicine(3,
             "a",
             4f,
@@ -452,14 +503,17 @@ class MedicineDaoTest {
             123456790L,
             20,
             33,
+            null,
             123456788L,
             887654321L,
-            false,
-            false,
-            1,
+            medicineWasTaken = false,
+            wasSkipped = false,
+            medicineFrequency = "Every day",
+            interval = 1L,
             medicinePeriodSet = true,
             medicineNeedsReschedule = false,
-            "noID")
+            rescheduleWorkerID = "noID", lastEdited = 0L, isActive = true, treatmentID = ""
+        )
 
         val medicineList = listOf(medicine1, medicine2, medicine3)
 
@@ -480,14 +534,17 @@ class MedicineDaoTest {
             123456789L,
             21,
             55,
+            null,
             123456789L,
             987654321L,
-            false,
-            false,
-            1,
+            medicineWasTaken = false,
+            wasSkipped = false,
+            medicineFrequency = "Every day",
+            interval = 1L,
             medicinePeriodSet = true,
             medicineNeedsReschedule = false,
-            "noID")
+            rescheduleWorkerID = "noID", lastEdited = 0L, isActive = true, treatmentID = ""
+        )
 
         val medicine2 = Medicine(2,
             "a",
@@ -497,14 +554,17 @@ class MedicineDaoTest {
             123456791L,
             20,
             33,
+            null,
             123456788L,
             887654321L,
-            false,
-            false,
-            1,
+            medicineWasTaken = false,
+            wasSkipped = false,
+            medicineFrequency = "Every day",
+            interval = 1L,
             medicinePeriodSet = true,
             medicineNeedsReschedule = false,
-            "noID")
+            rescheduleWorkerID = "noID", lastEdited = 0L, isActive = true, treatmentID = ""
+        )
 
         dao.insertMedicines(listOf(medicine1, medicine2))
 
@@ -526,14 +586,17 @@ class MedicineDaoTest {
             123456785L,
             20,
             33,
+            null,
             123456788L,
             887654321L,
-            false,
-            false,
-            1,
+            medicineWasTaken = false,
+            wasSkipped = false,
+            medicineFrequency = "Every day",
+            interval = 1L,
             medicinePeriodSet = false,
             medicineNeedsReschedule = true,
-            "noID")
+            rescheduleWorkerID = "noID", lastEdited = 0L, isActive = true, treatmentID = ""
+        )
 
         val medicine2 = Medicine(3,
             "b",
@@ -543,14 +606,17 @@ class MedicineDaoTest {
             123436785L,
             15,
             33,
+            null,
             113456788L,
             837654321L,
-            false,
-            false,
-            1,
+            medicineWasTaken = false,
+            wasSkipped = false,
+            medicineFrequency = "Every day",
+            interval = 1L,
             medicinePeriodSet = false,
             medicineNeedsReschedule = true,
-            "noID")
+            rescheduleWorkerID = "noID", lastEdited = 0L, isActive = true, treatmentID = ""
+        )
 
         val medicineList = listOf(medicine1, medicine2)
         val medicine1List = listOf(medicine1)
@@ -569,7 +635,7 @@ class MedicineDaoTest {
     }
 
     @Test
-    fun getAllDistinctMedicines() = runTest{
+    fun getLastAlarmFromAllDistinctMedicines() = runTest{
         val medicine1 = Medicine(1,
             "a",
             3f,
@@ -578,14 +644,17 @@ class MedicineDaoTest {
             123456789L,
             21,
             55,
+            null,
             123456789L,
             987654321L,
-            false,
-            false,
-            1,
+            medicineWasTaken = false,
+            wasSkipped = false,
+            medicineFrequency = "Every day",
+            interval = 1L,
             medicinePeriodSet = true,
             medicineNeedsReschedule = false,
-            "noID")
+            rescheduleWorkerID = "noID", lastEdited = 0L, isActive = true, treatmentID = ""
+        )
         val medicine2 = Medicine(2,
                 "b",
                 2f,
@@ -594,14 +663,17 @@ class MedicineDaoTest {
                 123456785L,
                 20,
                 33,
+            null,
                 123456788L,
                 887654321L,
-                false,
-            false,
-                1,
+            medicineWasTaken = false,
+            wasSkipped = false,
+            medicineFrequency = "Every day",
+            interval = 1L,
                 medicinePeriodSet = true,
                 medicineNeedsReschedule = false,
-                "noID")
+            rescheduleWorkerID = "noID", lastEdited = 0L, isActive = true, treatmentID = ""
+        )
 
         val medicine3 = Medicine(3,
                 "c",
@@ -611,14 +683,17 @@ class MedicineDaoTest {
                 123436785L,
                 15,
                 33,
+            null,
                 113456788L,
                 837654321L,
-                false,
-            false,
-                1,
+            medicineWasTaken = false,
+            wasSkipped = false,
+            medicineFrequency = "Every day",
+            interval = 1L,
                 medicinePeriodSet = true,
                 medicineNeedsReschedule = false,
-                "noID")
+            rescheduleWorkerID = "noID", lastEdited = 0L, isActive = true, treatmentID = ""
+        )
 
         val medicine4 = Medicine(4,
             "c",
@@ -628,14 +703,17 @@ class MedicineDaoTest {
             123439785L,
             18,
             33,
+            null,
             113456788L,
             837654321L,
-            false,
-            false,
-            1,
+            medicineWasTaken = false,
+            wasSkipped = false,
+            medicineFrequency = "Every day",
+            interval = 1L,
             medicinePeriodSet = true,
             medicineNeedsReschedule = false,
-            "noID")
+            rescheduleWorkerID = "noID", lastEdited = 0L, isActive = true, treatmentID = ""
+        )
 
         val medicine5 = Medicine(5,
             "c",
@@ -645,19 +723,22 @@ class MedicineDaoTest {
             123443785L,
             21,
             33,
+            null,
             113456788L,
             837654321L,
-            false,
-            false,
-            1,
+            medicineWasTaken = false,
+            wasSkipped = false,
+            medicineFrequency = "Every day",
+            interval = 1L,
             medicinePeriodSet = true,
             medicineNeedsReschedule = false,
-            "noID")
+            rescheduleWorkerID = "noID", lastEdited = 0L, isActive = true, treatmentID = ""
+        )
 
         val medicineList = listOf(medicine1, medicine2, medicine3, medicine4, medicine5)
         dao.insertMedicines(medicineList)
 
-        val allDistinctMedicines = dao.getAllDistinctMedicines()
+        val allDistinctMedicines = dao.getLastAlarmFromAllDistinctMedicines()
         assertThat(allDistinctMedicines).hasSize(3)
 
         val medicineNameList = allDistinctMedicines.map{it.name}.toList()
@@ -675,14 +756,17 @@ class MedicineDaoTest {
             123456789L,
             21,
             55,
+            null,
             123456789L,
             987654321L,
-            false,
-            false,
-            1,
+            medicineWasTaken = false,
+            wasSkipped = false,
+            medicineFrequency = "Every day",
+            interval = 1L,
             medicinePeriodSet = true,
             medicineNeedsReschedule = false,
-            "noID")
+            rescheduleWorkerID = "noID", lastEdited = 0L, isActive = true, treatmentID = ""
+        )
         val medicine2 = Medicine(2,
             "b",
             2f,
@@ -691,14 +775,17 @@ class MedicineDaoTest {
             123456785L,
             20,
             33,
+            null,
             123456788L,
             887654321L,
-            false,
-            false,
-            1,
+            medicineWasTaken = false,
+            wasSkipped = false,
+            medicineFrequency = "Every day",
+            interval = 1L,
             medicinePeriodSet = true,
             medicineNeedsReschedule = false,
-            "noID")
+            rescheduleWorkerID = "noID", lastEdited = 0L, isActive = true, treatmentID = ""
+        )
 
         val medicine3 = Medicine(3,
             "c",
@@ -708,14 +795,17 @@ class MedicineDaoTest {
             123436785L,
             15,
             33,
+            null,
             113456788L,
             837654321L,
-            false,
-            false,
-            1,
+            medicineWasTaken = false,
+            wasSkipped = false,
+            medicineFrequency = "Every day",
+            interval = 1L,
             medicinePeriodSet = true,
             medicineNeedsReschedule = false,
-            "noID")
+            rescheduleWorkerID = "noID", lastEdited = 0L, isActive = true, treatmentID = ""
+        )
 
         val medicine4 = Medicine(4,
             "c",
@@ -725,14 +815,17 @@ class MedicineDaoTest {
             123439785L,
             18,
             33,
+            null,
             113456788L,
             837654321L,
-            false,
-            false,
-            1,
+            medicineWasTaken = false,
+            wasSkipped = false,
+            medicineFrequency = "Every day",
+            interval = 1L,
             medicinePeriodSet = true,
             medicineNeedsReschedule = false,
-            "noID")
+            rescheduleWorkerID = "noID", lastEdited = 0L, isActive = true, treatmentID = ""
+        )
 
         val medicine5 = Medicine(5,
             "c",
@@ -742,14 +835,17 @@ class MedicineDaoTest {
             123443785L,
             21,
             33,
+            null,
             113456788L,
             837654321L,
-            false,
-            false,
-            1,
+            medicineWasTaken = false,
+            wasSkipped = false,
+            medicineFrequency = "Every day",
+            interval = 1L,
             medicinePeriodSet = true,
             medicineNeedsReschedule = false,
-            "noID")
+            rescheduleWorkerID = "noID", lastEdited = 0L, isActive = true, treatmentID = ""
+        )
 
         val medicineList = listOf(medicine1, medicine2, medicine3, medicine4, medicine5)
 

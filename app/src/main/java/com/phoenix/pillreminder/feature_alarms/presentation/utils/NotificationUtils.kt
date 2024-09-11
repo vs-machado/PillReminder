@@ -11,9 +11,7 @@ import android.media.AudioAttributes
 import android.net.Uri
 import android.os.Build
 import android.provider.Settings
-import android.util.Log
 import androidx.core.app.NotificationCompat
-import androidx.core.content.ContextCompat
 import com.phoenix.pillreminder.R
 import com.phoenix.pillreminder.feature_alarms.domain.model.AlarmItem
 import com.phoenix.pillreminder.feature_alarms.presentation.AlarmReceiver
@@ -42,9 +40,9 @@ object NotificationUtils {
                 createNotificationChannel(context, alarmUri)
 
                 return notificationBuilder(context, channelId, pendingIntent,
-                    context.getString(R.string.time_to_take_your_medicine),
+                    context.getString(R.string.time_to_use_your_medicine),
                     context.getString(R.string.do_not_forget_to_mark_the_medicine_as_taken, item.medicineName,
-                        checkMedicineForm(item.medicineForm, item.medicineQuantity, context)))
+                        checkMedicineForm(item.medicineForm, item.medicineQuantity, item.doseUnit, context)))
             }
             false -> {
                 /* If user does not give overlay permissions he will mark medicine as used through an action button in notification.
@@ -67,9 +65,9 @@ object NotificationUtils {
 
                 createNotificationChannel(context, alarmUri)
 
-                val title = context.getString(R.string.time_to_take_your_medicine)
+                val title = context.getString(R.string.time_to_use_your_medicine)
                 val text = context.getString(R.string.do_not_forget_to_mark_the_medicine_as_taken, item.medicineName, checkMedicineForm(item.medicineForm,
-                    item.medicineQuantity, context))
+                    item.medicineQuantity, item.doseUnit, context))
 
                 return notificationBuilderWithActionButtons(
                     context, channelId, pendingIntent, title, text,
@@ -99,7 +97,7 @@ object NotificationUtils {
 
          val title = context.getString(R.string.did_you_forget_to_use_your_medicine, item.medicineName)
          val text = context.getString(R.string.do_not_forget_to_mark_the_medicine_as_used, checkMedicineForm(item.medicineForm,
-             item.medicineQuantity, context))
+             item.medicineQuantity, item.doseUnit, context))
 
         return notificationBuilderWithActionButtons(
             context, followUpChannelId, pendingIntent, title, text,
@@ -116,9 +114,9 @@ object NotificationUtils {
 
         createPillboxNotificationChannel(context)
 
-        val title = "It's time to refill your pillbox"
-        val text = "Refill your pillbox and avoid forgetting to take your medication."
-        Log.d("Alarm", "notificationutils")
+        val title = context.getString(R.string.it_s_time_to_refill_your_pillbox)
+        val text =
+            context.getString(R.string.refill_your_pillbox_and_avoid_forgetting_to_use_your_medicine)
 
         return notificationBuilder(context, pillboxReminderChannelId, pendingIntent, title, text)
     }
@@ -198,15 +196,44 @@ object NotificationUtils {
             .build()
     }
 
-    private fun checkMedicineForm(medicineForm: String, medicineQuantity: String, context: Context): String{
-        return when(medicineForm){
-            "pill" -> context.getString(R.string.take_pill, medicineQuantity)
-            "injection" -> context.getString(R.string.take_injection, medicineQuantity)
-            "liquid" ->  context.getString(R.string.take_liquid, medicineQuantity)
-            "drop" -> context.getString(R.string.take_drops, medicineQuantity)
-            "inhaler" -> context.getString(R.string.inhale, medicineQuantity)
-            "pomade" -> context.getString(R.string.apply_pomade)
-            else -> {""}
+    private fun checkMedicineForm(medicineForm: String, medicineQuantity: String, doseUnit: String, context: Context): String {
+        return when(medicineForm) {
+            "pill" -> {
+                val quantity = medicineQuantity.toFloatOrNull()?.toInt() ?: 0
+                context.resources.getQuantityString(R.plurals.take_pill, quantity, quantity)
+            }
+            "injection" -> {
+                when(doseUnit) {
+                    "mL" -> context.getString(R.string.take_injection_ml, medicineQuantity)
+                    "syringe" -> {
+                        val quantity = medicineQuantity.toFloatOrNull()?.toInt() ?: 0
+                        context.resources.getQuantityString(R.plurals.take_injection_syringe, quantity, quantity)
+                    }
+                    else -> throw IllegalArgumentException("Illegal doseUnit value provided")
+                }
+            }
+            "liquid" -> {
+                context.getString(R.string.take_liquid, medicineQuantity)
+            }
+            "drop" -> {
+                val quantity = medicineQuantity.toFloatOrNull()?.toInt() ?: 0
+                context.resources.getQuantityString(R.plurals.take_drops, quantity, quantity)
+            }
+            "inhaler" -> {
+                when(doseUnit) {
+                    "mg" -> context.getString(R.string.inhale_mg, medicineQuantity)
+                    "puff" -> {
+                        val quantity = medicineQuantity.toFloatOrNull()?.toInt() ?: 0
+                        context.resources.getQuantityString(R.plurals.inhale_puff, quantity, quantity)
+                    }
+                    "mL" -> context.getString(R.string.inhale_mL, medicineQuantity)
+                    else -> throw IllegalArgumentException("Illegal doseUnit value provided")
+                }
+            }
+            "pomade" -> {
+                context.getString(R.string.apply_pomade)
+            }
+            else -> ""
         }
     }
 }

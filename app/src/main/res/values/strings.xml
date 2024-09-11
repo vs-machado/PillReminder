@@ -28,10 +28,13 @@
     <string name="delete_all">Delete all</string>
 
     <string name="take_pill">Take %1$s pill(s)</string>
-    <string name="take_injection">Inject %1$s mL</string>
-    <string name="take_liquid">Take %1$s mL</string>
+    <string name="take_injection_ml">Inject %1$s mL</string>
+    <string name="take_injection_syringe">Inject %1$s syringe(s)</string>
+    <string name="take_liquid">Use %1$s mL</string>
     <string name="take_drops">Take %1$s drop(s)</string>
-    <string name="inhale">Take %1$s mg</string>
+    <string name="inhale_mg">Inhale %1$s mg</string>
+    <string name="inhale_puff">Take %1$s puff(s)</string>
+    <string name="inhale_mL">Inhale %1$s mL</string>
     <string name="apply_pomade">1 application</string>
     <string name="delete_alarm">Delete alarm?</string>
     <string name="medicine_name_n_hh_mm">[Medicine name] \n [HH:MM]</string>
@@ -58,7 +61,7 @@
     <string name="please_set_the_tenth_medicine_alarm">Please, set the tenth medicine alarm:</string>
     <string name="every_day">Every day</string>
     <string name="every_other_day">Every other day</string>
-    <string name="specific_days_of_the_week">Specific days of the week</string>
+    <string name="specific_days_of_the_week">Specific days of week</string>
     <string name="every_x_days">Every X days</string>
     <string name="every_x_weeks">Every X weeks</string>
     <string name="every_x_months">Every X months</string>
@@ -70,7 +73,7 @@
     <string name="inhaler">Inhaler</string>
     <string name="pomade">Pomade</string>
     <string name="channel_for_reminding_users_to_take_their_medicines">Channel for reminding users to take their medicines</string>
-    <string name="time_to_take_your_medicine">Time to take your medicine!</string>
+    <string name="time_to_use_your_medicine">Time to use your medicine!</string>
     <string name="did_you_forget_to_use_your_medicine">Did you forget to use %1$s?</string>
     <string name="do_not_forget_to_mark_the_medicine_as_used">Do not forget to mark the medicine as used.\n%1$s</string>
     <string name="do_not_forget_to_mark_the_medicine_as_taken">Medicine: %1$s\n%2$s</string>
@@ -83,6 +86,7 @@
     <string name="medicine_not_taken_yet">Medicine not taken yet.</string>
     <string name="medicine_skipped">Dose skipped.</string>
     <string name="quantity">Quantity</string>
+    <string name="dose_quantity">Dose quantity</string>
     <string name="set_the_quantity_per_dosage">Set the quantity per dosage:</string>
     <string name="this_app_heavily_depends_on_user_overlay_and_notification_permissions_to_properly_work">This app heavily depends on user overlay and notification permissions to properly work.</string>
     <string name="the_app_must_not_be_used_without_these_permissions">The user\'s notification permission is mandatory for the proper functioning of the application.\n\n User\'s overlay permission\ngranting is optional.</string>
@@ -104,7 +108,7 @@
     <string name="menu_with_medicine_options">Menu with medicine options</string>
     <string name="welcome">Welcome!</string>
     <string name="app_explanation">Pill Reminder is an app to help you to keep track of your medicine doses.</string>
-    <string name="app_needs_permissions">...But first we need your permission.</string>
+    <string name="app_needs_permissions">…But first we need your permission.</string>
     <string name="notification_mandatory">"Sending notifications is mandatory for the proper functioning of the application."</string>
     <string name="pillbox_reminders">Pillbox reminders</string>
     <string name="click_on_pillbox">Click on the Pillbox refill reminders button and set a time to receive daily reminders.</string>
@@ -114,10 +118,10 @@
     <string name="close">Close</string>
     <string name="granting_screen_overlay_permission_is_optional">Granting screen overlay permission is optional.\n\nIt\'s recommended if you often don\'t see your notifications.</string>
     <string name="permission_request">Permission request</string>
-    <string name="features_text">• Schedule alarms to remind users about their medications.\n• Receive notifications
-    if the user does not mark a medication as used in the application.\n• Allow users to set a treatment period or
-        receive alarms until the medication is deleted.\n• Receive notifications after setting a daily pillbox refill reminder.
-        \n• Warn users if they attempt to mark a medication as used close to the next dose time.</string>
+    <string name="features_text">• Schedule alarms to remind users about their medicines.\n• Receive notifications
+    if the user does not mark a medicine as used in the application.\n• Allow users to set a treatment period or
+        receive alarms until the medicine is deleted.\n• Receive notifications after setting a daily pillbox refill reminder.
+        \n• Warn users if they attempt to mark a medicine as used close to the next dose time.</string>
     <string name="about_us_text">Application developed by Vinícius Santos as his final project for his bachelor\'s degree in Computer Engineering.</string>
     <string name="contact_me">Contact me</string>
     <string name="pill_reminder">Pill Reminder</string>
@@ -126,14 +130,14 @@
     <string name="about_me">About me</string>
     <string name="email">Email: vinicius.s.machado@protonmail.com</string>
     <string name="frequent_questions">Frequent questions</string>
-    <string name="how_do_i_delete_a_medication">How do I delete a medication?</string>
-    <string name="answer_how_do_i_delete_a_medication">Click the ⋮ icon at the right corner of the medication you want to delete, then select Delete or Delete all.</string>
+    <string name="how_do_i_delete_a_medicine">How do I delete a medicine?</string>
+    <string name="answer_how_do_i_delete_a_medicine">Click the ⋮ icon at the right corner of the medicine you want to delete, then select Delete or Delete all.</string>
     <string name="how_do_i_skip_a_dose">How do I skip a dose?</string>
-    <string name="answer_how_do_i_skip_a_dose">Click the ⋮ icon at the right corner of the medication you want to skip the dose, then select Skip dose option.</string>
+    <string name="answer_how_do_i_skip_a_dose">Click the ⋮ icon at the right corner of the medicine you want to skip the dose, then select Skip dose option.</string>
     <string name="i_m_not_receiving_alarms">I\'m not receiving alarms.</string>
     <string name="answer_i_m_not_receiving_alarms"><![CDATA[It is necessary to check if the app permissions to send notifications were granted or not. Sometimes when you don\'t open an app in a while, the phone automatically remove notifications permissions.\n\nGo to Settings > Apps > Pill Reminder > Permissions and click on any not allowed permission to grant it.]]></string>
     <string name="medicine_not_appearing_everyday_even_if_i_don_t_set_a_treatment_period">Medicine not appearing everyday even if I don\'t set a treatment period</string>
-    <string name="answer_medicine_not_appearing_everyday_even_if_i_don_t_set_a_treatment_period">This is normal. A medication without treatment period will be eventually reinserted in the app after a month.</string>
+    <string name="answer_medicine_not_appearing_everyday_even_if_i_don_t_set_a_treatment_period">This is normal. A medicine without treatment period will be eventually reinserted in the app after a month.</string>
     <string name="dashboard">Dashboard</string>
     <string name="home">Home</string>
     <string name="my_medicines">My medicines</string>
@@ -143,4 +147,204 @@
     <string name="set_pillbox_daily_refill_reminders">Set pillbox daily refill reminders</string>
     <string name="set_the_hour_that_you_wish_to_receive_n_daily_reminders">Set the hour at which you wish to receive\ndaily reminders:</string>
     <string name="save">Save</string>
+    <string name="select_medicine_usage_days">Select the medicine usage days:</string>
+    <string name="Sunday">Sunday</string>
+    <string name="Monday">Monday</string>
+    <string name="Tuesday">Tuesday</string>
+    <string name="Wednesday">Wednesday</string>
+    <string name="Thursday">Thursday</string>
+    <string name="Friday">Friday</string>
+    <string name="Saturday">Saturday</string>
+    <string name="select_the_medicine_interval">Select the medicine interval:</string>
+    <string name="days">days</string>
+    <string name="weeks">weeks</string>
+    <string name="months">months</string>
+    <string name="every">Every</string>
+    <string name="interval">interval</string>
+    <string name="it_s_time_to_refill_your_pillbox">Refill your pillbox</string>
+    <string name="refill_your_pillbox_and_avoid_forgetting_to_use_your_medicine">Refill and avoid forgetting to use your medicine.</string>
+    <string name="search_hint">Search registered medicines</string>
+    <string name="see_medicine_details">See medicine details</string>
+    <string name="details">Details</string>
+    <string name="number_pills">%1$d pill(s)</string>
+    <string name="number_drops">%1$d drop(s)</string>
+    <string name="number_ml">%.2f mL</string>
+    <string name="number_application">1 application</string>
+    <string name="number_inhalator">%.2f mg</string>
+    <string name="every_interval_days">Every %1$d days</string>
+    <string name="every_interval_weeks">Every %1$d weeks</string>
+    <string name="every_interval_months">Every %1$d months</string>
+    <string name="quantity_alarms">%1$d alarms</string>
+    <string name="ongoing">Ongoing</string>
+    <string name="hasn_started">It hasn\'t started yet</string>
+    <string name="ended">Ended</string>
+    <string name="quantity_pills">Quantity: %1$d pill(s)</string>
+    <string name="quantity_drops">Quantity: %1$d drop(s)</string>
+    <string name="quantity_ml">Quantity: %.2f mL</string>
+    <string name="quantity_application">Quantity: 1 application</string>
+    <string name="quantity_inhalator">Quantity: %.2f mg</string>
+    <string name="ongoing_treatment">Ongoing treatment</string>
+    <string name="treatment_ended">Treatment ended</string>
+    <string name="treatment_hasnt_started_yet">Treatment hasn\'t started yet</string>
+    <string name="medicine_already_used">Medicine already used</string>
+    <string name="medicine_not_used_yet">Not used yet</string>
+    <string name="frequency">Frequency</string>
+    <string name="alarms_per_day">Alarms per day</string>
+    <string name="alarms_hour">Alarms hour</string>
+    <string name="Hour">Hour</string>
+    <string name="treatment_start_date">Treatment start date</string>
+    <string name="treatment_end_date">Treatment end date</string>
+    <string name="treatment_status">Treatment status</string>
+    <string name="medicine_icon">Medicine icon</string>
+    <string name="pill_quantity">%1$s pill(s)</string>
+    <string name="ml_quantity">%1$s mL</string>
+    <string name="inhale_quantity">%1$s mg</string>
+    <string name="pomade_quantity">1 application</string>
+    <string name="medicine_time">Medicine time!</string>
+    <string name="specific_days_of_week">Specific days of week:\n\n%1$s</string>
+    <string name="edit">Edit medicine</string>
+    <string name="alarms_per_day_details">Alarms per day:\n\n%1$d alarm(s)</string>
+    <string name="undefined">Undefined</string>
+    <string name="select_at_least_1_day">You must select at least 1 day of the week.</string>
+    <string name="treatment_end_date_error">The treatment end date must be after the start date. Try again.</string>
+    <string name="changes_saved">The changes were saved</string>
+    <string name="medicine_form">Medicine form</string>
+    <string name="medicine_frequency">Medicine frequency</string>
+    <string name="select_treatment_end_date">Select the treatment end date:</string>
+    <string name="select_usage_days">Select the medicine usage days:</string>
+    <string name="select_alarm_hour">Select the alarm hour:</string>
+    <string name="Every">Every</string>
+    <string name="edit_medicine">Edit medicine</string>
+    <string name="end_treatment">End treatment</string>
+    <string name="are_you_sure_end_treatment">Are you sure you want to stop treatment for the following medicine?\n\nThe upcoming alarms will be deleted.\n\nMedicine: %1$s</string>
+    <string name="mL">mL</string>
+    <string name="syringe">syringe</string>
+    <string name="puff">puff</string>
+    <string name="mg">mg</string>
+    <string name="pill_unit">pill</string>
+    <string name="drop">drop</string>
+    <string name="application">application</string>
+
+    <string name="quantity_syringe">Quantity: %1$d syringe(s)</string>
+
+    <plurals name="take_pill">
+        <item quantity="one">Take %1$d pill</item>
+        <item quantity="other">Take %1$d pills</item>
+    </plurals>
+
+    <plurals name="take_injection_syringe">
+        <item quantity="one">Inject %1$d syringe</item>
+        <item quantity="other">Inject %1$d syringes</item>
+    </plurals>
+
+    <plurals name="take_drops">
+        <item quantity="one">Use %1$d drop</item>
+        <item quantity="other">Use %1$d drops</item>
+    </plurals>
+
+    <plurals name="inhale_puff">
+        <item quantity="one">Take %1$d puff</item>
+        <item quantity="other">Take %1$d puffs</item>
+    </plurals>
+
+    <plurals name="pills">
+        <item quantity="one">pill</item>
+        <item quantity="other">pills</item>
+    </plurals>
+
+    <plurals name="drops">
+        <item quantity="one">drop</item>
+        <item quantity="other">drops</item>
+    </plurals>
+
+
+    <plurals name="puffs">
+        <item quantity="one">puff</item>
+        <item quantity="other">puffs</item>
+    </plurals>
+
+    <plurals name="pills_quantity">
+        <item quantity="one">%1$d pill</item>
+        <item quantity="other">%1$d pills</item>
+    </plurals>
+
+    <plurals name="drops_quantity">
+        <item quantity="one">%1$d drop</item>
+        <item quantity="other">%1$d drops</item>
+    </plurals>
+
+    <plurals name="syringe_quantity">
+        <item quantity="one">%1$d syringe</item>
+        <item quantity="other">%1$d syringes</item>
+    </plurals>
+
+    <plurals name="pill_quantity">
+        <item quantity="one">%1$s pill</item>
+        <item quantity="other">%1$s pills</item>
+    </plurals>
+
+    <plurals name="puffs_quantity">
+        <item quantity="one">%1$d puff</item>
+        <item quantity="other">%1$d puffs</item>
+    </plurals>
+
+    <plurals name="quantity_pills">
+        <item quantity="one">Quantity: %1$d pill</item>
+        <item quantity="other">Quantity: %1$d pills</item>
+    </plurals>
+
+    <plurals name="quantity_drops">
+        <item quantity="one">Quantity: %1$d drop</item>
+        <item quantity="other">Quantity: %1$d drops</item>
+    </plurals>
+
+    <plurals name="quantity_syringe">
+        <item quantity="one">Quantity: %1$d syringe</item>
+        <item quantity="other">Quantity: %1$d syringes</item>
+    </plurals>
+
+    <plurals name="quantity_pill">
+        <item quantity="one">Quantity: %1$s pill</item>
+        <item quantity="other">Quantity: %1$s pills</item>
+    </plurals>
+
+    <plurals name="quantity_puffs">
+        <item quantity="one">Quantity: %1$d puff</item>
+        <item quantity="other">Quantity: %1$d puffs</item>
+    </plurals>
+
+    <plurals name="alarms_per_day_details">
+        <item quantity="one">Alarms per day:\n\n%1$d alarm</item>
+        <item quantity="other">Alarms per day:\n\n%1$d alarms</item>
+    </plurals>
+
+    <string-array name="medicine_forms">
+        <item>Pill</item>
+        <item>Injection</item>
+        <item>Liquid</item>
+        <item>Drops</item>
+        <item>Inhaler</item>
+        <item>Pomade</item>
+    </string-array>
+
+    <string-array name="units_injection">
+        <item>mL</item>
+        <item>syringe</item>
+    </string-array>
+
+    <string-array name="units_inhaler">
+        <item>mL</item>
+        <item>mg</item>
+        <item>puff</item>
+    </string-array>
+
+    <string-array name="medicine_frequency">
+        <item>Every day</item>
+        <item>Every other day</item>
+        <item>Specific days of week</item>
+        <item>Every X days</item>
+        <item>Every X weeks</item>
+        <item>Every X months</item>
+    </string-array>
+
 </resources>

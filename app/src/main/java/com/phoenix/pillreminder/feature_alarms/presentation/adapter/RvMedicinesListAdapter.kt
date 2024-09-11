@@ -21,7 +21,9 @@ private const val HOUR_12_FORMAT = "hh:mm a"
 class RvMedicinesListAdapter (private val showDeleteAlarmDialog: (Medicine) -> Unit,
                               private val showDeleteAllAlarmsDialog: (Medicine) -> Unit,
                               private val markMedicineUsage: (Medicine) -> Unit,
-                              private val markMedicinesAsSkipped: (Medicine) -> Unit) : RecyclerView.Adapter<MyViewHolder>() {
+                              private val markMedicinesAsSkipped: (Medicine) -> Unit,
+                              private val goToEditMedicines: (Medicine) -> Unit,
+                              private val showEndTreatmentDialog: (Medicine) -> Unit) : RecyclerView.Adapter<MyViewHolder>() {
 
     private val medicineList = ArrayList<Medicine>()
 
@@ -37,7 +39,8 @@ class RvMedicinesListAdapter (private val showDeleteAlarmDialog: (Medicine) -> U
     }
 
     override fun onBindViewHolder(holder: MyViewHolder, position: Int) {
-        holder.bind(medicineList[position], holder, showDeleteAlarmDialog, showDeleteAllAlarmsDialog, markMedicineUsage, markMedicinesAsSkipped)
+        holder.bind(medicineList[position], holder, showDeleteAlarmDialog, showDeleteAllAlarmsDialog,
+            markMedicineUsage, markMedicinesAsSkipped, goToEditMedicines, showEndTreatmentDialog)
     }
 
     fun setList(medicines: List<Medicine>, selectedDate: Date){
@@ -69,7 +72,15 @@ class RvMedicinesListAdapter (private val showDeleteAlarmDialog: (Medicine) -> U
 class MyViewHolder(private val medicinesBinding: AdapterListMedicinesBinding):RecyclerView.ViewHolder(medicinesBinding.root){
 
 
-    fun bind(medicine: Medicine, holder: MyViewHolder, showDeleteAlarmDialog: (Medicine) -> Unit, showDeleteAllAlarmsDialog: (Medicine) -> Unit, markMedicineUsage: (Medicine) -> Unit, markMedicinesAsSkipped: (Medicine) -> Unit){
+    fun bind(medicine: Medicine,
+             holder: MyViewHolder,
+             showDeleteAlarmDialog: (Medicine) -> Unit,
+             showDeleteAllAlarmsDialog: (Medicine) -> Unit,
+             markMedicineUsage: (Medicine) -> Unit,
+             markMedicinesAsSkipped: (Medicine) -> Unit,
+             goToEditMedicines: (Medicine) -> Unit,
+             showEndTreatmentDialog: (Medicine) -> Unit){
+
         val context = holder.itemView.context
         val currentTimeInMillis = System.currentTimeMillis()
 
@@ -100,22 +111,54 @@ class MyViewHolder(private val medicinesBinding: AdapterListMedicinesBinding):Re
 
             tvMedicineName.text = medicine.name
 
-
             when(medicine.form){
-                "pill" -> tvQuantity.text = context.getString(R.string.take_pill, medicine.quantity.toInt().toString())
-                "injection" -> tvQuantity.text = context.getString(R.string.take_injection, medicine.quantity.toString())
-                "liquid" -> tvQuantity.text = context.getString(R.string.take_liquid, medicine.quantity.toString())
-                "drop" -> tvQuantity.text = context.getString(R.string.take_drops, medicine.quantity.toInt().toString())
-                "inhaler" -> tvQuantity.text = context.getString(R.string.inhale, medicine.quantity.toString())
-                "pomade" -> tvQuantity.text = context.getString(R.string.apply_pomade)
+                "pill" -> {
+                    val quantity = medicine.quantity.toInt()
+                    tvQuantity.text = context.resources.getQuantityString(R.plurals.take_pill, quantity, quantity)
+                }
+                "injection" -> {
+                    when(medicine.unit) {
+                        "mL" -> {
+                            tvQuantity.text = context.getString(R.string.take_injection_ml, medicine.quantity.toString())
+                        }
+                        "syringe" -> {
+                            val quantity = medicine.quantity.toInt()
+                            tvQuantity.text = context.resources.getQuantityString(R.plurals.take_injection_syringe, quantity, quantity)
+                        }
+                    }
+                }
+                "liquid" -> {
+                    tvQuantity.text = context.getString(R.string.take_liquid, medicine.quantity.toString())
+                }
+                "drop" -> {
+                    val quantity = medicine.quantity.toInt()
+                    tvQuantity.text = context.resources.getQuantityString(R.plurals.take_drops, quantity, quantity)
+                }
+                "inhaler" -> {
+                    when(medicine.unit){
+                        "mg" -> {
+                            tvQuantity.text = context.getString(R.string.inhale_mg, medicine.quantity.toString())
+                        }
+                        "puff" -> {
+                            val quantity = medicine.quantity.toInt()
+                            tvQuantity.text = context.resources.getQuantityString(R.plurals.inhale_puff, quantity, quantity)
+                        }
+                        "mL" -> {
+                            tvQuantity.text = context.getString(R.string.inhale_mL, medicine.quantity.toString())
+                        }
+                    }
+                }
+                "pomade" -> {
+                    tvQuantity.text = context.getString(R.string.apply_pomade)
+                }
             }
 
             when(medicine.medicineWasTaken){
                 true -> {
                     tvMedicineTaken.isVisible = true
 
-                    if(medicine.form == "pomade" || medicine.form == "inhaler"){
-                        tvMedicineTaken.text = "Medicine already used."
+                    if(medicine.form == "pomade" || medicine.form == "inhaler" || medicine.form == "injection" || medicine.form == "drops" || medicine.form == "liquid"){
+                        tvMedicineTaken.text = context.getString(R.string.medicine_already_used)
                     } else{
                         tvMedicineTaken.text = context.getString(R.string.medicine_already_taken)
                     }
@@ -130,8 +173,8 @@ class MyViewHolder(private val medicinesBinding: AdapterListMedicinesBinding):Re
                                 context.getString(R.string.medicine_skipped)
                         }
                         false -> {
-                            if(medicine.form == "pomade" || medicine.form == "inhaler"){
-                                tvMedicineTaken.text = "Medicine not used yet."
+                            if(medicine.form == "pomade" || medicine.form == "inhaler" || medicine.form == "injection" || medicine.form == "drops" || medicine.form == "liquid"){
+                                tvMedicineTaken.text = context.getString(R.string.medicine_not_used_yet)
                             } else{
                                 tvMedicineTaken.text = context.getString(R.string.medicine_not_taken_yet)
                             }
@@ -157,6 +200,14 @@ class MyViewHolder(private val medicinesBinding: AdapterListMedicinesBinding):Re
                        }
                        R.id.menu3 -> {
                            markMedicinesAsSkipped(medicine)
+                           true
+                       }
+                       R.id.menu4 -> {
+                           goToEditMedicines(medicine)
+                           true
+                       }
+                       R.id.menu5 -> {
+                           showEndTreatmentDialog(medicine)
                            true
                        }
                        else -> false

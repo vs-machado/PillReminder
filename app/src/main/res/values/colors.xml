@@ -4,10 +4,18 @@
     <color name="white">#FFFFFFFF</color>
     <color name="colorPrimary">#001A9E</color>
     <color name="fab">#1D8CED</color>
+    <color name="light_fab">#AE62B2F8</color>
+    <color name="transparent_blue">#4D62B2F8</color>
+    <color name="light_blue">#62B2F8</color>
     <color name="red">#FF0000</color>
     <color name="button_gray">#747272</color>
     <color name="gradient_end_color">#B4E6FF</color>
     <color name="intro_text">#333333</color>
     <color name="intro_text_blue">#0D3663</color>
-    <color name="dark_blue">#066C70</color>
+    <color name="dark_blue">#B43AA0E4</color>
+    <color name="light_green">#4AC384</color>
+    <color name="green">#278505</color>
+    <color name="white_ice">#FBFBFB</color>
+    <color name="blue_gradient_start">#4870F4</color>
+    <color name="blue_gradient_end">#C97393FF</color>
 </resources>

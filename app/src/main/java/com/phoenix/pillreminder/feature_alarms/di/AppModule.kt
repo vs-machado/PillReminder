@@ -1,13 +1,12 @@
 package com.phoenix.pillreminder.feature_alarms.di
 
 import android.app.Application
-import android.content.Context
 import androidx.room.Room
 import androidx.work.WorkManager
-import androidx.work.impl.WorkManagerImpl
 import com.phoenix.pillreminder.feature_alarms.data.data_source.MedicineDatabase
 import com.phoenix.pillreminder.feature_alarms.data.repository.MedicineRepositoryImpl
 import com.phoenix.pillreminder.feature_alarms.domain.repository.MedicineRepository
+import com.phoenix.pillreminder.feature_alarms.presentation.AlarmReceiver
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -25,9 +24,8 @@ object AppModule {
             app,
             MedicineDatabase::class.java,
             "medicine_data_database"
-        ).build()
+        ).fallbackToDestructiveMigration().build()
     }
-
 
     @Provides
     @Singleton
@@ -35,12 +33,16 @@ object AppModule {
         return MedicineRepositoryImpl(db.medicineDao())
     }
 
-
     @Provides
     @Singleton
     fun provideWorkManager(app: Application): WorkManager{
         return WorkManager.getInstance(app)
     }
 
+    @Provides
+    @Singleton
+    fun provideAlarmReceiver(): AlarmReceiver {
+        return AlarmReceiver()
+    }
 
 }

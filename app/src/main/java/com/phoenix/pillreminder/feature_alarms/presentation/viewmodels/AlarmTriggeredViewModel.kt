@@ -39,14 +39,34 @@ class AlarmTriggeredViewModel : ViewModel() {
         }
     }
 
-    fun checkMedicineForm(medicineForm: String, medicineQuantity: String, context: Context): String{
+    fun checkMedicineForm(medicineForm: String, doseUnit: String, medicineQuantity: String, context: Context): String{
+        Log.d("alarmItem", "medicineQuantityString: $medicineQuantity")
+        val quantity = medicineQuantity.toFloatOrNull()?.toInt() ?: 0
+        Log.d("alarmItem", "quantity parsed: $quantity")
+
         return when(medicineForm){
-            "pill" -> context.getString(R.string.take_pill, medicineQuantity)
-            "injection" -> context.getString(R.string.take_injection, medicineQuantity)
-            "liquid" ->  context.getString(R.string.take_liquid, medicineQuantity)
-            "drop" -> context.getString(R.string.take_drops, medicineQuantity)
-            "inhaler" -> context.getString(R.string.inhale, medicineQuantity)
-            "pomade" -> context.getString(R.string.apply_pomade, medicineQuantity)
+            "pill" -> context.resources.getQuantityString(R.plurals.pill_quantity, quantity, quantity)
+            "injection" -> {
+                when(doseUnit){
+                    "mL" -> context.getString(R.string.ml_quantity, medicineQuantity)
+                    "syringe" -> {
+                        val quantity = medicineQuantity.toFloatOrNull()?.toInt() ?: 0
+                        context.resources.getQuantityString(R.plurals.syringe_quantity, quantity, quantity)
+                    }
+                    else -> throw IllegalArgumentException("Illegal doseUnit value provided")
+                }
+            }
+            "liquid" ->  context.getString(R.string.ml_quantity, medicineQuantity)
+            "drop" -> context.resources.getQuantityString(R.plurals.drops_quantity, quantity, quantity)
+            "inhaler" -> {
+                when(doseUnit){
+                    "mg" -> context.getString(R.string.inhale_quantity, medicineQuantity)
+                    "puff" -> context.resources.getQuantityString(R.plurals.puffs_quantity, quantity, quantity)
+                    "mL" -> context.getString(R.string.inhale_mL, medicineQuantity)
+                    else -> throw IllegalArgumentException("Illegal doseUnit value provided")
+                }
+            }
+            "pomade" -> context.getString(R.string.apply_pomade)
             else -> {""}
         }
     }

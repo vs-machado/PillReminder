@@ -5,10 +5,20 @@
         <item name="colorPrimary">@color/colorPrimary</item>
         <item name="android:textColorSecondary">@color/white</item>
         <item name="android:colorControlActivated">@color/fab</item>
+        <item name="android:statusBarColor">@color/white_ice</item>
+        <item name="android:navigationBarColor">@color/white_ice</item>
+        <item name="colorPrimaryVariant">@color/fab</item>
         <item name="navigationViewStyle">@style/Widget.App.NavigationView</item>
+        <item name="android:windowBackground">@color/white_ice</item>
+        <item name="android:windowLightStatusBar">true</item>
+        <item name="android:windowLightNavigationBar">true</item>
     </style>
 
     <style name="Theme.PillReminder" parent="Base.Theme.PillReminder" />
+
+    <style name="App.Custom.Indicator" parent="Widget.Material3.BottomNavigationView.ActiveIndicator">
+        <item name ="android:color">@color/transparent_blue</item>
+    </style>
 
     <style name = "FabShapeStyle" parent = "ShapeAppearance.MaterialComponents.SmallComponent">
         <item name="cornerSize">50%</item>
@@ -37,5 +47,33 @@
         <item name="android:background">@color/white</item>
     </style>
 
+    <style name="DayPickerButton" parent="Widget.MaterialComponents.Button.OutlinedButton">
+        <item name="android:layout_width">48dp</item>
+        <item name="android:layout_height">48dp</item>
+        <item name="android:insetTop">0dp</item>
+        <item name="android:insetBottom">0dp</item>
+        <item name="android:padding">0dp</item>
+        <item name="android:textSize">12sp</item>
+        <item name="cornerRadius">24dp</item>
+        <item name="strokeColor">@color/colorPrimary</item>
+        <item name="strokeWidth">1dp</item>
+    </style>
 
+    <style name="SearchViewTheme" parent="">
+        <item name="android:textColorHint">@color/black</item>
+    </style>
+
+    <style name="OutlinedButton" parent="Widget.Material3.Button.OutlinedButton">
+        <item name="strokeColor">@color/black</item>
+        <item name="strokeWidth">1dp</item>
+    </style>
+
+    <style name="TimePicker" parent="Theme.AppCompat.Light.Dialog">
+        <item name="android:timePickerStyle">@style/SpinnerTimePicker</item>
+        <item name="android:colorButtonNormal">@color/colorPrimary</item>
+    </style>
+
+    <style name = "SpinnerTimePicker" parent="@style/Widget.MaterialComponents.TimePicker">
+        <item name="android:timePickerMode">spinner</item>
+    </style>
 </resources>

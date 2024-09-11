@@ -1,45 +1,60 @@
 package com.phoenix.pillreminder.feature_alarms.domain.model
 
+import android.os.Parcelable
 import androidx.room.ColumnInfo
 import androidx.room.Entity
 import androidx.room.PrimaryKey
+import kotlinx.parcelize.Parcelize
 
+@Parcelize
 @Entity(tableName = "medicines_data_table")
 data class Medicine(
 
     @PrimaryKey(autoGenerate = true)
     @ColumnInfo(name = "medicine_id")
     var id:Int,
-    @ColumnInfo(name = "medicine_name")
+    @ColumnInfo(name = "name")
     var name:String,
-    @ColumnInfo(name = "medicine_quantity")
+    @ColumnInfo(name = "quantity")
     var quantity:Float,
-    @ColumnInfo(name = "medicine_form")
+    @ColumnInfo(name = "dose_unit")
+    var unit: String,
+    @ColumnInfo(name = "form")
     var form:String,
-    @ColumnInfo(name = "medicine_alarms_per_day")
+    @ColumnInfo(name = "alarms_per_day")
     var alarmsPerDay: Int,
-    @ColumnInfo(name = "medicine_alarm_in_millis")
+    @ColumnInfo(name = "alarm_in_millis")
     var alarmInMillis: Long,
-    @ColumnInfo(name = "medicine_alarm_hour")
+    @ColumnInfo(name = "alarm_hour")
     var alarmHour :Int,
-    @ColumnInfo(name = "medicine_alarm_minute")
+    @ColumnInfo(name = "alarm_minute")
     var alarmMinute:Int,
-    @ColumnInfo(name = "medicine_start_date")
+    @ColumnInfo(name = "selected_days_of_week")
+    var selectedDaysOfWeek: MutableSet<Int>?,
+    @ColumnInfo(name = "start_date")
     var startDate: Long,
-    @ColumnInfo(name = "medicine_end_date")
+    @ColumnInfo(name = "end_date")
     var endDate: Long,
-    @ColumnInfo(name = "medicine_was_taken")
+    @ColumnInfo(name = "was_taken")
     var medicineWasTaken: Boolean,
-    @ColumnInfo(name = "medicine_was_skipped")
+    @ColumnInfo(name = "was_skipped")
     var wasSkipped: Boolean,
-    @ColumnInfo(name = "medicine_frequency")
-    var medicineFrequency: Int,
-    @ColumnInfo(name = "medicine_treatment_period_set")
+    @ColumnInfo(name = "frequency")
+    var medicineFrequency: String,
+    @ColumnInfo(name = "interval")
+    var interval: Long,
+    @ColumnInfo(name = "treatment_period_set")
     var medicinePeriodSet: Boolean,
-    @ColumnInfo(name = "medicine_needs_reschedule")
+    @ColumnInfo(name = "needs_reschedule")
     var medicineNeedsReschedule: Boolean,
-    @ColumnInfo(name = "medicine_reschedule_worker_id")
-    var rescheduleWorkerID: String
+    @ColumnInfo(name = "reschedule_worker_id")
+    var rescheduleWorkerID: String,
+    @ColumnInfo(name = "last_edited")
+    var lastEdited: Long = 0L,
+    @ColumnInfo(name = "is_active")
+    var isActive: Boolean = true,
+    @ColumnInfo(name = "treatment_id")
+    var treatmentID: String
 
-)
+) : Parcelable
 

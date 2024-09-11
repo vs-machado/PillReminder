@@ -1,9 +1,6 @@
 package com.phoenix.pillreminder.feature_alarms.domain.repository
 
 import androidx.lifecycle.LiveData
-import androidx.room.Delete
-import androidx.room.Query
-import androidx.room.Update
 import com.phoenix.pillreminder.feature_alarms.domain.model.Medicine
 
 interface MedicineRepository {
@@ -11,11 +8,26 @@ interface MedicineRepository {
 
     suspend fun updateMedicine(medicine: Medicine)
 
+    suspend fun updateMedicinesActiveStatus(medicineName: String, currentTimeMillis: Long, isActive: Boolean)
+
+    suspend fun updateExpiredMedicines(treatmentID: String, name: String, quantity: Float, form: String, endDate: Long, frequency: String,
+                                       currentTime: Long)
+
     suspend fun deleteMedicine(medicine: Medicine)
 
     suspend fun deleteAllSelectedMedicines(medicines: List<Medicine>)
 
+    suspend fun deleteUpcomingAlarms(medicineName: String, currentTimeMillis: Long)
+
+    suspend fun getAlarmsAfterProvidedMillis(medicineName: String, millis: Long): List<Medicine>
+
+    suspend fun getAlarmTimeSinceMidnight(medicineName: String): Long
+
     fun getAllMedicines(): LiveData<List<Medicine>>
+
+    suspend fun getDailyAlarms(medicineName: String, alarmsPerDay: Int): List<Long>
+
+    suspend fun getMedicineEditTimestamp(medicineName: String): Long
 
     fun getAllMedicinesWithSameName(medicineName: String): List<Medicine>
 
@@ -37,5 +49,7 @@ interface MedicineRepository {
 
     fun getAlarmsToRescheduleEveryMonth(medicineName: String, alarmsPerDay: Int): List<Medicine>
 
-    fun getAllDistinctMedicines(): List<Medicine>
+    fun getLastAlarmFromAllDistinctMedicines(): List<Medicine>
+
+    suspend fun getAlarmTimesForMedicine(medicineName: String, cutoffTime: Long, treatmentID: String): List<String>
 }

@@ -33,6 +33,7 @@ class AndroidAlarmScheduler @Inject constructor(
         val intent = Intent(appContext, AlarmReceiver::class.java).apply {
             putExtra("ALARM_ITEM", item)
         }
+        Log.d("debug", "intent: $intent")
 
         // Checks if is possible to schedule exact alarms before calling the schedule method
         if(!alarmManager.canScheduleExactAlarms()){
@@ -55,10 +56,10 @@ class AndroidAlarmScheduler @Inject constructor(
 
     }
 
-    override fun cancelAlarm(item: AlarmItem, cancelAll: Boolean) {
+    override suspend fun cancelAlarm(item: AlarmItem, cancelAll: Boolean) {
         val itemTimeInMillis = item.time.atZone(ZoneId.systemDefault()).toInstant().toEpochMilli()
 
-        CoroutineScope(Dispatchers.IO).launch{
+       withContext(Dispatchers.Default){
             val pendingIntent =  PendingIntent.getBroadcast(
                 appContext,
                 item.hashCode(),
@@ -67,23 +68,29 @@ class AndroidAlarmScheduler @Inject constructor(
             )
 
             if (pendingIntent == null || itemTimeInMillis < System.currentTimeMillis()){
-                val alarmAlreadyScheduled = medicineRepository.getNextAlarmData(item.medicineName, System.currentTimeMillis())
-                val alarmItemTime = alarmAlreadyScheduled?.alarmInMillis?.let {
-                    Instant.ofEpochMilli(it).atZone(ZoneId.systemDefault()).toLocalDateTime()
-                }
-                if (alarmItemTime != null){
-                    val alarmItem = AlarmItem(
-                        alarmItemTime,
-                        alarmAlreadyScheduled.name,
-                        alarmAlreadyScheduled.form,
-                        alarmAlreadyScheduled.quantity.toString(),
-                        alarmAlreadyScheduled.alarmHour.toString(),
-                        alarmAlreadyScheduled.alarmMinute.toString()
-                    )
+                withContext(Dispatchers.IO){
+                    val alarmAlreadyScheduled = medicineRepository.getNextAlarmData(item.medicineName, System.currentTimeMillis())
 
-                    cancelAlarm(alarmItem, true)
+                    withContext(Dispatchers.Default){
+                        val alarmItemTime = alarmAlreadyScheduled?.alarmInMillis?.let {
+                            Instant.ofEpochMilli(it).atZone(ZoneId.systemDefault()).toLocalDateTime()
+                        }
+                        if (alarmItemTime != null){
+                            val alarmItem = AlarmItem(
+                                alarmItemTime,
+                                alarmAlreadyScheduled.name,
+                                alarmAlreadyScheduled.form,
+                                alarmAlreadyScheduled.quantity.toString(),
+                                alarmAlreadyScheduled.unit,
+                                alarmAlreadyScheduled.alarmHour.toString(),
+                                alarmAlreadyScheduled.alarmMinute.toString()
+                            )
+
+                            cancelAlarm(alarmItem, true)
+                        }
+                    }
                 }
-                return@launch
+                return@withContext
             }
 
             if(!cancelAll){
@@ -96,7 +103,7 @@ class AndroidAlarmScheduler @Inject constructor(
                 if(nextAlarm?.alarmInMillis != null){
                     scheduleNextAlarm(nextAlarm)
                 }
-                return@launch
+                return@withContext
             }
 
             withContext(Dispatchers.Main) {
@@ -113,10 +120,11 @@ class AndroidAlarmScheduler @Inject constructor(
             medicineName = medicine.name,
             medicineForm = medicine.form,
             medicineQuantity = medicine.quantity.toString(),
+            doseUnit = medicine.unit,
             alarmHour = medicine.alarmHour.toString(),
             alarmMinute = medicine.alarmMinute.toString()
         )
-
+        Log.d("alarmItem", "schedulenextalarm alarmitem: $alarmItem")
         alarmItem.let(alarmScheduler::scheduleAlarm)
     }
 

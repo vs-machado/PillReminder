@@ -1,12 +1,16 @@
 package com.phoenix.pillreminder.feature_alarms.presentation.activities
 
 import android.content.Intent
+import android.content.res.Configuration
 import android.os.Build
 import android.os.Bundle
+import android.util.Log
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.app.AppCompatDelegate
+import androidx.core.view.WindowInsetsControllerCompat
 import androidx.lifecycle.ViewModelProvider
+import com.phoenix.pillreminder.R
 import com.phoenix.pillreminder.databinding.ActivityAlarmTriggeredBinding
 import com.phoenix.pillreminder.feature_alarms.domain.model.AlarmItem
 import com.phoenix.pillreminder.feature_alarms.domain.repository.MedicineRepository
@@ -36,10 +40,12 @@ class AlarmTriggeredActivity: AppCompatActivity() {
         AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO)
         setContentView(binding.root)
 
+        setupNotificationAndStatusBar()
+
         /*mediaPlayer = MediaPlayer.create(this, R.raw.alarm_sound)
         mediaPlayer?.isLooping = true
         mediaPlayer?.start()*/
-        medicinesViewModel = ViewModelProvider(this).get(MedicinesViewModel::class.java)
+        medicinesViewModel = ViewModelProvider(this)[MedicinesViewModel::class.java]
 
         binding.apply{
             val alarmItem = if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU){
@@ -47,12 +53,13 @@ class AlarmTriggeredActivity: AppCompatActivity() {
             }else{
                 intent?.getParcelableExtra("ALARM_ITEM")
             }
+            Log.d("alarmItem", "alarmtriggeredactivity: $alarmItem")
 
             viewModel.apply{
                 alarmItem?.apply{
                     tvAlarmMedicineName.text = medicineName
                     tvAlarmHourMedicine.text = checkDateFormat(alarmHour.toInt(), alarmMinute.toInt(), context = applicationContext)
-                    tvAlarmQuantity.text = checkMedicineForm(medicineForm, medicineQuantity, context = applicationContext)
+                    tvAlarmQuantity.text = checkMedicineForm(medicineForm, doseUnit, medicineQuantity, context = applicationContext)
 
                     ivAlarmMedicineIcon.setImageResource(setMedicineImageView(medicineForm))
 
@@ -68,12 +75,14 @@ class AlarmTriggeredActivity: AppCompatActivity() {
                         }
                         val intent = Intent(applicationContext, MainActivity::class.java)
                         startActivity(intent)
+                        finish()
                     }
 
                     btnDismiss.setOnClickListener {
                         //stopMediaPlayer()
                         val intent = Intent(applicationContext, MainActivity::class.java)
                         startActivity(intent)
+                        finish()
                     }
                 }
             }
@@ -81,6 +90,22 @@ class AlarmTriggeredActivity: AppCompatActivity() {
         }
 
 
+
+    }
+
+    private fun setupNotificationAndStatusBar(){
+        val orientation = resources.configuration.orientation
+
+        if (orientation == Configuration.ORIENTATION_PORTRAIT){
+            window.statusBarColor = resources.getColor(R.color.blue_gradient_start, null)
+            window.navigationBarColor = resources.getColor(R.color.blue_gradient_end, null)
+            WindowInsetsControllerCompat(window, window.decorView).isAppearanceLightStatusBars = false
+        } else {
+            window.statusBarColor = resources.getColor(R.color.blue_gradient_start, null)
+            window.navigationBarColor = resources.getColor(R.color.white, null)
+            WindowInsetsControllerCompat(window, window.decorView).isAppearanceLightStatusBars = true
+            WindowInsetsControllerCompat(window, window.decorView).isAppearanceLightNavigationBars = true
+        }
 
     }
 

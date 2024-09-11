@@ -28,10 +28,13 @@
     <string name="delete_all">Deletar todos</string>
 
     <string name="take_pill">Tomar %1$s comprimido(s)</string>
-    <string name="take_injection">Injetar %1$s mL</string>
+    <string name="take_injection_ml">Injetar %1$s mL</string>
+    <string name="take_injection_syringe">Injetar %1$s seringa(s)</string>
     <string name="take_liquid">Tomar %1$s mL</string>
-    <string name="take_drops">Tomar %1$s gota(s)</string>
-    <string name="inhale">Inalar %1$s mg</string>
+    <string name="take_drops">Utilizar %1$s gota(s)</string>
+    <string name="inhale_mg">Inalar %1$s mg</string>
+    <string name="inhale_puff">%1$s inalações</string>
+    <string name="inhale_mL">Inalar %1$s mL</string>
     <string name="apply_pomade">1 aplicação</string>
     <string name="delete_alarm">Deletar alarme?</string>
     <string name="medicine_name_n_hh_mm">[Nome do remédio] \n [HH:MM]</string>
@@ -46,19 +49,19 @@
     <string name="mls">mL</string>
     <string name="mgs">mg</string>
     <string name="required">*Obrigatório</string>
-    <string name="please_set_the_medicine_alarm_hour">Por favor, defina o horário do alarme do remédio:</string>
-    <string name="please_set_the_second_medicine_alarm">Por favor, defina o horário do segundo alarme:</string>
-    <string name="please_set_the_third_medicine_alarm">Por favor, defina o horário do terceiro alarme:</string>
-    <string name="please_set_the_fourth_medicine_alarm">Por favor, defina o horário do quarto alarme:</string>
-    <string name="please_set_the_fifth_medicine_alarm">Por favor, defina o horário do quinto alarme:</string>
-    <string name="please_set_the_sixth_medicine_alarm">Por favor, defina o horário do sexto alarme:</string>
-    <string name="please_set_the_seventh_medicine_alarm">Por favor, defina o horário do sétimo alarme:</string>
-    <string name="please_set_the_eighth_medicine_alarm">Por favor, defina o horário do oitavo alarme:</string>
-    <string name="please_set_the_ninth_medicine_alarm">Por favor, defina o horário do nono alarme:</string>
-    <string name="please_set_the_tenth_medicine_alarm">Por favor, defina o horário do décimo alarme:</string>
+    <string name="please_set_the_medicine_alarm_hour">Defina o horário do alarme:</string>
+    <string name="please_set_the_second_medicine_alarm">Defina o horário do segundo alarme:</string>
+    <string name="please_set_the_third_medicine_alarm">Defina o horário do terceiro alarme:</string>
+    <string name="please_set_the_fourth_medicine_alarm">Defina o horário do quarto alarme:</string>
+    <string name="please_set_the_fifth_medicine_alarm">Defina o horário do quinto alarme:</string>
+    <string name="please_set_the_sixth_medicine_alarm">Defina o horário do sexto alarme:</string>
+    <string name="please_set_the_seventh_medicine_alarm">Defina o horário do sétimo alarme:</string>
+    <string name="please_set_the_eighth_medicine_alarm">Defina o horário do oitavo alarme:</string>
+    <string name="please_set_the_ninth_medicine_alarm">Defina o horário do nono alarme:</string>
+    <string name="please_set_the_tenth_medicine_alarm">Defina o horário do décimo alarme:</string>
     <string name="every_day">Todos os dias</string>
     <string name="every_other_day">De 2 em 2 dias</string>
-    <string name="specific_days_of_the_week">Em dias específicos da semana</string>
+    <string name="specific_days_of_the_week">Dias específicos</string>
     <string name="every_x_days">A cada X dias</string>
     <string name="every_x_weeks">A cada X semanas</string>
     <string name="every_x_months">A cada X meses</string>
@@ -70,7 +73,7 @@
     <string name="inhaler">Inalante</string>
     <string name="pomade">Pomada</string>
     <string name="channel_for_reminding_users_to_take_their_medicines">Canal para lembrar os usuários de tomarem seus remédios</string>
-    <string name="time_to_take_your_medicine">Hora de usar o seu remédio!</string>
+    <string name="time_to_use_your_medicine">Hora de usar o seu remédio!</string>
     <string name="did_you_forget_to_use_your_medicine">Você se esqueceu de usar %1$s?</string>
     <string name="do_not_forget_to_mark_the_medicine_as_used">Não esqueça de marcar a utilização do medicamento.\n%1$s</string>
     <string name="do_not_forget_to_mark_the_medicine_as_taken">Remédio: %1$s\n%2$s</string>
@@ -83,6 +86,7 @@
     <string name="medicine_not_taken_yet">Ainda não foi tomado</string>
     <string name="medicine_skipped">Dose pulada.</string>
     <string name="quantity">Quantidade</string>
+    <string name="dose_quantity">Quantidade por dose</string>
     <string name="set_the_quantity_per_dosage">Insira a quantidade por dose:</string>
     <string name="this_app_heavily_depends_on_user_overlay_and_notification_permissions_to_properly_work">O aplicativo depende fortemente das permissões do usuário de sobreposição e notificação para funcionar corretamente. </string>
     <string name="the_app_must_not_be_used_without_these_permissions">A permissão de envio de notificações é obrigatória para o bom funcionamento do aplicativo.\n\n A concessão da permissão de sobreposição de tela é opcional. </string>
@@ -125,8 +129,8 @@
     <string name="about_me">Sobre mim</string>
     <string name="email">Email: vinicius.s.machado@protonmail.com</string>
     <string name="frequent_questions">Perguntas frequentes</string>
-    <string name="how_do_i_delete_a_medication">Como eu deleto um medicamento?</string>
-    <string name="answer_how_do_i_delete_a_medication">Clique no ícone ⋮ no canto direito do medicamento que você deseja deletar e selecione Deletar ou Deletar todos.</string>
+    <string name="how_do_i_delete_a_medicine">Como eu deleto um medicamento?</string>
+    <string name="answer_how_do_i_delete_a_medicine">Clique no ícone ⋮ no canto direito do medicamento que você deseja deletar e selecione Deletar ou Deletar todos.</string>
     <string name="how_do_i_skip_a_dose">Como eu pulo uma dose?</string>
     <string name="answer_how_do_i_skip_a_dose">Clique no ícone ⋮ no canto direito do medicamento que você deseja pular a dose e selecione a opção Pular dose.</string>
     <string name="i_m_not_receiving_alarms">Eu não estou recebendo alarmes.</string>
@@ -142,4 +146,222 @@
     <string name="set_pillbox_daily_refill_reminders">Recarga do porta comprimidos</string>
     <string name="set_the_hour_that_you_wish_to_receive_n_daily_reminders">Defina o horário que você deseja receber lembretes diários de recarga do porta comprimidos:</string>
     <string name="save">Salvar</string>
+    <string name="select_medicine_usage_days">Selecione os dias de uso:</string>
+    <string name="Sunday">Domingo</string>
+    <string name="Monday">Segunda-feira</string>
+    <string name="Tuesday">Terça-feira</string>
+    <string name="Wednesday">Quarta-feira</string>
+    <string name="Thursday">Quinta-feira</string>
+    <string name="Friday">Sexta-feira</string>
+    <string name="Saturday">Sábado</string>
+    <string name="select_the_medicine_interval">Selecione o intervalo do remédio:</string>
+    <string name="days">dias</string>
+    <string name="weeks">semanas</string>
+    <string name="months">meses</string>
+    <string name="every">A cada</string>
+    <string name="interval">intervalo</string>
+    <string name="it_s_time_to_refill_your_pillbox">Recarregue seu porta comprimidos</string>
+    <string name="refill_your_pillbox_and_avoid_forgetting_to_use_your_medicine">Recarregue e evite esquecer de usar o seu medicamento.</string>
+    <string name="search_hint">Pesquise seus remédios</string>
+    <string name="details">Detalhes</string>
+    <string name="see_medicine_details">Ver detalhes do medicamento</string>
+    <string name="number_pills">%1$d comprimido(s)</string>
+    <string name="number_drops">%1$d gota(s)</string>
+    <string name="number_ml">%.2f mL</string>
+    <string name="number_application">1 aplicação</string>
+    <string name="number_inhalator">%.2f mg</string>
+    <string name="every_interval_days">A cada %1$d dias</string>
+    <string name="every_interval_weeks">A cada %1$d semanas</string>
+    <string name="every_interval_months">A cada %1$d meses</string>
+    <string name="quantity_alarms">%1$d alarmes</string>
+    <string name="ongoing">Em andamento</string>
+    <string name="hasn_started">Ainda não começou</string>
+    <string name="ended">Encerrado</string>
+    <string name="quantity_pills">Quantidade: %1$d comprimido(s)</string>
+    <string name="quantity_drops">Quantidade: %1$d gota(s)</string>
+    <string name="quantity_ml">Quantidade: %.2f mL</string>
+    <string name="quantity_syringe">Quantidade: %1$d seringa(s)</string>
+
+    <string name="quantity_application">Quantidade: 1 aplicação</string>
+    <string name="quantity_inhalator">Quantidade: %.2f mg</string>
+    <string name="ongoing_treatment">Tratamento em andamento</string>
+    <string name="treatment_ended">Tratamento encerrado</string>
+    <string name="treatment_hasnt_started_yet">Tratamento ainda não começou</string>
+    <string name="medicine_already_used">Medicamento utilizado</string>
+    <string name="medicine_not_used_yet">Ainda não foi utilizado</string>
+    <string name="frequency">Frequência</string>
+    <string name="alarms_per_day">Alarmes por dia</string>
+    <string name="alarms_hour">Horário dos alarmes</string>
+    <string name="treatment_start_date">Início do tratamento</string>
+    <string name="treatment_end_date">Término do tratamento</string>
+    <string name="treatment_status">Status do tratamento</string>
+    <string name="medicine_icon">Ícone do medicamento</string>
+    <string name="Hour">Horário</string>
+    <string name="pill_quantity">%1$s comprimido(s)</string>
+    <string name="ml_quantity">%1$s mL</string>
+
+    <string name="inhale_quantity">%1$s mg</string>
+    <string name="pomade_quantity">1 aplicação</string>
+    <string name="medicine_time">Hora do medicamento!</string>
+    <string name="specific_days_of_week">Dias específicos da semana:\n\n%1$s</string>
+    <string name="edit">Editar medicamento</string>
+    <string name="alarms_per_day_details">Alarmes por dia:\n\n%1$d alarme(s)</string>
+    <string name="undefined">Indefinido</string>
+    <string name="select_at_least_1_day">Você precisa selecionar pelo menos 1 dia da semana</string>
+    <string name="treatment_end_date_error">A data de encerramento do tratamento deve ser após a data de início. Tente novamente.</string>
+    <string name="changes_saved">As alterações foram salvas</string>
+    <string name="medicine_form">Forma do medicamento</string>
+    <string name="medicine_frequency">Frequência do medicamento</string>
+    <string name="select_treatment_end_date">Selecione a data de término do tratamento:</string>
+    <string name="select_usage_days">Selecione os dias de uso do medicamento:</string>
+    <string name="select_alarm_hour">Selecione o horário do alarme:</string>
+    <string name="Every">A cada</string>
+    <string name="edit_medicine">Editar medicamento</string>
+    <string name="end_treatment">Encerrar tratamento</string>
+    <string name="are_you_sure_end_treatment">Tem certeza de que deseja interromper o tratamento do seguinte medicamento?\n\nFuturos alarmes serão cancelados.\n\nMedicamento: %1$s</string>
+    <string name="mL">mL</string>
+    <string name="syringe">seringa</string>
+    <string name="puff">inalação</string>
+    <string name="mg">mg</string>
+    <string name="pill_unit">comprimido</string>
+    <string name="drop">gota</string>
+    <string name="application">aplicação</string>
+
+    <string-array name="medicine_forms">
+        <item>Comprimido</item>
+        <item>Injeção</item>
+        <item>Líquido</item>
+        <item>Gotas</item>
+        <item>Inalante</item>
+        <item>Pomada</item>
+    </string-array>
+
+    <string-array name="medicine_frequency">
+        <item>Todos os dias</item>
+        <item>De 2 em 2 dias</item>
+        <item>Dias específicos</item>
+        <item>A cada X dias</item>
+        <item>A cada X semanas</item>
+        <item>A cada X meses</item>
+    </string-array>
+
+    <string-array name="units_injection">
+        <item>mL</item>
+        <item>seringa</item>
+    </string-array>
+
+    <string-array name="units_inhaler">
+        <item>mL</item>
+        <item>mg</item>
+        <item>inalação</item>
+    </string-array>
+
+    <plurals name="take_pill">
+        <item quantity="one">Tome %1$d comprimido</item>
+        <item quantity="other">Tome %1$d comprimidos</item>
+        <item quantity="many">Tome %1$d comprimidos</item>
+    </plurals>
+
+    <plurals name="take_injection_syringe">
+        <item quantity="one">Injete %1$d seringa</item>
+        <item quantity="other">Injete %1$d seringas</item>
+        <item quantity="many">Injete %1$d seringas</item>
+    </plurals>
+
+    <plurals name="take_drops">
+        <item quantity="one">Use %1$d gota</item>
+        <item quantity="other">Use %1$d gotas</item>
+        <item quantity="many">Use %1$d gotas</item>
+    </plurals>
+
+    <plurals name="inhale_puff">
+        <item quantity="one">Faça %1$d inalação</item>
+        <item quantity="other">Faça %1$d inalações</item>
+        <item quantity="many">Faça %1$d inalações</item>
+    </plurals>
+
+    <plurals name="pills">
+        <item quantity="one">comprimido</item>
+        <item quantity="other">comprimidos</item>
+        <item quantity="many">comprimidos</item>
+    </plurals>
+
+    <plurals name="drops">
+        <item quantity="one">gota</item>
+        <item quantity="other">gotas</item>
+        <item quantity="many">gotas</item>
+    </plurals>
+
+    <plurals name="puffs">
+        <item quantity="one">inalação</item>
+        <item quantity="other">inalações</item>
+        <item quantity="many">inalações</item>
+    </plurals>
+
+    <plurals name="pills_quantity">
+        <item quantity="one">%1$d comprimido</item>
+        <item quantity="other">%1$d comprimidos</item>
+        <item quantity="many">%1$d comprimidos</item>
+    </plurals>
+
+    <plurals name="syringe_quantity">
+        <item quantity="one">%1$d seringa</item>
+        <item quantity="other">%1$d seringas</item>
+        <item quantity="many">%1$d seringas</item>
+    </plurals>
+
+    <plurals name="pill_quantity">
+        <item quantity="one">%1$s comprimido</item>
+        <item quantity="other">%1$s comprimidos</item>
+        <item quantity="many">%1$s comprimidos</item>
+    </plurals>
+
+    <plurals name="puffs_quantity">
+        <item quantity="one">%1$d inalação</item>
+        <item quantity="other">%1$d inalações</item>
+        <item quantity="many">%1$d inalações</item>
+    </plurals>
+
+    <plurals name="drops_quantity">
+        <item quantity="one">%1$s gota</item>
+        <item quantity="other">%1$s gotas</item>
+        <item quantity="many">%1$s gotas</item>
+    </plurals>
+
+    <plurals name="quantity_pills">
+        <item quantity="one">Quantidade: %1$d comprimido</item>
+        <item quantity="other">Quantidade: %1$d comprimidos</item>
+        <item quantity="many">Quantidade: %1$d comprimidos</item>
+    </plurals>
+
+    <plurals name="quantity_drops">
+        <item quantity="one">Quantidade: %1$d gota</item>
+        <item quantity="other">Quantidade: %1$d gotas</item>
+        <item quantity="many">Quantidade: %1$d gotas</item>
+    </plurals>
+
+    <plurals name="quantity_syringe">
+        <item quantity="one">Quantidade: %1$d seringa</item>
+        <item quantity="other">Quantidade: %1$d seringas</item>
+        <item quantity="many">Quantidade: %1$d seringas</item>
+    </plurals>
+
+    <plurals name="quantity_pill">
+        <item quantity="one">Quantidade: %1$s comprimido</item>
+        <item quantity="other">Quantidade: %1$s comprimidos</item>
+        <item quantity="many">Quantidade: %1$s comprimidos</item>
+    </plurals>
+
+    <plurals name="quantity_puffs">
+        <item quantity="one">Quantidade: %1$d inalação</item>
+        <item quantity="other">Quantidade: %1$d inalações</item>
+        <item quantity="many">Quantidade: %1$d inalações</item>
+    </plurals>
+
+    <plurals name="alarms_per_day_details">
+        <item quantity="one">Alarmes por dia:\n\n%1$d alarme</item>
+        <item quantity="other">Alarmes por dia:\n\n%1$d alarmes</item>
+        <item quantity="many">Alarmes por dia:\n\n%1$d alarmes</item>
+    </plurals>
+
 </resources>

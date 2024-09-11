@@ -9,19 +9,20 @@ import android.widget.Toast
 import androidx.activity.addCallback
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
+import androidx.core.view.WindowInsetsControllerCompat
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
-import androidx.fragment.app.viewModels
 import androidx.hilt.navigation.fragment.hiltNavGraphViewModels
-import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.NavOptions
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.ui.AppBarConfiguration
 import androidx.navigation.ui.setupWithNavController
+import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.google.android.material.datepicker.MaterialDatePicker
+import com.google.android.material.floatingactionbutton.FloatingActionButton
 import com.phoenix.pillreminder.R
-import com.phoenix.pillreminder.feature_alarms.presentation.activities.MainActivity
 import com.phoenix.pillreminder.databinding.FragmentTreatmentDurationBinding
+import com.phoenix.pillreminder.feature_alarms.domain.util.MedicineFrequency
 import com.phoenix.pillreminder.feature_alarms.presentation.viewmodels.AlarmSettingsSharedViewModel
 import com.phoenix.pillreminder.feature_alarms.presentation.viewmodels.MedicinesViewModel
 import dagger.hilt.android.AndroidEntryPoint
@@ -47,6 +48,16 @@ class TreatmentDurationFragment : Fragment(), ActivityCompat.OnRequestPermission
         savedInstanceState: Bundle?
     ): View {
         binding = FragmentTreatmentDurationBinding.inflate(layoutInflater)
+
+        // Sets the notification bar color to blue and white text on notifications
+        requireActivity().window.statusBarColor = resources.getColor(R.color.colorPrimary, null)
+        WindowInsetsControllerCompat(requireActivity().window, requireActivity().window.decorView).isAppearanceLightStatusBars = false
+        WindowInsetsControllerCompat(requireActivity().window, requireActivity().window.decorView).isAppearanceLightNavigationBars = true
+
+        requireActivity().findViewById<BottomNavigationView>(R.id.bottom_navigation).visibility = View.GONE
+        requireActivity().findViewById<View>(R.id.divider).visibility = View.GONE
+        requireActivity().findViewById<FloatingActionButton>(R.id.fabAddMedicine).visibility = View.GONE
+
         // Inflate the layout for this fragment
         return binding.root
     }
@@ -72,45 +83,42 @@ class TreatmentDurationFragment : Fragment(), ActivityCompat.OnRequestPermission
                         0 -> {
                             showDateRangePickerAndCreateAlarm()
                         }
-                        /* User don't want to set a treatment period. The app will set a temporary treatment period (33 days). If user
-                        doesn't remove the alarm, it will be renewed in 32 days. */
+                        /* User don't want to set a treatment period. The app will set a temporary treatment period (search for
+                        setTemporaryTreatmentDate method on sharedViewModel). If user doesn't remove the alarm, it will be renewed.*/
                         1 -> {
                             setTemporaryPeriod()
 
                             val startDateMillis = System.currentTimeMillis()
-                            val endDateMillis = (startDateMillis + (33 * 86400000L))
+                            val endDateMillis = setTemporaryTreatmentEndDate(startDateMillis)
 
                             extractDateComponents(startDateMillis, endDateMillis, false)
 
                             // Catches the workerID to cancel it if needed. workerID will be stored in the database.
                             val workerID = createRescheduleWorker(requireContext().applicationContext)
+                            val interval = getInterval().toLong()
 
                             when (getMedicineFrequency()){
-                                1 -> {
-                                    medicinesViewModel.insertMedicines(allAlarmsOfTreatment(1L, workerID))
+                                MedicineFrequency.EveryDay -> {
+                                    medicinesViewModel.insertMedicines(getAlarmsList(1L, workerID, null, true))
                                     createAlarmItemAndSchedule(requireActivity().applicationContext, 1L)
                                 }
-                                2 -> {
-                                    medicinesViewModel.insertMedicines(allAlarmsOfTreatment(2L, workerID))
+                                MedicineFrequency.EveryOtherDay -> {
+                                    medicinesViewModel.insertMedicines(getAlarmsList(2L, workerID, null, true))
                                     createAlarmItemAndSchedule(requireActivity().applicationContext, 2L)
                                 }
-                                /*
-                                "Specific days of the week" -> {
-                                    // Needs further implementation
+                                MedicineFrequency.SpecificDaysOfWeek -> {
+                                    medicinesViewModel.insertMedicines(getAlarmsListForSpecificDays(workerID, null, true))
+                                    createAlarmItemAndSchedule(requireActivity().applicationContext)
                                 }
-                                "Every X days" -> {
-                                    // Needs further implementation
+                                MedicineFrequency.EveryXDays, MedicineFrequency.EveryXWeeks, MedicineFrequency.EveryXMonths -> {
+                                    medicinesViewModel.insertMedicines(getAlarmsList(interval, workerID, null, true))
+                                    createAlarmItemAndSchedule(requireActivity().applicationContext, interval)
                                 }
-                                "Every X weeks" -> {
-                                    // Needs further implementation
-                                }
-                                "Every X months" -> {
-                                    // Needs further implementation
-                                }*/
                             }
 
                             setNumberOfAlarms(1)
                             clearTreatmentPeriod()
+                            clearAlarmArray()
 
                             Toast.makeText(requireContext(),
                                 getString(R.string.alarms_successfully_created),
@@ -137,35 +145,33 @@ class TreatmentDurationFragment : Fragment(), ActivityCompat.OnRequestPermission
                 val startDateMillis = selection.first
                 val endDateMillis = selection.second
 
+                val getInterval = sharedViewModel.getInterval().toLong()
+
                 //Extracts the treatment period and adds the user alarm hour to it in milliseconds
                 extractDateComponents(startDateMillis, endDateMillis, true)
 
                 when (getMedicineFrequency()){
-                    1 -> {
-                        medicinesViewModel.insertMedicines(allAlarmsOfTreatment(1L))
+                    MedicineFrequency.EveryDay -> {
+                        medicinesViewModel.insertMedicines(getAlarmsList(1L, null, true))
                         createAlarmItemAndSchedule(requireActivity().applicationContext, 1L)
                     }
-                    2 -> {
-                        medicinesViewModel.insertMedicines(allAlarmsOfTreatment(2L))
+                    MedicineFrequency.EveryOtherDay -> {
+                        medicinesViewModel.insertMedicines(getAlarmsList(2L, null, true))
                         createAlarmItemAndSchedule(requireActivity().applicationContext, 2L)
                     }
-                    /*
-                    "Specific days of the week" -> {
-                        // Needs further implementation
+                    MedicineFrequency.SpecificDaysOfWeek -> {
+                        medicinesViewModel.insertMedicines(getAlarmsListForSpecificDays(null, true))
+                        createAlarmItemAndSchedule(requireActivity().applicationContext)
                     }
-                    "Every X days" -> {
-                        // Needs further implementation
+                    MedicineFrequency.EveryXDays, MedicineFrequency.EveryXWeeks, MedicineFrequency.EveryXMonths -> {
+                        medicinesViewModel.insertMedicines(getAlarmsList(getInterval, null, true))
+                        createAlarmItemAndSchedule(requireActivity().applicationContext, getInterval)
                     }
-                    "Every X weeks" -> {
-                        // Needs further implementation
-                    }
-                    "Every X months" -> {
-                        // Needs further implementation
-                    }*/
                 }
 
                 setNumberOfAlarms(1)
                 clearTreatmentPeriod()
+                clearAlarmArray()
 
                 Toast.makeText(requireContext(),
                     getString(R.string.alarms_successfully_created),

@@ -3,46 +3,51 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:paddingTop="16dp">
+    android:layout_height="wrap_content"
+    android:paddingTop="8dp">
 
     <androidx.appcompat.widget.AppCompatImageButton
         android:id="@+id/arrowLeft"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="10dp"
-        android:layout_marginEnd="16dp"
+        android:layout_marginEnd="8dp"
         android:background="?attr/selectableItemBackgroundBorderless"
         android:padding="10dp"
         android:src="@drawable/ic_weekday_chevron_left"
         app:layout_constraintEnd_toStartOf="@+id/arrowRight"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toEndOf="@+id/textViewToday"
         app:layout_constraintTop_toBottomOf="@+id/scrollDays" />
 
     <androidx.appcompat.widget.AppCompatImageButton
         android:id="@+id/arrowRight"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginEnd="14dp"
         android:background="?attr/selectableItemBackgroundBorderless"
         android:padding="10dp"
         android:src="@drawable/ic_weekday_chevron_right"
         app:layout_constraintBottom_toBottomOf="@+id/arrowLeft"
-        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintEnd_toEndOf="@+id/scrollDays"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toEndOf="@+id/arrowLeft"
         app:layout_constraintTop_toTopOf="@+id/arrowLeft" />
 
     <HorizontalScrollView
         android:id="@+id/scrollDays"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
         android:scrollbars="none"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent">
+        app:layout_constraintTop_toBottomOf="@+id/selectedDayText">
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:id="@+id/daysContainer"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content">
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal">
 
             <androidx.constraintlayout.widget.ConstraintLayout
                 android:id="@+id/block1"
@@ -51,6 +56,8 @@
                 android:background="@android:color/transparent"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toStartOf="@+id/block2"
+                app:layout_constraintHorizontal_bias="0.5"
+                app:layout_constraintHorizontal_chainStyle="packed"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent">
 
@@ -95,6 +102,7 @@
                 android:background="@drawable/selected_day_bg"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toStartOf="@+id/block3"
+                app:layout_constraintHorizontal_bias="0.5"
                 app:layout_constraintStart_toEndOf="@+id/block1"
                 app:layout_constraintTop_toTopOf="parent">
 
@@ -139,6 +147,7 @@
                 android:background="@android:color/transparent"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toStartOf="@+id/block4"
+                app:layout_constraintHorizontal_bias="0.5"
                 app:layout_constraintStart_toEndOf="@+id/block2"
                 app:layout_constraintTop_toTopOf="parent">
 
@@ -183,6 +192,7 @@
                 android:background="@android:color/transparent"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toStartOf="@+id/block5"
+                app:layout_constraintHorizontal_bias="0.5"
                 app:layout_constraintStart_toEndOf="@+id/block3"
                 app:layout_constraintTop_toTopOf="parent">
 
@@ -227,6 +237,7 @@
                 android:background="@android:color/transparent"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toStartOf="@+id/block6"
+                app:layout_constraintHorizontal_bias="0.5"
                 app:layout_constraintStart_toEndOf="@+id/block4"
                 app:layout_constraintTop_toTopOf="parent">
 
@@ -271,6 +282,7 @@
                 android:background="@android:color/transparent"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toStartOf="@+id/block7"
+                app:layout_constraintHorizontal_bias="0.5"
                 app:layout_constraintStart_toEndOf="@+id/block5"
                 app:layout_constraintTop_toTopOf="parent">
 
@@ -358,10 +370,12 @@
         android:id="@+id/switchPillbox"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="26dp"
         android:text="@string/pillbox_reminders"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/scrollDays"
+        android:textAlignment="textEnd"
+        app:layout_constraintBottom_toBottomOf="@+id/arrowLeft"
+        app:layout_constraintEnd_toStartOf="@+id/textViewToday"
+        app:layout_constraintStart_toStartOf="@+id/scrollDays"
+        app:layout_constraintTop_toTopOf="@+id/arrowLeft"
         tools:layout_conversion_absoluteHeight="48dp"
         tools:layout_conversion_absoluteWidth="184dp" />
 
@@ -376,8 +390,20 @@
         android:textColor="@color/white"
         android:textSize="14sp"
         app:layout_constraintEnd_toStartOf="@+id/arrowLeft"
+        app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintStart_toEndOf="@+id/switchPillbox"
         app:layout_constraintTop_toBottomOf="@+id/scrollDays"
         tools:text="Today" />
+
+    <TextView
+        android:id="@+id/selectedDayText"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="8dp"
+        android:gravity="end"
+        android:text="TextView"
+        android:textSize="16sp"
+        app:layout_constraintEnd_toEndOf="@+id/scrollDays"
+        app:layout_constraintTop_toTopOf="parent" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

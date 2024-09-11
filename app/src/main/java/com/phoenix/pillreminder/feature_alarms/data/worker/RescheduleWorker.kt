@@ -25,7 +25,7 @@ class RescheduleWorker @AssistedInject constructor(
 
     override suspend fun doWork(): Result {
 
-        val distinctMedicines = repository.getAllDistinctMedicines()
+        val distinctMedicines = repository.getLastAlarmFromAllDistinctMedicines()
         val alarmScheduler = AndroidAlarmScheduler(repository, applicationContext)
 
         val alarmsToReschedule = distinctMedicines.flatMap{ medicine ->
@@ -33,8 +33,9 @@ class RescheduleWorker @AssistedInject constructor(
         }
 
         alarmsToReschedule.forEach { medicine ->
-            val interval = medicine.medicineFrequency.toLong()
+            val interval = medicine.interval
             val treatmentPeriodInDays = Calendar.getInstance().getActualMaximum(Calendar.DAY_OF_MONTH)
+
 
             withContext(Dispatchers.IO){
                 // Reinserts medicines alarms into the database for another month
@@ -50,6 +51,7 @@ class RescheduleWorker @AssistedInject constructor(
                     medicineName = medicine.name,
                     medicineForm = medicine.form,
                     medicineQuantity = medicine.quantity.toString(),
+                    doseUnit = medicine.unit,
                     alarmHour = medicine.alarmHour.toString(),
                     alarmMinute = medicine.alarmMinute.toString()
                 )
@@ -64,22 +66,32 @@ class RescheduleWorker @AssistedInject constructor(
 
     private fun allAlarmsOfTreatment(medicine: Medicine, interval: Long, treatmentPeriodInDays: Int): List<Medicine> {
         val alarms = mutableListOf<Medicine>()
+        val name = medicine.name
+        val quantity = medicine.quantity
+        val doseUnit = medicine.unit
+        val form = medicine.form
+        val alarmsPerDay = medicine.alarmsPerDay
+        val alarmHour = medicine.alarmHour
+        val alarmMinute = medicine.alarmMinute
+        val selectedDaysOfWeek = medicine.selectedDaysOfWeek
+        val startDate = medicine.startDate
+        val endDate = medicine.endDate
+        val medicineWasTaken = false
+        val frequency = medicine.medicineFrequency
+        val periodSet = medicine.medicinePeriodSet
+        val needsReschedule = medicine.medicineNeedsReschedule
+        val workerID = medicine.rescheduleWorkerID
+        val lastEdited = medicine.lastEdited
+        val treatmentID = medicine.treatmentID
 
-        for(day in interval.toInt()..treatmentPeriodInDays step interval.toInt()){
-            val name = medicine.name
-            val quantity = medicine.quantity
-            val form = medicine.form
-            val alarmsPerDay = medicine.alarmsPerDay
+        val scheduleInterval = when(frequency){
+            "EveryXWeeks" -> { interval * 7 }
+            "EveryXMonths" -> { interval * 30 }
+            else -> { interval }
+        }
+
+        for(day in interval.toInt()..treatmentPeriodInDays step scheduleInterval.toInt()){
             val alarmInMillis = (medicine.alarmInMillis + (86400000L * day))
-            val alarmHour = medicine.alarmHour
-            val alarmMinute = medicine.alarmMinute
-            val startDate = medicine.startDate
-            val endDate = medicine.endDate
-            val medicineWasTaken = false
-            val frequency = medicine.medicineFrequency
-            val periodSet = medicine.medicinePeriodSet
-            val needsReschedule = medicine.medicineNeedsReschedule
-            val workerID = medicine.rescheduleWorkerID
 
             if((alarmInMillis + (86400000L * day)) > System.currentTimeMillis()){
                 alarms.add(
@@ -87,19 +99,25 @@ class RescheduleWorker @AssistedInject constructor(
                         0,
                         name,
                         quantity,
+                        doseUnit,
                         form,
                         alarmsPerDay,
                         alarmInMillis,
                         alarmHour,
                         alarmMinute,
+                        selectedDaysOfWeek,
                         startDate,
                         endDate,
                         medicineWasTaken,
                         false,
                         frequency,
+                        scheduleInterval,
                         periodSet,
                         needsReschedule,
-                        workerID
+                        workerID,
+                        lastEdited,
+                        true,
+                        treatmentID
                     )
                 )
             }

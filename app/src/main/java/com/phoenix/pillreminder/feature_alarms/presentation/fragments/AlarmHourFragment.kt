@@ -8,12 +8,15 @@ import android.view.ViewGroup
 import android.widget.TimePicker
 import androidx.activity.addCallback
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.view.WindowInsetsControllerCompat
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.ui.AppBarConfiguration
 import androidx.navigation.ui.setupWithNavController
+import com.google.android.material.bottomnavigation.BottomNavigationView
+import com.google.android.material.floatingactionbutton.FloatingActionButton
 import com.phoenix.pillreminder.R
 import com.phoenix.pillreminder.databinding.FragmentAlarmHourBinding
 import com.phoenix.pillreminder.feature_alarms.presentation.viewmodels.AlarmHourViewModel
@@ -40,6 +43,16 @@ class AlarmHourFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View {
         binding = FragmentAlarmHourBinding.inflate(layoutInflater)
+
+        // Sets the notification bar color to blue and white text on notifications
+        requireActivity().window.statusBarColor = resources.getColor(R.color.colorPrimary, null)
+        WindowInsetsControllerCompat(requireActivity().window, requireActivity().window.decorView).isAppearanceLightStatusBars = false
+        WindowInsetsControllerCompat(requireActivity().window, requireActivity().window.decorView).isAppearanceLightNavigationBars = true
+
+        requireActivity().findViewById<BottomNavigationView>(R.id.bottom_navigation).visibility = View.GONE
+        requireActivity().findViewById<View>(R.id.divider).visibility = View.GONE
+        requireActivity().findViewById<FloatingActionButton>(R.id.fabAddMedicine).visibility = View.GONE
+
         // Inflate the layout for this fragment
         return binding.root
     }
@@ -79,7 +92,7 @@ class AlarmHourFragment : Fragment() {
 
                     if (currentAlarmNumber.value!! > getAlarmsPerDay()) {
                         //Clear the remaining positions of the alarm array
-                        clearAlarmArray()
+                        clearRemainingAlarmArrayPositions()
                         findNavController().navigate(R.id.action_alarmHourFragment_to_treatmentDurationFragment)
                     }
                 }

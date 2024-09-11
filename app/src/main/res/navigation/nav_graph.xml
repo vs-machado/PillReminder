@@ -26,6 +26,13 @@
         <action
             android:id="@+id/action_homeFragment_to_aboutFragment"
             app:destination="@id/aboutFragment" />
+        <action
+            android:id="@+id/action_homeFragment_to_editMedicinesFragment"
+            app:destination="@id/editMedicinesFragment"
+            app:enterAnim="@anim/slide_in_up"
+            app:exitAnim="@anim/slide_out_up"
+            app:popEnterAnim="@anim/slide_in_down"
+            app:popExitAnim="@anim/slide_out_down" />
     </fragment>
     <fragment
         android:id="@+id/addMedicinesFragment"
@@ -52,6 +59,13 @@
             app:exitAnim="@anim/slide_out_left"
             app:popEnterAnim="@anim/slide_in_left"
             app:popExitAnim="@anim/slide_out_right" />
+        <action
+            android:id="@+id/action_medicineFormFragment_to_frequencyFragment"
+            app:destination="@id/frequencyFragment"
+            app:enterAnim="@anim/slide_in_right"
+            app:exitAnim="@anim/slide_out_left"
+            app:popEnterAnim="@anim/slide_in_left"
+            app:popExitAnim="@anim/slide_out_right" />
     </fragment>
     <fragment
         android:id="@+id/frequencyFragment"
@@ -61,6 +75,20 @@
         <action
             android:id="@+id/action_frequencyFragment_to_howManyPerDayFragment"
             app:destination="@id/howManyPerDayFragment"
+            app:enterAnim="@anim/slide_in_right"
+            app:exitAnim="@anim/slide_out_left"
+            app:popEnterAnim="@anim/slide_in_left"
+            app:popExitAnim="@anim/slide_out_right" />
+        <action
+            android:id="@+id/action_frequencyFragment_to_dayPickerFragment"
+            app:destination="@id/specificDaysFragment"
+            app:enterAnim="@anim/slide_in_right"
+            app:exitAnim="@anim/slide_out_left"
+            app:popEnterAnim="@anim/slide_in_left"
+            app:popExitAnim="@anim/slide_out_right" />
+        <action
+            android:id="@+id/action_frequencyFragment_to_everyXPeriodFragment"
+            app:destination="@id/everyXPeriodFragment"
             app:enterAnim="@anim/slide_in_right"
             app:exitAnim="@anim/slide_out_left"
             app:popEnterAnim="@anim/slide_in_left"
@@ -122,7 +150,16 @@
         android:id="@+id/myMedicinesFragment"
         android:name="com.phoenix.pillreminder.feature_alarms.presentation.fragments.MyMedicinesFragment"
         android:label="@string/my_medicines"
-        tools:layout="@layout/fragment_my_medicines" />
+        tools:layout="@layout/fragment_my_medicines" >
+        <action
+            android:id="@+id/action_myMedicinesFragment_to_medicineDetailsFragment"
+            app:destination="@id/medicineDetailsFragment"
+            app:enterAnim="@anim/slide_in_right"
+            app:exitAnim="@anim/slide_out_left"
+            app:popEnterAnim="@anim/slide_in_left"
+            app:popExitAnim="@anim/slide_out_right">
+        </action>
+    </fragment>
     <fragment
         android:id="@+id/helpFragment"
         android:name="com.phoenix.pillreminder.feature_alarms.presentation.fragments.HelpFragment"
@@ -133,4 +170,45 @@
         android:name="com.phoenix.pillreminder.feature_alarms.presentation.fragments.AboutFragment"
         android:label="@string/about"
         tools:layout="@layout/fragment_about" />
+    <fragment
+        android:id="@+id/specificDaysFragment"
+        android:name="com.phoenix.pillreminder.feature_alarms.presentation.fragments.SpecificDaysFragment"
+        android:label=""
+        tools:layout="@layout/fragment_specific_days" >
+        <action
+            android:id="@+id/action_specificDaysFragment_to_howManyPerDayFragment"
+            app:destination="@id/howManyPerDayFragment"
+            app:enterAnim="@anim/slide_in_right"
+            app:exitAnim="@anim/slide_out_left"
+            app:popEnterAnim="@anim/slide_in_left"
+            app:popExitAnim="@anim/slide_out_right" />
+    </fragment>
+    <fragment
+        android:id="@+id/everyXPeriodFragment"
+        android:name="com.phoenix.pillreminder.feature_alarms.presentation.fragments.EveryXPeriodFragment"
+        android:label="" >
+        <action
+            android:id="@+id/action_everyXPeriodFragment_to_howManyPerDayFragment"
+            app:destination="@id/howManyPerDayFragment"
+            app:enterAnim="@anim/slide_in_right"
+            app:exitAnim="@anim/slide_out_left"
+            app:popEnterAnim="@anim/slide_in_left"
+            app:popExitAnim="@anim/slide_out_right" />
+    </fragment>
+    <fragment
+        android:id="@+id/medicineDetailsFragment"
+        android:name="com.phoenix.pillreminder.feature_alarms.presentation.fragments.MedicineDetailsFragment"
+        android:label= "@string/details">
+        <argument
+            android:name="medicine"
+            app:argType="com.phoenix.pillreminder.feature_alarms.domain.model.Medicine" />
+    </fragment>
+    <fragment
+        android:id="@+id/editMedicinesFragment"
+        android:name="com.phoenix.pillreminder.feature_alarms.presentation.fragments.EditMedicinesFragment"
+        android:label="@string/edit_medicine" >
+        <argument
+            android:name="edit_medicine"
+            app:argType="com.phoenix.pillreminder.feature_alarms.domain.model.Medicine" />
+    </fragment>
 </navigation>

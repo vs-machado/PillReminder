@@ -2,12 +2,19 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
 
     <item
+        android:id="@+id/menu4"
+        android:title="@string/edit" />
+    <item
         android:id="@+id/menu3"
         android:title="@string/skip_dose" />
+
     <item
         android:id="@+id/menu1"
         android:title="@string/delete" />
     <item
         android:id="@+id/menu2"
         android:title="@string/delete_all_alarms" />
+    <item
+        android:id="@+id/menu5"
+        android:title="@string/end_treatment" />
 </menu>

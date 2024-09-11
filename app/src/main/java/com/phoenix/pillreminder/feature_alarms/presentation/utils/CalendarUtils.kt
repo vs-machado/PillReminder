@@ -2,6 +2,7 @@ package com.phoenix.pillreminder.feature_alarms.presentation.utils
 
 import java.text.SimpleDateFormat
 import java.util.Calendar
+import java.util.Date
 import java.util.Locale
 
 object CalendarUtils {
@@ -12,5 +13,10 @@ object CalendarUtils {
         }
         val sdf = SimpleDateFormat(pattern, Locale.getDefault())
         return sdf.format(calendar.time)
+    }
+
+    fun formatMillisToString(millis: Long, pattern: String): String {
+        val sdf = SimpleDateFormat(pattern, Locale.getDefault())
+        return sdf.format(Date(millis))
     }
 }

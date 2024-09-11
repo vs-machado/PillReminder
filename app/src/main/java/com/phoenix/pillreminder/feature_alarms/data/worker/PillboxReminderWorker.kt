@@ -29,7 +29,6 @@ class PillboxReminderWorker(appContext: Context,
             //Already handled post notifications in appintro activity
             return Result.failure()
         }
-        Log.d("Alarm", "worker dowork")
 
         return Result.success()
     }

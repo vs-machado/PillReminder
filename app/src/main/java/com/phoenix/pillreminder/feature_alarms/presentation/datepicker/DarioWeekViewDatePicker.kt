@@ -3,8 +3,9 @@ package com.phoenix.pillreminder.feature_alarms.presentation.datepicker
 import android.content.Context
 import android.text.SpannableString
 import android.text.format.DateUtils
-import android.text.style.UnderlineSpan
 import android.util.AttributeSet
+import android.view.GestureDetector
+import android.view.MotionEvent
 import android.view.View
 import android.widget.ImageView
 import android.widget.TextView
@@ -23,6 +24,7 @@ class DarioWeekViewDatePicker @JvmOverloads constructor(
     defStyle: Int = 0,
     defStyleRes: Int = 0,
 ): ConstraintLayout(context, attrs, defStyle, defStyleRes) {
+    private lateinit var gestureDetector: GestureDetector
 
     companion object {
         private fun isSameDay(date1: Date, date2: Date): Boolean {
@@ -55,7 +57,7 @@ class DarioWeekViewDatePicker @JvmOverloads constructor(
     private val blocks = arrayListOf<ConstraintLayout>()
     private val dots = arrayListOf<ImageView>()
     private val weekDates = arrayListOf<Date>()
-    //private val selectedDayText: TextView
+    private val selectedDayText: TextView
     private val leftArrow: AppCompatImageButton
     private val rightArrow: AppCompatImageButton
     private val todayText: TextView
@@ -70,7 +72,7 @@ class DarioWeekViewDatePicker @JvmOverloads constructor(
         // refs to views
         leftArrow = findViewById(R.id.arrowLeft)
         rightArrow = findViewById(R.id.arrowRight)
-        //selectedDayText = findViewById(R.id.selectedDayText)
+        selectedDayText = findViewById(R.id.selectedDayText)
         todayText = findViewById(R.id.textViewToday)
         
         weekdayTextViews.addAll(listOf(
@@ -133,22 +135,23 @@ class DarioWeekViewDatePicker @JvmOverloads constructor(
         todayText.setOnClickListener { setToday() }
 
         setSelection(selectedDate)
+        setupGestureDetector()
     }
 
-    private fun setSelection(date: Date) {
+    fun setSelection(date: Date) {
         selectedDate = date
 
         // update long text for selected day
         val dateFormat = DateFormat.getDateInstance(DateFormat.LONG, Locale.getDefault())
 
         if (isToday(date)) {
-            todayText.visibility = View.GONE
+            todayText.visibility = View.INVISIBLE
             val formattedDate =  DateUtils.getRelativeTimeSpanString(selectedDate.time, System.currentTimeMillis(), DateUtils.DAY_IN_MILLIS, DateUtils.FORMAT_SHOW_WEEKDAY or DateUtils.FORMAT_ABBREV_WEEKDAY)
-            //selectedDayText.text = context.getString(R.string.today_date, formattedDate)
+            selectedDayText.text = context.getString(R.string.today_date, formattedDate)
         }
         else {
             todayText.visibility = View.VISIBLE
-            //selectedDayText.text = dateFormat.format(selectedDate)
+            selectedDayText.text = dateFormat.format(selectedDate)
         }
 
         // index of selected day of week
@@ -221,4 +224,34 @@ class DarioWeekViewDatePicker @JvmOverloads constructor(
     }
 
     private fun setToday() = setSelection(Calendar.getInstance().time)
+
+    private fun setupGestureDetector() {
+        gestureDetector = GestureDetector(context, object : GestureDetector.SimpleOnGestureListener() {
+            private val SWIPE_THRESHOLD = 100
+            private val SWIPE_VELOCITY_THRESHOLD = 100
+
+            override fun onFling(e1: MotionEvent?, e2: MotionEvent, velocityX: Float, velocityY: Float): Boolean {
+                val diffX = e2.x - (e1?.x ?: 0f)
+                if (Math.abs(diffX) > SWIPE_THRESHOLD && Math.abs(velocityX) > SWIPE_VELOCITY_THRESHOLD) {
+                    if (diffX > 0) {
+                        // Swipe right
+                        addDays(-1)
+                    } else {
+                        // Swipe left
+                        addDays(1)
+                    }
+                    return true
+                }
+                return false
+            }
+        })
+    }
+
+    override fun onTouchEvent(event: MotionEvent): Boolean {
+        return if (gestureDetector.onTouchEvent(event)) {
+            true
+        } else {
+            super.onTouchEvent(event)
+        }
+    }
 }

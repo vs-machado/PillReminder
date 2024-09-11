@@ -10,6 +10,8 @@ import android.widget.ImageButton
 import android.widget.TextView
 import androidx.cardview.widget.CardView
 import androidx.fragment.app.Fragment
+import com.google.android.material.floatingactionbutton.FloatingActionButton
+import com.phoenix.pillreminder.R
 import com.phoenix.pillreminder.databinding.FragmentHelpBinding
 
 class HelpFragment : Fragment() {
@@ -21,6 +23,7 @@ class HelpFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View {
         binding = FragmentHelpBinding.inflate(layoutInflater)
+        requireActivity().findViewById<FloatingActionButton>(R.id.fabAddMedicine).visibility = View.GONE
         // Inflate the layout for this fragment
         return binding.root
     }

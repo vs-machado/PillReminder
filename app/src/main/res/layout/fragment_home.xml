@@ -58,8 +58,8 @@
                 android:layout_height="match_parent"
                 android:background="@color/white"
                 android:backgroundTint="#FBFBFB"
-                android:paddingStart="20dp"
-                android:paddingEnd="20dp"
+                android:paddingStart="8dp"
+                android:paddingEnd="8dp"
                 android:visibility="visible" />
 
         </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>

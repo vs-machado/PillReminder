@@ -25,7 +25,8 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:elevation="50dp"
-        app:cardCornerRadius="20dp"
+        app:cardCornerRadius="16dp
+"
         app:cardElevation="0dp"
         app:cardMaxElevation="1dp"
         app:cardUseCompatPadding="true"
@@ -36,8 +37,8 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:background="#FFFFFF"
-            android:paddingTop="12dp"
-            android:paddingBottom="12dp">
+            android:paddingTop="16dp"
+            android:paddingBottom="16dp">
 
 
             <ImageView

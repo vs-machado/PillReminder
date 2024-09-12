@@ -49,16 +49,6 @@
 
         </androidx.recyclerview.widget.RecyclerView>
 
-        <TextView
-            android:id="@+id/textView13"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_gravity="bottom"
-            android:background="#FBFBFB"
-            android:gravity="center"
-            android:padding="8dp"
-            android:text="@string/assets_designed_by_freepik" />
-
     </LinearLayout>
 
 </FrameLayout>

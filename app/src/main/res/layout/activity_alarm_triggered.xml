@@ -161,18 +161,6 @@
                 app:strokeColor="#4870F4"
                 app:strokeWidth="1dp" />
 
-            <TextView
-                android:id="@+id/textView2"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginEnd="16dp"
-                android:layout_marginBottom="8dp"
-                android:text="@string/assets_designed_by_freepik"
-                android:textColor="@color/black"
-                android:textSize="12sp"
-                app:layout_constraintBottom_toTopOf="@+id/divider5"
-                app:layout_constraintEnd_toEndOf="parent" />
-
         </androidx.constraintlayout.widget.ConstraintLayout>
     </com.google.android.material.card.MaterialCardView>
 

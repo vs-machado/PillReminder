@@ -223,6 +223,9 @@
     <string name="pill_unit">pill</string>
     <string name="drop">drop</string>
     <string name="application">application</string>
+    <string name="ongoing_treatments">Ongoing treatments</string>
+    <string name="ended_treatments">Ended treatments</string>
+    <string name="filter">Filter</string>
 
     <string name="quantity_syringe">Quantity: %1$d syringe(s)</string>
 

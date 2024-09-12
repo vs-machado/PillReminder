@@ -16,11 +16,30 @@ class MedicinesDataAdapter(
 ): RecyclerView.Adapter<MedicinesDataAdapter.MedicinesDataViewHolder>() {
     private val medicineList = ArrayList<Medicine>()
 
-    fun setAlarmsAndList(medicines: List<Medicine>, filter: String? = null){
+    fun setAlarmsAndList(medicines: List<Medicine>, filter: String? = null, filterOptions: MutableSet<Int>){
         val newList = if(filter.isNullOrEmpty()){
-            medicines
+            medicines.filter {
+                val ongoingTreatmentFilter = filterOptions.contains(R.id.filter_ongoingTreatment)
+                val endedTreatmentFilter = filterOptions.contains(R.id.filter_endedTreatment)
+
+                when {
+                    ongoingTreatmentFilter -> it.isActive
+                    endedTreatmentFilter -> !it.isActive
+                    else -> true
+                }
+            }
         } else {
-            medicines.filter{ it.name.contains(filter, true) }
+            medicines.filter{
+                val nameMatches = filter.isEmpty() || it.name.contains(filter, true)
+                val ongoingTreatmentFilter = filterOptions.contains(R.id.filter_ongoingTreatment)
+                val endedTreatmentFilter = filterOptions.contains(R.id.filter_endedTreatment)
+
+                when{
+                    ongoingTreatmentFilter -> nameMatches && it.isActive
+                    endedTreatmentFilter -> nameMatches&& !it.isActive
+                    else -> nameMatches
+                }
+            }
         }
 
         val diffCallback = object: DiffUtil.Callback(){

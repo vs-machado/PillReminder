@@ -225,6 +225,9 @@
     <string name="pill_unit">comprimido</string>
     <string name="drop">gota</string>
     <string name="application">aplicação</string>
+    <string name="ongoing_treatments">Tratamentos em andamento</string>
+    <string name="ended_treatments">Tratamentos encerrados</string>
+    <string name="filter">Filtrar</string>
 
     <string-array name="medicine_forms">
         <item>Comprimido</item>

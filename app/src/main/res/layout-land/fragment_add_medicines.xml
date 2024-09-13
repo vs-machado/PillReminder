@@ -5,6 +5,8 @@
     android:id="@+id/clAddMedicines"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="?android:attr/colorBackground"
+    android:backgroundTint="?android:attr/colorBackground"
     android:fitsSystemWindows="true"
     tools:context=".feature_alarms.presentation.fragments.AddMedicinesFragment">
 
@@ -25,14 +27,14 @@
                 android:id="@+id/toolbarAddMedicines"
                 android:layout_width="match_parent"
                 android:layout_height="50dp"
-                android:background="@color/colorPrimary"
+                android:background="@color/toolbar"
                 android:elevation="4dp" />
 
             <com.google.android.material.tabs.TabLayout
                 android:id="@+id/clSecondaryToolbar"
                 android:layout_width="match_parent"
                 android:layout_height="100dp"
-                android:background="@color/colorPrimary"
+                android:background="@color/toolbar"
                 android:contentDescription="."
                 tools:ignore="HardcodedText" />
 

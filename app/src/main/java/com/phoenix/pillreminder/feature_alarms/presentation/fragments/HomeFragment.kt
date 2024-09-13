@@ -556,11 +556,11 @@ class HomeFragment: Fragment() {
 
         ThemeUtils.applyThemeBasedSystemColors(
             requireActivity(),
-            R.color.colorPrimary,
-            R.color.white,
+            R.color.white_ice,
+            R.color.white_ice,
             R.color.dark_gray,
             R.color.dark_gray,
-            isAppearanceLightStatusBar = false,
+            isAppearanceLightStatusBar = true,
             isAppearanceLightNavigationBar = true,
             isAppearanceLightStatusBarNightMode = false,
             isAppearanceLightNavigationBarNightMode = false

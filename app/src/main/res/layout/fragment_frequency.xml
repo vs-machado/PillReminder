@@ -50,7 +50,7 @@
         android:layout_marginTop="16dp"
         android:contentDescription="@string/how_often_do_you_take_it"
         android:text="@string/how_often_do_you_take_it"
-        android:textColor="@color/white"
+        android:textColor="?android:attr/textColorSecondary"
         android:textSize="20sp"
         android:textStyle="bold"
         app:layout_constraintStart_toStartOf="parent"

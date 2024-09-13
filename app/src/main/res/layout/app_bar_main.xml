@@ -38,7 +38,7 @@
                 android:paddingHorizontal="16dp"
                 android:soundEffectsEnabled="true"
                 android:text="@string/save"
-                android:textColor="@color/white"
+                android:textColor="?android:attr/textColorSecondary"
                 android:textStyle="bold"
                 android:visibility="gone"
                 app:layout_constraintBottom_toBottomOf="@id/toolbarHome"

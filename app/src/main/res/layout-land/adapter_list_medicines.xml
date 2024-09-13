@@ -104,7 +104,7 @@
                 android:layout_marginTop="4dp"
                 android:backgroundTint="#4CAF50"
                 android:text="@string/mark_as_used"
-                android:textColor="@color/white"
+                android:textColor="?android:attr/textColorSecondary"
                 android:visibility="gone"
                 app:icon="@drawable/baseline_check_24"
                 app:iconPadding="4dp"

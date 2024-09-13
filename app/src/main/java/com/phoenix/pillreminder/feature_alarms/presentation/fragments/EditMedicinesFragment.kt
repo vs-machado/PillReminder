@@ -41,6 +41,7 @@ import com.phoenix.pillreminder.feature_alarms.presentation.activities.MainActiv
 import com.phoenix.pillreminder.feature_alarms.presentation.adapter.AlarmsHourListAdapter
 import com.phoenix.pillreminder.feature_alarms.presentation.adapter.DayPickerAdapter
 import com.phoenix.pillreminder.feature_alarms.presentation.utils.DateUtil
+import com.phoenix.pillreminder.feature_alarms.presentation.utils.ThemeUtils
 import com.phoenix.pillreminder.feature_alarms.presentation.viewmodels.AlarmSettingsSharedViewModel
 import com.phoenix.pillreminder.feature_alarms.presentation.viewmodels.EditMedicinesViewModel
 import com.phoenix.pillreminder.feature_alarms.presentation.viewmodels.MedicinesViewModel
@@ -73,7 +74,16 @@ class EditMedicinesFragment: Fragment() {
 
         // Sets the notification bar color to blue and white text on notifications
         requireActivity().window.statusBarColor = resources.getColor(R.color.colorPrimary, null)
-        WindowInsetsControllerCompat(requireActivity().window, requireActivity().window.decorView).isAppearanceLightStatusBars = false
+
+        ThemeUtils.applyThemeBasedSystemColors(
+            requireActivity(),
+            R.color.colorPrimary,
+            R.color.dark_gray,
+            isAppearanceLightStatusBar = false,
+            isAppearanceLightNavigationBar = true,
+            isAppearanceLightStatusBarNightMode = false,
+            isAppearanceLightNavigationBarNightMode = false
+        )
 
         requireActivity().findViewById<FloatingActionButton>(R.id.fabAddMedicine).visibility = View.GONE
 

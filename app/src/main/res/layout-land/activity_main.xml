@@ -51,7 +51,7 @@
         app:itemHorizontalTranslationEnabled = "false"
         android:background="@color/white_ice"
         app:itemIconTint="@color/black"
-        app:itemTextColor="@color/black"
+        app:itemTextColor="?android:attr/textColorPrimary"
         app:itemActiveIndicatorStyle="@style/App.Custom.Indicator"/>
 
 

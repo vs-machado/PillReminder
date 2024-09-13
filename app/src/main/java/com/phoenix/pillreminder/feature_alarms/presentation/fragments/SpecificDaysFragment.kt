@@ -17,6 +17,7 @@ import com.google.android.material.floatingactionbutton.FloatingActionButton
 import com.phoenix.pillreminder.R
 import com.phoenix.pillreminder.databinding.FragmentSpecificDaysBinding
 import com.phoenix.pillreminder.feature_alarms.presentation.adapter.DayPickerAdapter
+import com.phoenix.pillreminder.feature_alarms.presentation.utils.ThemeUtils
 import com.phoenix.pillreminder.feature_alarms.presentation.viewmodels.AlarmSettingsSharedViewModel
 
 // Used to specify the days of the week in which the medicine should be taken.
@@ -30,8 +31,16 @@ class SpecificDaysFragment : Fragment() {
 
         // Sets the notification bar color to blue and white text on notifications
         requireActivity().window.statusBarColor = resources.getColor(R.color.colorPrimary, null)
-        WindowInsetsControllerCompat(requireActivity().window, requireActivity().window.decorView).isAppearanceLightStatusBars = false
-        WindowInsetsControllerCompat(requireActivity().window, requireActivity().window.decorView).isAppearanceLightNavigationBars = true
+
+        ThemeUtils.applyThemeBasedSystemColors(
+            requireActivity(),
+            R.color.colorPrimary,
+            R.color.dark_gray,
+            isAppearanceLightStatusBar = false,
+            isAppearanceLightNavigationBar = true,
+            isAppearanceLightStatusBarNightMode = false,
+            isAppearanceLightNavigationBarNightMode = false
+        )
 
         requireActivity().findViewById<BottomNavigationView>(R.id.bottom_navigation).visibility = View.GONE
         requireActivity().findViewById<View>(R.id.divider).visibility = View.GONE

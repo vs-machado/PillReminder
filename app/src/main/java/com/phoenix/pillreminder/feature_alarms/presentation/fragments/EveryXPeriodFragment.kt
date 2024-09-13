@@ -12,6 +12,8 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.navigation.fragment.findNavController
+import androidx.navigation.ui.AppBarConfiguration
+import androidx.navigation.ui.setupWithNavController
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.google.android.material.floatingactionbutton.FloatingActionButton
 import com.phoenix.pillreminder.R
@@ -36,7 +38,7 @@ class EveryXPeriodFragment: Fragment() {
             requireActivity(),
             R.color.colorPrimary,
             R.color.white_ice,
-            R.color.dark_gray,
+            R.color.grayed_blue,
             R.color.dark_gray,
             isAppearanceLightStatusBar = false,
             isAppearanceLightNavigationBar = true,
@@ -53,8 +55,12 @@ class EveryXPeriodFragment: Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        val navController = findNavController()
+        val appBarConfiguration = AppBarConfiguration(navController.graph)
 
         binding.apply{
+            toolbar.setupWithNavController(navController, appBarConfiguration)
+
             try{
                 when(sharedViewModel.getMedicineFrequency()){
                     MedicineFrequency.EveryXDays -> tvPeriod.text = context?.getString(R.string.days)

@@ -5,6 +5,8 @@
     android:id="@+id/frameLayout4"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="?android:attr/colorBackground"
+    android:backgroundTint="?android:attr/colorBackground"
     tools:context=".feature_alarms.presentation.fragments.SpecificDaysFragment">
 
     <com.google.android.material.appbar.AppBarLayout
@@ -19,14 +21,14 @@
             android:id="@+id/toolbar"
             android:layout_width="match_parent"
             android:layout_height="50dp"
-            android:background="@color/colorPrimary"
+            android:background="@color/toolbar"
             android:elevation="4dp" />
 
         <com.google.android.material.tabs.TabLayout
             android:id="@+id/tabLayout"
             android:layout_width="match_parent"
             android:layout_height="110dp"
-            android:background="@color/colorPrimary"
+            android:background="@color/toolbar"
             android:contentDescription="." />
 
     </com.google.android.material.appbar.AppBarLayout>
@@ -66,7 +68,6 @@
         app:backgroundTint="@color/fab"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:shapeAppearanceOverlay="@style/FabShapeStyle"
         app:srcCompat="@drawable/arrow_right_white"
         app:tint="@color/white" />
 
@@ -88,7 +89,7 @@
         android:id="@+id/etInterval"
         android:layout_width="100dp"
         android:layout_height="48dp"
-        android:backgroundTint="@color/black"
+        android:backgroundTint="?android:attr/textColorPrimary"
         android:ems="10"
         android:gravity="center"
         android:hint="@string/interval"

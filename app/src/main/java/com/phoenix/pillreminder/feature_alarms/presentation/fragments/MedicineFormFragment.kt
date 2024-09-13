@@ -31,7 +31,7 @@ class MedicineFormFragment : Fragment() {
         ThemeUtils.applyThemeBasedSystemColors(
             requireActivity(),
             R.color.colorPrimary,
-            R.color.white,
+            R.color.white_ice,
             R.color.grayed_blue,
             R.color.dark_gray,
             isAppearanceLightStatusBar = false,

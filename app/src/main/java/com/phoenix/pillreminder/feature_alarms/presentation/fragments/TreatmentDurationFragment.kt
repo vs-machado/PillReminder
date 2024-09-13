@@ -53,7 +53,7 @@ class TreatmentDurationFragment : Fragment(), ActivityCompat.OnRequestPermission
             requireActivity(),
             R.color.colorPrimary,
             R.color.white_ice,
-            R.color.dark_gray,
+            R.color.grayed_blue,
             R.color.dark_gray,
             isAppearanceLightStatusBar = false,
             isAppearanceLightNavigationBar = true,

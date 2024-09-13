@@ -5,8 +5,6 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.appcompat.app.AppCompatActivity
-import androidx.core.content.ContextCompat
-import androidx.core.view.WindowInsetsControllerCompat
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.navigation.fragment.findNavController
@@ -33,7 +31,7 @@ class SpecificDaysFragment : Fragment() {
             requireActivity(),
             R.color.colorPrimary,
             R.color.white_ice,
-            R.color.dark_gray,
+            R.color.grayed_blue,
             R.color.dark_gray,
             isAppearanceLightStatusBar = false,
             isAppearanceLightNavigationBar = true,
@@ -56,7 +54,28 @@ class SpecificDaysFragment : Fragment() {
 
         binding.toolbar.setupWithNavController(navController, appBarConfiguration)
 
-        val list = listOf(
+        setupDayPicker()
+
+        binding.fabNext.setOnClickListener {
+            findNavController().navigate(R.id.action_specificDaysFragment_to_howManyPerDayFragment)
+        }
+    }
+
+    private fun setupDayPicker(){
+        val list = getDaysList()
+        val arrayAdapter = DayPickerAdapter(requireContext(), list)
+        binding.lvDayPicker.adapter = arrayAdapter
+
+        // The selected days array list is 1 based. Position adjustment made in checkItemSelection method.
+        binding.lvDayPicker.setOnItemClickListener { _, _, position, _ ->
+            val arrayNotEmpty = arrayAdapter.checkItemSelection(position)
+            binding.fabNext.visibility = if (arrayNotEmpty) View.VISIBLE else View.INVISIBLE
+            sharedViewModel.setSelectedDaysList(arrayAdapter.getSelectedDaysList())
+        }
+    }
+
+    private fun getDaysList(): List<String>{
+        return listOf(
             R.string.Sunday,
             R.string.Monday,
             R.string.Tuesday,
@@ -65,24 +84,6 @@ class SpecificDaysFragment : Fragment() {
             R.string.Friday,
             R.string.Saturday
         ).map { requireContext().getString(it) }
-
-        val arrayAdapter = DayPickerAdapter(
-            requireContext(),
-            list,
-            ContextCompat.getColor(requireContext(), R.color.white_ice)
-        )
-        binding.lvDayPicker.adapter = arrayAdapter
-
-        // The selected days array list is 1 based. Position adjustment made in checkItemSelection method.
-        binding.lvDayPicker.setOnItemClickListener{ _,_, position, _ ->
-            val arrayNotEmpty = arrayAdapter.checkItemSelection(position)
-            binding.fabNext.visibility = if(arrayNotEmpty) View.VISIBLE else View.INVISIBLE
-            sharedViewModel.setSelectedDaysList(arrayAdapter.getSelectedDaysList())
-        }
-
-        binding.fabNext.setOnClickListener {
-            findNavController().navigate(R.id.action_specificDaysFragment_to_howManyPerDayFragment)
-        }
     }
 
     override fun onResume() {

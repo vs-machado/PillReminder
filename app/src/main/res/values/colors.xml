@@ -30,4 +30,8 @@
     <color name ="track_checked_color">#ECDCFF</color>
     <color name ="track_unchecked_color">#7A747E</color>
     <color name ="toolbar">@color/colorPrimary</color>
+    <color name ="selected_item_array_list">@color/light_green</color>
+    <color name ="array_list_background">@color/white_ice</color>
+    <color name ="array_list_text_color_unselected">@color/black</color>
+    <color name ="array_list_text_color_selected">@color/white</color>
 </resources>

@@ -30,4 +30,8 @@
     <color name ="track_checked_color">#364450</color>
     <color name ="track_unchecked_color">#928F9A</color>
     <color name ="toolbar">@color/fab</color>
+    <color name ="selected_item_array_list">@color/grayed_blue</color>
+    <color name ="array_list_background">@color/dark_gray</color>
+    <color name ="array_list_text_color_selected">@color/white</color>
+    <color name ="array_list_text_color_unselected">@color/white</color>
 </resources>

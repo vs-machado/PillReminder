@@ -39,7 +39,7 @@ class MainActivity: AppCompatActivity() {
 
         setupToolbar()
         setupNavigation()
-        AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO) // disables night mode
+//        AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO) // disables night mode
         checkAndShowTutorial()
     }
 

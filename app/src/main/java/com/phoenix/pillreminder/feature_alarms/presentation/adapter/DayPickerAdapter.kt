@@ -12,7 +12,10 @@ import com.phoenix.pillreminder.R
 class DayPickerAdapter(
     context: Context,
     private val days: List<String>,
-    private val backgroundColor: Int
+    private val backgroundColorRes: Int = R.color.array_list_background,
+    private val textColorUnselectedRes: Int = R.color.array_list_text_color_unselected,
+    private val backgroundColorSelectedRes: Int = R.color.selected_item_array_list,
+    private val textColorSelectedRes: Int = R.color.array_list_text_color_selected
 ): ArrayAdapter<String>(context, R.layout.adapter_day_picker, days) {
 
     private val selectedItems = mutableSetOf<Int>()
@@ -23,18 +26,17 @@ class DayPickerAdapter(
 
         val tvDay = view.findViewById<TextView>(R.id.tvDay)
         tvDay.text = days[position]
-        tvDay.setTextColor(ContextCompat.getColor(context, R.color.black))
 
         updateItemAppearance(view, position)
 
         return view
     }
 
-    fun checkItemSelection(position: Int): Boolean{
+    fun checkItemSelection(position: Int): Boolean {
         // The set goes from 1-7, corresponding to Sunday - Saturday. So position must be > 0
-        if(selectedItems.contains(position + 1)){
+        if (selectedItems.contains(position + 1)) {
             selectedItems.remove(position + 1)
-        } else{
+        } else {
             selectedItems.add(position + 1)
         }
         notifyDataSetChanged()
@@ -46,14 +48,21 @@ class DayPickerAdapter(
         return selectedItems
     }
 
-    private fun updateItemAppearance(view: View, position: Int){
+    private fun updateItemAppearance(view: View, position: Int) {
         val tvDay = view.findViewById<TextView>(R.id.tvDay)
-        if(selectedItems.contains(position + 1)){
-            view.setBackgroundColor(ContextCompat.getColor(context, R.color.light_green))
-            tvDay.setTextColor(ContextCompat.getColor(context, R.color.white))
+        val isSelected = (position + 1) in selectedItems
+
+        val (backgroundColor, textColor) = if (!isSelected) {
+            Pair(backgroundColorRes, textColorUnselectedRes)
         } else {
-            view.setBackgroundColor(backgroundColor)
-            tvDay.setTextColor(ContextCompat.getColor(context, R.color.black))
+            Pair(backgroundColorSelectedRes, textColorSelectedRes)
         }
+
+        view.setBackgroundColor(getColor(backgroundColor))
+        tvDay.setTextColor(getColor(textColor))
+    }
+
+    private fun getColor(colorRes: Int): Int {
+        return ContextCompat.getColor(context, colorRes)
     }
 }

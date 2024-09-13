@@ -27,7 +27,6 @@ import android.widget.Toast
 import androidx.activity.addCallback
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.core.content.ContextCompat
-import androidx.core.view.WindowInsetsControllerCompat
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.hilt.navigation.fragment.hiltNavGraphViewModels
@@ -50,6 +49,7 @@ import com.phoenix.pillreminder.feature_alarms.presentation.HideFabScrollListene
 import com.phoenix.pillreminder.feature_alarms.presentation.PermissionManager
 import com.phoenix.pillreminder.feature_alarms.presentation.adapter.RvMedicinesListAdapter
 import com.phoenix.pillreminder.feature_alarms.presentation.utils.CalendarUtils
+import com.phoenix.pillreminder.feature_alarms.presentation.utils.ThemeUtils
 import com.phoenix.pillreminder.feature_alarms.presentation.viewmodels.AlarmSettingsSharedViewModel
 import com.phoenix.pillreminder.feature_alarms.presentation.viewmodels.HomeFragmentViewModel
 import com.phoenix.pillreminder.feature_alarms.presentation.viewmodels.MedicinesViewModel
@@ -554,10 +554,17 @@ class HomeFragment: Fragment() {
         val toolbar = requireActivity().findViewById<androidx.appcompat.widget.Toolbar>(R.id.toolbarHome)
         toolbar.visibility = View.GONE
 
-        // The next fragment changes the notification bar to blue. This resets the bar to the white color.
-        requireActivity().window.statusBarColor = resources.getColor(R.color.white_ice, null)
-        WindowInsetsControllerCompat(requireActivity().window, requireActivity().window.decorView).isAppearanceLightStatusBars = true
-        WindowInsetsControllerCompat(requireActivity().window, requireActivity().window.decorView).isAppearanceLightNavigationBars = true
+        ThemeUtils.applyThemeBasedSystemColors(
+            requireActivity(),
+            R.color.white_ice,
+            R.color.white_ice,
+            R.color.dark_gray,
+            R.color.dark_gray,
+            isAppearanceLightStatusBar = true,
+            isAppearanceLightNavigationBar = true,
+            isAppearanceLightStatusBarNightMode = false,
+            isAppearanceLightNavigationBarNightMode = false
+        )
 
         requireActivity().findViewById<BottomNavigationView>(R.id.bottom_navigation).visibility = View.VISIBLE
         requireActivity().findViewById<View>(R.id.divider).visibility = View.VISIBLE

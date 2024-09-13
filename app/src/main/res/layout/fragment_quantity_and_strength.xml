@@ -5,6 +5,7 @@
     android:id="@+id/frameLayout3"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="?android:attr/colorBackground"
     tools:context=".feature_alarms.presentation.fragments.QuantityAndStrengthFragment">
 
     <com.google.android.material.appbar.AppBarLayout
@@ -19,14 +20,14 @@
             android:id="@+id/toolbar"
             android:layout_width="match_parent"
             android:layout_height="50dp"
-            android:background="@color/colorPrimary"
+            android:background="@color/toolbar"
             android:elevation="4dp" />
 
         <com.google.android.material.tabs.TabLayout
             android:id="@+id/tabLayout"
             android:layout_width="match_parent"
             android:layout_height="110dp"
-            android:background="@color/colorPrimary"
+            android:background="@color/toolbar"
             android:contentDescription="." />
 
     </com.google.android.material.appbar.AppBarLayout>
@@ -39,7 +40,7 @@
         android:layout_marginTop="16dp"
         android:contentDescription=""
         android:text="@string/set_the_quantity_per_dosage"
-        android:textColor="@color/white"
+        android:textColor="?android:attr/textColorSecondary"
         android:textSize="20sp"
         android:textStyle="bold"
         app:layout_constraintStart_toStartOf="parent"
@@ -62,7 +63,7 @@
         android:layout_height="wrap_content"
         android:layout_marginStart="40dp"
         android:autofillHints="1"
-        android:backgroundTint="@color/black"
+        android:backgroundTint="?android:attr/textColorPrimary"
         android:ems="10"
         android:gravity="center"
         android:hint="@string/quantity"

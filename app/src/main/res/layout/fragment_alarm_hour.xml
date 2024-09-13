@@ -5,6 +5,8 @@
     android:id="@+id/clAlarmHour"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="?android:attr/colorBackground"
+    android:backgroundTint="?android:attr/colorBackground"
     tools:context=".feature_alarms.presentation.fragments.AlarmHourFragment">
 
     <com.google.android.material.appbar.AppBarLayout
@@ -19,14 +21,14 @@
             android:id="@+id/toolbar"
             android:layout_width="match_parent"
             android:layout_height="50dp"
-            android:background="@color/colorPrimary"
+            android:background="@color/toolbar"
             android:elevation="4dp" />
 
         <com.google.android.material.tabs.TabLayout
             android:id="@+id/tlAlarmHour"
             android:layout_width="match_parent"
             android:layout_height="110dp"
-            android:background="@color/colorPrimary"
+            android:background="@color/toolbar"
             android:contentDescription="."
             tools:ignore="HardcodedText" />
 
@@ -51,7 +53,7 @@
         android:layout_marginTop="16dp"
         android:contentDescription=""
         android:text="@string/please_insert_the_medicine_alarm_hour"
-        android:textColor="@color/white"
+        android:textColor="?android:attr/textColorSecondary"
         android:textSize="20sp"
         android:textStyle="bold"
         app:layout_constraintStart_toStartOf="parent"

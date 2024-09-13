@@ -4,7 +4,8 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:paddingTop="8dp">
+    android:paddingTop="8dp"
+    android:background="?android:attr/colorBackground">
 
     <androidx.appcompat.widget.AppCompatImageButton
         android:id="@+id/arrowLeft"
@@ -289,6 +290,7 @@
                 <TextView
                     android:id="@+id/weekdayText6"
                     style="@style/WeekDayTopText"
+                    android:textColor="@color/week_view_stroke"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="@dimen/weekday_text_margin_top"
@@ -372,6 +374,9 @@
         android:layout_height="wrap_content"
         android:text="@string/pillbox_reminders"
         android:textAlignment="textEnd"
+        android:textColor="?android:attr/textColorPrimary"
+        app:thumbTint="@color/thumb_color"
+        app:trackTint="@color/track_color"
         app:layout_constraintBottom_toBottomOf="@+id/arrowLeft"
         app:layout_constraintEnd_toStartOf="@+id/textViewToday"
         app:layout_constraintStart_toStartOf="@+id/scrollDays"

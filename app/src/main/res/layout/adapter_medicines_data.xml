@@ -31,7 +31,7 @@
             <ImageView
                 android:id="@+id/ivMedicineType"
                 android:layout_width="60dp"
-                android:layout_height="70dp"
+                android:layout_height="50dp"
                 android:layout_marginStart="16dp"
                 android:contentDescription="@string/medicine_type_icon"
                 app:layout_constraintBottom_toBottomOf="parent"
@@ -50,7 +50,7 @@
                 android:textSize="16sp"
                 android:textStyle="bold"
                 app:layout_constraintStart_toEndOf="@+id/ivMedicineType"
-                app:layout_constraintTop_toTopOf="@+id/ivMedicineType"
+                app:layout_constraintTop_toTopOf="parent"
                 tools:layout_conversion_absoluteHeight="0dp"
                 tools:layout_conversion_absoluteWidth="0dp" />
 
@@ -92,8 +92,8 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:backgroundTint="@android:color/transparent"
-                android:cropToPadding="false"
                 android:contentDescription="@string/see_medicine_details"
+                android:cropToPadding="false"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
                 app:srcCompat="@drawable/ic_overview"

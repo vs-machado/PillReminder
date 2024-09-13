@@ -1,11 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:background="#FFFFFF"
-    android:backgroundTint="#FBFBFB"
+    android:backgroundTint="?android:attr/colorBackground"
     android:orientation="vertical"
     android:paddingTop="8dp"
     android:paddingBottom="8dp">
@@ -25,19 +23,20 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:elevation="50dp"
-        app:cardCornerRadius="20dp"
+        app:cardCornerRadius="16dp"
         app:cardElevation="0dp"
         app:cardMaxElevation="1dp"
         app:cardUseCompatPadding="true"
-        app:strokeWidth="0.4dp">
+        app:strokeColor="@color/card_view_outline"
+        app:strokeWidth="0.6dp">
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:id="@+id/constraintLayout"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:background="#FFFFFF"
-            android:paddingTop="12dp"
-            android:paddingBottom="12dp">
+            android:background="?android:attr/colorBackground"
+            android:paddingTop="16dp"
+            android:paddingBottom="16dp">
 
 
             <ImageView
@@ -83,7 +82,8 @@
                 android:contentDescription="@string/menu_with_medicine_options"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintTop_toTopOf="@+id/tvMedicineName"
-                app:srcCompat="@drawable/ic_more_vert" />
+                app:srcCompat="@drawable/ic_more_vert"
+                app:tint="?android:attr/textColorPrimary" />
 
             <TextView
                 android:id="@+id/tvMedicineTaken"
@@ -104,7 +104,7 @@
                 android:layout_marginTop="8dp"
                 android:backgroundTint="#4CAF50"
                 android:text="@string/mark_as_used"
-                android:textColor="@color/white"
+                android:textColor="?android:attr/textColorSecondary"
                 android:visibility="visible"
                 app:icon="@drawable/baseline_check_24"
                 app:iconPadding="4dp"

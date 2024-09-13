@@ -5,6 +5,7 @@
     android:id="@+id/frameLayout2"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="?android:attr/colorBackground"
     tools:context=".feature_alarms.presentation.fragments.MedicineFormFragment">
 
     <com.google.android.material.appbar.AppBarLayout
@@ -19,14 +20,14 @@
             android:id="@+id/toolbarMedicineForm"
             android:layout_width="match_parent"
             android:layout_height="50dp"
-            android:background="@color/colorPrimary"
+            android:background="@color/toolbar"
             android:elevation="4dp" />
 
         <com.google.android.material.tabs.TabLayout
             android:id="@+id/clSecondaryToolbar"
             android:layout_width="match_parent"
             android:layout_height="100dp"
-            android:background="@color/colorPrimary"
+            android:background="@color/toolbar"
             android:contentDescription="."
             tools:ignore="HardcodedText" />
 
@@ -51,7 +52,7 @@
         android:layout_marginTop="16dp"
         android:contentDescription="@string/what_form_is_the_med"
         android:text="@string/what_form_is_the_med"
-        android:textColor="@color/white"
+        android:textColor="?android:attr/textColorSecondary"
         android:textSize="20sp"
         android:textStyle="bold"
         app:layout_constraintStart_toStartOf="parent"

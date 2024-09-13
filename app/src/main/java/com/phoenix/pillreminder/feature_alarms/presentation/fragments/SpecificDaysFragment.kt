@@ -5,8 +5,6 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.appcompat.app.AppCompatActivity
-import androidx.core.content.ContextCompat
-import androidx.core.view.WindowInsetsControllerCompat
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.navigation.fragment.findNavController
@@ -17,6 +15,7 @@ import com.google.android.material.floatingactionbutton.FloatingActionButton
 import com.phoenix.pillreminder.R
 import com.phoenix.pillreminder.databinding.FragmentSpecificDaysBinding
 import com.phoenix.pillreminder.feature_alarms.presentation.adapter.DayPickerAdapter
+import com.phoenix.pillreminder.feature_alarms.presentation.utils.ThemeUtils
 import com.phoenix.pillreminder.feature_alarms.presentation.viewmodels.AlarmSettingsSharedViewModel
 
 // Used to specify the days of the week in which the medicine should be taken.
@@ -28,10 +27,17 @@ class SpecificDaysFragment : Fragment() {
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
         binding = FragmentSpecificDaysBinding.inflate(inflater, container, false)
 
-        // Sets the notification bar color to blue and white text on notifications
-        requireActivity().window.statusBarColor = resources.getColor(R.color.colorPrimary, null)
-        WindowInsetsControllerCompat(requireActivity().window, requireActivity().window.decorView).isAppearanceLightStatusBars = false
-        WindowInsetsControllerCompat(requireActivity().window, requireActivity().window.decorView).isAppearanceLightNavigationBars = true
+        ThemeUtils.applyThemeBasedSystemColors(
+            requireActivity(),
+            R.color.colorPrimary,
+            R.color.white_ice,
+            R.color.grayed_blue,
+            R.color.dark_gray,
+            isAppearanceLightStatusBar = false,
+            isAppearanceLightNavigationBar = true,
+            isAppearanceLightStatusBarNightMode = false,
+            isAppearanceLightNavigationBarNightMode = false
+        )
 
         requireActivity().findViewById<BottomNavigationView>(R.id.bottom_navigation).visibility = View.GONE
         requireActivity().findViewById<View>(R.id.divider).visibility = View.GONE
@@ -48,7 +54,28 @@ class SpecificDaysFragment : Fragment() {
 
         binding.toolbar.setupWithNavController(navController, appBarConfiguration)
 
-        val list = listOf(
+        setupDayPicker()
+
+        binding.fabNext.setOnClickListener {
+            findNavController().navigate(R.id.action_specificDaysFragment_to_howManyPerDayFragment)
+        }
+    }
+
+    private fun setupDayPicker(){
+        val list = getDaysList()
+        val arrayAdapter = DayPickerAdapter(requireContext(), list)
+        binding.lvDayPicker.adapter = arrayAdapter
+
+        // The selected days array list is 1 based. Position adjustment made in checkItemSelection method.
+        binding.lvDayPicker.setOnItemClickListener { _, _, position, _ ->
+            val arrayNotEmpty = arrayAdapter.checkItemSelection(position)
+            binding.fabNext.visibility = if (arrayNotEmpty) View.VISIBLE else View.INVISIBLE
+            sharedViewModel.setSelectedDaysList(arrayAdapter.getSelectedDaysList())
+        }
+    }
+
+    private fun getDaysList(): List<String>{
+        return listOf(
             R.string.Sunday,
             R.string.Monday,
             R.string.Tuesday,
@@ -57,24 +84,6 @@ class SpecificDaysFragment : Fragment() {
             R.string.Friday,
             R.string.Saturday
         ).map { requireContext().getString(it) }
-
-        val arrayAdapter = DayPickerAdapter(
-            requireContext(),
-            list,
-            ContextCompat.getColor(requireContext(), R.color.white_ice)
-        )
-        binding.lvDayPicker.adapter = arrayAdapter
-
-        // The selected days array list is 1 based. Position adjustment made in checkItemSelection method.
-        binding.lvDayPicker.setOnItemClickListener{ _,_, position, _ ->
-            val arrayNotEmpty = arrayAdapter.checkItemSelection(position)
-            binding.fabNext.visibility = if(arrayNotEmpty) View.VISIBLE else View.INVISIBLE
-            sharedViewModel.setSelectedDaysList(arrayAdapter.getSelectedDaysList())
-        }
-
-        binding.fabNext.setOnClickListener {
-            findNavController().navigate(R.id.action_specificDaysFragment_to_howManyPerDayFragment)
-        }
     }
 
     override fun onResume() {

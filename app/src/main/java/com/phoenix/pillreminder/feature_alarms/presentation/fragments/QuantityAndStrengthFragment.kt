@@ -7,7 +7,6 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.appcompat.app.AppCompatActivity
-import androidx.core.view.WindowInsetsControllerCompat
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.navigation.findNavController
@@ -18,6 +17,7 @@ import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.google.android.material.floatingactionbutton.FloatingActionButton
 import com.phoenix.pillreminder.R
 import com.phoenix.pillreminder.databinding.FragmentQuantityAndStrengthBinding
+import com.phoenix.pillreminder.feature_alarms.presentation.utils.ThemeUtils
 import com.phoenix.pillreminder.feature_alarms.presentation.viewmodels.AlarmSettingsSharedViewModel
 
 class QuantityAndStrengthFragment : Fragment() {
@@ -28,10 +28,17 @@ class QuantityAndStrengthFragment : Fragment() {
     ): View {
         binding = FragmentQuantityAndStrengthBinding.inflate(layoutInflater)
 
-        // Sets the notification bar color to blue and white text on notifications
-        requireActivity().window.statusBarColor = resources.getColor(R.color.colorPrimary, null)
-        WindowInsetsControllerCompat(requireActivity().window, requireActivity().window.decorView).isAppearanceLightStatusBars = false
-        WindowInsetsControllerCompat(requireActivity().window, requireActivity().window.decorView).isAppearanceLightNavigationBars = true
+        ThemeUtils.applyThemeBasedSystemColors(
+            requireActivity(),
+            R.color.colorPrimary,
+            R.color.white_ice,
+            R.color.grayed_blue,
+            R.color.dark_gray,
+            isAppearanceLightStatusBar = false,
+            isAppearanceLightNavigationBar = true,
+            isAppearanceLightStatusBarNightMode = false,
+            isAppearanceLightNavigationBarNightMode = false
+        )
 
         requireActivity().findViewById<BottomNavigationView>(R.id.bottom_navigation).visibility = View.GONE
         requireActivity().findViewById<View>(R.id.divider).visibility = View.GONE

@@ -20,14 +20,14 @@
             android:id="@+id/toolbarHowMany"
             android:layout_width="match_parent"
             android:layout_height="50dp"
-            android:background="@color/colorPrimary"
+            android:background="@color/toolbar"
             android:elevation="4dp" />
 
         <com.google.android.material.tabs.TabLayout
             android:id="@+id/clSecondaryToolbar"
             android:layout_width="match_parent"
             android:layout_height="100dp"
-            android:background="@color/colorPrimary"
+            android:background="@color/toolbar"
             android:contentDescription="."
             tools:ignore="HardcodedText" />
     </com.google.android.material.appbar.AppBarLayout>
@@ -51,7 +51,7 @@
         android:layout_marginTop="16dp"
         android:contentDescription="@string/how_many_do_you_take_per_day"
         android:text="@string/how_many_do_you_take_per_day"
-        android:textColor="@color/white"
+        android:textColor="?android:attr/textColorSecondary"
         android:textSize="20sp"
         android:textStyle="bold"
         app:layout_constraintStart_toStartOf="parent"

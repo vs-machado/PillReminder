@@ -3,14 +3,15 @@ package com.phoenix.pillreminder.feature_alarms.presentation.utils
 import android.content.res.Configuration
 import androidx.core.view.WindowInsetsControllerCompat
 import androidx.fragment.app.FragmentActivity
-import com.phoenix.pillreminder.R
 
 object ThemeUtils {
 
     fun applyThemeBasedSystemColors(
         activity: FragmentActivity,
         statusBarColorLightMode: Int,
-        statusbarColorDarkMode: Int,
+        navigationBarColorLightMode: Int,
+        statusBarColorNightMode: Int,
+        navigationBarColorNightMode: Int,
         isAppearanceLightStatusBar: Boolean,
         isAppearanceLightNavigationBar: Boolean,
         isAppearanceLightStatusBarNightMode: Boolean,
@@ -24,6 +25,7 @@ object ThemeUtils {
             Configuration.UI_MODE_NIGHT_NO -> {
                 // Light theme
                 activity.window.statusBarColor = activity.resources.getColor(statusBarColorLightMode, null)
+                activity.window.navigationBarColor = activity.resources.getColor(navigationBarColorLightMode, null)
                 WindowInsetsControllerCompat(activity.window, activity.window.decorView).apply {
                     isAppearanceLightStatusBars = isAppearanceLightStatusBar
                     isAppearanceLightNavigationBars = isAppearanceLightNavigationBar
@@ -31,7 +33,8 @@ object ThemeUtils {
             }
             Configuration.UI_MODE_NIGHT_YES -> {
                 // Dark theme
-                activity.window.statusBarColor = activity.resources.getColor(statusbarColorDarkMode, null)
+                activity.window.statusBarColor = activity.resources.getColor(statusBarColorNightMode, null)
+                activity.window.navigationBarColor = activity.resources.getColor(navigationBarColorNightMode, null)
                 WindowInsetsControllerCompat(activity.window, activity.window.decorView).apply {
                     isAppearanceLightStatusBars = isAppearanceLightStatusBarNightMode
                     isAppearanceLightNavigationBars = isAppearanceLightNavigationBarNightMode

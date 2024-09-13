@@ -29,12 +29,11 @@ class SpecificDaysFragment : Fragment() {
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
         binding = FragmentSpecificDaysBinding.inflate(inflater, container, false)
 
-        // Sets the notification bar color to blue and white text on notifications
-        requireActivity().window.statusBarColor = resources.getColor(R.color.colorPrimary, null)
-
         ThemeUtils.applyThemeBasedSystemColors(
             requireActivity(),
             R.color.colorPrimary,
+            R.color.white,
+            R.color.dark_gray,
             R.color.dark_gray,
             isAppearanceLightStatusBar = false,
             isAppearanceLightNavigationBar = true,

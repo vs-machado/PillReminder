@@ -72,12 +72,11 @@ class EditMedicinesFragment: Fragment() {
         val medicine = arguments?.getParcelable("edit_medicine", Medicine::class.java)
         medicine?.let { setupAdapters(it) }
 
-        // Sets the notification bar color to blue and white text on notifications
-        requireActivity().window.statusBarColor = resources.getColor(R.color.colorPrimary, null)
-
         ThemeUtils.applyThemeBasedSystemColors(
             requireActivity(),
             R.color.colorPrimary,
+            R.color.white,
+            R.color.dark_gray,
             R.color.dark_gray,
             isAppearanceLightStatusBar = false,
             isAppearanceLightNavigationBar = true,

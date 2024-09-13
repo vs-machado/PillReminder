@@ -20,14 +20,14 @@
             android:id="@+id/toolbarHowMany"
             android:layout_width="match_parent"
             android:layout_height="50dp"
-            android:background="@color/colorPrimary"
+            android:background="@color/toolbar"
             android:elevation="4dp" />
 
         <com.google.android.material.tabs.TabLayout
             android:id="@+id/clSecondaryToolbar"
             android:layout_width="match_parent"
             android:layout_height="110dp"
-            android:background="@color/colorPrimary"
+            android:background="@color/toolbar"
             android:contentDescription="."
             tools:ignore="HardcodedText" />
     </com.google.android.material.appbar.AppBarLayout>

@@ -8,6 +8,7 @@
     <color name="light_fab">#AE62B2F8</color>
     <color name="transparent_blue">#4D62B2F8</color>
     <color name="light_blue">#62B2F8</color>
+    <color name="grayed_blue">#2A4359</color>
     <color name="red">#FF0000</color>
     <color name="red_text_button">#D24141</color>
     <color name="button_gray">#747272</color>
@@ -23,9 +24,10 @@
     <color name="icon_color">@color/white</color>
     <color name="solid_selected_day">@android:color/transparent</color>
     <color name="card_view_outline">#80FFFFFF</color>
-    <color name="dark_gray">#131313</color>
+    <color name="dark_gray">#1E1F21</color>
     <color name ="thumb_checked_color">#2A4359</color>
     <color name ="thumb_unchecked_color">#E1DCE3</color>
     <color name ="track_checked_color">#364450</color>
     <color name ="track_unchecked_color">#928F9A</color>
+    <color name ="toolbar">@color/fab</color>
 </resources>

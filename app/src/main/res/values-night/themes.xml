@@ -1,7 +1,7 @@
 <resources xmlns:tools="http://schemas.android.com/tools">
     <!-- Base application theme. -->
     <style name="Base.Theme.PillReminder" parent="Theme.Material3.DayNight.NoActionBar">
-        <item name="colorPrimary">@color/ic_launcher_background</item>
+        <item name="colorPrimary">#507DA4</item>
         <item name="android:textColorPrimary">@color/white</item>
         <item name="android:textColorSecondary">@color/white</item>
         <item name="android:textColorTertiary">@color/white</item>
@@ -13,6 +13,6 @@
         <item name="android:windowBackground">@color/white_ice</item>
         <item name="android:windowLightStatusBar">false</item>
         <item name="android:windowLightNavigationBar">false</item>
-        <item name="android:colorBackground">@color/dark_gray</item>
+        <item name="android:colorBackground">#1E1F21</item>
     </style>
 </resources>

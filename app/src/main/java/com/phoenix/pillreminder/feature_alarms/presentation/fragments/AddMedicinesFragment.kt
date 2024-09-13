@@ -34,7 +34,7 @@ class AddMedicinesFragment : Fragment() {
             requireActivity(),
             R.color.colorPrimary,
             R.color.white,
-            R.color.dark_gray,
+            R.color.grayed_blue,
             R.color.dark_gray,
             isAppearanceLightStatusBar = false,
             isAppearanceLightNavigationBar = true,

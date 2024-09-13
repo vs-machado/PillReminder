@@ -8,6 +8,7 @@
     <color name="light_fab">#AE62B2F8</color>
     <color name="transparent_blue">#4D62B2F8</color>
     <color name="light_blue">#62B2F8</color>
+    <color name="grayed_blue">#2A4359</color>
     <color name="red">#FF0000</color>
     <color name="red_text_button">#D24141</color>
     <color name="button_gray">#747272</color>
@@ -23,9 +24,10 @@
     <color name="icon_color">@color/black</color>
     <color name="solid_selected_day">#6DECF3FA</color>
     <color name="card_view_outline">@color/m3_card_stroke_color</color>
-    <color name="dark_gray">#131313</color>
+    <color name="dark_gray">#1E1F21</color>
     <color name ="thumb_checked_color">@color/colorPrimary</color>
     <color name ="thumb_unchecked_color">#1C1A1F</color>
     <color name ="track_checked_color">#ECDCFF</color>
     <color name ="track_unchecked_color">#7A747E</color>
+    <color name ="toolbar">@color/colorPrimary</color>
 </resources>

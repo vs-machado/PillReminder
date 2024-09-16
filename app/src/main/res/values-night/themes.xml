@@ -13,6 +13,6 @@
         <item name="android:windowBackground">?android:attr/colorBackground</item>
         <item name="android:windowLightStatusBar">false</item>
         <item name="android:windowLightNavigationBar">false</item>
-        <item name="android:colorBackground">#1E1F21</item>
+        <item name="android:colorBackground">#16171C</item>
     </style>
 </resources>

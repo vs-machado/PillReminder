@@ -24,7 +24,8 @@
     <color name="icon_color">@color/white</color>
     <color name="solid_selected_day">@android:color/transparent</color>
     <color name="card_view_outline">#80FFFFFF</color>
-    <color name="dark_gray">#1E1F21</color>
+    <color name="card_view_background">@color/dark_gray</color>
+    <color name="dark_gray">#16171C</color>
     <color name ="thumb_checked_color">#2A4359</color>
     <color name ="thumb_unchecked_color">#E1DCE3</color>
     <color name ="track_checked_color">#364450</color>
@@ -34,4 +35,8 @@
     <color name ="array_list_background">@color/dark_gray</color>
     <color name ="array_list_text_color_selected">@color/white</color>
     <color name ="array_list_text_color_unselected">@color/white</color>
+    <color name="search_view_background">#424242</color>
+    <color name="search_icon">#E1DCE3</color>
+    <color name="ib_details">@color/white</color>
+    <color name="treatment_status">#32a608</color>
 </resources>

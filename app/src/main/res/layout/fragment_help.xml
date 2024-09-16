@@ -22,7 +22,6 @@
     <ScrollView
         android:layout_width="0dp"
         android:layout_height="0dp"
-        android:layout_marginTop="16dp"
         android:layout_marginBottom="80dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
@@ -72,7 +71,7 @@
                         android:src="@drawable/ic_keyboard_arrow_down"
                         app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintTop_toTopOf="parent"
-                        app:tint="@color/black" />
+                        app:tint="?android:attr/textColorPrimary" />
 
                     <TextView
                         android:id="@+id/tvAnswer1"
@@ -129,7 +128,7 @@
                         android:src="@drawable/ic_keyboard_arrow_down"
                         app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintTop_toTopOf="parent"
-                        app:tint="@color/black" />
+                        app:tint="?android:attr/textColorPrimary" />
 
                     <TextView
                         android:id="@+id/tvAnswer2"
@@ -186,7 +185,7 @@
                         android:src="@drawable/ic_keyboard_arrow_down"
                         app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintTop_toTopOf="parent"
-                        app:tint="@color/black" />
+                        app:tint="?android:attr/textColorPrimary" />
 
                     <TextView
                         android:id="@+id/tvAnswer3"
@@ -244,7 +243,7 @@
                         android:src="@drawable/ic_keyboard_arrow_down"
                         app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintTop_toTopOf="parent"
-                        app:tint="@color/black" />
+                        app:tint="?android:attr/textColorPrimary" />
 
                     <TextView
                         android:id="@+id/tvAnswer4"

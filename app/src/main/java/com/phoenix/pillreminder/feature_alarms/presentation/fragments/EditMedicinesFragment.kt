@@ -583,7 +583,10 @@ class EditMedicinesFragment: Fragment() {
         val arrayAdapter = DayPickerAdapter(
             requireContext(),
             list,
-            ContextCompat.getColor(requireContext(), R.color.white)
+            R.color.array_list_background_dialog,
+            R.color.array_list_text_color_unselected,
+            R.color.selected_item_array_list_dialog,
+            R.color.array_list_text_color_selected
         )
         binding.lvDayPickerDialog.adapter = arrayAdapter
 

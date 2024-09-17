@@ -32,10 +32,16 @@
     <color name ="track_checked_color">#364450</color>
     <color name ="track_unchecked_color">#928F9A</color>
     <color name ="toolbar">@color/fab</color>
-    <color name ="selected_item_array_list">@color/grayed_blue</color>
-    <color name ="array_list_background">@color/dark_gray</color>
-    <color name ="array_list_text_color_selected">@color/white</color>
-    <color name ="array_list_text_color_unselected">@color/white</color>
+    <color name ="selected_item_array_list">#2A4359</color>
+    <color name ="array_list_background">#16171C</color>
+    <color name ="array_list_text_color_selected">#FFFFFFFF</color>
+    <color name ="array_list_text_color_unselected">#FFFFFFFF</color>
     <color name="search_view_background">#424242</color>
     <color name="search_icon">#E1DCE3</color>
+
+    <color name ="selected_item_array_list_dialog">#4AC384</color>
+    <color name ="array_list_background_dialog">@color/white</color>
+    <color name ="array_list_text_color_selected_dialog">@color/white</color>
+    <color name ="array_list_text_color_unselected_dialog">@color/black</color>
+
 </resources>

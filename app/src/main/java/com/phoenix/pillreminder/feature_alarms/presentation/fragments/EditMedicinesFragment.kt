@@ -14,9 +14,7 @@ import android.view.Window
 import android.widget.ArrayAdapter
 import android.widget.TextView
 import android.widget.Toast
-import android.widget.Toolbar
 import androidx.core.content.ContextCompat
-import androidx.core.view.WindowInsetsControllerCompat
 import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.hilt.navigation.fragment.hiltNavGraphViewModels
@@ -72,25 +70,9 @@ class EditMedicinesFragment: Fragment() {
         val medicine = arguments?.getParcelable("edit_medicine", Medicine::class.java)
         medicine?.let { setupAdapters(it) }
 
-        ThemeUtils.applyThemeBasedSystemColors(
-            requireActivity(),
-            R.color.colorPrimary,
-            R.color.white_ice,
-            R.color.dark_gray,
-            R.color.dark_gray,
-            isAppearanceLightStatusBar = false,
-            isAppearanceLightNavigationBar = true,
-            isAppearanceLightStatusBarNightMode = false,
-            isAppearanceLightNavigationBarNightMode = false
-        )
-
-        requireActivity().findViewById<FloatingActionButton>(R.id.fabAddMedicine).visibility = View.GONE
-
-        val toolbar = requireActivity().findViewById<androidx.appcompat.widget.Toolbar>(R.id.toolbarHome)
-        toolbar.visibility = View.VISIBLE
-
-        val bottomNavigationView = requireActivity().findViewById<BottomNavigationView>(R.id.bottom_navigation)
-        bottomNavigationView.visibility = View.GONE
+        hideFabAndBottomNav()
+        setupViewTheme()
+        setupToolbar()
 
         return binding.root
     }
@@ -677,5 +659,36 @@ class EditMedicinesFragment: Fragment() {
     override fun onResume(){
         super.onResume()
         (activity as MainActivity).findViewById<TextView>(R.id.tvSave).visibility = View.VISIBLE
+    }
+
+    private fun setupToolbar() {
+        val navController = findNavController()
+        val appBarConfiguration = AppBarConfiguration(navController.graph)
+
+        val toolbar = requireActivity().findViewById<androidx.appcompat.widget.Toolbar>(R.id.toolbarHome)
+        toolbar.setupWithNavController(navController, appBarConfiguration)
+        toolbar.visibility = View.VISIBLE
+    }
+
+    private fun setupViewTheme(){
+        ThemeUtils.applyThemeBasedSystemColors(
+            requireActivity(),
+            R.color.colorPrimary,
+            R.color.white_ice,
+            R.color.fab,
+            R.color.dark_gray,
+            isAppearanceLightStatusBar = false,
+            isAppearanceLightNavigationBar = true,
+            isAppearanceLightStatusBarNightMode = false,
+            isAppearanceLightNavigationBarNightMode = false
+        )
+    }
+
+    private fun hideFabAndBottomNav(){
+        val fabAddMedicine = requireActivity().findViewById<FloatingActionButton>(R.id.fabAddMedicine)
+        fabAddMedicine.visibility = View.GONE
+
+        val bottomNavigationView = requireActivity().findViewById<BottomNavigationView>(R.id.bottom_navigation)
+        bottomNavigationView.visibility = View.GONE
     }
 }

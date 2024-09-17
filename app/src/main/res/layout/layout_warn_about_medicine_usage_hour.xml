@@ -60,7 +60,7 @@
                 android:layout_marginTop="24dp"
                 android:layout_marginBottom="8dp"
                 android:text="@string/mark_medicine_usage"
-                android:textColor="#d24141"
+                android:textColor="@color/dialog_text"
                 app:cornerRadius="20dp"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
@@ -74,7 +74,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="@string/skip_dose"
-                android:textColor="#d24141"
+                android:textColor="@color/dialog_text"
                 app:layout_constraintBottom_toBottomOf="@+id/btnMarkMedicineUsage"
                 app:layout_constraintEnd_toStartOf="@+id/btnMarkMedicineUsage"
                 app:layout_constraintHorizontal_bias="0.5"
@@ -93,7 +93,7 @@
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
                 app:srcCompat="@drawable/ic_alert_24"
-                app:tint="#d24141" />
+                app:tint="@color/dialog_text" />
 
 
         </androidx.constraintlayout.widget.ConstraintLayout>

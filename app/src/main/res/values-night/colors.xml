@@ -10,7 +10,9 @@
     <color name="light_blue">#62B2F8</color>
     <color name="grayed_blue">#2A4359</color>
     <color name="red">#FF0000</color>
-    <color name="red_text_button">#D24141</color>
+    <color name="dialog_text">#00d7f0</color>
+    <color name="dialog_text_blue">#00d7f0</color>
+    <color name="warning_icon_black_blue">#00d7f0</color>
     <color name="button_gray">#747272</color>
     <color name="gradient_end_color">#B4E6FF</color>
     <color name="intro_text">#333333</color>

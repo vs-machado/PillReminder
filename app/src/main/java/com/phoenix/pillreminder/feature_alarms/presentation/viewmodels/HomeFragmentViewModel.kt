@@ -72,7 +72,7 @@ class HomeFragmentViewModel @Inject constructor(
         viewModelScope.launch(Dispatchers.IO){
             repository.updateMedicine(medicine)
 
-            withContext(Dispatchers.Main){
+            withContext(Dispatchers.Default){
                 /*Checks if the alarm was already triggered. If so, there is no need to cancel the broadcast.
                 cancelAlarm() will cancel the alarm and check if there is another alarm to be scheduled*/
                 if(medicine.alarmInMillis > System.currentTimeMillis()){
@@ -82,10 +82,13 @@ class HomeFragmentViewModel @Inject constructor(
 
             val hasNextAlarm = repository.hasNextAlarmData(medicine.name, System.currentTimeMillis())
 
-            withContext(Dispatchers.Main){
+            withContext(Dispatchers.IO){
                 if(!hasNextAlarm){
                     val workRequestID = UUID.fromString(repository.getWorkerID(medicine.name))
-                    WorkManager.getInstance(appContext).cancelWorkById(workRequestID)
+
+                    withContext(Dispatchers.Main){
+                        WorkManager.getInstance(appContext).cancelWorkById(workRequestID)
+                    }
                 }
             }
         }

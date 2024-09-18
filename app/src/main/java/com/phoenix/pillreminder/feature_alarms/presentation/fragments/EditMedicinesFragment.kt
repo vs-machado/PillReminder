@@ -11,7 +11,6 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.view.Window
-import android.widget.ArrayAdapter
 import android.widget.TextView
 import android.widget.Toast
 import androidx.core.content.ContextCompat
@@ -38,6 +37,7 @@ import com.phoenix.pillreminder.feature_alarms.domain.util.MedicineFrequency
 import com.phoenix.pillreminder.feature_alarms.presentation.activities.MainActivity
 import com.phoenix.pillreminder.feature_alarms.presentation.adapter.AlarmsHourListAdapter
 import com.phoenix.pillreminder.feature_alarms.presentation.adapter.DayPickerAdapter
+import com.phoenix.pillreminder.feature_alarms.presentation.adapter.NoFilterAdapter
 import com.phoenix.pillreminder.feature_alarms.presentation.utils.DateUtil
 import com.phoenix.pillreminder.feature_alarms.presentation.utils.ThemeUtils
 import com.phoenix.pillreminder.feature_alarms.presentation.viewmodels.AlarmSettingsSharedViewModel
@@ -49,6 +49,8 @@ import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import java.util.TimeZone
 
+/* Class used to edit the medicines data. It allows the change of the medicine name,
+   form, quantity, dose unit, treatment end date, frequency and the alarms hour. */
 @AndroidEntryPoint
 class EditMedicinesFragment: Fragment() {
     private lateinit var binding: FragmentEditMedicinesBinding
@@ -59,7 +61,6 @@ class EditMedicinesFragment: Fragment() {
     private var alarmHourList: List<AlarmHour>? = null
     private lateinit var millisList: List<Long>
     private var endDateMillis: Long = 0L
-
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -241,6 +242,7 @@ class EditMedicinesFragment: Fragment() {
         binding.acTvMedicineFrequency.setOnItemClickListener { parent, _, position, _ ->
             val selectedItem = parent.getItemAtPosition(position).toString()
 
+            // Shows a dialog allowing the user to set a custom interval
             medicine?.let{
                 when(selectedItem){
                     context?.getString(R.string.specific_days_of_the_week) -> { showSpecificDaysDialog() }
@@ -599,11 +601,11 @@ class EditMedicinesFragment: Fragment() {
 
     private fun setupAdapters(medicine: Medicine){
         val medicineForms = resources.getStringArray(R.array.medicine_forms)
-        val formsArrayAdapter = ArrayAdapter(requireContext(), R.layout.dropdown_item, medicineForms)
+        val formsArrayAdapter = NoFilterAdapter(requireContext(), R.layout.dropdown_item, medicineForms)
         binding.acTvMedicineForm.setAdapter(formsArrayAdapter)
 
         val medicineFrequencies = resources.getStringArray(R.array.medicine_frequency)
-        val frequenciesArrayAdapter = ArrayAdapter(requireContext(), R.layout.dropdown_item, medicineFrequencies)
+        val frequenciesArrayAdapter = NoFilterAdapter(requireContext(), R.layout.dropdown_item, medicineFrequencies)
         binding.acTvMedicineFrequency.setAdapter(frequenciesArrayAdapter)
 
         when(medicine.form){
@@ -631,7 +633,7 @@ class EditMedicinesFragment: Fragment() {
         when(form){
             "injection" -> {
                 val doseUnit = resources.getStringArray(R.array.units_injection)
-                val formsArrayAdapter = ArrayAdapter(requireContext(), R.layout.dropdown_item, doseUnit)
+                val formsArrayAdapter = NoFilterAdapter(requireContext(), R.layout.dropdown_item, doseUnit)
                 binding.acTvDoseUnit.setAdapter(formsArrayAdapter)
                 when(medicine.unit){
                     "mL" -> binding.acTvDoseUnit.setText(getString(R.string.mL), false)
@@ -640,7 +642,7 @@ class EditMedicinesFragment: Fragment() {
             }
             "inhaler" -> {
                 val doseUnit = resources.getStringArray(R.array.units_inhaler)
-                val formsArrayAdapter = ArrayAdapter(requireContext(), R.layout.dropdown_item, doseUnit)
+                val formsArrayAdapter = NoFilterAdapter(requireContext(), R.layout.dropdown_item, doseUnit)
                 binding.acTvDoseUnit.setAdapter(formsArrayAdapter)
                 when(medicine.unit){
                     "mg" -> binding.acTvDoseUnit.setText(getString(R.string.mgs), false)

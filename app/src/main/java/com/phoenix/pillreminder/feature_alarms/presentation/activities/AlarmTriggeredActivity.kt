@@ -37,7 +37,7 @@ class AlarmTriggeredActivity: AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         binding = ActivityAlarmTriggeredBinding.inflate(layoutInflater)
         super.onCreate(savedInstanceState)
-        AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO)
+        AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_FOLLOW_SYSTEM)
         setContentView(binding.root)
 
         setupNotificationAndStatusBar()

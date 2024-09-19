@@ -18,6 +18,7 @@ import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.google.android.material.floatingactionbutton.FloatingActionButton
 import com.phoenix.pillreminder.R
 import com.phoenix.pillreminder.databinding.FragmentAlarmHourBinding
+import com.phoenix.pillreminder.feature_alarms.presentation.OnOneOffFabClickListener
 import com.phoenix.pillreminder.feature_alarms.presentation.utils.ThemeUtils
 import com.phoenix.pillreminder.feature_alarms.presentation.viewmodels.AlarmHourViewModel
 import com.phoenix.pillreminder.feature_alarms.presentation.viewmodels.AlarmSettingsSharedViewModel
@@ -92,17 +93,21 @@ class AlarmHourFragment : Fragment() {
                     saveAlarmHour(position, hourOfDay, minute)
                 }
 
-                //Asks the user the next alarm hour
-                fabNext.setOnClickListener {
-                    sharedViewModel.position++
-                    updateCurrentAlarmNumber()
+                // Asks the user the next alarm hour. The custom click listener is used to prevent fast tapping.
+                // Fast tapping can break the quantity of alarms being set.
+                fabNext.setOnClickListener(object: OnOneOffFabClickListener() {
 
-                    if (currentAlarmNumber.value!! > getAlarmsPerDay()) {
-                        //Clear the remaining positions of the alarm array
-                        clearRemainingAlarmArrayPositions()
-                        findNavController().navigate(R.id.action_alarmHourFragment_to_treatmentDurationFragment)
+                    override fun onSingleClick(fab: FloatingActionButton) {
+                        sharedViewModel.position++
+                        updateCurrentAlarmNumber()
+
+                        if (currentAlarmNumber.value!! > getAlarmsPerDay()) {
+                            //Clear the remaining positions of the alarm array
+                            clearRemainingAlarmArrayPositions()
+                            findNavController().navigate(R.id.action_alarmHourFragment_to_treatmentDurationFragment)
+                        }
                     }
-                }
+                })
             }
         }
     }

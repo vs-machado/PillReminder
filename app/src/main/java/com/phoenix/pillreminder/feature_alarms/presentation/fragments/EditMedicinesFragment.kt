@@ -113,6 +113,11 @@ class EditMedicinesFragment: Fragment() {
                     }
                 }
 
+                if(!editMedicinesViewModel.isInitialized.value) {
+                    initializeViewModelData(medicine)
+                    editMedicinesViewModel.setInitialized()
+                }
+
                 // Fill the text inputs with the medicine data
                 viewLifecycleOwner.lifecycleScope.launch(Dispatchers.Main){
                     initRecyclerView(medicine)
@@ -128,13 +133,6 @@ class EditMedicinesFragment: Fragment() {
                 tietQuantity.setText(medicine.quantity.toString())
                 tvQuantityAlarms.text = context?.getString(R.string.alarms_per_day_details, medicine.alarmsPerDay)
                 tietStartDate.setText(startDate)
-
-                alarmSettingsSharedViewModel.setInterval(medicine.interval.toInt())
-                alarmSettingsSharedViewModel.setTreatmentStartDate(medicine.startDate)
-                alarmSettingsSharedViewModel.setTreatmentEndDate(medicine.endDate)
-                alarmSettingsSharedViewModel.setDoseUnit(medicine.unit)
-                alarmSettingsSharedViewModel.setMedicineForm(medicine.form)
-
 
                 if(medicine.medicinePeriodSet){
                     tietEndDate.setText(endDate)
@@ -693,5 +691,14 @@ class EditMedicinesFragment: Fragment() {
 
         val bottomNavigationView = requireActivity().findViewById<BottomNavigationView>(R.id.bottom_navigation)
         bottomNavigationView.visibility = View.GONE
+    }
+
+    private fun initializeViewModelData(medicine: Medicine) {
+        Log.d("debug", "initialize")
+        alarmSettingsSharedViewModel.setInterval(medicine.interval.toInt())
+        alarmSettingsSharedViewModel.setTreatmentStartDate(medicine.startDate)
+        alarmSettingsSharedViewModel.setTreatmentEndDate(medicine.endDate)
+        alarmSettingsSharedViewModel.setDoseUnit(medicine.unit)
+        alarmSettingsSharedViewModel.setMedicineForm(medicine.form)
     }
 }

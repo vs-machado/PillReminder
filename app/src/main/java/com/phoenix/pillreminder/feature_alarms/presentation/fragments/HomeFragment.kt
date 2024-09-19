@@ -233,6 +233,14 @@ class HomeFragment: Fragment() {
                 displayMedicinesList(hfViewModel.getDate())
             },
             goToEditMedicines = { selectedMedicine ->
+                if (!selectedMedicine.isActive) {
+                    Toast.makeText(
+                        requireContext(),
+                        requireContext().getString(R.string.cannot_edit_finished_treatment),
+                        Toast.LENGTH_LONG
+                    ).show()
+                    return@RvMedicinesListAdapter
+                }
                 val action = HomeFragmentDirections.actionHomeFragmentToEditMedicinesFragment(selectedMedicine)
                 findNavController().navigate(action)
             },

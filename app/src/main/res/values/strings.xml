@@ -226,6 +226,7 @@
     <string name="ongoing_treatments">Ongoing treatments</string>
     <string name="ended_treatments">Ended treatments</string>
     <string name="filter">Filter</string>
+    <string name="cannot_edit_finished_treatment">You can\'t edit a finished treatment</string>
 
     <string name="quantity_syringe">Quantity: %1$d syringe(s)</string>
 

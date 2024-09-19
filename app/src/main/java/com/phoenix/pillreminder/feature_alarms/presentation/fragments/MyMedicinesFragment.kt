@@ -17,6 +17,7 @@ import com.phoenix.pillreminder.R
 import com.phoenix.pillreminder.databinding.FragmentMyMedicinesBinding
 import com.phoenix.pillreminder.feature_alarms.domain.model.Medicine
 import com.phoenix.pillreminder.feature_alarms.presentation.adapter.MedicinesDataAdapter
+import com.phoenix.pillreminder.feature_alarms.presentation.utils.ThemeUtils
 import com.phoenix.pillreminder.feature_alarms.presentation.viewmodels.MedicinesViewModel
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.Dispatchers
@@ -110,5 +111,21 @@ class MyMedicinesFragment : Fragment() {
 
     private fun applyFilters(){
         adapter.setAlarmsAndList(medicines, filterString, filterOptions)
+    }
+
+
+    override fun onResume() {
+        super.onResume()
+        ThemeUtils.applyThemeBasedSystemColors(
+            requireActivity(),
+            R.color.white_ice,
+            R.color.white_ice,
+            R.color.dark_gray,
+            R.color.dark_gray,
+            isAppearanceLightStatusBar = true,
+            isAppearanceLightNavigationBar = true,
+            isAppearanceLightStatusBarNightMode = false,
+            isAppearanceLightNavigationBarNightMode = false
+        )
     }
 }

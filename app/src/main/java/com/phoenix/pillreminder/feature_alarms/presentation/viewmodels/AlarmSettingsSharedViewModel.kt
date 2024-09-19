@@ -437,7 +437,6 @@ class AlarmSettingsSharedViewModel @Inject constructor(
                         alarmHour = "${getAlarmHour(i)}",
                         alarmMinute = "${getAlarmMinute(i)}"
                     )
-                    Log.d("alarmItem", "viewmodel alarmitem: $alarmItem")
 
                     // It schedules only the first alarm. The next alarm will be set when the first alarm is triggered.
                     if (!alarmScheduled){
@@ -473,8 +472,6 @@ class AlarmSettingsSharedViewModel @Inject constructor(
                     alarmHour = "${getAlarmHour(i)}",
                     alarmMinute = "${getAlarmMinute(i)}"
                 )
-
-                Log.d("alarmItem", "viewmodel alarmitem: $alarmItem")
 
                 if(!alarmScheduled){
                     alarmItem.let(alarmScheduler::scheduleAlarm)

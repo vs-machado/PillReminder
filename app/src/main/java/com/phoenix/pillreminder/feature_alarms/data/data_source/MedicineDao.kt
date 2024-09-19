@@ -49,11 +49,11 @@ interface MedicineDao {
     @Query("SELECT DISTINCT alarm_in_millis FROM medicines_data_table WHERE " +
             "name = :medicineName AND last_edited = (" +
             "    SELECT MAX(last_edited) FROM medicines_data_table " +
-            "    WHERE name = :medicineName" +
+            "    WHERE name = :medicineName AND treatment_id = :treatmentID" +
             ") AND is_active = true " +
             "ORDER BY alarm_in_millis ASC " +
             "LIMIT :alarmsPerDay")
-    suspend fun getDailyAlarms(medicineName: String, alarmsPerDay: Int): List<Long>
+    suspend fun getDailyAlarms(medicineName: String, alarmsPerDay: Int, treatmentID: String): List<Long>
 
     @Query("SELECT last_edited FROM medicines_data_table " +
             "WHERE name = :medicineName AND is_active = true ORDER BY last_edited DESC LIMIT 1")

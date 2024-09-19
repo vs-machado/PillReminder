@@ -53,7 +53,6 @@ class AlarmTriggeredActivity: AppCompatActivity() {
             }else{
                 intent?.getParcelableExtra("ALARM_ITEM")
             }
-            Log.d("alarmItem", "alarmtriggeredactivity: $alarmItem")
 
             viewModel.apply{
                 alarmItem?.apply{

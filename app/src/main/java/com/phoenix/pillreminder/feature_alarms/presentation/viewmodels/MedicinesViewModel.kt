@@ -1,5 +1,6 @@
 package com.phoenix.pillreminder.feature_alarms.presentation.viewmodels
 
+import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
@@ -11,6 +12,7 @@ import com.phoenix.pillreminder.feature_alarms.domain.repository.MedicineReposit
 import com.phoenix.pillreminder.feature_alarms.presentation.AlarmScheduler
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.Job
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import java.time.Instant
@@ -142,9 +144,9 @@ class MedicinesViewModel @Inject constructor(
         }
     }
 
-    suspend fun getMillisList(medicineName: String, alarmsPerDay: Int): List<Long>{
+    suspend fun getMillisList(medicineName: String, alarmsPerDay: Int, treatmentID: String): List<Long>{
         return withContext(Dispatchers.IO){
-            medicineRepository.getDailyAlarms(medicineName, alarmsPerDay)
+            medicineRepository.getDailyAlarms(medicineName, alarmsPerDay, treatmentID)
         }
     }
 

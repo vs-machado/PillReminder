@@ -25,7 +25,7 @@ interface MedicineRepository {
 
     fun getAllMedicines(): LiveData<List<Medicine>>
 
-    suspend fun getDailyAlarms(medicineName: String, alarmsPerDay: Int): List<Long>
+    suspend fun getDailyAlarms(medicineName: String, alarmsPerDay: Int, treatmentID: String): List<Long>
 
     suspend fun getMedicineEditTimestamp(medicineName: String): Long
 

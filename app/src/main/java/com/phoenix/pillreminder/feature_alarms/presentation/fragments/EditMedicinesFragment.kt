@@ -16,6 +16,7 @@ import android.widget.Toast
 import androidx.core.content.ContextCompat
 import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.viewModels
 import androidx.hilt.navigation.fragment.hiltNavGraphViewModels
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
@@ -439,7 +440,7 @@ class EditMedicinesFragment: Fragment() {
         binding.rvAlarmsHour.adapter = adapter
 
         withContext(Dispatchers.IO){
-            millisList = medicinesViewModel.getMillisList(medicine.name, medicine.alarmsPerDay)
+            millisList = medicinesViewModel.getMillisList(medicine.name, medicine.alarmsPerDay, medicine.treatmentID)
 
             // Formats the hours to 12 or 24 hours format.
             alarmHourList = editMedicinesViewModel.convertMillisToAlarmHourList(requireContext(), millisList)

@@ -223,18 +223,48 @@ class EditMedicinesFragment: Fragment() {
                 val selectedItem = parent.getItemAtPosition(position).toString()
                 tietQuantity.isEnabled = true
 
-                when(selectedItem){
-                    context?.getString(R.string.pomade) -> {
-                        tietQuantity.isEnabled = false
-                        tietQuantity.setText("1")
-                        tvStrength.text = ""
+                medicine?.let { medicine -> // still needs to make tvstrength visible in the remain medicine forms and set the tildoseunit field
+                    when(selectedItem){
+                        context?.getString(R.string.pomade) -> {
+                            tietQuantity.isEnabled = false
+                            tietQuantity.setText("1")
+                            tvStrength.text = ""
+                            tvStrengthVisible()
+                        }
+                        context?.getString(R.string.pill) -> {
+                            tvStrengthVisible()
+                            tvStrength.text = context?.getString(R.string.pills)
+                        }
+                        context?.getString(R.string.Drops) -> {
+                            tvStrengthVisible()
+                            tvStrength.text = context?.getString(R.string.drops)
+                        }
+                        context?.getString(R.string.injection) ->{
+                            tilDoseUnitVisible(medicine, "injection")
+                            when(medicine.unit){
+                                "mL" -> acTvDoseUnit.setText(context?.getString(R.string.mls), false)
+                                "syringe" -> acTvDoseUnit.setText(context?.getString(R.string.syringe), false)
+                                else -> acTvDoseUnit.setText(context?.getString(R.string.mls), false)
+                            }
+                        }
+                        context?.getString(R.string.liquid) -> {
+                            tvStrengthVisible()
+                            tvStrength.text = context?.getString(R.string.mls)
+                        }
+                        context?.getString(R.string.inhaler) -> {
+                            tilDoseUnitVisible(medicine, "inhaler")
+                            when(medicine.unit) {
+                                "mg" -> acTvDoseUnit.setText(context?.getString(R.string.mg), false)
+                                "puff" ->  acTvDoseUnit.setText(context?.getString(R.string.puff), false)
+                                "mL" -> acTvDoseUnit.setText(context?.getString(R.string.mls), false)
+                                else -> {
+                                    acTvDoseUnit.setText(context?.getString(R.string.mls), false)
+                                }
+                            }
+                        }
                     }
-                    context?.getString(R.string.pill) -> tvStrength.text = context?.getString(R.string.pills)
-                    context?.getString(R.string.Drops) -> tvStrength.text = context?.getString(R.string.drops)
-                    context?.getString(R.string.injection) -> tvStrength.text = context?.getString(R.string.mls)
-                    context?.getString(R.string.liquid) -> tvStrength.text = context?.getString(R.string.mls)
-                    context?.getString(R.string.inhaler) -> tvStrength.text = context?.getString(R.string.mgs)
                 }
+
             }
         }
 
@@ -694,7 +724,6 @@ class EditMedicinesFragment: Fragment() {
     }
 
     private fun initializeViewModelData(medicine: Medicine) {
-        Log.d("debug", "initialize")
         alarmSettingsSharedViewModel.setInterval(medicine.interval.toInt())
         alarmSettingsSharedViewModel.setTreatmentStartDate(medicine.startDate)
         alarmSettingsSharedViewModel.setTreatmentEndDate(medicine.endDate)

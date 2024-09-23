@@ -35,6 +35,9 @@ interface MedicineDao {
     @Delete
     suspend fun deleteAllSelectedMedicines(medicines: List<Medicine>)
 
+    @Query("SELECT selected_days_of_week FROM medicines_data_table WHERE name = :medicineName AND treatment_id = :treatmentID")
+    suspend fun getSelectedDaysList(medicineName: String, treatmentID: String): String
+
     @Query("SELECT * FROM medicines_data_table WHERE name = :medicineName AND alarm_in_millis > :millis ORDER BY alarm_in_millis ASC")
     suspend fun getAlarmsAfterProvidedMillis(medicineName: String, millis: Long): List<Medicine>
 

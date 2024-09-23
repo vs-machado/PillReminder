@@ -28,6 +28,13 @@ class MedicineRepositoryImpl (
         dao.updateExpiredMedicines(treatmentID, name, quantity, form, endDate, frequency, currentTime)
     }
 
+    override suspend fun getSelectedDaysList(
+        medicineName: String,
+        treatmentID: String
+    ): String {
+        return dao.getSelectedDaysList(medicineName, treatmentID)
+    }
+
     override suspend fun deleteMedicine(medicine: Medicine) {
         dao.deleteMedicine(medicine)
     }

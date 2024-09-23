@@ -17,6 +17,8 @@ interface MedicineRepository {
 
     suspend fun deleteAllSelectedMedicines(medicines: List<Medicine>)
 
+    suspend fun getSelectedDaysList(medicineName: String, treatmentID: String): String
+
     suspend fun deleteUpcomingAlarms(medicineName: String, currentTimeMillis: Long)
 
     suspend fun getAlarmsAfterProvidedMillis(medicineName: String, millis: Long): List<Medicine>

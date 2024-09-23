@@ -13,6 +13,7 @@ import com.phoenix.pillreminder.feature_alarms.presentation.AlarmScheduler
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
+import kotlinx.coroutines.async
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import java.time.Instant
@@ -115,6 +116,12 @@ class MedicinesViewModel @Inject constructor(
         }
     }
 
+    suspend fun getSelectedDaysList(medicineName: String, treatmentID: String): MutableSet<Int> {
+        return withContext(Dispatchers.IO) {
+            val daysString = medicineRepository.getSelectedDaysList(medicineName, treatmentID)
+            daysString.split(",").mapNotNull { it.toIntOrNull() }.toMutableSet()
+        }
+    }
     fun removeRemainingAlarms(medicine: Medicine) = viewModelScope.launch {
         withContext(Dispatchers.IO){
             val medicinesToDelete = medicineRepository.getAlarmsAfterProvidedMillis(medicine.name, System.currentTimeMillis())

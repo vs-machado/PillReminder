@@ -62,6 +62,7 @@ class EditMedicinesFragment: Fragment() {
     private var alarmHourList: List<AlarmHour>? = null
     private lateinit var millisList: List<Long>
     private var endDateMillis: Long = 0L
+    private var userSelectedDaysOfWeek: Boolean = false
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -317,6 +318,14 @@ class EditMedicinesFragment: Fragment() {
                 setMedicineQuantity(quantity)
                 setNumberOfAlarms(alarmsPerDay!!)
                 setTreatmentID(medicine.treatmentID)
+
+                // When user does not select the days of week in EditMedicinesFragment the days of week must be queried from the database
+                if(medicine.selectedDaysOfWeek != null && !userSelectedDaysOfWeek) {
+                    viewLifecycleOwner.lifecycleScope.launch {
+                        val list = medicinesViewModel.getSelectedDaysList(medicine.name, medicine.treatmentID)
+                        alarmSettingsSharedViewModel.setSelectedDaysList(list)
+                    }
+                }
 
                 when(inputFrequency){
                     context?.getString(R.string.every_day) -> setMedicineFrequency(MedicineFrequency.EveryDay)
@@ -611,6 +620,7 @@ class EditMedicinesFragment: Fragment() {
         binding.btnOkEveryDialog.setOnClickListener {
             if(arrayNotEmpty) {
                 alarmSettingsSharedViewModel.setSelectedDaysList(arrayAdapter.getSelectedDaysList())
+                userSelectedDaysOfWeek = true // flag used to prevent database query in tvSave click listener
                 dialog.dismiss()
             } else {
                 Toast.makeText(

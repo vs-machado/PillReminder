@@ -129,4 +129,8 @@ class MedicineRepositoryImpl (
     override suspend fun getAlarmTimesForMedicine(medicineName: String, cutoffTime: Long, treatmentID: String): List<String>{
         return dao.getAlarmTimesForMedicine(medicineName, cutoffTime, treatmentID)
     }
+
+    override suspend fun getLastAlarm(medicineName: String, treatmentID: String): Medicine {
+        return dao.getLastAlarm(medicineName, treatmentID)
+    }
 }

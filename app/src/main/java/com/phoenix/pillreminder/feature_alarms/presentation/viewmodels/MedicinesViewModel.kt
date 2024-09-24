@@ -178,4 +178,10 @@ class MedicinesViewModel @Inject constructor(
         }
     }
 
+    suspend fun getLastAlarm(medicineName: String, treatmentID: String): Medicine {
+        return withContext(Dispatchers.IO){
+            medicineRepository.getLastAlarm(medicineName, treatmentID)
+        }
+    }
+
 }

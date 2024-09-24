@@ -59,7 +59,7 @@ interface MedicineDao {
     suspend fun getDailyAlarms(medicineName: String, alarmsPerDay: Int, treatmentID: String): List<Long>
 
     @Query("SELECT last_edited FROM medicines_data_table " +
-            "WHERE name = :medicineName AND is_active = true ORDER BY last_edited DESC LIMIT 1")
+            "WHERE name = :medicineName  ORDER BY last_edited DESC LIMIT 1")
     suspend fun getMedicineEditTimestamp(medicineName: String): Long
 
     @Query("SELECT *" +
@@ -146,7 +146,7 @@ interface MedicineDao {
     """)
     suspend fun getAlarmTimesForMedicine(medicineName: String, cutoffTime: Long, treatmentID: String): List<String>
 
-    @Query("SELECT * FROM medicines_data_table WHERE name = :medicineName AND treatment_id = :treatmentID AND is_active = true ORDER BY alarm_in_millis DESC LIMIT 1")
+    @Query("SELECT * FROM medicines_data_table WHERE name = :medicineName AND treatment_id = :treatmentID ORDER BY alarm_in_millis DESC LIMIT 1")
     suspend fun getLastAlarm(medicineName: String, treatmentID: String): Medicine
 
 }

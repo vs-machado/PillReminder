@@ -84,7 +84,7 @@ class AlarmSettingsSharedViewModel @Inject constructor(
     private lateinit var workRequestID: UUID
 
     init{
-        _currentAlarmNumber.value = 1
+        _currentAlarmNumber.postValue(1)
     }
 
     // Used with medicine frequency every day or every other day with treatment period set.
@@ -669,6 +669,7 @@ class AlarmSettingsSharedViewModel @Inject constructor(
             withContext(Dispatchers.Default){
                 if(!hasNextAlarm && workerID != "noID"){
                     workManager.cancelWorkById(workRequestID)
+                    Log.d("debug", "cancel work")
                 }
             }
         }

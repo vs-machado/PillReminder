@@ -233,16 +233,23 @@ class HomeFragment: Fragment() {
                 displayMedicinesList(hfViewModel.getDate())
             },
             goToEditMedicines = { selectedMedicine ->
-                if (!selectedMedicine.isActive) {
-                    Toast.makeText(
-                        requireContext(),
-                        requireContext().getString(R.string.cannot_edit_finished_treatment),
-                        Toast.LENGTH_LONG
-                    ).show()
-                    return@RvMedicinesListAdapter
+                viewLifecycleOwner.lifecycleScope.launch(Dispatchers.IO) {
+                    val lastAlarm = medicinesViewModel.getLastAlarm(selectedMedicine.name, selectedMedicine.treatmentID)
+
+                    withContext(Dispatchers.Main){
+                        if (!lastAlarm.isActive) {
+                            Toast.makeText(
+                                requireContext(),
+                                requireContext().getString(R.string.cannot_edit_finished_treatment),
+                                Toast.LENGTH_LONG
+                            ).show()
+                            return@withContext
+                        }
+                        val action = HomeFragmentDirections.actionHomeFragmentToEditMedicinesFragment(lastAlarm)
+                        findNavController().navigate(action)
+                    }
                 }
-                val action = HomeFragmentDirections.actionHomeFragmentToEditMedicinesFragment(selectedMedicine)
-                findNavController().navigate(action)
+
             },
             showEndTreatmentDialog = { selectedMedicine ->
                 showEndTreatmentDialog(selectedMedicine)

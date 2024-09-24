@@ -54,4 +54,6 @@ interface MedicineRepository {
     fun getLastAlarmFromAllDistinctMedicines(): List<Medicine>
 
     suspend fun getAlarmTimesForMedicine(medicineName: String, cutoffTime: Long, treatmentID: String): List<String>
+
+    suspend fun getLastAlarm(medicineName: String, treatmentID: String): Medicine
 }

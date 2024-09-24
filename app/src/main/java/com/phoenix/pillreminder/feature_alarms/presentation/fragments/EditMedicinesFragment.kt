@@ -220,52 +220,14 @@ class EditMedicinesFragment: Fragment() {
                 "EveryXMonths" -> acTvMedicineFrequency.setText(context?.getString(R.string.every_x_months), false)
             }
 
+            // tvStrength or acTvDoseUnit will be visible depending on medicine form selected by user
             acTvMedicineForm.setOnItemClickListener { parent, _, position, _ ->
                 val selectedItem = parent.getItemAtPosition(position).toString()
                 tietQuantity.isEnabled = true
 
-                medicine?.let { medicine -> // still needs to make tvstrength visible in the remain medicine forms and set the tildoseunit field
-                    when(selectedItem){
-                        context?.getString(R.string.pomade) -> {
-                            tietQuantity.isEnabled = false
-                            tietQuantity.setText("1")
-                            tvStrength.text = ""
-                            tvStrengthVisible()
-                        }
-                        context?.getString(R.string.pill) -> {
-                            tvStrengthVisible()
-                            tvStrength.text = context?.getString(R.string.pills)
-                        }
-                        context?.getString(R.string.Drops) -> {
-                            tvStrengthVisible()
-                            tvStrength.text = context?.getString(R.string.drops)
-                        }
-                        context?.getString(R.string.injection) ->{
-                            tilDoseUnitVisible(medicine, "injection")
-                            when(medicine.unit){
-                                "mL" -> acTvDoseUnit.setText(context?.getString(R.string.mls), false)
-                                "syringe" -> acTvDoseUnit.setText(context?.getString(R.string.syringe), false)
-                                else -> acTvDoseUnit.setText(context?.getString(R.string.mls), false)
-                            }
-                        }
-                        context?.getString(R.string.liquid) -> {
-                            tvStrengthVisible()
-                            tvStrength.text = context?.getString(R.string.mls)
-                        }
-                        context?.getString(R.string.inhaler) -> {
-                            tilDoseUnitVisible(medicine, "inhaler")
-                            when(medicine.unit) {
-                                "mg" -> acTvDoseUnit.setText(context?.getString(R.string.mg), false)
-                                "puff" ->  acTvDoseUnit.setText(context?.getString(R.string.puff), false)
-                                "mL" -> acTvDoseUnit.setText(context?.getString(R.string.mls), false)
-                                else -> {
-                                    acTvDoseUnit.setText(context?.getString(R.string.mls), false)
-                                }
-                            }
-                        }
-                    }
+                medicine?.let { medicine ->
+                    setDoseVisibility(medicine, selectedItem)
                 }
-
             }
         }
 
@@ -299,11 +261,25 @@ class EditMedicinesFragment: Fragment() {
                 else -> throw IllegalArgumentException("Invalid argument")
             }
 
-            if(binding.acTvDoseUnit.isVisible){
-                doseUnit = binding.acTvDoseUnit.text.toString()
-            } else {
-                if (medicine != null) {
-                    doseUnit = medicine.unit
+            if(binding.tilDoseUnit.visibility == View.VISIBLE){
+                val unitField = binding.acTvDoseUnit.text.toString()
+                doseUnit = when(unitField){
+                    requireContext().getString(R.string.mls) -> "mL"
+                    requireContext().getString(R.string.mg) -> "mg"
+                    requireContext().getString(R.string.syringe) -> "syringe"
+                    requireContext().getString(R.string.puff) -> "puff"
+                    else -> throw Exception("Invalid dose unit")
+                }
+            }
+
+            if(binding.tvStrength.visibility == View.VISIBLE) {
+                val formField = binding.acTvMedicineForm.text.toString()
+                doseUnit = when(formField){
+                    requireContext().getString(R.string.pill) -> "pill"
+                    requireContext().getString(R.string.Drops) -> "drop" //
+                    requireContext().getString(R.string.pomade) -> "application"
+                    requireContext().getString(R.string.liquid) -> "mL"
+                    else -> throw Exception("Invalid medicine form")
                 }
             }
 
@@ -656,17 +632,15 @@ class EditMedicinesFragment: Fragment() {
             "inhaler" -> tilDoseUnitVisible(medicine, "inhaler")
         }
 
-        val tvstrengthtext = binding.tvStrength.text.toString()
-        Log.d("tvstrength", tvstrengthtext)
     }
 
     private fun tvStrengthVisible(){
         binding.tvStrength.visibility = View.VISIBLE
-        binding.tilDoseUnit.visibility = View.INVISIBLE
+        binding.tilDoseUnit.visibility = View.GONE
     }
 
     private fun tilDoseUnitVisible(medicine: Medicine, form: String) {
-        binding.tvStrength.visibility = View.INVISIBLE
+        binding.tvStrength.visibility = View.GONE
         binding.tilDoseUnit.visibility = View.VISIBLE
 
         when(form){
@@ -739,5 +713,49 @@ class EditMedicinesFragment: Fragment() {
         alarmSettingsSharedViewModel.setTreatmentEndDate(medicine.endDate)
         alarmSettingsSharedViewModel.setDoseUnit(medicine.unit)
         alarmSettingsSharedViewModel.setMedicineForm(medicine.form)
+    }
+
+    private fun setDoseVisibility(medicine: Medicine, medicineForm: String) {
+        binding.apply{
+            when(medicineForm){
+                context?.getString(R.string.pomade) -> {
+                    tietQuantity.isEnabled = false
+                    tietQuantity.setText("1")
+                    tvStrength.text = ""
+                    tvStrengthVisible()
+                }
+                context?.getString(R.string.pill) -> {
+                    tvStrengthVisible()
+                    tvStrength.text = context?.getString(R.string.pills)
+                }
+                context?.getString(R.string.Drops) -> {
+                    tvStrengthVisible()
+                    tvStrength.text = context?.getString(R.string.drops)
+                }
+                context?.getString(R.string.injection) ->{
+                    tilDoseUnitVisible(medicine, "injection")
+                    when(medicine.unit){
+                        "mL" -> acTvDoseUnit.setText(context?.getString(R.string.mls), false)
+                        "syringe" -> acTvDoseUnit.setText(context?.getString(R.string.syringe), false)
+                        else -> acTvDoseUnit.setText(context?.getString(R.string.mls), false)
+                    }
+                }
+                context?.getString(R.string.liquid) -> {
+                    tvStrengthVisible()
+                    tvStrength.text = context?.getString(R.string.mls)
+                }
+                context?.getString(R.string.inhaler) -> {
+                    tilDoseUnitVisible(medicine, "inhaler")
+                    when(medicine.unit) {
+                        "mg" -> acTvDoseUnit.setText(context?.getString(R.string.mg), false)
+                        "puff" ->  acTvDoseUnit.setText(context?.getString(R.string.puff), false)
+                        "mL" -> acTvDoseUnit.setText(context?.getString(R.string.mls), false)
+                        else -> {
+                            acTvDoseUnit.setText(context?.getString(R.string.mls), false)
+                        }
+                    }
+                }
+            }
+        }
     }
 }

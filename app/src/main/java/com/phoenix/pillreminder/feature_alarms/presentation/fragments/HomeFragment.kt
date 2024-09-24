@@ -434,6 +434,7 @@ class HomeFragment: Fragment() {
         binding.btnEndTreatment.setOnClickListener {
             viewLifecycleOwner.lifecycleScope.launch(Dispatchers.Main){
                 medicinesViewModel.endTreatment(medicine).join()
+                sharedViewModel.cancelWork(medicine)
                 displayMedicinesList(hfViewModel.getDate())
                 dialog.dismiss()
             }

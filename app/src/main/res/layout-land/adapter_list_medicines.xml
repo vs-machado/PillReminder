@@ -75,16 +75,25 @@
                 app:layout_constraintStart_toEndOf="@+id/ivMedicineType"
                 app:layout_constraintTop_toBottomOf="@+id/tvMedicineName" />
 
-            <ImageView
-                android:id="@+id/ivMenu"
-                android:layout_width="24dp"
-                android:layout_height="24dp"
-                android:layout_marginEnd="10dp"
-                app:tint="?android:attr/textColorPrimary"
-                android:contentDescription="@string/menu_with_medicine_options"
+            <FrameLayout
+                android:id="@+id/frameLayout"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="-10dp"
+                android:padding="10dp"
                 app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintTop_toTopOf="@+id/tvMedicineName"
-                app:srcCompat="@drawable/ic_more_vert" />
+                app:layout_constraintTop_toTopOf="parent">
+
+                <ImageView
+                    android:id="@+id/ivMenu"
+                    android:layout_width="24dp"
+                    android:layout_height="24dp"
+                    android:layout_marginEnd="4dp"
+                    android:contentDescription="@string/menu_with_medicine_options"
+                    app:srcCompat="@drawable/ic_more_vert"
+                    app:tint="?android:attr/textColorPrimary" />
+
+            </FrameLayout>
 
             <TextView
                 android:id="@+id/tvMedicineTaken"

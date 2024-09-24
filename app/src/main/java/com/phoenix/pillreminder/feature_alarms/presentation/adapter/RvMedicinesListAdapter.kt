@@ -184,7 +184,7 @@ class MyViewHolder(private val medicinesBinding: AdapterListMedicinesBinding):Re
 
             }
 
-           ivMenu.setOnClickListener {
+           frameLayout?.setOnClickListener {
                val popup = PopupMenu(context, ivMenu)
                popup.inflate(R.menu.options_menu)
 

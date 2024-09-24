@@ -22,7 +22,7 @@
                 style="@style/ToolbarTitleTheme"
                 android:layout_width="match_parent"
                 android:layout_height="50dp"
-                android:background="@color/colorPrimary"
+                android:background="@color/toolbar"
                 android:elevation="4dp"
                 android:visibility="gone"
                 app:layout_constraintTop_toTopOf="parent"

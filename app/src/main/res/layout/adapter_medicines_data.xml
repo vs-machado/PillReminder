@@ -6,26 +6,28 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:animateLayoutChanges="false"
-    android:background="#FBFBFB"
-    android:backgroundTint="#FBFBFB"
+    android:background="?android:attr/colorBackground"
+    android:backgroundTint="?android:attr/colorBackground"
     android:orientation="vertical"
     android:paddingBottom="16dp">
 
     <com.google.android.material.card.MaterialCardView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        app:cardBackgroundColor="@color/white"
+        app:cardBackgroundColor="@color/card_view_background"
         app:cardCornerRadius="16dp"
         app:cardElevation="0dp"
-        app:strokeWidth="0.4dp"
+        app:cardUseCompatPadding="true"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent">
+        app:layout_constraintTop_toTopOf="parent"
+        app:strokeColor="@color/card_view_outline"
+        app:strokeWidth="0.6dp">
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:paddingHorizontal="8dp"
+            android:paddingHorizontal="0dp"
             android:paddingVertical="8dp">
 
             <ImageView
@@ -60,7 +62,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="8dp"
                 android:text="Ongoing treatment"
-                android:textColor="#278505"
+                android:textColor="@color/treatment_status"
                 android:textSize="14sp"
                 android:visibility="visible"
                 app:layout_constraintStart_toStartOf="@+id/divider4"
@@ -91,13 +93,13 @@
                 android:id="@+id/ibDetails"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_marginEnd="8dp"
                 android:backgroundTint="@android:color/transparent"
                 android:contentDescription="@string/see_medicine_details"
                 android:cropToPadding="false"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
                 app:srcCompat="@drawable/ic_overview"
-                app:tint="@color/button_gray"
                 tools:ignore="TouchTargetSizeCheck" />
         </androidx.constraintlayout.widget.ConstraintLayout>
 

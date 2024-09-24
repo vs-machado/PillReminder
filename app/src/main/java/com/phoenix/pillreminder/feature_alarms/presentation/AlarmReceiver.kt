@@ -39,7 +39,6 @@ class AlarmReceiver: BroadcastReceiver(), ActivityCompat.OnRequestPermissionsRes
 
         // Automatically reschedule alarms if user reboots the device or install an app update
         if(intent?.action == Intent.ACTION_BOOT_COMPLETED || intent?.action == Intent.ACTION_MY_PACKAGE_REPLACED || intent?.action == "com.phoenix.pillreminder.RESCHEDULEBACKUPALARMS"){
-            Log.d("debug", "action triggered")
             if (context != null) {
                 rescheduleAlarms(context)
             }
@@ -107,7 +106,6 @@ class AlarmReceiver: BroadcastReceiver(), ActivityCompat.OnRequestPermissionsRes
 
         launch{
             val medicineAlarmsToSchedule = repository.getAlarmsToRescheduleAfterReboot(System.currentTimeMillis())
-            Log.d("debug", "medicinealarmstoschedule: $medicineAlarmsToSchedule")
             val alarmScheduler = AndroidAlarmScheduler(repository, context)
 
             medicineAlarmsToSchedule.forEach{ medicine ->

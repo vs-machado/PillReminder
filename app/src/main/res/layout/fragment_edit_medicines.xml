@@ -177,6 +177,7 @@
                     android:clickable="true"
                     android:cursorVisible="false"
                     android:drawableEnd="@drawable/ic_calendar_month_24"
+                    android:drawableTint="@color/icon_color"
                     android:inputType="none" />
 
             </com.google.android.material.textfield.TextInputLayout>

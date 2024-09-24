@@ -70,7 +70,7 @@
                 android:layout_marginTop="24dp"
                 android:layout_marginBottom="8dp"
                 android:text="@string/delete_all"
-                android:textColor="#d24141"
+                android:textColor="@color/dialog_text"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintHorizontal_bias="0.5"
@@ -83,7 +83,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="@string/cancel"
-                android:textColor="#d24141"
+                android:textColor="@color/dialog_text"
                 app:layout_constraintBottom_toBottomOf="@+id/btnDeleteAll"
                 app:layout_constraintEnd_toStartOf="@+id/btnDeleteAll"
                 app:layout_constraintHorizontal_bias="0.5"
@@ -102,7 +102,7 @@
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
                 app:srcCompat="@drawable/ic_alert_24"
-                app:tint="#d24141" />
+                app:tint="@color/dialog_text" />
 
 
         </androidx.constraintlayout.widget.ConstraintLayout>

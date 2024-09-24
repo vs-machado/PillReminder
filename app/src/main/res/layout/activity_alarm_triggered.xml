@@ -57,6 +57,7 @@
                 android:layout_marginTop="16dp"
                 android:layout_marginEnd="16dp"
                 android:text="Ibuprofen"
+                android:textColor="@color/black"
                 android:textSize="24sp"
                 app:layout_constraintEnd_toStartOf="@+id/ivAlarmMedicineIcon"
                 app:layout_constraintStart_toStartOf="parent"
@@ -80,6 +81,7 @@
                 android:layout_marginStart="16dp"
                 android:layout_marginTop="16dp"
                 android:text="@string/quantity"
+                android:textColor="@color/black"
                 android:textSize="24sp"
                 android:textStyle="bold"
                 app:layout_constraintStart_toStartOf="parent"
@@ -92,6 +94,7 @@
                 android:layout_marginStart="16dp"
                 android:text="1 pill"
                 android:textSize="20sp"
+                android:textColor="@color/black"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/tv15" />
 
@@ -102,6 +105,7 @@
                 android:layout_marginStart="16dp"
                 android:layout_marginTop="16dp"
                 android:text="@string/Hour"
+                android:textColor="@color/black"
                 android:textSize="24sp"
                 android:textStyle="bold"
                 app:layout_constraintStart_toStartOf="parent"
@@ -113,6 +117,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginStart="16dp"
                 android:text="14:00"
+                android:textColor="@color/black"
                 android:textSize="20sp"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/tv16" />
@@ -136,6 +141,7 @@
                 android:layout_marginTop="16dp"
                 android:text="@string/mark_medicine_usage"
                 android:textSize="16sp"
+                android:textColor="@color/white"
                 app:backgroundTint="#4870F4"
                 app:cornerRadius="8dp"
                 app:layout_constraintEnd_toEndOf="@+id/divider5"

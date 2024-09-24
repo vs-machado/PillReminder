@@ -28,7 +28,7 @@ class SharedPreferencesRepositoryImpl(
     }
 
     override fun setAlarmReschedulePreferences(boolean: Boolean) {
-        sharedPreferencesAlarmReschedule.edit().putBoolean("alarms_reschedule", boolean).apply()
+        sharedPreferencesAlarmReschedule.edit().putBoolean("alarms_rescheduled", boolean).apply()
     }
 
     override fun getAlarmReschedulePreferences(): Boolean {

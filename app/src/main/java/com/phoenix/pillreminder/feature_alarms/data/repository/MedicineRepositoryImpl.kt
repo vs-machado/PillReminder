@@ -28,6 +28,13 @@ class MedicineRepositoryImpl (
         dao.updateExpiredMedicines(treatmentID, name, quantity, form, endDate, frequency, currentTime)
     }
 
+    override suspend fun getSelectedDaysList(
+        medicineName: String,
+        treatmentID: String
+    ): String {
+        return dao.getSelectedDaysList(medicineName, treatmentID)
+    }
+
     override suspend fun deleteMedicine(medicine: Medicine) {
         dao.deleteMedicine(medicine)
     }
@@ -48,8 +55,8 @@ class MedicineRepositoryImpl (
         return dao.getAllMedicines()
     }
 
-    override suspend fun getDailyAlarms(medicineName: String, alarmsPerDay: Int): List<Long> {
-        return dao.getDailyAlarms(medicineName, alarmsPerDay)
+    override suspend fun getDailyAlarms(medicineName: String, alarmsPerDay: Int, treatmentID: String): List<Long> {
+        return dao.getDailyAlarms(medicineName, alarmsPerDay, treatmentID)
     }
 
     override suspend fun getMedicineEditTimestamp(medicineName: String): Long{

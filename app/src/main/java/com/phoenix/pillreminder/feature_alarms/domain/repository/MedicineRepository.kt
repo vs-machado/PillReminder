@@ -17,6 +17,8 @@ interface MedicineRepository {
 
     suspend fun deleteAllSelectedMedicines(medicines: List<Medicine>)
 
+    suspend fun getSelectedDaysList(medicineName: String, treatmentID: String): String
+
     suspend fun deleteUpcomingAlarms(medicineName: String, currentTimeMillis: Long)
 
     suspend fun getAlarmsAfterProvidedMillis(medicineName: String, millis: Long): List<Medicine>
@@ -25,7 +27,7 @@ interface MedicineRepository {
 
     fun getAllMedicines(): LiveData<List<Medicine>>
 
-    suspend fun getDailyAlarms(medicineName: String, alarmsPerDay: Int): List<Long>
+    suspend fun getDailyAlarms(medicineName: String, alarmsPerDay: Int, treatmentID: String): List<Long>
 
     suspend fun getMedicineEditTimestamp(medicineName: String): Long
 

@@ -11,14 +11,12 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.view.Window
-import android.widget.ArrayAdapter
 import android.widget.TextView
 import android.widget.Toast
-import android.widget.Toolbar
 import androidx.core.content.ContextCompat
-import androidx.core.view.WindowInsetsControllerCompat
 import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.viewModels
 import androidx.hilt.navigation.fragment.hiltNavGraphViewModels
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
@@ -40,6 +38,7 @@ import com.phoenix.pillreminder.feature_alarms.domain.util.MedicineFrequency
 import com.phoenix.pillreminder.feature_alarms.presentation.activities.MainActivity
 import com.phoenix.pillreminder.feature_alarms.presentation.adapter.AlarmsHourListAdapter
 import com.phoenix.pillreminder.feature_alarms.presentation.adapter.DayPickerAdapter
+import com.phoenix.pillreminder.feature_alarms.presentation.adapter.NoFilterAdapter
 import com.phoenix.pillreminder.feature_alarms.presentation.utils.DateUtil
 import com.phoenix.pillreminder.feature_alarms.presentation.utils.ThemeUtils
 import com.phoenix.pillreminder.feature_alarms.presentation.viewmodels.AlarmSettingsSharedViewModel
@@ -51,6 +50,8 @@ import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import java.util.TimeZone
 
+/* Class used to edit the medicines data. It allows the change of the medicine name,
+   form, quantity, dose unit, treatment end date, frequency and the alarms hour. */
 @AndroidEntryPoint
 class EditMedicinesFragment: Fragment() {
     private lateinit var binding: FragmentEditMedicinesBinding
@@ -61,7 +62,7 @@ class EditMedicinesFragment: Fragment() {
     private var alarmHourList: List<AlarmHour>? = null
     private lateinit var millisList: List<Long>
     private var endDateMillis: Long = 0L
-
+    private var userSelectedDaysOfWeek: Boolean = false
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -72,25 +73,9 @@ class EditMedicinesFragment: Fragment() {
         val medicine = arguments?.getParcelable("edit_medicine", Medicine::class.java)
         medicine?.let { setupAdapters(it) }
 
-        ThemeUtils.applyThemeBasedSystemColors(
-            requireActivity(),
-            R.color.colorPrimary,
-            R.color.white_ice,
-            R.color.dark_gray,
-            R.color.dark_gray,
-            isAppearanceLightStatusBar = false,
-            isAppearanceLightNavigationBar = true,
-            isAppearanceLightStatusBarNightMode = false,
-            isAppearanceLightNavigationBarNightMode = false
-        )
-
-        requireActivity().findViewById<FloatingActionButton>(R.id.fabAddMedicine).visibility = View.GONE
-
-        val toolbar = requireActivity().findViewById<androidx.appcompat.widget.Toolbar>(R.id.toolbarHome)
-        toolbar.visibility = View.VISIBLE
-
-        val bottomNavigationView = requireActivity().findViewById<BottomNavigationView>(R.id.bottom_navigation)
-        bottomNavigationView.visibility = View.GONE
+        hideFabAndBottomNav()
+        setupViewTheme()
+        setupToolbar()
 
         return binding.root
     }
@@ -129,6 +114,11 @@ class EditMedicinesFragment: Fragment() {
                     }
                 }
 
+                if(!editMedicinesViewModel.isInitialized.value) {
+                    initializeViewModelData(medicine)
+                    editMedicinesViewModel.setInitialized()
+                }
+
                 // Fill the text inputs with the medicine data
                 viewLifecycleOwner.lifecycleScope.launch(Dispatchers.Main){
                     initRecyclerView(medicine)
@@ -144,13 +134,6 @@ class EditMedicinesFragment: Fragment() {
                 tietQuantity.setText(medicine.quantity.toString())
                 tvQuantityAlarms.text = context?.getString(R.string.alarms_per_day_details, medicine.alarmsPerDay)
                 tietStartDate.setText(startDate)
-
-                alarmSettingsSharedViewModel.setInterval(medicine.interval.toInt())
-                alarmSettingsSharedViewModel.setTreatmentStartDate(medicine.startDate)
-                alarmSettingsSharedViewModel.setTreatmentEndDate(medicine.endDate)
-                alarmSettingsSharedViewModel.setDoseUnit(medicine.unit)
-                alarmSettingsSharedViewModel.setMedicineForm(medicine.form)
-
 
                 if(medicine.medicinePeriodSet){
                     tietEndDate.setText(endDate)
@@ -241,24 +224,55 @@ class EditMedicinesFragment: Fragment() {
                 val selectedItem = parent.getItemAtPosition(position).toString()
                 tietQuantity.isEnabled = true
 
-                when(selectedItem){
-                    context?.getString(R.string.pomade) -> {
-                        tietQuantity.isEnabled = false
-                        tietQuantity.setText("1")
-                        tvStrength.text = ""
+                medicine?.let { medicine -> // still needs to make tvstrength visible in the remain medicine forms and set the tildoseunit field
+                    when(selectedItem){
+                        context?.getString(R.string.pomade) -> {
+                            tietQuantity.isEnabled = false
+                            tietQuantity.setText("1")
+                            tvStrength.text = ""
+                            tvStrengthVisible()
+                        }
+                        context?.getString(R.string.pill) -> {
+                            tvStrengthVisible()
+                            tvStrength.text = context?.getString(R.string.pills)
+                        }
+                        context?.getString(R.string.Drops) -> {
+                            tvStrengthVisible()
+                            tvStrength.text = context?.getString(R.string.drops)
+                        }
+                        context?.getString(R.string.injection) ->{
+                            tilDoseUnitVisible(medicine, "injection")
+                            when(medicine.unit){
+                                "mL" -> acTvDoseUnit.setText(context?.getString(R.string.mls), false)
+                                "syringe" -> acTvDoseUnit.setText(context?.getString(R.string.syringe), false)
+                                else -> acTvDoseUnit.setText(context?.getString(R.string.mls), false)
+                            }
+                        }
+                        context?.getString(R.string.liquid) -> {
+                            tvStrengthVisible()
+                            tvStrength.text = context?.getString(R.string.mls)
+                        }
+                        context?.getString(R.string.inhaler) -> {
+                            tilDoseUnitVisible(medicine, "inhaler")
+                            when(medicine.unit) {
+                                "mg" -> acTvDoseUnit.setText(context?.getString(R.string.mg), false)
+                                "puff" ->  acTvDoseUnit.setText(context?.getString(R.string.puff), false)
+                                "mL" -> acTvDoseUnit.setText(context?.getString(R.string.mls), false)
+                                else -> {
+                                    acTvDoseUnit.setText(context?.getString(R.string.mls), false)
+                                }
+                            }
+                        }
                     }
-                    context?.getString(R.string.pill) -> tvStrength.text = context?.getString(R.string.pills)
-                    context?.getString(R.string.Drops) -> tvStrength.text = context?.getString(R.string.drops)
-                    context?.getString(R.string.injection) -> tvStrength.text = context?.getString(R.string.mls)
-                    context?.getString(R.string.liquid) -> tvStrength.text = context?.getString(R.string.mls)
-                    context?.getString(R.string.inhaler) -> tvStrength.text = context?.getString(R.string.mgs)
                 }
+
             }
         }
 
         binding.acTvMedicineFrequency.setOnItemClickListener { parent, _, position, _ ->
             val selectedItem = parent.getItemAtPosition(position).toString()
 
+            // Shows a dialog allowing the user to set a custom interval
             medicine?.let{
                 when(selectedItem){
                     context?.getString(R.string.specific_days_of_the_week) -> { showSpecificDaysDialog() }
@@ -304,6 +318,14 @@ class EditMedicinesFragment: Fragment() {
                 setMedicineQuantity(quantity)
                 setNumberOfAlarms(alarmsPerDay!!)
                 setTreatmentID(medicine.treatmentID)
+
+                // When user does not select the days of week in EditMedicinesFragment the days of week must be queried from the database
+                if(medicine.selectedDaysOfWeek != null && !userSelectedDaysOfWeek) {
+                    viewLifecycleOwner.lifecycleScope.launch {
+                        val list = medicinesViewModel.getSelectedDaysList(medicine.name, medicine.treatmentID)
+                        alarmSettingsSharedViewModel.setSelectedDaysList(list)
+                    }
+                }
 
                 when(inputFrequency){
                     context?.getString(R.string.every_day) -> setMedicineFrequency(MedicineFrequency.EveryDay)
@@ -455,7 +477,7 @@ class EditMedicinesFragment: Fragment() {
         binding.rvAlarmsHour.adapter = adapter
 
         withContext(Dispatchers.IO){
-            millisList = medicinesViewModel.getMillisList(medicine.name, medicine.alarmsPerDay)
+            millisList = medicinesViewModel.getMillisList(medicine.name, medicine.alarmsPerDay, medicine.treatmentID)
 
             // Formats the hours to 12 or 24 hours format.
             alarmHourList = editMedicinesViewModel.convertMillisToAlarmHourList(requireContext(), millisList)
@@ -583,7 +605,10 @@ class EditMedicinesFragment: Fragment() {
         val arrayAdapter = DayPickerAdapter(
             requireContext(),
             list,
-            ContextCompat.getColor(requireContext(), R.color.white)
+            R.color.array_list_background_dialog,
+            R.color.array_list_text_color_unselected,
+            R.color.selected_item_array_list_dialog,
+            R.color.array_list_text_color_selected
         )
         binding.lvDayPickerDialog.adapter = arrayAdapter
 
@@ -595,6 +620,7 @@ class EditMedicinesFragment: Fragment() {
         binding.btnOkEveryDialog.setOnClickListener {
             if(arrayNotEmpty) {
                 alarmSettingsSharedViewModel.setSelectedDaysList(arrayAdapter.getSelectedDaysList())
+                userSelectedDaysOfWeek = true // flag used to prevent database query in tvSave click listener
                 dialog.dismiss()
             } else {
                 Toast.makeText(
@@ -614,11 +640,11 @@ class EditMedicinesFragment: Fragment() {
 
     private fun setupAdapters(medicine: Medicine){
         val medicineForms = resources.getStringArray(R.array.medicine_forms)
-        val formsArrayAdapter = ArrayAdapter(requireContext(), R.layout.dropdown_item, medicineForms)
+        val formsArrayAdapter = NoFilterAdapter(requireContext(), R.layout.dropdown_item, medicineForms)
         binding.acTvMedicineForm.setAdapter(formsArrayAdapter)
 
         val medicineFrequencies = resources.getStringArray(R.array.medicine_frequency)
-        val frequenciesArrayAdapter = ArrayAdapter(requireContext(), R.layout.dropdown_item, medicineFrequencies)
+        val frequenciesArrayAdapter = NoFilterAdapter(requireContext(), R.layout.dropdown_item, medicineFrequencies)
         binding.acTvMedicineFrequency.setAdapter(frequenciesArrayAdapter)
 
         when(medicine.form){
@@ -646,7 +672,7 @@ class EditMedicinesFragment: Fragment() {
         when(form){
             "injection" -> {
                 val doseUnit = resources.getStringArray(R.array.units_injection)
-                val formsArrayAdapter = ArrayAdapter(requireContext(), R.layout.dropdown_item, doseUnit)
+                val formsArrayAdapter = NoFilterAdapter(requireContext(), R.layout.dropdown_item, doseUnit)
                 binding.acTvDoseUnit.setAdapter(formsArrayAdapter)
                 when(medicine.unit){
                     "mL" -> binding.acTvDoseUnit.setText(getString(R.string.mL), false)
@@ -655,7 +681,7 @@ class EditMedicinesFragment: Fragment() {
             }
             "inhaler" -> {
                 val doseUnit = resources.getStringArray(R.array.units_inhaler)
-                val formsArrayAdapter = ArrayAdapter(requireContext(), R.layout.dropdown_item, doseUnit)
+                val formsArrayAdapter = NoFilterAdapter(requireContext(), R.layout.dropdown_item, doseUnit)
                 binding.acTvDoseUnit.setAdapter(formsArrayAdapter)
                 when(medicine.unit){
                     "mg" -> binding.acTvDoseUnit.setText(getString(R.string.mgs), false)
@@ -674,5 +700,44 @@ class EditMedicinesFragment: Fragment() {
     override fun onResume(){
         super.onResume()
         (activity as MainActivity).findViewById<TextView>(R.id.tvSave).visibility = View.VISIBLE
+    }
+
+    private fun setupToolbar() {
+        val navController = findNavController()
+        val appBarConfiguration = AppBarConfiguration(navController.graph)
+
+        val toolbar = requireActivity().findViewById<androidx.appcompat.widget.Toolbar>(R.id.toolbarHome)
+        toolbar.setupWithNavController(navController, appBarConfiguration)
+        toolbar.visibility = View.VISIBLE
+    }
+
+    private fun setupViewTheme(){
+        ThemeUtils.applyThemeBasedSystemColors(
+            requireActivity(),
+            R.color.colorPrimary,
+            R.color.white_ice,
+            R.color.fab,
+            R.color.dark_gray,
+            isAppearanceLightStatusBar = false,
+            isAppearanceLightNavigationBar = true,
+            isAppearanceLightStatusBarNightMode = false,
+            isAppearanceLightNavigationBarNightMode = false
+        )
+    }
+
+    private fun hideFabAndBottomNav(){
+        val fabAddMedicine = requireActivity().findViewById<FloatingActionButton>(R.id.fabAddMedicine)
+        fabAddMedicine.visibility = View.GONE
+
+        val bottomNavigationView = requireActivity().findViewById<BottomNavigationView>(R.id.bottom_navigation)
+        bottomNavigationView.visibility = View.GONE
+    }
+
+    private fun initializeViewModelData(medicine: Medicine) {
+        alarmSettingsSharedViewModel.setInterval(medicine.interval.toInt())
+        alarmSettingsSharedViewModel.setTreatmentStartDate(medicine.startDate)
+        alarmSettingsSharedViewModel.setTreatmentEndDate(medicine.endDate)
+        alarmSettingsSharedViewModel.setDoseUnit(medicine.unit)
+        alarmSettingsSharedViewModel.setMedicineForm(medicine.form)
     }
 }

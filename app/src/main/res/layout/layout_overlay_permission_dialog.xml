@@ -59,6 +59,7 @@
                 android:layout_marginTop="8dp"
                 android:layout_marginBottom="8dp"
                 android:text="@string/go_to_permissions"
+                android:textColor="@color/dialog_text_blue"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintHorizontal_bias="0.5"
@@ -77,15 +78,15 @@
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
                 app:srcCompat="@drawable/ic_alert_24"
-                app:tint="#000000" />
+                app:tint="@color/warning_icon_black_blue" />
 
             <Button
                 android:id="@+id/btnDismissRequest"
                 style="@style/Widget.Material3.Button.TextButton"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:backgroundTint="#FFFFFF"
                 android:text="@string/dismiss"
+                android:textColor="@color/dialog_text_blue"
                 app:layout_constraintEnd_toStartOf="@+id/btnGivePermissions"
                 app:layout_constraintHorizontal_bias="0.5"
                 app:layout_constraintStart_toStartOf="parent"

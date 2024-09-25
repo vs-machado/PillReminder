@@ -70,8 +70,8 @@ interface MedicineDao {
     @Query("SELECT * FROM medicines_data_table")
     fun getMedicines(): List<Medicine>
 
-    @Query("SELECT reschedule_worker_id FROM medicines_data_table WHERE name = :medicineName AND is_active = true")
-    fun getWorkerID(medicineName: String): String
+    @Query("SELECT reschedule_worker_id FROM medicines_data_table WHERE name = :medicineName AND treatment_id = :treatmentID ORDER BY alarm_in_millis DESC LIMIT 1")
+    fun getWorkerID(medicineName: String, treatmentID: String): String
 
     @Query("SELECT * "+
             "FROM medicines_data_table " +

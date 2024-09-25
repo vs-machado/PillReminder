@@ -66,8 +66,8 @@ class MedicinesViewModel @Inject constructor(
         }
     }
 
-    fun getWorkerID(medicineName: String): String {
-        return medicineRepository.getWorkerID(medicineName)
+    fun getWorkerID(medicineName: String, treatmentID: String): String {
+        return medicineRepository.getWorkerID(medicineName, treatmentID)
     }
 
     fun getLastAlarmFromAllDistinctMedicines(): List<Medicine> {

@@ -72,8 +72,8 @@ class MedicineRepositoryImpl (
         return dao.getMedicines()
     }
 
-    override fun getWorkerID(medicineName: String): String {
-        return dao.getWorkerID(medicineName)
+    override fun getWorkerID(medicineName: String, treatmentID: String): String {
+        return dao.getWorkerID(medicineName, treatmentID)
     }
 
     override fun getCurrentAlarmData(alarmInMillis: Long): Medicine? {

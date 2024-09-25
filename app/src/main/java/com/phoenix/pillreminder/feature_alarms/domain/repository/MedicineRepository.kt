@@ -35,7 +35,7 @@ interface MedicineRepository {
 
     fun getMedicines(): List<Medicine>
 
-    fun getWorkerID(medicineName: String): String
+    fun getWorkerID(medicineName: String, treatmentID: String): String
 
     fun getCurrentAlarmData(alarmInMillis: Long): Medicine?
 

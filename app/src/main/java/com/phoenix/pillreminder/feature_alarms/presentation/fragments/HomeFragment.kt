@@ -432,13 +432,31 @@ class HomeFragment: Fragment() {
         binding.tvYouSure.text = context?.getString(R.string.are_you_sure_end_treatment, medicine.name)
 
         binding.btnEndTreatment.setOnClickListener {
-            viewLifecycleOwner.lifecycleScope.launch(Dispatchers.Main){
-                medicinesViewModel.endTreatment(medicine).join()
-                sharedViewModel.cancelWork(medicine)
-                displayMedicinesList(hfViewModel.getDate())
-                dialog.dismiss()
+            viewLifecycleOwner.lifecycleScope.launch {
+                try {
+                    withContext(Dispatchers.Default) {
+                        medicinesViewModel.endTreatment(medicine).join()
+                        sharedViewModel.cancelWork(medicine)
+                    }
+
+                    withContext(Dispatchers.Main) {
+                        displayMedicinesList(hfViewModel.getDate())
+                        dialog.dismiss()
+                    }
+                } catch (e: Exception) {
+                    Log.e("EndTreatmentDialog", "Error ending treatment", e)
+
+                    withContext(Dispatchers.Main) {
+                        Toast.makeText(
+                            context,
+                            requireContext().getString(R.string.error_treatment_termination),
+                            Toast.LENGTH_SHORT
+                        ).show()
+                    }
+                }
             }
         }
+
 
         binding.btnCancel.setOnClickListener {
             dialog.dismiss()

@@ -8,5 +8,5 @@ interface AlarmScheduler {
 
     fun schedulePillboxReminder(hours: Int, minutes: Int)
 
-    suspend fun cancelAlarm(item: AlarmItem, cancelAll: Boolean)
+    suspend fun cancelAlarm(item: AlarmItem, cancelAll: Boolean): Boolean
 }

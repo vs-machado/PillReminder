@@ -53,73 +53,87 @@ class AndroidAlarmScheduler @Inject constructor(
 
     }
 
-    override suspend fun cancelAlarm(item: AlarmItem, cancelAll: Boolean): Boolean {
-        return withContext(Dispatchers.Default) {
-            var currentItem = item
-            var alarmCancelled = false
-            var cutoffTime = System.currentTimeMillis()
+    // cancelAll defines if the method will search for a valid pendingIntent or not.
+    // When user delete only one alarm, there's no need to search for a valid pendingIntent.
+    // If the pendingIntent is invalid, the valid alarm was already scheduled.
+    // When user deletes all alarms, the method will search for a valid pendingIntent,
+    // cancelling the alarm even if the medicine object clicked was not scheduled yet.
+    override suspend fun cancelAlarm(item: AlarmItem, cancelAll: Boolean) {
+        withContext(Dispatchers.Default) {
+            when(cancelAll){
+                true -> {
+                    var currentItem = item
+                    var cutoffTime = System.currentTimeMillis()
 
-            while(true) {
-                val itemTimeInMillis = currentItem.time.atZone(ZoneId.systemDefault()).toInstant().toEpochMilli()
+                    while(true) {
+                        val itemTimeInMillis = currentItem.time.atZone(ZoneId.systemDefault()).toInstant().toEpochMilli()
 
-
-                val pendingIntent = PendingIntent.getBroadcast(
-                    appContext,
-                    currentItem.hashCode(),
-                    Intent(appContext, AlarmReceiver::class.java),
-                    PendingIntent.FLAG_NO_CREATE or PendingIntent.FLAG_IMMUTABLE
-                )
-
-                // If the pending intent is not valid, search for the next alarm and then runs the loop again
-                if (pendingIntent == null || itemTimeInMillis < System.currentTimeMillis()) {
-                    val nextAlarm = withContext(Dispatchers.IO) {
-                        medicineRepository.getNextAlarmData(currentItem.medicineName, cutoffTime)
-                    }
-
-                    if (nextAlarm == null) {
-                        break
-                    }
-
-                    val alarmItemTime = nextAlarm.alarmInMillis?.let {
-                        Instant.ofEpochMilli(it).atZone(ZoneId.systemDefault()).toLocalDateTime()
-                    }
-
-                    if (alarmItemTime != null) {
-                        currentItem = AlarmItem(
-                            alarmItemTime,
-                            nextAlarm.name,
-                            nextAlarm.form,
-                            nextAlarm.quantity.toString(),
-                            nextAlarm.unit,
-                            nextAlarm.alarmHour.toString(),
-                            nextAlarm.alarmMinute.toString()
+                        val pendingIntent = PendingIntent.getBroadcast(
+                            appContext,
+                            currentItem.hashCode(),
+                            Intent(appContext, AlarmReceiver::class.java),
+                            PendingIntent.FLAG_NO_CREATE or PendingIntent.FLAG_IMMUTABLE
                         )
-                        cutoffTime = nextAlarm.alarmInMillis
-                        // We don't cancel the alarm here, as we'll check it in the next iteration
-                    } else {
-                        break
-                    }
-                } else {
-                    alarmCancelled = cancelAlarmForItem(currentItem) // Checks if there's a valid pendingIntent to cancel
-                    if (alarmCancelled) {
-                        // If the alarm was cancelled, check if there's another alarm to be scheduled
-                        if (!cancelAll) {
-                            val currentAlarmInMillis = currentItem.time.atZone(ZoneId.systemDefault()).toInstant().toEpochMilli()
 
-                            // Search for the alarm (next to the selected) in the database
+                        if (pendingIntent == null || itemTimeInMillis < System.currentTimeMillis()) {
                             val nextAlarm = withContext(Dispatchers.IO) {
-                                medicineRepository.getNextAlarmData(currentItem.medicineName, currentAlarmInMillis + 1L)
+                                medicineRepository.getNextAlarmData(currentItem.medicineName, cutoffTime)
+                            }
+
+                            if (nextAlarm == null) {
+                                break
+                            }
+
+                            val alarmItemTime = nextAlarm.alarmInMillis?.let {
+                                Instant.ofEpochMilli(it).atZone(ZoneId.systemDefault()).toLocalDateTime()
+                            }
+
+                            if (alarmItemTime != null) {
+                                currentItem = AlarmItem(
+                                    alarmItemTime,
+                                    nextAlarm.name,
+                                    nextAlarm.form,
+                                    nextAlarm.quantity.toString(),
+                                    nextAlarm.unit,
+                                    nextAlarm.alarmHour.toString(),
+                                    nextAlarm.alarmMinute.toString()
+                                )
+                                cutoffTime = nextAlarm.alarmInMillis
+                            } else {
+                                break
+                            }
+                        }
+                        else {
+                            cancelAlarmForItem(currentItem)
+                            break
+                        }
+                    }
+                }
+                false -> {
+                    val pendingIntent = PendingIntent.getBroadcast(
+                        appContext,
+                        item.hashCode(),
+                        Intent(appContext, AlarmReceiver::class.java),
+                        PendingIntent.FLAG_NO_CREATE or PendingIntent.FLAG_IMMUTABLE
+                    )
+
+                    if (pendingIntent != null) {
+                        val alarmCancelled = cancelAlarmForItem(item)
+
+                        if (alarmCancelled) {
+                            val currentAlarmInMillis = item.time.atZone(ZoneId.systemDefault()).toInstant().toEpochMilli()
+
+                            val nextAlarm = withContext(Dispatchers.IO) {
+                                medicineRepository.getNextAlarmData(item.medicineName, currentAlarmInMillis + 1L)
                             }
 
                             if (nextAlarm?.alarmInMillis != null) {
                                 scheduleNextAlarm(nextAlarm)
                             }
                         }
-                        break
                     }
                 }
             }
-            alarmCancelled // Alarm cancelling
         }
     }
 
@@ -130,12 +144,13 @@ class AndroidAlarmScheduler @Inject constructor(
             Intent(appContext, AlarmReceiver::class.java),
             PendingIntent.FLAG_NO_CREATE or PendingIntent.FLAG_IMMUTABLE
         )
-        return if (pendingIntent != null) {
+
+        if (pendingIntent != null) {
             alarmManager.cancel(pendingIntent)
-            true
-        } else {
-            false
+            return true
         }
+
+        return false
     }
 
 

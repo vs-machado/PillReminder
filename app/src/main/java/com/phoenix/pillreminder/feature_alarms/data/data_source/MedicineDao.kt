@@ -1,11 +1,14 @@
 package com.phoenix.pillreminder.feature_alarms.data.data_source
 
+import android.database.Cursor
+import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.room.Dao
 import androidx.room.Delete
 import androidx.room.Insert
 import androidx.room.Query
 import androidx.room.Update
+import com.phoenix.pillreminder.feature_alarms.domain.model.AlarmTimeData
 import com.phoenix.pillreminder.feature_alarms.domain.model.Medicine
 
 @Dao
@@ -49,14 +52,15 @@ interface MedicineDao {
     @Query("SELECT * FROM medicines_data_table")
     fun getAllMedicines():LiveData<List<Medicine>>
 
-    @Query("SELECT DISTINCT alarm_in_millis FROM medicines_data_table WHERE " +
+    @Query("SELECT DISTINCT alarm_hour, alarm_minute FROM medicines_data_table WHERE " +
             "name = :medicineName AND last_edited = (" +
             "    SELECT MAX(last_edited) FROM medicines_data_table " +
             "    WHERE name = :medicineName AND treatment_id = :treatmentID" +
             ") AND is_active = true " +
             "ORDER BY alarm_in_millis ASC " +
             "LIMIT :alarmsPerDay")
-    suspend fun getDailyAlarms(medicineName: String, alarmsPerDay: Int, treatmentID: String): List<Long>
+    suspend fun getDailyAlarms(medicineName: String, alarmsPerDay: Int, treatmentID: String): List<AlarmTimeData>
+
 
     @Query("SELECT last_edited FROM medicines_data_table " +
             "WHERE name = :medicineName  ORDER BY last_edited DESC LIMIT 1")

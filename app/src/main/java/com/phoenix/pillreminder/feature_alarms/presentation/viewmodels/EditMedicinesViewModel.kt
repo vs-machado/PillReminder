@@ -2,6 +2,7 @@ package com.phoenix.pillreminder.feature_alarms.presentation.viewmodels
 
 import android.content.Context
 import android.text.format.DateFormat
+import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.phoenix.pillreminder.feature_alarms.domain.model.AlarmHour
@@ -32,18 +33,18 @@ class EditMedicinesViewModel @Inject constructor(
     private val _isInitialized = MutableStateFlow(false)
     val isInitialized: StateFlow<Boolean> = _isInitialized.asStateFlow()
 
-    fun setInitialized() {
-        _isInitialized.value = true
+    fun setInitialized(bool: Boolean) {
+        _isInitialized.value = bool
     }
 
-    fun convertMillisToAlarmHourList(context: Context, millisList: List<Long>): List<AlarmHour>{
+    fun convertMillisToAlarmHourList(context: Context, alarmHourList: List<Pair<Int, Int>>): List<AlarmHour>{
         val is24HourFormat = DateFormat.is24HourFormat(context)
         val pattern = if(is24HourFormat) "HH:mm" else "hh:mm a"
 
-        return millisList
+        return alarmHourList
             .distinct()
-            .sortedBy { normalizeMillisToTimeOfDay(it) }
-            .map{ AlarmHour(CalendarUtils.formatMillisToString(it, pattern)) }
+            .sortedBy { normalizeIntPairToMillis(it) }
+            .map{ AlarmHour(CalendarUtils.formatMillisToString(normalizeIntPairToMillis(it), pattern)) }
     }
 
     fun resetCalendarHourToMidnight(millis: Long, timeZone: TimeZone): Long {
@@ -59,12 +60,15 @@ class EditMedicinesViewModel @Inject constructor(
         return date.timeInMillis
     }
 
-    private fun normalizeMillisToTimeOfDay(millis: Long): Long {
-        val calendar = Calendar.getInstance().apply { timeInMillis = millis }
-        return (calendar.get(Calendar.HOUR_OF_DAY) * 3600000L +
-                calendar.get(Calendar.MINUTE) * 60000L +
-                calendar.get(Calendar.SECOND) * 1000L +
-                calendar.get(Calendar.MILLISECOND))
+    private fun normalizeIntPairToMillis(alarms: Pair<Int, Int>): Long {
+        val calendar = Calendar.getInstance().apply{
+            set(Calendar.HOUR_OF_DAY, alarms.first)
+            set(Calendar.MINUTE, alarms.second)
+            set(Calendar.SECOND, 0)
+            set(Calendar.MILLISECOND, 0)
+        }
+
+        return calendar.timeInMillis
     }
 
     // It sums the selected alarm milliseconds to the selected date millis. This is used to set

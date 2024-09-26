@@ -51,6 +51,7 @@ import com.phoenix.pillreminder.feature_alarms.presentation.adapter.RvMedicinesL
 import com.phoenix.pillreminder.feature_alarms.presentation.utils.CalendarUtils
 import com.phoenix.pillreminder.feature_alarms.presentation.utils.ThemeUtils
 import com.phoenix.pillreminder.feature_alarms.presentation.viewmodels.AlarmSettingsSharedViewModel
+import com.phoenix.pillreminder.feature_alarms.presentation.viewmodels.EditMedicinesViewModel
 import com.phoenix.pillreminder.feature_alarms.presentation.viewmodels.HomeFragmentViewModel
 import com.phoenix.pillreminder.feature_alarms.presentation.viewmodels.MedicinesViewModel
 import dagger.hilt.android.AndroidEntryPoint
@@ -73,6 +74,7 @@ class HomeFragment: Fragment() {
     private lateinit var adapter: RvMedicinesListAdapter
     private val medicinesViewModel: MedicinesViewModel by hiltNavGraphViewModels(R.id.nav_graph)
     private val sharedViewModel: AlarmSettingsSharedViewModel by hiltNavGraphViewModels(R.id.nav_graph)
+    private val editMedicinesViewModel: EditMedicinesViewModel by hiltNavGraphViewModels(R.id.nav_graph)
     private var toast: Toast? = null
     private val hfViewModel: HomeFragmentViewModel by viewModels()
     private lateinit var dialog: Dialog
@@ -609,7 +611,9 @@ class HomeFragment: Fragment() {
             adapter.setList(medicinesViewModel.getMedicines(), currentDate)
         }
 
-
+        // State used in EditMedicinesFragment. Everytime user navigates to EditMedicinesFragment AlarmSettingsSharedViewModel must set the treatment data.
+        // The viewmodel setters are called when isInitialized is set to false. isInitialized is set to false when user goes back to HomeFragment or saves the changes.
+        editMedicinesViewModel.setInitialized(false)
     }
 
     override fun onPause() {

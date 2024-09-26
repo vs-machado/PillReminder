@@ -186,7 +186,6 @@ class AlarmSettingsSharedViewModel @Inject constructor(
             false -> { getTreatmentID() }
         }
 
-
         val alarms = mutableListOf<Medicine>()
 
         val scheduleInterval = when(frequency){

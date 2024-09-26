@@ -1,6 +1,7 @@
 package com.phoenix.pillreminder.feature_alarms.domain.repository
 
 import androidx.lifecycle.LiveData
+import com.phoenix.pillreminder.feature_alarms.domain.model.AlarmTimeData
 import com.phoenix.pillreminder.feature_alarms.domain.model.Medicine
 
 interface MedicineRepository {
@@ -27,7 +28,7 @@ interface MedicineRepository {
 
     fun getAllMedicines(): LiveData<List<Medicine>>
 
-    suspend fun getDailyAlarms(medicineName: String, alarmsPerDay: Int, treatmentID: String): List<Long>
+    suspend fun getDailyAlarms(medicineName: String, alarmsPerDay: Int, treatmentID: String): List<AlarmTimeData>
 
     suspend fun getMedicineEditTimestamp(medicineName: String): Long
 

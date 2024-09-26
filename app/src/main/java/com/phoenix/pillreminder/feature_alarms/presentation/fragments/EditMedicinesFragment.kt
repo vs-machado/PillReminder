@@ -6,6 +6,7 @@ import android.graphics.Color
 import android.graphics.drawable.ColorDrawable
 import android.os.Bundle
 import android.text.format.DateFormat.is24HourFormat
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -43,7 +44,6 @@ import com.phoenix.pillreminder.feature_alarms.presentation.viewmodels.EditMedic
 import com.phoenix.pillreminder.feature_alarms.presentation.viewmodels.MedicinesViewModel
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.async
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import java.util.TimeZone
@@ -58,7 +58,7 @@ class EditMedicinesFragment: Fragment() {
     private val medicinesViewModel: MedicinesViewModel by hiltNavGraphViewModels(R.id.nav_graph)
     private lateinit var adapter: AlarmsHourListAdapter
     private var alarmHourList: List<AlarmHour>? = null
-    private lateinit var millisList: List<Long>
+    private lateinit var dailyAlarmsList: List<Pair<Int, Int>>
     private var endDateMillis: Long = 0L
     private var userSelectedDaysOfWeek: Boolean = false
 
@@ -112,9 +112,10 @@ class EditMedicinesFragment: Fragment() {
                     }
                 }
 
+                // Initializes the viewmodel data only once
                 if(!editMedicinesViewModel.isInitialized.value) {
                     initializeViewModelData(medicine)
-                    editMedicinesViewModel.setInitialized()
+                    editMedicinesViewModel.setInitialized(true)
                 }
 
                 // Fill the text inputs with the medicine data
@@ -293,6 +294,9 @@ class EditMedicinesFragment: Fragment() {
                 setNumberOfAlarms(alarmsPerDay!!)
                 setTreatmentID(medicine.treatmentID)
 
+                // After saving the medicine changes, setInitialized is set to false, requiring the fragment to set the viewmodel updated data
+                editMedicinesViewModel.setInitialized(false)
+
                 // When user does not select the days of week in EditMedicinesFragment the days of week must be queried from the database
                 if(medicine.selectedDaysOfWeek != null && !userSelectedDaysOfWeek) {
                     viewLifecycleOwner.lifecycleScope.launch {
@@ -451,10 +455,10 @@ class EditMedicinesFragment: Fragment() {
         binding.rvAlarmsHour.adapter = adapter
 
         withContext(Dispatchers.IO){
-            millisList = medicinesViewModel.getMillisList(medicine.name, medicine.alarmsPerDay, medicine.treatmentID)
+            dailyAlarmsList = medicinesViewModel.getDailyAlarms(medicine.name, medicine.alarmsPerDay, medicine.treatmentID)
 
             // Formats the hours to 12 or 24 hours format.
-            alarmHourList = editMedicinesViewModel.convertMillisToAlarmHourList(requireContext(), millisList)
+            alarmHourList = editMedicinesViewModel.convertMillisToAlarmHourList(requireContext(), dailyAlarmsList)
 
             // Fill and initialize the alarm hour and minute array variables to schedule alarms
             alarmHourList?.let { alarmSettingsSharedViewModel.convertTimeListToArrays(it) }

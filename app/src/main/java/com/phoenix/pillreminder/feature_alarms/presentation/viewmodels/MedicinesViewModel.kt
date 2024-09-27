@@ -1,5 +1,6 @@
 package com.phoenix.pillreminder.feature_alarms.presentation.viewmodels
 
+import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
@@ -115,7 +116,9 @@ class MedicinesViewModel @Inject constructor(
 
     suspend fun getSelectedDaysList(medicineName: String, treatmentID: String): MutableSet<Int> {
         return withContext(Dispatchers.IO) {
+            Log.d("debug", "$medicineName $treatmentID")
             val daysString = medicineRepository.getSelectedDaysList(medicineName, treatmentID)
+            Log.d("debug", daysString)
             daysString.split(",").mapNotNull { it.toIntOrNull() }.toMutableSet()
         }
     }

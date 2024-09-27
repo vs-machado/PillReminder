@@ -691,11 +691,30 @@ class AlarmSettingsSharedViewModel @Inject constructor(
             }
         }
     }
-    
-    fun convertTimeListToArrays(timeList: List<AlarmHour>){
-        timeList.forEachIndexed{ index, timeString ->
-            val (hour, minute) = timeString.alarmHour.split(':').map(String::toInt)
-            alarmHour[index] = hour
+
+    fun convertTimeListToArrays(timeList: List<AlarmHour>) {
+        timeList.forEachIndexed { index, timeString ->
+            // Split the time string into time and period (AM/PM)
+            // If there's no period (24-hour format), use an empty string
+            val (time, period) = timeString.alarmHour.split(' ', limit = 2).let {
+                if (it.size == 2) it else listOf(it[0], "")
+            }
+
+            // Split the time into hour and minute
+            val (hour, minute) = time.split(':').map(String::toInt)
+
+            // Adjust the hour based on the period (AM/PM)
+            val adjustedHour = when {
+                // If it's PM and not 12, add 12 to convert to 24-hour format
+                period.equals("PM", ignoreCase = true) && hour != 12 -> hour + 12
+                // If it's 12 AM, set to 0 (midnight in 24-hour format)
+                period.equals("AM", ignoreCase = true) && hour == 12 -> 0
+                // For all other cases (AM times, 12 PM, or 24-hour format), use the hour as is
+                else -> hour
+            }
+
+            // Store the adjusted hour and minute in their respective arrays
+            alarmHour[index] = adjustedHour
             alarmMinute[index] = minute
         }
     }

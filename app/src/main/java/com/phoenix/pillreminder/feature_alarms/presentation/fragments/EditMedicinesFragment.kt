@@ -6,7 +6,6 @@ import android.graphics.Color
 import android.graphics.drawable.ColorDrawable
 import android.os.Bundle
 import android.text.format.DateFormat.is24HourFormat
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -210,14 +209,7 @@ class EditMedicinesFragment: Fragment() {
             }
 
             // Initializes medicine frequency and sets the text
-            when(medicine?.medicineFrequency){
-                "EveryDay" -> acTvMedicineFrequency.setText(context?.getString(R.string.every_day), false)
-                "EveryOtherDay" -> acTvMedicineFrequency.setText(context?.getString(R.string.every_other_day), false)
-                "SpecificDaysOfWeek" -> acTvMedicineFrequency.setText(context?.getString(R.string.specific_days_of_the_week), false)
-                "EveryXDays" -> acTvMedicineFrequency.setText(context?.getString(R.string.every_x_days), false)
-                "EveryXWeeks" -> acTvMedicineFrequency.setText(context?.getString(R.string.every_x_weeks), false)
-                "EveryXMonths" -> acTvMedicineFrequency.setText(context?.getString(R.string.every_x_months), false)
-            }
+            medicine?.let { setActvMedicineFrequency(it) }
 
             // tvStrength or acTvDoseUnit will be visible depending on medicine form selected by user
             acTvMedicineForm.setOnItemClickListener { parent, _, position, _ ->
@@ -534,10 +526,21 @@ class EditMedicinesFragment: Fragment() {
         }
 
         binding.btnOkEveryDialog.setOnClickListener {
-            val interval = binding.etIntervalEveryDialog.text.toString().toInt()
-            alarmSettingsSharedViewModel.setInterval(interval)
+            val intervalField = binding.etIntervalEveryDialog.text
 
-            dialog.dismiss()
+            if(intervalField.isNotEmpty()){
+                val interval = intervalField.toString().toInt()
+                alarmSettingsSharedViewModel.setInterval(interval)
+                dialog.dismiss()
+                return@setOnClickListener
+            }
+
+            Toast.makeText(
+                requireContext(),
+                requireContext().getString(R.string.you_must_provide_a_interval),
+                Toast.LENGTH_LONG
+            ).show()
+
         }
 
         binding.btnCancelEveryDialog.setOnClickListener {
@@ -600,13 +603,14 @@ class EditMedicinesFragment: Fragment() {
                 alarmSettingsSharedViewModel.setSelectedDaysList(arrayAdapter.getSelectedDaysList())
                 userSelectedDaysOfWeek = true // flag used to prevent database query in tvSave click listener
                 dialog.dismiss()
-            } else {
-                Toast.makeText(
-                    requireContext(),
-                    context?.getString(R.string.select_at_least_1_day),
-                    Toast.LENGTH_LONG
-                ).show()
+                return@setOnClickListener
             }
+
+            Toast.makeText(
+                requireContext(),
+                context?.getString(R.string.select_at_least_1_day),
+                Toast.LENGTH_LONG
+            ).show()
         }
 
         binding.btnCancelEveryDialog.setOnClickListener {
@@ -757,6 +761,19 @@ class EditMedicinesFragment: Fragment() {
                         }
                     }
                 }
+            }
+        }
+    }
+
+    private fun setActvMedicineFrequency(medicine: Medicine) {
+        binding.apply{
+            when(medicine.medicineFrequency){
+                "EveryDay" -> acTvMedicineFrequency.setText(context?.getString(R.string.every_day), false)
+                "EveryOtherDay" -> acTvMedicineFrequency.setText(context?.getString(R.string.every_other_day), false)
+                "SpecificDaysOfWeek" -> acTvMedicineFrequency.setText(context?.getString(R.string.specific_days_of_the_week), false)
+                "EveryXDays" -> acTvMedicineFrequency.setText(context?.getString(R.string.every_x_days), false)
+                "EveryXWeeks" -> acTvMedicineFrequency.setText(context?.getString(R.string.every_x_weeks), false)
+                "EveryXMonths" -> acTvMedicineFrequency.setText(context?.getString(R.string.every_x_months), false)
             }
         }
     }

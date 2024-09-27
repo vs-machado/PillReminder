@@ -230,6 +230,7 @@
     <string name="filter">Filtrar</string>
     <string name="cannot_edit_finished_treatment">Não é possível editar um tratamento encerrado.</string>
     <string name="error_treatment_termination">Erro ao encerrar o tratamento</string>
+    <string name="you_must_provide_a_interval">Você deve inserir um intervalo. Tente novamente.</string>
 
     <string-array name="medicine_forms">
         <item>Comprimido</item>

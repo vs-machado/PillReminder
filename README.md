@@ -4,14 +4,14 @@
 <div align="center">
   <table>
     <tr>
-      <td><img src="https://github.com/vs-machado/PillReminder/assets/144490624/8c0a2311-2b9c-42d3-a941-dfd882c4c37c" alt="Screenshot 1" width="200"></td>
-      <td><img src="https://github.com/vs-machado/PillReminder/assets/144490624/229ab4b8-4473-46a8-82aa-1e16551a1746" alt="Screenshot 4" width="200"></td>
-      <td><img src="https://github.com/vs-machado/PillReminder/assets/144490624/23c7c99e-297a-48a6-8a2e-b28a6b10520a" alt="Screenshot 5" width="200"></td>
+      <td><img src="https://github.com/user-attachments/assets/a50477e4-b429-43a9-8082-2ec9e68c37f7" alt="Screenshot 1" width="200"></td>
+      <td><img src="https://github.com/user-attachments/assets/e28d9270-90f8-480f-9bfc-e610afabf5d6" alt="Screenshot 2" width="200"></td>
+      <td><img src="https://github.com/user-attachments/assets/233da499-b311-4d3b-bb65-f1df0a5ba158" alt="Screenshot 3" width="200"></td>
     </tr>
     <tr>
-     <td><img src="https://github.com/vs-machado/PillReminder/assets/144490624/702531d9-7b28-405c-b9a6-67cadcd9eb89" alt="Screenshot 6" width="200"></td>
-     <td><img src="https://github.com/vs-machado/PillReminder/assets/144490624/80ab931c-b42d-484c-9ade-87fff37a7fa9" alt="Screenshot 3" width="200"></td>
-     <td><img src="https://github.com/vs-machado/PillReminder/assets/144490624/32b9dd54-32a8-451b-bee8-4fcfd45311bb" alt="Screenshot 2" width="200"></td>
+     <td><img src="https://github.com/user-attachments/assets/f13f7c44-2372-4255-a9de-8f20e85ba6e8" alt="Screenshot 4" width="200"></td>
+     <td><img src="https://github.com/user-attachments/assets/a6994074-30ea-40c7-9270-f99356ac3e2d" alt="Screenshot 5" width="200"></td>
+     <td><img src="https://github.com/user-attachments/assets/4029d968-dc99-4677-8614-05172c329c44" alt="Screenshot 6" width="200"></td>
     </tr>
   </table>
 </div>
@@ -21,7 +21,8 @@
   <li>Schedule alarms to remind users about their medicines</li>
   <li>Receive notifications if user does not mark medicine as used in the application</li>
   <li>Allows users to set a treatment period or receive alarms until medicine deletion</li>
-  <li>Receive notifications after setting a daily pillbox refill reminder</li>
+  <li>Receive daily notifications after setting a pillbox refill reminder</li>
+  <li>List all ongoing and ended treatments</li>
   <li>Warn user if he pretends to mark a medicine as used close to the next dose hour</li>
 </ul>
 

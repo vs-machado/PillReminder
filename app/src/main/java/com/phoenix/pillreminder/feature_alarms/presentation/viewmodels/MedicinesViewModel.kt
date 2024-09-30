@@ -12,8 +12,6 @@ import com.phoenix.pillreminder.feature_alarms.domain.repository.MedicineReposit
 import com.phoenix.pillreminder.feature_alarms.presentation.AlarmScheduler
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.Job
-import kotlinx.coroutines.async
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import java.time.Instant
@@ -66,8 +64,8 @@ class MedicinesViewModel @Inject constructor(
         }
     }
 
-    fun getWorkerID(medicineName: String): String {
-        return medicineRepository.getWorkerID(medicineName)
+    fun getWorkerID(medicineName: String, treatmentID: String): String {
+        return medicineRepository.getWorkerID(medicineName, treatmentID)
     }
 
     fun getLastAlarmFromAllDistinctMedicines(): List<Medicine> {
@@ -118,7 +116,9 @@ class MedicinesViewModel @Inject constructor(
 
     suspend fun getSelectedDaysList(medicineName: String, treatmentID: String): MutableSet<Int> {
         return withContext(Dispatchers.IO) {
+            Log.d("debug", "$medicineName $treatmentID")
             val daysString = medicineRepository.getSelectedDaysList(medicineName, treatmentID)
+            Log.d("debug", daysString)
             daysString.split(",").mapNotNull { it.toIntOrNull() }.toMutableSet()
         }
     }
@@ -151,9 +151,11 @@ class MedicinesViewModel @Inject constructor(
         }
     }
 
-    suspend fun getMillisList(medicineName: String, alarmsPerDay: Int, treatmentID: String): List<Long>{
+    suspend fun getDailyAlarms(medicineName: String, alarmsPerDay: Int, treatmentID: String): List<Pair<Int, Int>>{
         return withContext(Dispatchers.IO){
-            medicineRepository.getDailyAlarms(medicineName, alarmsPerDay, treatmentID)
+            medicineRepository.getDailyAlarms(medicineName, alarmsPerDay, treatmentID).map {
+                Pair(it.hour, it.minute)
+            }
         }
     }
 
@@ -175,6 +177,12 @@ class MedicinesViewModel @Inject constructor(
         withContext(Dispatchers.IO){
             medicineRepository.updateMedicinesActiveStatus(medicine.name, System.currentTimeMillis(), false)
             medicineRepository.deleteUpcomingAlarms(medicine.name, System.currentTimeMillis())
+        }
+    }
+
+    suspend fun getLastAlarm(medicineName: String, treatmentID: String): Medicine {
+        return withContext(Dispatchers.IO){
+            medicineRepository.getLastAlarm(medicineName, treatmentID)
         }
     }
 

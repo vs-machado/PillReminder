@@ -1,11 +1,14 @@
 package com.phoenix.pillreminder.feature_alarms.data.data_source
 
+import android.database.Cursor
+import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.room.Dao
 import androidx.room.Delete
 import androidx.room.Insert
 import androidx.room.Query
 import androidx.room.Update
+import com.phoenix.pillreminder.feature_alarms.domain.model.AlarmTimeData
 import com.phoenix.pillreminder.feature_alarms.domain.model.Medicine
 
 @Dao
@@ -35,7 +38,7 @@ interface MedicineDao {
     @Delete
     suspend fun deleteAllSelectedMedicines(medicines: List<Medicine>)
 
-    @Query("SELECT selected_days_of_week FROM medicines_data_table WHERE name = :medicineName AND treatment_id = :treatmentID")
+    @Query("SELECT selected_days_of_week FROM medicines_data_table WHERE name = :medicineName AND treatment_id = :treatmentID ORDER BY alarm_in_millis DESC LIMIT 1")
     suspend fun getSelectedDaysList(medicineName: String, treatmentID: String): String
 
     @Query("SELECT * FROM medicines_data_table WHERE name = :medicineName AND alarm_in_millis > :millis ORDER BY alarm_in_millis ASC")
@@ -49,17 +52,18 @@ interface MedicineDao {
     @Query("SELECT * FROM medicines_data_table")
     fun getAllMedicines():LiveData<List<Medicine>>
 
-    @Query("SELECT DISTINCT alarm_in_millis FROM medicines_data_table WHERE " +
+    @Query("SELECT DISTINCT alarm_hour, alarm_minute FROM medicines_data_table WHERE " +
             "name = :medicineName AND last_edited = (" +
             "    SELECT MAX(last_edited) FROM medicines_data_table " +
             "    WHERE name = :medicineName AND treatment_id = :treatmentID" +
             ") AND is_active = true " +
             "ORDER BY alarm_in_millis ASC " +
             "LIMIT :alarmsPerDay")
-    suspend fun getDailyAlarms(medicineName: String, alarmsPerDay: Int, treatmentID: String): List<Long>
+    suspend fun getDailyAlarms(medicineName: String, alarmsPerDay: Int, treatmentID: String): List<AlarmTimeData>
+
 
     @Query("SELECT last_edited FROM medicines_data_table " +
-            "WHERE name = :medicineName AND is_active = true ORDER BY last_edited DESC LIMIT 1")
+            "WHERE name = :medicineName  ORDER BY last_edited DESC LIMIT 1")
     suspend fun getMedicineEditTimestamp(medicineName: String): Long
 
     @Query("SELECT *" +
@@ -70,8 +74,8 @@ interface MedicineDao {
     @Query("SELECT * FROM medicines_data_table")
     fun getMedicines(): List<Medicine>
 
-    @Query("SELECT reschedule_worker_id FROM medicines_data_table WHERE name = :medicineName AND is_active = true")
-    fun getWorkerID(medicineName: String): String
+    @Query("SELECT reschedule_worker_id FROM medicines_data_table WHERE name = :medicineName AND treatment_id = :treatmentID ORDER BY alarm_in_millis DESC LIMIT 1")
+    fun getWorkerID(medicineName: String, treatmentID: String): String
 
     @Query("SELECT * "+
             "FROM medicines_data_table " +
@@ -146,7 +150,7 @@ interface MedicineDao {
     """)
     suspend fun getAlarmTimesForMedicine(medicineName: String, cutoffTime: Long, treatmentID: String): List<String>
 
-    @Query("SELECT * FROM medicines_data_table WHERE name = :medicineName AND treatment_id = :treatmentID AND is_active = true ORDER BY alarm_in_millis DESC LIMIT 1")
+    @Query("SELECT * FROM medicines_data_table WHERE name = :medicineName AND treatment_id = :treatmentID ORDER BY alarm_in_millis DESC LIMIT 1")
     suspend fun getLastAlarm(medicineName: String, treatmentID: String): Medicine
 
 }

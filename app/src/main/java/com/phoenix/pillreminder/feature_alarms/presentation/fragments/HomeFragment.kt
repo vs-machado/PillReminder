@@ -51,6 +51,7 @@ import com.phoenix.pillreminder.feature_alarms.presentation.adapter.RvMedicinesL
 import com.phoenix.pillreminder.feature_alarms.presentation.utils.CalendarUtils
 import com.phoenix.pillreminder.feature_alarms.presentation.utils.ThemeUtils
 import com.phoenix.pillreminder.feature_alarms.presentation.viewmodels.AlarmSettingsSharedViewModel
+import com.phoenix.pillreminder.feature_alarms.presentation.viewmodels.EditMedicinesViewModel
 import com.phoenix.pillreminder.feature_alarms.presentation.viewmodels.HomeFragmentViewModel
 import com.phoenix.pillreminder.feature_alarms.presentation.viewmodels.MedicinesViewModel
 import dagger.hilt.android.AndroidEntryPoint
@@ -73,6 +74,7 @@ class HomeFragment: Fragment() {
     private lateinit var adapter: RvMedicinesListAdapter
     private val medicinesViewModel: MedicinesViewModel by hiltNavGraphViewModels(R.id.nav_graph)
     private val sharedViewModel: AlarmSettingsSharedViewModel by hiltNavGraphViewModels(R.id.nav_graph)
+    private val editMedicinesViewModel: EditMedicinesViewModel by hiltNavGraphViewModels(R.id.nav_graph)
     private var toast: Toast? = null
     private val hfViewModel: HomeFragmentViewModel by viewModels()
     private lateinit var dialog: Dialog
@@ -233,16 +235,23 @@ class HomeFragment: Fragment() {
                 displayMedicinesList(hfViewModel.getDate())
             },
             goToEditMedicines = { selectedMedicine ->
-                if (!selectedMedicine.isActive) {
-                    Toast.makeText(
-                        requireContext(),
-                        requireContext().getString(R.string.cannot_edit_finished_treatment),
-                        Toast.LENGTH_LONG
-                    ).show()
-                    return@RvMedicinesListAdapter
+                viewLifecycleOwner.lifecycleScope.launch(Dispatchers.IO) {
+                    val lastAlarm = medicinesViewModel.getLastAlarm(selectedMedicine.name, selectedMedicine.treatmentID)
+
+                    withContext(Dispatchers.Main){
+                        if (!lastAlarm.isActive) {
+                            Toast.makeText(
+                                requireContext(),
+                                requireContext().getString(R.string.cannot_edit_finished_treatment),
+                                Toast.LENGTH_LONG
+                            ).show()
+                            return@withContext
+                        }
+                        val action = HomeFragmentDirections.actionHomeFragmentToEditMedicinesFragment(lastAlarm)
+                        findNavController().navigate(action)
+                    }
                 }
-                val action = HomeFragmentDirections.actionHomeFragmentToEditMedicinesFragment(selectedMedicine)
-                findNavController().navigate(action)
+
             },
             showEndTreatmentDialog = { selectedMedicine ->
                 showEndTreatmentDialog(selectedMedicine)
@@ -425,12 +434,31 @@ class HomeFragment: Fragment() {
         binding.tvYouSure.text = context?.getString(R.string.are_you_sure_end_treatment, medicine.name)
 
         binding.btnEndTreatment.setOnClickListener {
-            viewLifecycleOwner.lifecycleScope.launch(Dispatchers.Main){
-                medicinesViewModel.endTreatment(medicine).join()
-                displayMedicinesList(hfViewModel.getDate())
-                dialog.dismiss()
+            viewLifecycleOwner.lifecycleScope.launch {
+                try {
+                    withContext(Dispatchers.Default) {
+                        medicinesViewModel.endTreatment(medicine).join()
+                        sharedViewModel.cancelWork(medicine)
+                    }
+
+                    withContext(Dispatchers.Main) {
+                        displayMedicinesList(hfViewModel.getDate())
+                        dialog.dismiss()
+                    }
+                } catch (e: Exception) {
+                    Log.e("EndTreatmentDialog", "Error ending treatment", e)
+
+                    withContext(Dispatchers.Main) {
+                        Toast.makeText(
+                            context,
+                            requireContext().getString(R.string.error_treatment_termination),
+                            Toast.LENGTH_SHORT
+                        ).show()
+                    }
+                }
             }
         }
+
 
         binding.btnCancel.setOnClickListener {
             dialog.dismiss()
@@ -583,7 +611,9 @@ class HomeFragment: Fragment() {
             adapter.setList(medicinesViewModel.getMedicines(), currentDate)
         }
 
-
+        // State used in EditMedicinesFragment. Everytime user navigates to EditMedicinesFragment AlarmSettingsSharedViewModel must set the treatment data.
+        // The viewmodel setters are called when isInitialized is set to false. isInitialized is set to false when user goes back to HomeFragment or saves the changes.
+        editMedicinesViewModel.setInitialized(false)
     }
 
     override fun onPause() {

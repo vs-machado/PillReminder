@@ -84,7 +84,7 @@ class AlarmSettingsSharedViewModel @Inject constructor(
     private lateinit var workRequestID: UUID
 
     init{
-        _currentAlarmNumber.value = 1
+        _currentAlarmNumber.postValue(1)
     }
 
     // Used with medicine frequency every day or every other day with treatment period set.
@@ -185,7 +185,6 @@ class AlarmSettingsSharedViewModel @Inject constructor(
             true -> { UUID.randomUUID().toString() }
             false -> { getTreatmentID() }
         }
-
 
         val alarms = mutableListOf<Medicine>()
 
@@ -415,37 +414,46 @@ class AlarmSettingsSharedViewModel @Inject constructor(
 
         return alarms
     }
-    fun createAlarmItemAndSchedule(context: Context, interval: Long){
-        val alarmScheduler : AlarmScheduler = AndroidAlarmScheduler(repository, context)
-        var alarmScheduled = false
 
-        val scheduleInterval = when(getMedicineFrequency()){
-            MedicineFrequency.EveryXWeeks -> { interval * 7 }
-            MedicineFrequency.EveryXMonths -> { interval * 30 }
-            else -> { interval }
+    fun createAlarmItemAndSchedule(context: Context, interval: Long) {
+        val alarmScheduler: AlarmScheduler = AndroidAlarmScheduler(repository, context)
+
+        val scheduleInterval = when (getMedicineFrequency()) {
+            MedicineFrequency.EveryXWeeks -> interval * 7
+            MedicineFrequency.EveryXMonths -> interval * 30
+            else -> interval
         }
 
-        for(day in 0 .. getTreatmentPeriodInDays() step scheduleInterval){
-            for(i in 0 until getAlarmHoursList().size){
-                if(getAlarmInMillis(i) > System.currentTimeMillis()){
-                    val alarmItem = AlarmItem (
-                        time = millisToDateTime(getAlarmInMillis(i)),
-                        medicineName = getMedicineName(),
-                        medicineForm = "${getMedicineForm()}",
-                        medicineQuantity = "${getMedicineQuantity()}",
-                        doseUnit = getDoseUnit(),
-                        alarmHour = "${getAlarmHour(i)}",
-                        alarmMinute = "${getAlarmMinute(i)}"
-                    )
+        val alarmItems = mutableListOf<AlarmItem>()
 
-                    // It schedules only the first alarm. The next alarm will be set when the first alarm is triggered.
-                    if (!alarmScheduled){
-                        alarmItem.let(alarmScheduler::scheduleAlarm)
-                        alarmScheduled = true
-                    }
-                }
+        for (day in 0..getTreatmentPeriodInDays() step scheduleInterval) {
+            for (i in getAlarmHoursList().indices) {
+                val alarmTimeMillis = getAlarmInMillis(i) + day * 24 * 60 * 60 * 1000 // Add days to alarm time
+
+                val alarmItem = AlarmItem(
+                    time = millisToDateTime(alarmTimeMillis),
+                    medicineName = getMedicineName(),
+                    medicineForm = "${getMedicineForm()}",
+                    medicineQuantity = getMedicineQuantity().toString(),
+                    doseUnit = getDoseUnit(),
+                    alarmHour = getAlarmHour(i).toString(),
+                    alarmMinute = getAlarmMinute(i).toString()
+                )
+
+                alarmItems.add(alarmItem)
             }
         }
+
+        // Sort alarms by time
+        alarmItems.sortBy { it.time }
+
+        // Find and schedule the first future alarm
+        val currentTime = System.currentTimeMillis()
+        val firstFutureAlarm = alarmItems.find {
+           it.time.atZone(ZoneId.systemDefault()).toInstant().toEpochMilli() > currentTime
+        }
+
+        firstFutureAlarm?.let { alarmScheduler.scheduleAlarm(it) }
     }
 
     fun setTreatmentID(treatmentID: String) {
@@ -457,28 +465,37 @@ class AlarmSettingsSharedViewModel @Inject constructor(
     }
 
     //Used with frequency specific days of week
-    fun createAlarmItemAndSchedule(context: Context){
-        val alarmScheduler : AlarmScheduler = AndroidAlarmScheduler(repository, context)
-        var alarmScheduled = false
+    fun createAlarmItemAndSchedule(context: Context) {
+        val alarmScheduler: AlarmScheduler = AndroidAlarmScheduler(repository, context)
 
-        for(i in 0 until getAlarmHoursList().size){
-            if(getAlarmInMillis(i) > System.currentTimeMillis()){
-                val alarmItem = AlarmItem(
-                    time = millisToDateTime(getAlarmInMillis(i)),
-                    medicineName = getMedicineName(),
-                    medicineForm = "${getMedicineForm()}",
-                    medicineQuantity = "${getMedicineQuantity()}",
-                    doseUnit = getDoseUnit(),
-                    alarmHour = "${getAlarmHour(i)}",
-                    alarmMinute = "${getAlarmMinute(i)}"
-                )
+        val alarmItems = mutableListOf<AlarmItem>()
 
-                if(!alarmScheduled){
-                    alarmItem.let(alarmScheduler::scheduleAlarm)
-                    alarmScheduled = true
-                }
-            }
+        for (i in getAlarmHoursList().indices) {
+            val alarmTimeMillis = getAlarmInMillis(i)
+
+            val alarmItem = AlarmItem(
+                time = millisToDateTime(alarmTimeMillis),
+                medicineName = getMedicineName(),
+                medicineForm = "${getMedicineForm()}",
+                medicineQuantity = "${getMedicineQuantity()}",
+                doseUnit = getDoseUnit(),
+                alarmHour = "${getAlarmHour(i)}",
+                alarmMinute ="${getAlarmMinute(i)}"
+            )
+
+            alarmItems.add(alarmItem)
         }
+
+        // Sort alarms by time
+        alarmItems.sortBy { it.time }
+
+        // Find and schedule the first future alarm
+        val currentTime = System.currentTimeMillis()
+        val firstFutureAlarm = alarmItems.find {
+            it.time.atZone(ZoneId.systemDefault()).toInstant().toEpochMilli() > currentTime
+        }
+
+        firstFutureAlarm?.let { alarmScheduler.scheduleAlarm(it) }
     }
 
     fun getExpiredMedicinesUpdatedInfo(medicine: Medicine): ExpiredMedicinesInfo {
@@ -669,15 +686,35 @@ class AlarmSettingsSharedViewModel @Inject constructor(
             withContext(Dispatchers.Default){
                 if(!hasNextAlarm && workerID != "noID"){
                     workManager.cancelWorkById(workRequestID)
+                    Log.d("debug", "cancel work")
                 }
             }
         }
     }
-    
-    fun convertTimeListToArrays(timeList: List<AlarmHour>){
-        timeList.forEachIndexed{ index, timeString ->
-            val (hour, minute) = timeString.alarmHour.split(':').map(String::toInt)
-            alarmHour[index] = hour
+
+    fun convertTimeListToArrays(timeList: List<AlarmHour>) {
+        timeList.forEachIndexed { index, timeString ->
+            // Split the time string into time and period (AM/PM)
+            // If there's no period (24-hour format), use an empty string
+            val (time, period) = timeString.alarmHour.split(' ', limit = 2).let {
+                if (it.size == 2) it else listOf(it[0], "")
+            }
+
+            // Split the time into hour and minute
+            val (hour, minute) = time.split(':').map(String::toInt)
+
+            // Adjust the hour based on the period (AM/PM)
+            val adjustedHour = when {
+                // If it's PM and not 12, add 12 to convert to 24-hour format
+                period.equals("PM", ignoreCase = true) && hour != 12 -> hour + 12
+                // If it's 12 AM, set to 0 (midnight in 24-hour format)
+                period.equals("AM", ignoreCase = true) && hour == 12 -> 0
+                // For all other cases (AM times, 12 PM, or 24-hour format), use the hour as is
+                else -> hour
+            }
+
+            // Store the adjusted hour and minute in their respective arrays
+            alarmHour[index] = adjustedHour
             alarmMinute[index] = minute
         }
     }

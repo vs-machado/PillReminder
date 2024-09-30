@@ -6,7 +6,6 @@ import android.graphics.Color
 import android.graphics.drawable.ColorDrawable
 import android.os.Bundle
 import android.text.format.DateFormat.is24HourFormat
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -14,9 +13,7 @@ import android.view.Window
 import android.widget.TextView
 import android.widget.Toast
 import androidx.core.content.ContextCompat
-import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
-import androidx.fragment.app.viewModels
 import androidx.hilt.navigation.fragment.hiltNavGraphViewModels
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
@@ -60,7 +57,7 @@ class EditMedicinesFragment: Fragment() {
     private val medicinesViewModel: MedicinesViewModel by hiltNavGraphViewModels(R.id.nav_graph)
     private lateinit var adapter: AlarmsHourListAdapter
     private var alarmHourList: List<AlarmHour>? = null
-    private lateinit var millisList: List<Long>
+    private lateinit var dailyAlarmsList: List<Pair<Int, Int>>
     private var endDateMillis: Long = 0L
     private var userSelectedDaysOfWeek: Boolean = false
 
@@ -114,9 +111,10 @@ class EditMedicinesFragment: Fragment() {
                     }
                 }
 
+                // Initializes the viewmodel data only once
                 if(!editMedicinesViewModel.isInitialized.value) {
                     initializeViewModelData(medicine)
-                    editMedicinesViewModel.setInitialized()
+                    editMedicinesViewModel.setInitialized(true)
                 }
 
                 // Fill the text inputs with the medicine data
@@ -211,61 +209,16 @@ class EditMedicinesFragment: Fragment() {
             }
 
             // Initializes medicine frequency and sets the text
-            when(medicine?.medicineFrequency){
-                "EveryDay" -> acTvMedicineFrequency.setText(context?.getString(R.string.every_day), false)
-                "EveryOtherDay" -> acTvMedicineFrequency.setText(context?.getString(R.string.every_other_day), false)
-                "SpecificDaysOfWeek" -> acTvMedicineFrequency.setText(context?.getString(R.string.specific_days_of_the_week), false)
-                "EveryXDays" -> acTvMedicineFrequency.setText(context?.getString(R.string.every_x_days), false)
-                "EveryXWeeks" -> acTvMedicineFrequency.setText(context?.getString(R.string.every_x_weeks), false)
-                "EveryXMonths" -> acTvMedicineFrequency.setText(context?.getString(R.string.every_x_months), false)
-            }
+            medicine?.let { setActvMedicineFrequency(it) }
 
+            // tvStrength or acTvDoseUnit will be visible depending on medicine form selected by user
             acTvMedicineForm.setOnItemClickListener { parent, _, position, _ ->
                 val selectedItem = parent.getItemAtPosition(position).toString()
                 tietQuantity.isEnabled = true
 
-                medicine?.let { medicine -> // still needs to make tvstrength visible in the remain medicine forms and set the tildoseunit field
-                    when(selectedItem){
-                        context?.getString(R.string.pomade) -> {
-                            tietQuantity.isEnabled = false
-                            tietQuantity.setText("1")
-                            tvStrength.text = ""
-                            tvStrengthVisible()
-                        }
-                        context?.getString(R.string.pill) -> {
-                            tvStrengthVisible()
-                            tvStrength.text = context?.getString(R.string.pills)
-                        }
-                        context?.getString(R.string.Drops) -> {
-                            tvStrengthVisible()
-                            tvStrength.text = context?.getString(R.string.drops)
-                        }
-                        context?.getString(R.string.injection) ->{
-                            tilDoseUnitVisible(medicine, "injection")
-                            when(medicine.unit){
-                                "mL" -> acTvDoseUnit.setText(context?.getString(R.string.mls), false)
-                                "syringe" -> acTvDoseUnit.setText(context?.getString(R.string.syringe), false)
-                                else -> acTvDoseUnit.setText(context?.getString(R.string.mls), false)
-                            }
-                        }
-                        context?.getString(R.string.liquid) -> {
-                            tvStrengthVisible()
-                            tvStrength.text = context?.getString(R.string.mls)
-                        }
-                        context?.getString(R.string.inhaler) -> {
-                            tilDoseUnitVisible(medicine, "inhaler")
-                            when(medicine.unit) {
-                                "mg" -> acTvDoseUnit.setText(context?.getString(R.string.mg), false)
-                                "puff" ->  acTvDoseUnit.setText(context?.getString(R.string.puff), false)
-                                "mL" -> acTvDoseUnit.setText(context?.getString(R.string.mls), false)
-                                else -> {
-                                    acTvDoseUnit.setText(context?.getString(R.string.mls), false)
-                                }
-                            }
-                        }
-                    }
+                medicine?.let { medicine ->
+                    setDoseVisibility(medicine, selectedItem)
                 }
-
             }
         }
 
@@ -299,11 +252,25 @@ class EditMedicinesFragment: Fragment() {
                 else -> throw IllegalArgumentException("Invalid argument")
             }
 
-            if(binding.acTvDoseUnit.isVisible){
-                doseUnit = binding.acTvDoseUnit.text.toString()
-            } else {
-                if (medicine != null) {
-                    doseUnit = medicine.unit
+            if(binding.tilDoseUnit.visibility == View.VISIBLE){
+                val unitField = binding.acTvDoseUnit.text.toString()
+                doseUnit = when(unitField){
+                    requireContext().getString(R.string.mls) -> "mL"
+                    requireContext().getString(R.string.mg) -> "mg"
+                    requireContext().getString(R.string.syringe) -> "syringe"
+                    requireContext().getString(R.string.puff) -> "puff"
+                    else -> throw Exception("Invalid dose unit")
+                }
+            }
+
+            if(binding.tvStrength.visibility == View.VISIBLE) {
+                val formField = binding.acTvMedicineForm.text.toString()
+                doseUnit = when(formField){
+                    requireContext().getString(R.string.pill) -> "pill"
+                    requireContext().getString(R.string.Drops) -> "drop" //
+                    requireContext().getString(R.string.pomade) -> "application"
+                    requireContext().getString(R.string.liquid) -> "mL"
+                    else -> throw Exception("Invalid medicine form")
                 }
             }
 
@@ -318,6 +285,9 @@ class EditMedicinesFragment: Fragment() {
                 setMedicineQuantity(quantity)
                 setNumberOfAlarms(alarmsPerDay!!)
                 setTreatmentID(medicine.treatmentID)
+
+                // After saving the medicine changes, setInitialized is set to false, requiring the fragment to set the viewmodel updated data
+                editMedicinesViewModel.setInitialized(false)
 
                 // When user does not select the days of week in EditMedicinesFragment the days of week must be queried from the database
                 if(medicine.selectedDaysOfWeek != null && !userSelectedDaysOfWeek) {
@@ -477,10 +447,10 @@ class EditMedicinesFragment: Fragment() {
         binding.rvAlarmsHour.adapter = adapter
 
         withContext(Dispatchers.IO){
-            millisList = medicinesViewModel.getMillisList(medicine.name, medicine.alarmsPerDay, medicine.treatmentID)
+            dailyAlarmsList = medicinesViewModel.getDailyAlarms(medicine.name, medicine.alarmsPerDay, medicine.treatmentID)
 
             // Formats the hours to 12 or 24 hours format.
-            alarmHourList = editMedicinesViewModel.convertMillisToAlarmHourList(requireContext(), millisList)
+            alarmHourList = editMedicinesViewModel.convertMillisToAlarmHourList(requireContext(), dailyAlarmsList)
 
             // Fill and initialize the alarm hour and minute array variables to schedule alarms
             alarmHourList?.let { alarmSettingsSharedViewModel.convertTimeListToArrays(it) }
@@ -556,10 +526,21 @@ class EditMedicinesFragment: Fragment() {
         }
 
         binding.btnOkEveryDialog.setOnClickListener {
-            val interval = binding.etIntervalEveryDialog.text.toString().toInt()
-            alarmSettingsSharedViewModel.setInterval(interval)
+            val intervalField = binding.etIntervalEveryDialog.text
 
-            dialog.dismiss()
+            if(intervalField.isNotEmpty()){
+                val interval = intervalField.toString().toInt()
+                alarmSettingsSharedViewModel.setInterval(interval)
+                dialog.dismiss()
+                return@setOnClickListener
+            }
+
+            Toast.makeText(
+                requireContext(),
+                requireContext().getString(R.string.you_must_provide_a_interval),
+                Toast.LENGTH_LONG
+            ).show()
+
         }
 
         binding.btnCancelEveryDialog.setOnClickListener {
@@ -622,13 +603,14 @@ class EditMedicinesFragment: Fragment() {
                 alarmSettingsSharedViewModel.setSelectedDaysList(arrayAdapter.getSelectedDaysList())
                 userSelectedDaysOfWeek = true // flag used to prevent database query in tvSave click listener
                 dialog.dismiss()
-            } else {
-                Toast.makeText(
-                    requireContext(),
-                    context?.getString(R.string.select_at_least_1_day),
-                    Toast.LENGTH_LONG
-                ).show()
+                return@setOnClickListener
             }
+
+            Toast.makeText(
+                requireContext(),
+                context?.getString(R.string.select_at_least_1_day),
+                Toast.LENGTH_LONG
+            ).show()
         }
 
         binding.btnCancelEveryDialog.setOnClickListener {
@@ -656,17 +638,15 @@ class EditMedicinesFragment: Fragment() {
             "inhaler" -> tilDoseUnitVisible(medicine, "inhaler")
         }
 
-        val tvstrengthtext = binding.tvStrength.text.toString()
-        Log.d("tvstrength", tvstrengthtext)
     }
 
     private fun tvStrengthVisible(){
         binding.tvStrength.visibility = View.VISIBLE
-        binding.tilDoseUnit.visibility = View.INVISIBLE
+        binding.tilDoseUnit.visibility = View.GONE
     }
 
     private fun tilDoseUnitVisible(medicine: Medicine, form: String) {
-        binding.tvStrength.visibility = View.INVISIBLE
+        binding.tvStrength.visibility = View.GONE
         binding.tilDoseUnit.visibility = View.VISIBLE
 
         when(form){
@@ -739,5 +719,62 @@ class EditMedicinesFragment: Fragment() {
         alarmSettingsSharedViewModel.setTreatmentEndDate(medicine.endDate)
         alarmSettingsSharedViewModel.setDoseUnit(medicine.unit)
         alarmSettingsSharedViewModel.setMedicineForm(medicine.form)
+    }
+
+    private fun setDoseVisibility(medicine: Medicine, medicineForm: String) {
+        binding.apply{
+            when(medicineForm){
+                context?.getString(R.string.pomade) -> {
+                    tietQuantity.isEnabled = false
+                    tietQuantity.setText("1")
+                    tvStrength.text = ""
+                    tvStrengthVisible()
+                }
+                context?.getString(R.string.pill) -> {
+                    tvStrengthVisible()
+                    tvStrength.text = context?.getString(R.string.pills)
+                }
+                context?.getString(R.string.Drops) -> {
+                    tvStrengthVisible()
+                    tvStrength.text = context?.getString(R.string.drops)
+                }
+                context?.getString(R.string.injection) ->{
+                    tilDoseUnitVisible(medicine, "injection")
+                    when(medicine.unit){
+                        "mL" -> acTvDoseUnit.setText(context?.getString(R.string.mls), false)
+                        "syringe" -> acTvDoseUnit.setText(context?.getString(R.string.syringe), false)
+                        else -> acTvDoseUnit.setText(context?.getString(R.string.mls), false)
+                    }
+                }
+                context?.getString(R.string.liquid) -> {
+                    tvStrengthVisible()
+                    tvStrength.text = context?.getString(R.string.mls)
+                }
+                context?.getString(R.string.inhaler) -> {
+                    tilDoseUnitVisible(medicine, "inhaler")
+                    when(medicine.unit) {
+                        "mg" -> acTvDoseUnit.setText(context?.getString(R.string.mg), false)
+                        "puff" ->  acTvDoseUnit.setText(context?.getString(R.string.puff), false)
+                        "mL" -> acTvDoseUnit.setText(context?.getString(R.string.mls), false)
+                        else -> {
+                            acTvDoseUnit.setText(context?.getString(R.string.mls), false)
+                        }
+                    }
+                }
+            }
+        }
+    }
+
+    private fun setActvMedicineFrequency(medicine: Medicine) {
+        binding.apply{
+            when(medicine.medicineFrequency){
+                "EveryDay" -> acTvMedicineFrequency.setText(context?.getString(R.string.every_day), false)
+                "EveryOtherDay" -> acTvMedicineFrequency.setText(context?.getString(R.string.every_other_day), false)
+                "SpecificDaysOfWeek" -> acTvMedicineFrequency.setText(context?.getString(R.string.specific_days_of_the_week), false)
+                "EveryXDays" -> acTvMedicineFrequency.setText(context?.getString(R.string.every_x_days), false)
+                "EveryXWeeks" -> acTvMedicineFrequency.setText(context?.getString(R.string.every_x_weeks), false)
+                "EveryXMonths" -> acTvMedicineFrequency.setText(context?.getString(R.string.every_x_months), false)
+            }
+        }
     }
 }

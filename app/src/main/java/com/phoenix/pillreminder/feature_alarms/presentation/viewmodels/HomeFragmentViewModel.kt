@@ -84,7 +84,7 @@ class HomeFragmentViewModel @Inject constructor(
 
             withContext(Dispatchers.IO){
                 if(!hasNextAlarm){
-                    val workRequestID = UUID.fromString(repository.getWorkerID(medicine.name))
+                    val workRequestID = UUID.fromString(repository.getWorkerID(medicine.name, medicine.treatmentID))
 
                     withContext(Dispatchers.Main){
                         WorkManager.getInstance(appContext).cancelWorkById(workRequestID)

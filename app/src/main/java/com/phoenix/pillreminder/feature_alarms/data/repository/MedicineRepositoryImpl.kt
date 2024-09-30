@@ -2,6 +2,7 @@ package com.phoenix.pillreminder.feature_alarms.data.repository
 
 import androidx.lifecycle.LiveData
 import com.phoenix.pillreminder.feature_alarms.data.data_source.MedicineDao
+import com.phoenix.pillreminder.feature_alarms.domain.model.AlarmTimeData
 import com.phoenix.pillreminder.feature_alarms.domain.model.Medicine
 import com.phoenix.pillreminder.feature_alarms.domain.repository.MedicineRepository
 
@@ -55,7 +56,7 @@ class MedicineRepositoryImpl (
         return dao.getAllMedicines()
     }
 
-    override suspend fun getDailyAlarms(medicineName: String, alarmsPerDay: Int, treatmentID: String): List<Long> {
+    override suspend fun getDailyAlarms(medicineName: String, alarmsPerDay: Int, treatmentID: String): List<AlarmTimeData> {
         return dao.getDailyAlarms(medicineName, alarmsPerDay, treatmentID)
     }
 
@@ -72,8 +73,8 @@ class MedicineRepositoryImpl (
         return dao.getMedicines()
     }
 
-    override fun getWorkerID(medicineName: String): String {
-        return dao.getWorkerID(medicineName)
+    override fun getWorkerID(medicineName: String, treatmentID: String): String {
+        return dao.getWorkerID(medicineName, treatmentID)
     }
 
     override fun getCurrentAlarmData(alarmInMillis: Long): Medicine? {
@@ -128,5 +129,9 @@ class MedicineRepositoryImpl (
 
     override suspend fun getAlarmTimesForMedicine(medicineName: String, cutoffTime: Long, treatmentID: String): List<String>{
         return dao.getAlarmTimesForMedicine(medicineName, cutoffTime, treatmentID)
+    }
+
+    override suspend fun getLastAlarm(medicineName: String, treatmentID: String): Medicine {
+        return dao.getLastAlarm(medicineName, treatmentID)
     }
 }

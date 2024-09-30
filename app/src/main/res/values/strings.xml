@@ -227,6 +227,8 @@
     <string name="ended_treatments">Ended treatments</string>
     <string name="filter">Filter</string>
     <string name="cannot_edit_finished_treatment">You can\'t edit a finished treatment</string>
+    <string name="error_treatment_termination">Error during treatment termination</string>
+    <string name="you_must_provide_a_interval">You must provide an interval. Try again.</string>
 
     <string name="quantity_syringe">Quantity: %1$d syringe(s)</string>
 

@@ -26,5 +26,8 @@
   <li>Warn user if he pretends to mark a medicine as used close to the next dose hour</li>
 </ul>
 
+<h2>Installation</h2>
+[![GitHub](https://github.com/user-attachments/assets/aece0484-443f-46a8-9c81-d08efe0268b2)](https://github.com/vs-machado/PillReminder/releases/tag/1.0.0)
+
 <h2>Disclaimer</h2>
 The project cannot be held responsible for any errors in the receipt of alarms. If the application malfunctions, first try restarting your phone. If this does not work, we recommend reinstalling the application.

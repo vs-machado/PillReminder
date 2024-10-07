@@ -1,5 +1,5 @@
 <h1 align="center">Pill Reminder</h1>
-<p align="center">An Android open source application for helping users to track their medicines doses</p>
+<p align="center">An Android application for helping users to track their medicines doses</p>
 
 <div align="center">
   <table>
@@ -30,6 +30,12 @@
 <a href="https://github.com/vs-machado/PillReminder/releases/tag/1.0.0">
     <img alt="GitHub installation" width="200px" src="https://github.com/user-attachments/assets/aece0484-443f-46a8-9c81-d08efe0268b2" />
 </a>
+
+<h2>License</h2>
+This project is licensed under the Creative Commons Attribution-NonCommercial 4.0 International (CC BY-NC 4.0) license.<br>
+You are free to share and adapt the material for non-commercial purposes, as long as you provide proper attribution.
+
+For more details, visit:  https://creativecommons.org/licenses/by-nc/4.0/
 
 <h2>Disclaimer</h2>
 The project cannot be held responsible for any errors in the receipt of alarms. If the application malfunctions, first try restarting your phone. If this does not work, we recommend reinstalling the application.

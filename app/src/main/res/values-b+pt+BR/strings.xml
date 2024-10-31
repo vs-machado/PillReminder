@@ -137,8 +137,8 @@
     <string name="medicine_not_appearing_everyday_even_if_i_don_t_set_a_treatment_period">O medicamento não aparece todos os dias, mesmo que eu não tenha definido um período de tratamento.</string>
     <string name="answer_medicine_not_appearing_everyday_even_if_i_don_t_set_a_treatment_period">Isso é normal. Um medicamento sem período de tratamento será eventualmente reinserido no aplicativo após um mês.</string>
     <string name="dashboard">Painel</string>
-    <string name="home">Página inicial</string>
-    <string name="my_medicines">Meus medicamentos</string>
+    <string name="home">Início</string>
+    <string name="my_medicines">Medicamentos</string>
     <string name="info">Info</string>
     <string name="about">Sobre</string>
     <string name="help">Ajuda</string>

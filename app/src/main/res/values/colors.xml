@@ -3,7 +3,7 @@
     <color name="black">#FF000000</color>
     <color name="white">#FFFFFFFF</color>
     <color name="colorPrimary">#001A9E</color>
-    <color name="week_view_stroke">#001A9E</color>
+    <color name="week_view_stroke">#0C3078</color>
     <color name="fab">#1D8CED</color>
     <color name="light_fab">#AE62B2F8</color>
     <color name="transparent_blue">#4D62B2F8</color>

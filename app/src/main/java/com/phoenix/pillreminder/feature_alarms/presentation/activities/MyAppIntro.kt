@@ -61,6 +61,30 @@ class MyAppIntro: AppIntro2() {
                     descriptionTypefaceFontRes = R.font.manrope_semibold
                 )
             )
+            addSlide(
+                AppIntroFragment.createInstance(
+                    title = getString(R.string.to_see_your_medicine_details),
+                    description = getString(R.string.click_on_my_medicines),
+                    imageDrawable = R.drawable.tutorial_medicine_details,
+                    backgroundColorRes = R.color.gradient_end_color,
+                    titleColorRes = R.color.intro_text_blue,
+                    descriptionColorRes = R.color.intro_text_blue,
+                    titleTypefaceFontRes = R.font.manrope_semibold,
+                    descriptionTypefaceFontRes = R.font.manrope_semibold
+                )
+            )
+            addSlide(
+                AppIntroFragment.createInstance(
+                    title = getString(R.string.marking_the_medicine_usage),
+                    description = getString(R.string.click_on_mark_medicine),
+                    imageDrawable = R.drawable.tutorial_mark_usage,
+                    backgroundColorRes = R.color.gradient_end_color,
+                    titleColorRes = R.color.intro_text_blue,
+                    descriptionColorRes = R.color.intro_text_blue,
+                    titleTypefaceFontRes = R.font.manrope_semibold,
+                    descriptionTypefaceFontRes = R.font.manrope_semibold
+                )
+            )
             setTransformer(AppIntroPageTransformerType.Parallax(
                 titleParallaxFactor = 1.0,
                 imageParallaxFactor = -1.0,

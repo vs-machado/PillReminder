@@ -20,6 +20,12 @@
     <string name="do_you_want_to_set_a_treatment_duration">Do you want to set a treatment duration?</string>
     <string name="please_insert_the_medicine_alarm_hour">Please, insert the medicine alarm hour:</string>
 
+    <string name="to_see_your_medicine_details">To see your medicine details:</string>
+    <string name="click_on_my_medicines">Click on My medicines and then click on the list icon.</string>
+    <string name="marking_the_medicine_usage">Marking the medicine usage:</string>
+    <string name="click_on_mark_medicine">Click on Mark medicine usage button. If overlay permissions are disabled,
+        Mark medicine usage button will appear in the notification.</string>
+
     <string name="hour_minute_format">0%1$s</string>
     <string name="tv_hour">%1$s:%2$s</string>
     <string name="tv_alarm_and_hour">%1$s\n%2$s</string>

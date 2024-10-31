@@ -9,6 +9,7 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.app.AppCompatDelegate
 import androidx.core.view.GravityCompat
 import androidx.fragment.app.Fragment
+import androidx.navigation.NavOptions
 import androidx.navigation.findNavController
 import androidx.navigation.fragment.NavHostFragment
 import androidx.navigation.ui.AppBarConfiguration
@@ -52,6 +53,12 @@ class MainActivity: AppCompatActivity() {
     private fun setupNavigation(){
         val navHostFragment = supportFragmentManager.findFragmentById(R.id.fragmentContainerView3) as NavHostFragment
         val navController = navHostFragment.navController
+        val navOptions = NavOptions.Builder()
+            .setEnterAnim(R.anim.fade_in)
+            .setExitAnim(R.anim.fade_out)
+            .setPopEnterAnim(R.anim.fade_in)
+            .setPopExitAnim(R.anim.fade_out)
+            .build()
 
         appBarConfiguration = AppBarConfiguration(setOf(R.id.homeFragment))
         setupActionBarWithNavController(navController, appBarConfiguration)
@@ -60,19 +67,19 @@ class MainActivity: AppCompatActivity() {
         binding.bottomNavigation.setOnItemSelectedListener { menuItem ->
             when(menuItem.itemId){
                 R.id.bottom_home -> {
-                    navController.navigate(R.id.homeFragment)
+                    navController.navigate(R.id.homeFragment, null, navOptions)
                     true
                 }
                 R.id.bottom_medicines -> {
-                    navController.navigate(R.id.myMedicinesFragment)
+                    navController.navigate(R.id.myMedicinesFragment, null, navOptions)
                     true
                 }
                 R.id.bottom_help -> {
-                    navController.navigate(R.id.helpFragment)
+                    navController.navigate(R.id.helpFragment, null, navOptions)
                     true
                 }
                 R.id.settings -> {
-                    navController.navigate(R.id.mySettingsFragment)
+                    navController.navigate(R.id.mySettingsFragment, null, navOptions)
                     true
                 }
                 else -> return@setOnItemSelectedListener false

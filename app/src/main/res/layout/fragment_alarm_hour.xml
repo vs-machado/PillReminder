@@ -21,6 +21,7 @@
             android:id="@+id/toolbar"
             android:layout_width="match_parent"
             android:layout_height="50dp"
+            android:theme="@style/ToolbarTitleTheme"
             android:background="@color/toolbar"
             android:elevation="4dp" />
 
@@ -53,7 +54,7 @@
         android:layout_marginTop="16dp"
         android:contentDescription=""
         android:text="@string/please_insert_the_medicine_alarm_hour"
-        android:textColor="?android:attr/textColorSecondary"
+        android:textColor="?android:attr/textColorTertiary"
         android:textSize="20sp"
         android:textStyle="bold"
         app:layout_constraintStart_toStartOf="parent"

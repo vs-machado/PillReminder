@@ -18,6 +18,7 @@
 
         <androidx.appcompat.widget.Toolbar
             android:id="@+id/toolbar"
+            android:theme="@style/ToolbarTitleTheme"
             android:layout_width="match_parent"
             android:layout_height="50dp"
             android:background="@color/toolbar"
@@ -40,7 +41,7 @@
         android:layout_marginTop="16dp"
         android:contentDescription=""
         android:text="@string/set_the_quantity_per_dosage"
-        android:textColor="?android:attr/textColorSecondary"
+        android:textColor="?android:attr/textColorTertiary"
         android:textSize="20sp"
         android:textStyle="bold"
         app:layout_constraintStart_toStartOf="parent"
@@ -113,6 +114,7 @@
                 android:layout_gravity="center_vertical"
                 android:layout_marginTop="6dp"
                 android:text="@string/pills"
+                android:textColor="?android:attr/textColorSecondary"
                 android:textSize="24sp"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"

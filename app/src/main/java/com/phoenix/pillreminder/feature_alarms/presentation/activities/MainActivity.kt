@@ -18,9 +18,8 @@ import androidx.navigation.ui.setupWithNavController
 import com.phoenix.pillreminder.R
 import com.phoenix.pillreminder.databinding.ActivityMainBinding
 import com.phoenix.pillreminder.feature_alarms.domain.repository.MedicineRepository
-import com.phoenix.pillreminder.feature_alarms.presentation.fragments.HelpFragment
-import com.phoenix.pillreminder.feature_alarms.presentation.fragments.HomeFragment
-import com.phoenix.pillreminder.feature_alarms.presentation.fragments.MyMedicinesFragment
+import com.phoenix.pillreminder.feature_alarms.domain.repository.SharedPreferencesRepository
+import com.phoenix.pillreminder.feature_alarms.presentation.utils.LanguageConfig
 import dagger.hilt.android.AndroidEntryPoint
 import javax.inject.Inject
 
@@ -28,6 +27,8 @@ import javax.inject.Inject
 class MainActivity: AppCompatActivity() {
     @Inject
     lateinit var repository: MedicineRepository
+
+    @Inject lateinit var sharedPreferencesRepository: SharedPreferencesRepository
 
     private lateinit var binding: ActivityMainBinding
     private lateinit var appBarConfiguration: AppBarConfiguration
@@ -70,6 +71,10 @@ class MainActivity: AppCompatActivity() {
                     navController.navigate(R.id.helpFragment)
                     true
                 }
+                R.id.settings -> {
+                    navController.navigate(R.id.mySettingsFragment)
+                    true
+                }
                 else -> return@setOnItemSelectedListener false
             }
         }
@@ -80,6 +85,7 @@ class MainActivity: AppCompatActivity() {
                     R.id.homeFragment -> R.id.bottom_home
                     R.id.myMedicinesFragment -> R.id.bottom_medicines
                     R.id.helpFragment -> R.id.bottom_help
+                    R.id.mySettingsFragment -> R.id.settings
                     else -> return@addOnDestinationChangedListener
                 }
             ).isChecked = true
@@ -104,4 +110,16 @@ class MainActivity: AppCompatActivity() {
         editor.putBoolean("isTutorialShown", true)
         editor.apply()
     }
+
+//    override fun attachBaseContext(newBase: Context?) {
+//        val languageCode = sharedPreferencesRepository.getAppLanguage()
+//
+//        if(languageCode != null && newBase != null){
+//            val context: Context = LanguageConfig.changeLanguage(newBase, languageCode)
+//            super.attachBaseContext(context)
+//            return
+//        }
+//
+//        super.attachBaseContext(newBase)
+//    }
 }

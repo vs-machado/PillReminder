@@ -101,6 +101,7 @@ dependencies {
     implementation("com.google.android.material:material:1.12.0")
     implementation("androidx.constraintlayout:constraintlayout:2.1.4")
     implementation("androidx.drawerlayout:drawerlayout:1.2.0")
+    implementation("androidx.preference:preference-ktx:1.2.1")
 
     // Swipe refresh layout
     implementation("androidx.swiperefreshlayout:swiperefreshlayout:1.1.0")

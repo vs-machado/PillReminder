@@ -14,7 +14,7 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="24dp"
         android:text="@string/medicine_time"
-        android:textColor="?android:attr/textColorSecondary"
+        android:textColor="?android:attr/textColorTertiary"
         android:textSize="28dp"
         android:textStyle="bold"
         app:layout_constraintEnd_toEndOf="parent"

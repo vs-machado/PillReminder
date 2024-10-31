@@ -231,6 +231,10 @@
     <string name="cannot_edit_finished_treatment">Não é possível editar um tratamento encerrado.</string>
     <string name="error_treatment_termination">Erro ao encerrar o tratamento</string>
     <string name="you_must_provide_a_interval">Você deve inserir um intervalo. Tente novamente.</string>
+    <string name="settings">Configurações</string>
+    <string name="app_language">Idioma do app</string>
+    <string name="request_permissions">Solicitar permissões do app</string>
+
 
     <string-array name="medicine_forms">
         <item>Comprimido</item>
@@ -259,6 +263,16 @@
         <item>mL</item>
         <item>mg</item>
         <item>inalação</item>
+    </string-array>
+
+    <string-array name="language_entries">
+        <item>English</item>
+        <item>Português (Brasil)</item>
+    </string-array>
+
+    <string-array name="language_values">
+        <item>en</item>
+        <item>pt-BR</item>
     </string-array>
 
     <plurals name="take_pill">

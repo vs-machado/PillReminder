@@ -13,4 +13,8 @@ interface SharedPreferencesRepository {
     fun setAlarmReschedulePreferences(boolean: Boolean)
 
     fun getAlarmReschedulePreferences(): Boolean
+
+    fun getAppLanguage(): String?
+
+    fun setAppLanguage(language: String)
 }

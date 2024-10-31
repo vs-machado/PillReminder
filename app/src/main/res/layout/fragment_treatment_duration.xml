@@ -52,7 +52,7 @@
         android:layout_marginStart="32dp"
         android:layout_marginTop="16dp"
         android:text="@string/do_you_want_to_set_a_treatment_duration"
-        android:textColor="?android:attr/textColorSecondary"
+        android:textColor="?android:attr/textColorTertiary"
         android:textSize="20sp"
         android:textStyle="bold"
         app:layout_constraintStart_toStartOf="parent"

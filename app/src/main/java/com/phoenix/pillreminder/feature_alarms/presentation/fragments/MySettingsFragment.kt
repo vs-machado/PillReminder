@@ -1,0 +1,89 @@
+package com.phoenix.pillreminder.feature_alarms.presentation.fragments
+
+import android.Manifest
+import android.content.pm.PackageManager
+import android.os.Bundle
+import android.provider.Settings
+import android.view.View
+import androidx.activity.result.contract.ActivityResultContracts
+import androidx.core.content.ContextCompat
+import androidx.preference.ListPreference
+import androidx.preference.Preference
+import androidx.preference.PreferenceFragmentCompat
+import com.google.android.material.floatingactionbutton.FloatingActionButton
+import com.phoenix.pillreminder.R
+import com.phoenix.pillreminder.feature_alarms.domain.repository.SharedPreferencesRepository
+import com.phoenix.pillreminder.feature_alarms.presentation.PermissionManager
+import com.phoenix.pillreminder.feature_alarms.presentation.utils.LanguageConfig
+import com.phoenix.pillreminder.feature_alarms.presentation.utils.ThemeUtils
+import dagger.hilt.android.AndroidEntryPoint
+import javax.inject.Inject
+
+// User can change the app theme, language and request app permissions
+@AndroidEntryPoint
+class MySettingsFragment: PreferenceFragmentCompat() {
+
+    @Inject lateinit var sharedPreferencesRepository: SharedPreferencesRepository
+
+    override fun onCreatePreferences(savedInstanceState: Bundle?, rootKey: String?) {
+        setPreferencesFromResource(R.xml.preferences, rootKey)
+        setupPreferenceListeners()
+    }
+
+    override fun onResume() {
+        super.onResume()
+
+        // Apply theme
+        ThemeUtils.applyThemeBasedSystemColors(
+            requireActivity(),
+            R.color.white_ice,
+            R.color.white_ice,
+            R.color.dark_gray,
+            R.color.dark_gray,
+            isAppearanceLightStatusBar = true,
+            isAppearanceLightNavigationBar = true,
+            isAppearanceLightStatusBarNightMode = false,
+            isAppearanceLightNavigationBarNightMode = false
+        )
+
+        // Avoid FAB recreation during screen rotation
+        requireActivity().findViewById<FloatingActionButton>(R.id.fabAddMedicine).visibility = View.GONE
+    }
+
+    private fun setupPreferenceListeners() {
+        val languagePreference = findPreference<ListPreference>("language")
+        val appLanguage = sharedPreferencesRepository.getAppLanguage()
+
+        languagePreference?.apply {
+            value = appLanguage
+            setOnPreferenceChangeListener { _, newValue ->
+                sharedPreferencesRepository.setAppLanguage(newValue as String)
+                LanguageConfig.changeLanguage(newValue)
+                true
+            }
+        }
+
+        // Permissions preference
+        findPreference<Preference>("permissions")
+            ?.setOnPreferenceClickListener {
+                requestAppPermissions()
+                true
+            }
+    }
+
+    // Request POST_NOTIFICATIONS permission and overlay permission
+    private fun requestAppPermissions() {
+        if (ContextCompat.checkSelfPermission(requireContext(), Manifest.permission.POST_NOTIFICATIONS) == PackageManager.PERMISSION_DENIED) {
+            requestPermissionLauncher.launch(Manifest.permission.POST_NOTIFICATIONS)
+        }
+        if(!Settings.canDrawOverlays(context)){
+            requestOverlayPermissionLauncher.launch(PermissionManager.getOverlayPermissionIntent(requireContext()))
+        }
+    }
+
+    private val requestPermissionLauncher = registerForActivityResult(ActivityResultContracts.RequestPermission()) { _ ->
+        requestOverlayPermissionLauncher.launch(PermissionManager.getOverlayPermissionIntent(requireContext()))
+    }
+
+    private val requestOverlayPermissionLauncher = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) {}
+}

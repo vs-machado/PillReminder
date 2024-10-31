@@ -19,6 +19,7 @@
         <androidx.appcompat.widget.Toolbar
             android:id="@+id/toolbarHowMany"
             android:layout_width="match_parent"
+            android:theme="@style/ToolbarTitleTheme"
             android:layout_height="50dp"
             android:background="@color/toolbar"
             android:elevation="4dp" />
@@ -51,7 +52,7 @@
         android:layout_marginTop="16dp"
         android:contentDescription="@string/how_many_do_you_take_per_day"
         android:text="@string/how_many_do_you_take_per_day"
-        android:textColor="?android:attr/textColorSecondary"
+        android:textColor="?android:attr/textColorTertiary"
         android:textSize="20sp"
         android:textStyle="bold"
         app:layout_constraintStart_toStartOf="parent"
@@ -81,6 +82,7 @@
         android:layout_marginStart="16dp"
         android:layout_marginTop="180dp"
         android:text="@string/time"
+        android:textColor="?android:attr/textColorPrimary"
         android:textSize="20sp"
         app:layout_constraintStart_toStartOf="@+id/guideline2"
         app:layout_constraintTop_toBottomOf="@+id/appBarHowMany" />

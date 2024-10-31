@@ -229,6 +229,9 @@
     <string name="cannot_edit_finished_treatment">You can\'t edit a finished treatment</string>
     <string name="error_treatment_termination">Error during treatment termination</string>
     <string name="you_must_provide_a_interval">You must provide an interval. Try again.</string>
+    <string name="settings">Settings</string>
+    <string name="app_language">App language</string>
+    <string name="request_permissions">Request app permissions</string>
 
     <string name="quantity_syringe">Quantity: %1$d syringe(s)</string>
 
@@ -350,6 +353,16 @@
         <item>Every X days</item>
         <item>Every X weeks</item>
         <item>Every X months</item>
+    </string-array>
+
+    <string-array name="language_entries">
+        <item>English</item>
+        <item>Português (Brasil)</item>
+    </string-array>
+
+    <string-array name="language_values">
+        <item>en</item>
+        <item>pt-BR</item>
     </string-array>
 
 </resources>

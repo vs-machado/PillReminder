@@ -22,6 +22,7 @@
             android:layout_width="match_parent"
             android:layout_height="50dp"
             android:background="@color/toolbar"
+            android:theme="@style/ToolbarTitleTheme"
             android:elevation="4dp" />
 
         <com.google.android.material.tabs.TabLayout
@@ -51,7 +52,7 @@
         android:layout_marginStart="32dp"
         android:layout_marginTop="16dp"
         android:text="@string/select_medicine_usage_days"
-        android:textColor="?android:attr/textColorSecondary"
+        android:textColor="?android:attr/textColorTertiary"
         android:textSize="20sp"
         android:textStyle="bold"
         app:layout_constraintStart_toStartOf="parent"

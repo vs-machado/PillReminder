@@ -49,6 +49,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginStart="16dp"
                 android:text="@string/name_of_the_medicine"
+                android:textColor="?android:attr/textColorPrimary"
                 android:textSize="16sp"
                 android:textStyle="bold"
                 app:layout_constraintStart_toEndOf="@+id/ivMedicineType"
@@ -75,6 +76,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="1 capsule"
+                android:textColor="?android:attr/textColorPrimary"
                 app:layout_constraintStart_toStartOf="@+id/tvMedicineName"
                 app:layout_constraintTop_toBottomOf="@+id/tvMedicineName" />
 

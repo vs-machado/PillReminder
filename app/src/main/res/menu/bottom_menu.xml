@@ -11,6 +11,11 @@
         android:icon="@drawable/ic_medication_selector"/>
 
     <item
+        android:id="@+id/settings"
+        android:title="@string/settings"
+        android:icon="@drawable/baseline_settings_24"/>
+
+    <item
         android:id="@+id/bottom_help"
         android:title="@string/help"
         android:icon="@drawable/ic_help_selector"/>

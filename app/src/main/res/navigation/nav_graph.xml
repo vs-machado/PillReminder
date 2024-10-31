@@ -33,6 +33,9 @@
             app:exitAnim="@anim/slide_out_up"
             app:popEnterAnim="@anim/slide_in_down"
             app:popExitAnim="@anim/slide_out_down" />
+        <action
+            android:id="@+id/action_homeFragment_to_mySettingsFragment"
+            app:destination="@id/mySettingsFragment" />
     </fragment>
     <fragment
         android:id="@+id/addMedicinesFragment"
@@ -211,4 +214,8 @@
             android:name="edit_medicine"
             app:argType="com.phoenix.pillreminder.feature_alarms.domain.model.Medicine" />
     </fragment>
+    <fragment
+        android:id="@+id/mySettingsFragment"
+        android:name="com.phoenix.pillreminder.feature_alarms.presentation.fragments.MySettingsFragment"
+        android:label="MySettingsFragment" />
 </navigation>

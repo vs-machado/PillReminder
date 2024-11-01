@@ -241,7 +241,8 @@
     <string name="settings">Configurações</string>
     <string name="app_language">Idioma do app</string>
     <string name="request_permissions">Solicitar permissões do app</string>
-
+    <string name="disable_battery_optimizations">Desabilitar otimizações de bateria</string>
+    <string name="optimizations_already_disabled">As otimizações de bateria já estão desabilitadas</string>
 
     <string-array name="medicine_forms">
         <item>Comprimido</item>

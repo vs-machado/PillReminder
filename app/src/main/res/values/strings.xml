@@ -238,6 +238,8 @@
     <string name="settings">Settings</string>
     <string name="app_language">App language</string>
     <string name="request_permissions">Request app permissions</string>
+    <string name="disable_battery_optimizations">Disable battery optimizations</string>
+    <string name="optimizations_already_disabled">Battery optimizations are already disabled</string>
 
     <string name="quantity_syringe">Quantity: %1$d syringe(s)</string>
 

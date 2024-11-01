@@ -1,11 +1,18 @@
 package com.phoenix.pillreminder.feature_alarms.presentation.fragments
 
 import android.Manifest
+import android.content.ActivityNotFoundException
+import android.content.Context
+import android.content.Intent
 import android.content.pm.PackageManager
+import android.net.Uri
+import android.os.Build
 import android.os.Bundle
+import android.os.PowerManager
 import android.provider.Settings
 import android.util.Log
 import android.view.View
+import android.widget.Toast
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.core.content.ContextCompat
 import androidx.preference.ListPreference
@@ -20,7 +27,7 @@ import com.phoenix.pillreminder.feature_alarms.presentation.utils.ThemeUtils
 import dagger.hilt.android.AndroidEntryPoint
 import javax.inject.Inject
 
-// User can change the app theme, language and request app permissions
+// User can change the app language, disable battery optimizations and request app permissions
 @AndroidEntryPoint
 class MySettingsFragment: PreferenceFragmentCompat() {
 
@@ -70,6 +77,13 @@ class MySettingsFragment: PreferenceFragmentCompat() {
                 requestAppPermissions()
                 true
             }
+
+        // Disabling battery optimizations ensure that notifications will be delivered on time
+        findPreference<Preference>("battery_optimizations")
+            ?.setOnPreferenceClickListener {
+                disableBatteryOptimizations()
+                true
+            }
     }
 
     // Request POST_NOTIFICATIONS permission and overlay permission
@@ -87,4 +101,26 @@ class MySettingsFragment: PreferenceFragmentCompat() {
     }
 
     private val requestOverlayPermissionLauncher = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) {}
+
+    private fun disableBatteryOptimizations() {
+        val packageName = requireContext().packageName
+        val pm = requireContext().getSystemService(Context.POWER_SERVICE) as PowerManager
+
+        if (pm.isIgnoringBatteryOptimizations(packageName)) {
+            // Already ignoring battery optimizations
+            Toast.makeText(context, getString(R.string.optimizations_already_disabled), Toast.LENGTH_SHORT).show()
+        } else {
+            val intent = Intent().apply {
+                action = Settings.ACTION_REQUEST_IGNORE_BATTERY_OPTIMIZATIONS
+                data = Uri.parse("package:$packageName")
+            }
+            try {
+                startActivity(intent)
+            } catch (e: ActivityNotFoundException) {
+                // Fallback to general battery settings if the specific action is not available
+                val fallbackIntent = Intent(Settings.ACTION_BATTERY_SAVER_SETTINGS)
+                startActivity(fallbackIntent)
+            }
+        }
+    }
 }

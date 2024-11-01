@@ -19,4 +19,9 @@
         app:key="permissions"
         app:title="@string/request_permissions" />
 
+    <Preference
+        app:icon="@drawable/baseline_battery_saver_24"
+        app:key="battery_optimizations"
+        app:title="@string/disable_battery_optimizations" />
+
 </PreferenceScreen>

@@ -18,10 +18,10 @@
       </SelectionState>
       <SelectionState runConfigName="ensure that language is set correctly in shared preferences()">
         <option name="selectionMode" value="DROPDOWN" />
-        <DropdownSelection timestamp="2024-11-01T13:59:29.338452700Z">
+        <DropdownSelection timestamp="2024-11-01T18:31:23.307110900Z">
           <Target type="DEFAULT_BOOT">
             <handle>
-              <DeviceId pluginId="LocalEmulator" identifier="path=C:\Users\axdxs\.android\avd\Resizable_Experimental_API_34.avd" />
+              <DeviceId pluginId="PhysicalDevice" identifier="serial=RX8T10184XA" />
             </handle>
           </Target>
         </DropdownSelection>

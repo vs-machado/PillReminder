@@ -1,0 +1,375 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">Recordatorio de Medicamentos</string>
+    <string name="hello_blank_fragment">Hola fragmento en blanco</string>
+    <string name="hour">08:00</string>
+    <string name="strength">Concentración</string>
+    <string name="take_2_pill_s">Tomar 2 pastillas</string>
+    <string name="name_of_the_medicine">Nombre del medicamento</string>
+    <string name="setup_alarm">Configurar una alarma de medicamento</string>
+    <string name="go_back_to_previous_page">Volver a la página anterior</string>
+    <string name="medicine">Medicamento</string>
+    <string name="what_medicine_would_you_like_to_add">¿Qué medicamento te gustaría agregar?</string>
+    <string name="goes_back_to_previous_page">Vuelve a la página anterior</string>
+    <string name="goes_to_the_next_page">Va a la página siguiente</string>
+    <string name="what_form_is_the_med">¿En qué forma está el medicamento?</string>
+    <string name="how_often_do_you_take_it">¿Con qué frecuencia lo usas?</string>
+    <string name="clock_icon">Icono de reloj</string>
+    <string name="how_many_do_you_take_per_day">¿Cuántas veces lo usas al día?</string>
+    <string name="time">vez(ces)</string>
+    <string name="do_you_want_to_set_a_treatment_duration">¿Quieres establecer una duración del tratamiento?</string>
+    <string name="please_insert_the_medicine_alarm_hour">Por favor, ingresa la hora de la alarma del medicamento:</string>
+
+    <string name="to_see_your_medicine_details">Para ver los detalles de tu medicamento:</string>
+    <string name="click_on_my_medicines">Haz clic en Mis medicamentos y luego en el icono de lista.</string>
+    <string name="marking_the_medicine_usage">Marcar el uso del medicamento:</string>
+    <string name="click_on_mark_medicine">Haz clic en el botón Marcar uso del medicamento. Si los permisos de superposición están desactivados, el botón Marcar uso del medicamento aparecerá en la notificación.</string>
+
+    <string name="hour_minute_format">0%1$s</string>
+    <string name="tv_hour">%1$s:%2$s</string>
+    <string name="tv_alarm_and_hour">%1$s\n%2$s</string>
+    <string name="tv_medicine">Medicamento: %1$s</string>
+    <string name="delete_all_alarms_question">¿Estás seguro de que quieres eliminar\ntodas las alarmas?</string>
+    <string name="delete_all">Eliminar todo</string>
+
+    <string name="take_pill">Tomar %1$s pastilla(s)</string>
+    <string name="take_injection_ml">Inyectar %1$s mL</string>
+    <string name="take_injection_syringe">Inyectar %1$s jeringa(s)</string>
+    <string name="take_liquid">Usar %1$s mL</string>
+    <string name="take_drops">Tomar %1$s gota(s)</string>
+    <string name="inhale_mg">Inhalar %1$s mg</string>
+    <string name="inhale_puff">Tomar %1$s inhalación(es)</string>
+    <string name="inhale_mL">Inhalar %1$s mL</string>
+    <string name="apply_pomade">1 aplicación</string>
+    <string name="delete_alarm">¿Eliminar alarma?</string>
+    <string name="medicine_name_n_hh_mm">[Nombre del medicamento] \n [HH:MM]</string>
+    <string name="are_you_sure_you_want_to_delete_n_the_following_alarm">¿Estás seguro de que quieres eliminar\nla siguiente alarma?</string>
+    <string name="delete">Eliminar</string>
+    <string name="cancel">Cancelar</string>
+    <string name="delete_all_alarms">Eliminar todas las alarmas</string>
+    <string name="skip_dose">Saltar dosis</string>
+    <string name="pills">pastilla(s)</string>
+    <string name="drops">gota(s)</string>
+    <string name="grams">g</string>
+    <string name="mls">mL</string>
+    <string name="mgs">mg</string>
+    <string name="required">*Obligatorio</string>
+    <string name="please_set_the_medicine_alarm_hour">Por favor, configura la hora de la alarma del medicamento:</string>
+    <string name="please_set_the_second_medicine_alarm">Por favor, configura la segunda alarma del medicamento:</string>
+    <string name="please_set_the_third_medicine_alarm">Por favor, configura la tercera alarma del medicamento:</string>
+    <string name="please_set_the_fourth_medicine_alarm">Por favor, configura la cuarta alarma del medicamento:</string>
+    <string name="please_set_the_fifth_medicine_alarm">Por favor, configura la quinta alarma del medicamento:</string>
+    <string name="please_set_the_sixth_medicine_alarm">Por favor, configura la sexta alarma del medicamento:</string>
+    <string name="please_set_the_seventh_medicine_alarm">Por favor, configura la séptima alarma del medicamento:</string>
+    <string name="please_set_the_eighth_medicine_alarm">Por favor, configura la octava alarma del medicamento:</string>
+    <string name="please_set_the_ninth_medicine_alarm">Por favor, configura la novena alarma del medicamento:</string>
+    <string name="please_set_the_tenth_medicine_alarm">Por favor, configura la décima alarma del medicamento:</string>
+    <string name="every_day">Todos los días</string>
+    <string name="every_other_day">Cada dos días</string>
+    <string name="specific_days_of_the_week">Días específicos de la semana</string>
+    <string name="every_x_days">Cada X días</string>
+    <string name="every_x_weeks">Cada X semanas</string>
+    <string name="every_x_months">Cada X meses</string>
+    <string name="alarm_successfully_deleted">¡Alarma eliminada con éxito!</string>
+    <string name="pill">Pastilla</string>
+    <string name="injection">Inyección</string>
+    <string name="liquid">Líquido</string>
+    <string name="Drops">Gotas</string>
+    <string name="inhaler">Inhalador</string>
+    <string name="pomade">Pomada</string>
+    <string name="channel_for_reminding_users_to_take_their_medicines">Canal para recordar a los usuarios que tomen sus medicamentos</string>
+    <string name="time_to_use_your_medicine">¡Hora de usar tu medicamento!</string>
+    <string name="did_you_forget_to_use_your_medicine">¿Olvidaste usar %1$s?</string>
+    <string name="do_not_forget_to_mark_the_medicine_as_used">No olvides marcar el medicamento como usado.\n%1$s</string>
+    <string name="do_not_forget_to_mark_the_medicine_as_taken">Medicamento: %1$s\n%2$s</string>
+    <string name="yes_i_do">Sí, lo hago</string>
+    <string name="no_i_don_t">No, no lo hago</string>
+    <string name="alarms_successfully_created">¡Alarmas creadas con éxito!</string>
+    <string name="select_the_treatment_duration">Selecciona la duración del tratamiento:</string>
+    <string name="medicine_already_taken">Medicamento ya tomado</string>
+    <string name="medicine_not_taken_yet">Medicamento aún no tomado.</string>
+    <string name="medicine_skipped">Dosis saltada.</string>
+    <string name="quantity">Cantidad</string>
+    <string name="dose_quantity">Cantidad de dosis</string>
+    <string name="set_the_quantity_per_dosage">Establece la cantidad por dosis:</string>
+    <string name="this_app_heavily_depends_on_user_overlay_and_notification_permissions_to_properly_work">Esta aplicación depende en gran medida de los permisos de superposición y notificaciones del usuario para funcionar correctamente.</string>
+    <string name="the_app_must_not_be_used_without_these_permissions">El permiso de notificación del usuario es obligatorio para el correcto funcionamiento de la aplicación.\n\nEl permiso de superposición del usuario\nes opcional.</string>
+    <string name="go_to_permissions">Ir a permisos</string>
+    <string name="dismiss">Descartar</string>
+    <string name="permission_required">Permiso requerido</string>
+    <string name="alarm">Alarma</string>
+    <string name="clock_icon_designed_by_bukeicon_assets_source_from_freepik">Icono de reloj diseñado por bukeicon. Fuente de activos de Freepik.</string>
+    <string name="_00_00">00:00</string>
+    <string name="medicine_name">Nombre del medicamento</string>
+    <string name="mark_as_used">Marcar como usado</string>
+    <string name="mute_sound">Silenciar sonido</string>
+    <string name="dont_show_again">No mostrar de nuevo</string>
+    <string name="medicine_type_icon">Icono del tipo de medicamento</string>
+    <string name="close_to_the_next_dosage">Cerca de la próxima dosis</string>
+    <string name="mark_medicine_usage">Marcar uso del medicamento</string>
+    <string name="are_you_sure_about_using_the_medicine_at_this_hour_n_nask_your_doctor_what_to_do_if_you_miss_a_dose_n_nit_is_usually_advisable_to_skip_the_dose_and_use_the_medicine_at_the_next_scheduled_time">¿Estás seguro de usar el medicamento a esta hora?\n\nPregunta a tu médico qué hacer si te saltas una dosis.\n\nGeneralmente se aconseja saltar la dosis y usar el medicamento en el próximo horario programado.</string>
+    <string name="medicine_not_taken">Medicamento no tomado</string>
+    <string name="menu_with_medicine_options">Menú con opciones de medicamento</string>
+    <string name="welcome">¡Bienvenido!</string>
+    <string name="app_explanation">Recordatorio de Medicamentos es una aplicación para ayudarte a llevar un registro de tus dosis de medicamentos.</string>
+    <string name="app_needs_permissions">…Pero primero necesitamos tu permiso.</string>
+    <string name="notification_mandatory">"El envío de notificaciones es obligatorio para el correcto funcionamiento de la aplicación."</string>
+    <string name="pillbox_reminders">Recordatorios de pastillero</string>
+    <string name="click_on_pillbox">Haz clic en el botón de recordatorios de recarga del pastillero y establece una hora para recibir recordatorios diarios.</string>
+    <string name="app_usage">El uso de la aplicación es simple:</string>
+    <string name="just_click_on_plus_btn">Solo haz clic en el botón + y completa la información del medicamento.</string>
+    <string name="open">Abrir</string>
+    <string name="close">Cerrar</string>
+    <string name="granting_screen_overlay_permission_is_optional">Conceder el permiso de superposición de pantalla es opcional.\n\nSe recomienda si a menudo no ves tus notificaciones.</string>
+    <string name="permission_request">Solicitud de permiso</string>
+    <string name="features_text">• Programar alarmas para recordar a los usuarios sobre sus medicamentos.\n• Recibir notificaciones
+    si el usuario no marca un medicamento como usado en la aplicación.\n• Permitir a los usuarios establecer un período de tratamiento o
+        recibir alarmas hasta que se elimine el medicamento.\n• Recibir notificaciones después de establecer un recordatorio diario de recarga del pastillero.
+        \n• Advertir a los usuarios si intentan marcar un medicamento como usado cerca del próximo horario de dosis.</string>
+    <string name="about_us_text">Aplicación desarrollada por Vinícius Santos como su proyecto final para su licenciatura en Ingeniería Informática.</string>
+    <string name="contact_me">Contáctame</string>
+    <string name="pill_reminder">Recordatorio de Medicamentos</string>
+    <string name="app_description">Una aplicación de Android de código abierto para ayudar a los usuarios a realizar un seguimiento de sus dosis de medicamentos.</string>
+    <string name="features">Características</string>
+    <string name="about_me">Sobre mí</string>
+    <string name="email">Correo electrónico: vinicius.s.machado@protonmail.com</string>
+    <string name="frequent_questions">Preguntas frecuentes</string>
+    <string name="how_do_i_delete_a_medicine">¿Cómo elimino un medicamento?</string>
+    <string name="answer_how_do_i_delete_a_medicine">Haz clic en el icono ⋮ en la esquina derecha del medicamento que deseas eliminar, luego selecciona Eliminar o Eliminar todo.</string>
+    <string name="how_do_i_skip_a_dose">¿Cómo salto una dosis?</string>
+    <string name="answer_how_do_i_skip_a_dose">Haz clic en el icono ⋮ en la esquina derecha del medicamento del que deseas saltar la dosis, luego selecciona la opción Saltar dosis.</string>
+    <string name="i_m_not_receiving_alarms">No estoy recibiendo alarmas.</string>
+    <string name="answer_i_m_not_receiving_alarms"><![CDATA[Es necesario verificar si se otorgaron o no los permisos de la aplicación para enviar notificaciones. A veces, cuando no abres una aplicación durante un tiempo, el teléfono elimina automáticamente los permisos de notificaciones.\n\nVe a Configuración > Aplicaciones > Recordatorio de Medicamentos > Permisos y haz clic en cualquier permiso no permitido para otorgarlo.]]></string>
+    <string name="medicine_not_appearing_everyday_even_if_i_don_t_set_a_treatment_period">El medicamento no aparece todos los días aunque no establezca un período de tratamiento</string>
+    <string name="answer_medicine_not_appearing_everyday_even_if_i_don_t_set_a_treatment_period">Esto es normal. Un medicamento sin período de tratamiento se reinsertará eventualmente en la aplicación después de un mes.</string>
+    <string name="dashboard">Panel de control</string>
+    <string name="home">Inicio</string>
+    <string name="my_medicines">Mis medicamentos</string>
+    <string name="info">Información</string>
+    <string name="about">Acerca de</string>
+    <string name="help">Ayuda</string>
+    <string name="set_pillbox_daily_refill_reminders">Establecer recordatorios diarios de recarga del pastillero</string>
+    <string name="set_the_hour_that_you_wish_to_receive_n_daily_reminders">Establece la hora a la que deseas recibir\nrecordatorios diarios:</string>
+    <string name="save">Guardar</string>
+    <string name="select_medicine_usage_days">Selecciona los días de uso del medicamento:</string>
+    <string name="Sunday">Domingo</string>
+    <string name="Monday">Lunes</string>
+    <string name="Tuesday">Martes</string>
+    <string name="Wednesday">Miércoles</string>
+    <string name="Thursday">Jueves</string>
+    <string name="Friday">Viernes</string>
+    <string name="Saturday">Sábado</string>
+    <string name="select_the_medicine_interval">Selecciona el intervalo del medicamento:</string>
+    <string name="days">días</string>
+    <string name="weeks">semanas</string>
+    <string name="months">meses</string>
+    <string name="every">Cada</string>
+    <string name="interval">intervalo</string>
+    <string name="it_s_time_to_refill_your_pillbox">Recarga tu pastillero</string>
+    <string name="refill_your_pillbox_and_avoid_forgetting_to_use_your_medicine">Recarga y evita olvidar usar tu medicamento.</string>
+    <string name="search_hint">Buscar medicamentos registrados</string>
+    <string name="see_medicine_details">Ver detalles del medicamento</string>
+    <string name="details">Detalles</string>
+    <string name="number_pills">%1$d pastilla(s)</string>
+    <string name="number_drops">%1$d gota(s)</string>
+    <string name="number_ml">%.2f mL</string>
+    <string name="number_application">1 aplicación</string>
+    <string name="number_inhalator">%.2f mg</string>
+    <string name="every_interval_days">Cada %1$d días</string>
+    <string name="every_interval_weeks">Cada %1$d semanas</string>
+    <string name="every_interval_months">Cada %1$d meses</string>
+    <string name="quantity_alarms">%1$d alarmas</string>
+    <string name="ongoing">En curso</string>
+    <string name="hasn_started">Aún no ha comenzado</string>
+    <string name="ended">Finalizado</string>
+    <string name="quantity_pills">Cantidad: %1$d pastilla(s)</string>
+    <string name="quantity_drops">Cantidad: %1$d gota(s)</string>
+    <string name="quantity_ml">Cantidad: %.2f mL</string>
+    <string name="quantity_application">Cantidad: 1 aplicación</string>
+    <string name="quantity_inhalator">Cantidad: %.2f mg</string>
+    <string name="ongoing_treatment">Tratamiento en curso</string>
+    <string name="treatment_ended">Tratamiento finalizado</string>
+    <string name="treatment_hasnt_started_yet">El tratamiento aún no ha comenzado</string>
+    <string name="medicine_already_used">Medicamento ya usado</string>
+    <string name="medicine_not_used_yet">Aún no usado</string>
+    <string name="frequency">Frecuencia</string>
+    <string name="alarms_per_day">Alarmas por día</string>
+    <string name="alarms_hour">Hora de las alarmas</string>
+    <string name="Hour">Hora</string>
+    <string name="treatment_start_date">Fecha de inicio del tratamiento</string>
+    <string name="treatment_end_date">Fecha de finalización del tratamiento</string>
+    <string name="treatment_status">Estado del tratamiento</string>
+    <string name="medicine_icon">Icono del medicamento</string>
+    <string name="pill_quantity">%1$s pastilla(s)</string>
+    <string name="ml_quantity">%1$s mL</string>
+    <string name="inhale_quantity">%1$s mg</string>
+    <string name="pomade_quantity">1 aplicación</string>
+    <string name="medicine_time">¡Hora del medicamento!</string>
+    <string name="specific_days_of_week">Días específicos de la semana:\n\n%1$s</string>
+    <string name="edit">Editar medicamento</string>
+    <string name="alarms_per_day_details">Alarmas por día:\n\n%1$d alarma(s)</string>
+    <string name="undefined">No definido</string>
+    <string name="select_at_least_1_day">Debes seleccionar al menos 1 día de la semana.</string>
+    <string name="treatment_end_date_error">La fecha de finalización del tratamiento debe ser posterior a la fecha de inicio. Inténtalo de nuevo.</string>
+    <string name="changes_saved">Los cambios se han guardado</string>
+    <string name="medicine_form">Forma del medicamento</string>
+    <string name="medicine_frequency">Frecuencia del medicamento</string>
+    <string name="select_treatment_end_date">Selecciona la fecha de finalización del tratamiento:</string>
+    <string name="select_usage_days">Selecciona los días de uso del medicamento:</string>
+    <string name="select_alarm_hour">Selecciona la hora de la alarma:</string>
+    <string name="Every">Cada</string>
+    <string name="edit_medicine">Editar medicamento</string>
+    <string name="end_treatment">Finalizar tratamiento</string>
+    <string name="are_you_sure_end_treatment">¿Estás seguro de que quieres detener el tratamiento para el siguiente medicamento?\n\nLas próximas alarmas serán eliminadas.\n\nMedicamento: %1$s</string>
+    <string name="mL">mL</string>
+    <string name="syringe">jeringa</string>
+    <string name="puff">inhalación</string>
+    <string name="mg">mg</string>
+    <string name="pill_unit">pastilla</string>
+    <string name="drop">gota</string>
+    <string name="application">aplicación</string>
+    <string name="ongoing_treatments">Tratamientos en curso</string>
+    <string name="ended_treatments">Tratamientos finalizados</string>
+    <string name="filter">Filtrar</string>
+    <string name="cannot_edit_finished_treatment">No puedes editar un tratamiento finalizado</string>
+    <string name="error_treatment_termination">Error durante la finalización del tratamiento</string>
+    <string name="you_must_provide_a_interval">Debes proporcionar un intervalo. Inténtalo de nuevo.</string>
+    <string name="settings">Configuración</string>
+    <string name="app_language">Idioma de la aplicación</string>
+    <string name="request_permissions">Solicitar permisos de la aplicación</string>
+    <string name="disable_battery_optimizations">Desactivar optimizaciones de batería</string>
+    <string name="optimizations_already_disabled">Las optimizaciones de batería ya están desactivadas</string>
+
+    <string name="quantity_syringe">Cantidad: %1$d jeringa(s)</string>
+
+    <plurals name="take_pill">
+        <item quantity="one">Tomar %1$d pastilla</item>
+        <item quantity="other">Tomar %1$d pastillas</item>
+    </plurals>
+
+    <plurals name="take_injection_syringe">
+        <item quantity="one">Inyectar %1$d jeringa</item>
+        <item quantity="other">Inyectar %1$d jeringas</item>
+    </plurals>
+
+    <plurals name="take_drops">
+        <item quantity="one">Usar %1$d gota</item>
+        <item quantity="other">Usar %1$d gotas</item>
+    </plurals>
+
+    <plurals name="inhale_puff">
+        <item quantity="one">Tomar %1$d inhalación</item>
+        <item quantity="other">Tomar %1$d inhalaciones</item>
+    </plurals>
+
+    <plurals name="pills">
+        <item quantity="one">pastilla</item>
+        <item quantity="other">pastillas</item>
+    </plurals>
+
+    <plurals name="drops">
+        <item quantity="one">gota</item>
+        <item quantity="other">gotas</item>
+    </plurals>
+
+    <plurals name="puffs">
+        <item quantity="one">inhalación</item>
+        <item quantity="other">inhalaciones</item>
+    </plurals>
+
+    <plurals name="pills_quantity">
+        <item quantity="one">%1$d pastilla</item>
+        <item quantity="other">%1$d pastillas</item>
+    </plurals>
+
+    <plurals name="drops_quantity">
+        <item quantity="one">%1$d gota</item>
+        <item quantity="other">%1$d gotas</item>
+    </plurals>
+
+    <plurals name="syringe_quantity">
+        <item quantity="one">%1$d jeringa</item>
+        <item quantity="other">%1$d jeringas</item>
+    </plurals>
+
+    <plurals name="pill_quantity">
+        <item quantity="one">%1$s pastilla</item>
+        <item quantity="other">%1$s pastillas</item>
+    </plurals>
+
+    <plurals name="puffs_quantity">
+        <item quantity="one">%1$d inhalación</item>
+        <item quantity="other">%1$d inhalaciones</item>
+    </plurals>
+
+    <plurals name="quantity_pills">
+        <item quantity="one">Cantidad: %1$d pastilla</item>
+        <item quantity="other">Cantidad: %1$d pastillas</item>
+    </plurals>
+
+    <plurals name="quantity_drops">
+        <item quantity="one">Cantidad: %1$d gota</item>
+        <item quantity="other">Cantidad: %1$d gotas</item>
+    </plurals>
+
+    <plurals name="quantity_syringe">
+        <item quantity="one">Cantidad: %1$d jeringa</item>
+        <item quantity="other">Cantidad: %1$d jeringas</item>
+    </plurals>
+
+    <plurals name="quantity_pill">
+        <item quantity="one">Cantidad: %1$s pastilla</item>
+        <item quantity="other">Cantidad: %1$s pastillas</item>
+    </plurals>
+
+    <plurals name="quantity_puffs">
+        <item quantity="one">Cantidad: %1$d inhalación</item>
+        <item quantity="other">Cantidad: %1$d inhalaciones</item>
+    </plurals>
+
+    <plurals name="alarms_per_day_details">
+        <item quantity="one">Alarmas por día:\n\n%1$d alarma</item>
+        <item quantity="other">Alarmas por día:\n\n%1$d alarmas</item>
+    </plurals>
+
+    <string-array name="medicine_forms">
+        <item>Pastilla</item>
+        <item>Inyección</item>
+        <item>Líquido</item>
+        <item>Gotas</item>
+        <item>Inhalador</item>
+        <item>Pomada</item>
+    </string-array>
+
+    <string-array name="units_injection">
+        <item>mL</item>
+        <item>jeringa</item>
+    </string-array>
+
+    <string-array name="units_inhaler">
+        <item>mL</item>
+        <item>mg</item>
+        <item>inhalación</item>
+    </string-array>
+
+    <string-array name="medicine_frequency">
+        <item>Todos los días</item>
+        <item>Cada dos días</item>
+        <item>Días específicos de la semana</item>
+        <item>Cada X días</item>
+        <item>Cada X semanas</item>
+        <item>Cada X meses</item>
+    </string-array>
+
+    <string-array name="language_entries">
+        <item>English</item>
+        <item>Português (Brasil)</item>
+        <item>Español</item>
+    </string-array>
+
+    <string-array name="language_values">
+        <item>en</item>
+        <item>pt-BR</item>
+        <item>es</item>
+    </string-array>
+</resources>

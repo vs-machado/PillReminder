@@ -20,7 +20,7 @@ android {
         versionCode = 1
         versionName = "1.0"
 
-        testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
+        testInstrumentationRunner = "com.phoenix.pillreminder.feature_alarms.CustomTestRunner"
     }
 
     buildTypes {
@@ -51,6 +51,8 @@ dependencies {
     implementation("androidx.test:core-ktx:1.5.0")
     implementation("androidx.test.ext:junit-ktx:1.1.5")
     implementation("com.android.support:cardview-v7:28.0.0")
+    implementation("androidx.test:runner:1.6.2")
+    implementation("com.google.dagger:hilt-android-testing:2.51.1")
     val navVersion = "2.7.5"
     val coreVersion = "1.12.0"
     val roomVersion = "2.6.1"
@@ -127,4 +129,6 @@ dependencies {
     androidTestImplementation("org.jetbrains.kotlinx:kotlinx-coroutines-test:1.3.9")
     androidTestImplementation("com.google.truth:truth:1.4.2")
     androidTestImplementation("androidx.arch.core:core-testing:2.2.0")
+    androidTestImplementation("com.google.dagger:hilt-android-testing:2.51.1")
+    kspAndroidTest("com.google.dagger:hilt-android-compiler:2.51.1")
 }

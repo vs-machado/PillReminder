@@ -3,25 +3,19 @@ package com.phoenix.pillreminder.feature_alarms.presentation.activities
 import android.content.Context
 import android.content.Intent
 import android.os.Bundle
-import android.view.MenuItem
-import androidx.appcompat.app.ActionBarDrawerToggle
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.app.AppCompatDelegate
-import androidx.core.view.GravityCompat
-import androidx.fragment.app.Fragment
 import androidx.navigation.NavOptions
-import androidx.navigation.findNavController
 import androidx.navigation.fragment.NavHostFragment
 import androidx.navigation.ui.AppBarConfiguration
-import androidx.navigation.ui.navigateUp
 import androidx.navigation.ui.setupActionBarWithNavController
 import androidx.navigation.ui.setupWithNavController
 import com.phoenix.pillreminder.R
 import com.phoenix.pillreminder.databinding.ActivityMainBinding
 import com.phoenix.pillreminder.feature_alarms.domain.repository.MedicineRepository
 import com.phoenix.pillreminder.feature_alarms.domain.repository.SharedPreferencesRepository
-import com.phoenix.pillreminder.feature_alarms.presentation.utils.LanguageConfig
 import dagger.hilt.android.AndroidEntryPoint
+import java.util.Locale
 import javax.inject.Inject
 
 @AndroidEntryPoint
@@ -33,6 +27,12 @@ class MainActivity: AppCompatActivity() {
 
     private lateinit var binding: ActivityMainBinding
     private lateinit var appBarConfiguration: AppBarConfiguration
+    private val languageMapping =  mapOf(
+        "en-US" to "en", "en-GB" to "en", "en-AU" to "en",
+        "en-CA" to "en", "en-IN" to "en", "en-NZ" to "en",
+        "en-ZA" to "en", "en-IE" to "en", "en-JM" to "en",
+        "pt-BR" to "pt-BR"
+    )
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -43,6 +43,7 @@ class MainActivity: AppCompatActivity() {
         setupNavigation()
         AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_FOLLOW_SYSTEM)
         checkAndShowTutorial()
+        setAppLanguagePreference()
     }
 
     private fun setupToolbar() {
@@ -116,6 +117,12 @@ class MainActivity: AppCompatActivity() {
         val editor = sharedPref.edit()
         editor.putBoolean("isTutorialShown", true)
         editor.apply()
+    }
+
+    private fun setAppLanguagePreference() {
+        val phoneLanguage = Locale.getDefault().toLanguageTag()
+        val language = languageMapping[phoneLanguage] ?: "en"
+        sharedPreferencesRepository.setAppLanguage(language)
     }
 
 //    override fun attachBaseContext(newBase: Context?) {

@@ -20,6 +20,13 @@
     <string name="do_you_want_to_set_a_treatment_duration">Deseja definir o período de duração do tratamento?</string>
     <string name="please_insert_the_medicine_alarm_hour">Por favor, insira o horário do alarme do remédio:</string>
 
+    <string name="to_see_your_medicine_details">Para ver os detalhes dos seus medicamentos:</string>
+    <string name="click_on_my_medicines">Clique em Medicamentos e depois clique no ícone da lista.</string>
+    <string name="marking_the_medicine_usage">Marcando o uso do medicamento:</string>
+    <string name="click_on_mark_medicine">Clique em Marcar o uso do medicamento. Se as permissões de sobreposição de tela estiverem desativadas,
+        o botão Marcar o uso do medicamento aparecerá na notificação.</string>
+
+
     <string name="hour_minute_format">0%1$s</string>
     <string name="tv_hour">%1$s:%2$s</string>
     <string name="tv_alarm_and_hour">%1$s\n%2$s</string>
@@ -137,8 +144,8 @@
     <string name="medicine_not_appearing_everyday_even_if_i_don_t_set_a_treatment_period">O medicamento não aparece todos os dias, mesmo que eu não tenha definido um período de tratamento.</string>
     <string name="answer_medicine_not_appearing_everyday_even_if_i_don_t_set_a_treatment_period">Isso é normal. Um medicamento sem período de tratamento será eventualmente reinserido no aplicativo após um mês.</string>
     <string name="dashboard">Painel</string>
-    <string name="home">Página inicial</string>
-    <string name="my_medicines">Meus medicamentos</string>
+    <string name="home">Início</string>
+    <string name="my_medicines">Medicamentos</string>
     <string name="info">Info</string>
     <string name="about">Sobre</string>
     <string name="help">Ajuda</string>
@@ -231,6 +238,11 @@
     <string name="cannot_edit_finished_treatment">Não é possível editar um tratamento encerrado.</string>
     <string name="error_treatment_termination">Erro ao encerrar o tratamento</string>
     <string name="you_must_provide_a_interval">Você deve inserir um intervalo. Tente novamente.</string>
+    <string name="settings">Configurações</string>
+    <string name="app_language">Idioma do app</string>
+    <string name="request_permissions">Solicitar permissões do app</string>
+    <string name="disable_battery_optimizations">Desabilitar otimizações de bateria</string>
+    <string name="optimizations_already_disabled">As otimizações de bateria já estão desabilitadas</string>
 
     <string-array name="medicine_forms">
         <item>Comprimido</item>
@@ -259,6 +271,20 @@
         <item>mL</item>
         <item>mg</item>
         <item>inalação</item>
+    </string-array>
+
+    <string-array name="language_entries">
+        <item>English</item>
+        <item>Português (Brasil)</item>
+        <item>Español</item>
+        <item>Italiano</item>
+    </string-array>
+
+    <string-array name="language_values">
+        <item>en</item>
+        <item>pt-BR</item>
+        <item>es</item>
+        <item>it</item>
     </string-array>
 
     <plurals name="take_pill">

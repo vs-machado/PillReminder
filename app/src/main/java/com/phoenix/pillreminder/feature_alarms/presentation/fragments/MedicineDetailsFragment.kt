@@ -1,6 +1,7 @@
 package com.phoenix.pillreminder.feature_alarms.presentation.fragments
 
 import android.os.Bundle
+import android.text.format.DateFormat.is24HourFormat
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -11,6 +12,7 @@ import com.google.android.material.floatingactionbutton.FloatingActionButton
 import com.phoenix.pillreminder.R
 import com.phoenix.pillreminder.databinding.FragmentMedicineDetailsBinding
 import com.phoenix.pillreminder.feature_alarms.domain.model.Medicine
+import com.phoenix.pillreminder.feature_alarms.presentation.utils.CalendarUtils
 import com.phoenix.pillreminder.feature_alarms.presentation.utils.DateUtil
 import com.phoenix.pillreminder.feature_alarms.presentation.viewmodels.MedicinesViewModel
 import dagger.hilt.android.AndroidEntryPoint
@@ -114,15 +116,21 @@ class MedicineDetailsFragment: Fragment() {
                     else -> context?.getString(R.string.ended)
                 }
 
+                // Display the alarm hours for the medicine
                 viewLifecycleOwner.lifecycleScope.launch(Dispatchers.Main){
                     val result = withContext(Dispatchers.IO){
                         val cutoffTime = medicinesViewModel.getMedicineEditTimestamp(medicine.name)
                         medicinesViewModel.getAlarmTimesForMedicine(medicine.name, cutoffTime, medicine.treatmentID)
                     }
 
+                    val formattedHourList = withContext(Dispatchers.Default) {
+                        CalendarUtils.formatStringHourList(result, requireContext()).joinToString(", ")
+                    }
+
                     // Concatenates all the different alarm hours for the same medicine in a string
-                    tvAlarmsHour.text = result.joinToString(", ")
+                    tvAlarmsHour.text = formattedHourList
                 }
+
             }
 
 

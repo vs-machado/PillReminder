@@ -40,7 +40,7 @@
         android:layout_marginTop="16dp"
         android:contentDescription=""
         android:text="@string/set_the_quantity_per_dosage"
-        android:textColor="?android:attr/textColorSecondary"
+        android:textColor="?android:attr/textColorTertiary"
         android:textSize="20sp"
         android:textStyle="bold"
         app:layout_constraintStart_toStartOf="parent"

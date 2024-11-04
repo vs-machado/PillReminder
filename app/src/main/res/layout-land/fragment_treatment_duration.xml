@@ -20,6 +20,7 @@
         <androidx.appcompat.widget.Toolbar
             android:id="@+id/toolbar"
             android:layout_width="match_parent"
+            android:theme="@style/ToolbarTitleTheme"
             android:layout_height="50dp"
             android:background="@color/toolbar"
             android:elevation="4dp" />

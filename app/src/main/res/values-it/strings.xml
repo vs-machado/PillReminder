@@ -1,0 +1,392 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">Promemoria Medicinali</string>
+    <string name="hello_blank_fragment">Ciao blank fragment</string>
+    <string name="hour">08:00</string>
+    <string name="strength">Dosaggio</string>
+    <string name="take_2_pill_s">Prendi 2 pillole</string>
+    <string name="name_of_the_medicine">Nome del medicinale</string>
+    <string name="setup_alarm">Imposta un promemoria per il medicinale</string>
+    <string name="go_back_to_previous_page">Torna alla pagina precedente</string>
+    <string name="medicine">Medicinale</string>
+    <string name="what_medicine_would_you_like_to_add">Quale medicinale vorresti aggiungere?</string>
+    <string name="goes_back_to_previous_page">Torna alla pagina precedente</string>
+    <string name="goes_to_the_next_page">Vai alla pagina successiva</string>
+    <string name="what_form_is_the_med">In che forma è il medicinale?</string>
+    <string name="how_often_do_you_take_it">Con quale frequenza lo usi?</string>
+    <string name="clock_icon">Icona orologio</string>
+    <string name="how_many_do_you_take_per_day">Quante volte lo usi al giorno?</string>
+    <string name="time">volta</string>
+    <string name="do_you_want_to_set_a_treatment_duration">Vuoi impostare una durata del trattamento?</string>
+    <string name="please_insert_the_medicine_alarm_hour">Per favore, inserisci l\'ora del promemoria:</string>
+    <string name="to_see_your_medicine_details">Per vedere i dettagli del tuo medicinale:</string>
+    <string name="click_on_my_medicines">Clicca su I miei medicinali e poi sull\'icona lista.</string>
+    <string name="marking_the_medicine_usage">Segnare l\'uso del medicinale:</string>
+    <string name="click_on_mark_medicine">Clicca sul pulsante Segna uso medicinale. Se i permessi di sovrapposizione sono disabilitati, il pulsante apparirà nella notifica.</string>
+    <string name="hour_minute_format">0%1$s</string>
+    <string name="tv_hour">%1$s:%2$s</string>
+    <string name="tv_alarm_and_hour">%1$s\n%2$s</string>
+    <string name="tv_medicine">Medicinale: %1$s</string>
+    <string name="delete_all_alarms_question">Sei sicuro di voler eliminare\ntutti i promemoria?</string>
+    <string name="delete_all">Elimina tutto</string>
+
+    <string name="take_pill">Prendi %1$s pillola</string>
+    <string name="take_injection_ml">Inietta %1$s mL</string>
+    <string name="take_injection_syringe">Inietta %1$s siringa/he</string>
+    <string name="take_liquid">Usa %1$s mL</string>
+    <string name="take_drops">Prendi %1$s goccia</string>
+    <string name="inhale_mg">Inala %1$s mg</string>
+    <string name="inhale_puff">Fai %1$s inalazione/i</string>
+    <string name="inhale_mL">Inala %1$s mL</string>
+    <string name="apply_pomade">1 applicazione</string>
+    <string name="delete_alarm">Eliminare il promemoria?</string>
+    <string name="medicine_name_n_hh_mm">[Nome medicinale] \n [HH:MM]</string>
+    <string name="are_you_sure_you_want_to_delete_n_the_following_alarm">Sei sicuro di voler eliminare\nil seguente promemoria?</string>
+    <string name="delete">Elimina</string>
+    <string name="cancel">Annulla</string>
+    <string name="delete_all_alarms">Elimina tutti i promemoria</string>
+    <string name="skip_dose">Salta dose</string>
+    <string name="pills">pillola</string>
+    <string name="drops">goccia</string>
+    <string name="grams">g</string>
+    <string name="mls">mL</string>
+    <string name="mgs">mg</string>
+    <string name="required">*Obbligatorio</string>
+    <string name="please_set_the_medicine_alarm_hour">Per favore, imposta l\'ora del promemoria:</string>
+    <string name="please_set_the_second_medicine_alarm">Per favore, imposta il secondo promemoria:</string>
+    <string name="please_set_the_third_medicine_alarm">Per favore, imposta il terzo promemoria:</string>
+    <string name="please_set_the_fourth_medicine_alarm">Per favore, imposta il quarto promemoria:</string>
+    <string name="please_set_the_fifth_medicine_alarm">Per favore, imposta il quinto promemoria:</string>
+    <string name="please_set_the_sixth_medicine_alarm">Per favore, imposta il sesto promemoria:</string>
+    <string name="please_set_the_seventh_medicine_alarm">Per favore, imposta il settimo promemoria:</string>
+    <string name="please_set_the_eighth_medicine_alarm">Per favore, imposta l\'ottavo promemoria:</string>
+    <string name="please_set_the_ninth_medicine_alarm">Per favore, imposta il nono promemoria:</string>
+    <string name="please_set_the_tenth_medicine_alarm">Per favore, imposta il decimo promemoria:</string>
+    <string name="every_day">Ogni giorno</string>
+    <string name="every_other_day">Giorni alterni</string>
+    <string name="specific_days_of_the_week">Giorni specifici della settimana</string>
+    <string name="every_x_days">Ogni X giorni</string>
+    <string name="every_x_weeks">Ogni X settimane</string>
+    <string name="every_x_months">Ogni X mesi</string>
+    <string name="alarm_successfully_deleted">Promemoria eliminato con successo!</string>
+    <string name="pill">Pillola</string>
+    <string name="injection">Iniezione</string>
+    <string name="liquid">Liquido</string>
+    <string name="Drops">Gocce</string>
+    <string name="inhaler">Inalatore</string>
+    <string name="pomade">Pomata</string>
+    <string name="channel_for_reminding_users_to_take_their_medicines">Canale per ricordare agli utenti di prendere i medicinali</string>
+    <string name="time_to_use_your_medicine">È ora di prendere il medicinale!</string>
+    <string name="did_you_forget_to_use_your_medicine">Hai dimenticato di prendere %1$s?</string>
+    <string name="do_not_forget_to_mark_the_medicine_as_used">Non dimenticare di segnare il medicinale come assunto.\n%1$s</string>
+    <string name="do_not_forget_to_mark_the_medicine_as_taken">Medicinale: %1$s\n%2$s</string>
+    <string name="yes_i_do">Sì</string>
+    <string name="no_i_don_t">No</string>
+    <string name="alarms_successfully_created">Promemoria creati con successo!</string>
+    <string name="select_the_treatment_duration">Seleziona la durata del trattamento:</string>
+    <string name="medicine_already_taken">Medicinale già assunto</string>
+    <string name="medicine_not_taken_yet">Medicinale non ancora assunto.</string>
+    <string name="medicine_skipped">Dose saltata.</string>
+    <string name="quantity">Quantità</string>
+    <string name="dose_quantity">Quantità dose</string>
+    <string name="set_the_quantity_per_dosage">Imposta la quantità per dose:</string>
+    <string name="this_app_heavily_depends_on_user_overlay_and_notification_permissions_to_properly_work">Questa app dipende fortemente dai permessi di sovrapposizione e notifica per funzionare correttamente.</string>
+    <string name="the_app_must_not_be_used_without_these_permissions">Il permesso di notifica è obbligatorio per il corretto funzionamento dell\'applicazione.\n\nIl permesso di sovrapposizione è opzionale.</string>
+    <string name="go_to_permissions">Vai ai permessi</string>
+    <string name="dismiss">Chiudi</string>
+    <string name="permission_required">Permesso richiesto</string>
+    <string name="alarm">Promemoria</string>
+    <string name="clock_icon_designed_by_bukeicon_assets_source_from_freepik">Icona orologio disegnata da bukeicon. Asset da Freepik.</string>
+    <string name="_00_00">00:00</string>
+    <string name="medicine_name">Nome medicinale</string>
+    <string name="mark_as_used">Segna come assunto</string>
+    <string name="mute_sound">Disattiva suono</string>
+    <string name="dont_show_again">Non mostrare più</string>
+    <string name="medicine_type_icon">Icona tipo medicinale</string>
+    <string name="close_to_the_next_dosage">Vicino alla prossima dose</string>
+    <string name="mark_medicine_usage">Segna uso medicinale</string>
+    <string name="are_you_sure_about_using_the_medicine_at_this_hour_n_nask_your_doctor_what_to_do_if_you_miss_a_dose_n_nit_is_usually_advisable_to_skip_the_dose_and_use_the_medicine_at_the_next_scheduled_time">Sei sicuro di voler prendere il medicinale a quest\'ora?\n\nChiedi al tuo medico cosa fare se salti una dose.\n\nDi solito è consigliabile saltare la dose e prendere il medicinale al prossimo orario programmato.</string>
+    <string name="medicine_not_taken">Medicinale non assunto</string>
+    <string name="menu_with_medicine_options">Menu con opzioni medicinale</string>
+    <string name="welcome">Benvenuto!</string>
+    <string name="app_explanation">Promemoria Medicinali è un\'app che ti aiuta a tenere traccia delle tue dosi di medicinali.</string>
+    <string name="app_needs_permissions">…Ma prima abbiamo bisogno del tuo permesso.</string>
+    <string name="notification_mandatory">L\'invio di notifiche è obbligatorio per il corretto funzionamento dell\'applicazione.</string>
+    <string name="pillbox_reminders">Promemoria portapillole</string>
+    <string name="click_on_pillbox">Clicca sul pulsante Promemoria riempimento portapillole e imposta un orario per ricevere promemoria giornalieri.</string>
+    <string name="app_usage">L\'uso dell\'app è semplice:</string>
+    <string name="just_click_on_plus_btn">Basta cliccare sul pulsante + e inserire le informazioni del medicinale.</string>
+    <string name="open">Apri</string>
+    <string name="close">Chiudi</string>
+    <string name="granting_screen_overlay_permission_is_optional">Concedere il permesso di sovrapposizione schermo è opzionale.\n\nÈ consigliato se spesso non vedi le tue notifiche.</string>
+    <string name="permission_request">Richiesta permesso</string>
+    <string name="features_text">• Programma promemoria per ricordare agli utenti i loro medicinali.\n• Ricevi notifiche
+se l\'utente non segna un medicinale come assunto nell\'applicazione.\n• Permetti agli utenti di impostare un periodo di trattamento o
+    ricevere promemoria fino all\'eliminazione del medicinale.\n• Ricevi notifiche dopo aver impostato un promemoria giornaliero per il riempimento del portapillole.
+    \n• Avvisa gli utenti se tentano di segnare un medicinale come assunto vicino al prossimo orario di assunzione.</string>
+    <string name="about_us_text">Applicazione sviluppata da Vinícius Santos come suo progetto finale per la laurea in Ingegneria Informatica.</string>
+    <string name="contact_me">Contattami</string>
+    <string name="pill_reminder">Promemoria Medicinali</string>
+    <string name="app_description">Un\'applicazione Android open source per aiutare gli utenti a tenere traccia delle loro dosi di medicinali.</string>
+    <string name="features">Funzionalità</string>
+    <string name="about_me">Chi sono</string>
+    <string name="email">Email: vinicius.s.machado@protonmail.com</string>
+    <string name="frequent_questions">Domande frequenti</string>
+    <string name="how_do_i_delete_a_medicine">Come elimino un medicinale?</string>
+    <string name="answer_how_do_i_delete_a_medicine">Clicca sull\'icona ⋮ nell\'angolo destro del medicinale che vuoi eliminare, poi seleziona Elimina o Elimina tutto.</string>
+    <string name="how_do_i_skip_a_dose">Come salto una dose?</string>
+    <string name="answer_how_do_i_skip_a_dose">Clicca sull\'icona ⋮ nell\'angolo destro del medicinale di cui vuoi saltare la dose, poi seleziona l\'opzione Salta dose.</string>
+    <string name="i_m_not_receiving_alarms">Non ricevo i promemoria.</string>
+    <string name="answer_i_m_not_receiving_alarms"><![CDATA[È necessario verificare se i permessi dell\'app per inviare notifiche sono stati concessi o meno. A volte quando non apri un\'app per un po\', il telefono rimuove automaticamente i permessi di notifica.\n\nVai in Impostazioni > App > Promemoria Medicinali > Permessi e clicca su qualsiasi permesso non concesso per concederlo.]]></string>
+    <string name="medicine_not_appearing_everyday_even_if_i_don_t_set_a_treatment_period">Il medicinale non appare ogni giorno anche se non imposto un periodo di trattamento</string>
+    <string name="answer_medicine_not_appearing_everyday_even_if_i_don_t_set_a_treatment_period">Questo è normale. Un medicinale senza periodo di trattamento verrà reinserito nell\'app dopo un mese.</string>
+    <string name="dashboard">Dashboard</string>
+    <string name="home">Home</string>
+    <string name="my_medicines">I miei medicinali</string>
+    <string name="info">Info</string>
+    <string name="about">Informazioni</string>
+    <string name="help">Aiuto</string>
+    <string name="set_pillbox_daily_refill_reminders">Imposta promemoria giornalieri per il riempimento del portapillole</string>
+    <string name="set_the_hour_that_you_wish_to_receive_n_daily_reminders">Imposta l\'ora in cui desideri ricevere\ni promemoria giornalieri:</string>
+    <string name="save">Salva</string>
+    <string name="select_medicine_usage_days">Seleziona i giorni di utilizzo del medicinale:</string>
+    <string name="Sunday">Domenica</string>
+    <string name="Monday">Lunedì</string>
+    <string name="Tuesday">Martedì</string>
+    <string name="Wednesday">Mercoledì</string>
+    <string name="Thursday">Giovedì</string>
+    <string name="Friday">Venerdì</string>
+    <string name="Saturday">Sabato</string>
+    <string name="select_the_medicine_interval">Seleziona l\'intervallo del medicinale:</string>
+    <string name="days">giorni</string>
+    <string name="weeks">settimane</string>
+    <string name="months">mesi</string>
+    <string name="every">Ogni</string>
+    <string name="interval">intervallo</string>
+    <string name="it_s_time_to_refill_your_pillbox">È ora di riempire il portapillole</string>
+    <string name="refill_your_pillbox_and_avoid_forgetting_to_use_your_medicine">Riempi il portapillole ed evita di dimenticare di prendere i medicinali</string>
+    <string name="search_hint">Cerca medicinali registrati</string>
+    <string name="see_medicine_details">Vedi dettagli medicinale</string>
+    <string name="details">Dettagli</string>
+    <string name="number_pills">%1$d pillola</string>
+    <string name="number_drops">%1$d goccia</string>
+    <string name="number_ml">%.2f mL</string>
+    <string name="number_application">1 applicazione</string>
+    <string name="number_inhalator">%.2f mg</string>
+    <string name="every_interval_days">Ogni %1$d giorni</string>
+    <string name="every_interval_weeks">Ogni %1$d settimane</string>
+    <string name="every_interval_months">Ogni %1$d mesi</string>
+    <string name="quantity_alarms">%1$d allarmi</string>
+    <string name="ongoing">In corso</string>
+    <string name="hasn_started">Non ancora iniziato</string>
+    <string name="ended">Terminato</string>
+    <string name="quantity_pills">Quantità: %1$d pillola</string>
+    <string name="quantity_drops">Quantità: %1$d goccia</string>
+    <string name="quantity_ml">Quantità: %.2f mL</string>
+    <string name="quantity_application">Quantità: 1 applicazione</string>
+    <string name="quantity_inhalator">Quantità: %.2f mg</string>
+    <string name="ongoing_treatment">Trattamento in corso</string>
+    <string name="treatment_ended">Trattamento terminato</string>
+    <string name="treatment_hasnt_started_yet">Il trattamento non è ancora iniziato</string>
+    <string name="medicine_already_used">Medicinale già utilizzato</string>
+    <string name="medicine_not_used_yet">Non ancora utilizzato</string>
+    <string name="frequency">Frequenza</string>
+    <string name="alarms_per_day">Allarmi al giorno</string>
+    <string name="alarms_hour">Ora degli allarmi</string>
+    <string name="Hour">Ora</string>
+    <string name="treatment_start_date">Data di inizio trattamento</string>
+    <string name="treatment_end_date">Data di fine trattamento</string>
+    <string name="treatment_status">Stato del trattamento</string>
+    <string name="medicine_icon">Icona medicinale</string>
+    <string name="pill_quantity">%1$s pillola</string>
+    <string name="ml_quantity">%1$s mL</string>
+    <string name="inhale_quantity">%1$s mg</string>
+    <string name="pomade_quantity">1 applicazione</string>
+    <string name="medicine_time">È ora di prendere il medicinale!</string>
+    <string name="specific_days_of_week">Giorni specifici della settimana:\n\n%1$s</string>
+    <string name="edit">Modifica medicinale</string>
+    <string name="alarms_per_day_details">Allarmi al giorno:\n\n%1$d allarme/i</string>
+    <string name="undefined">Non definito</string>
+    <string name="select_at_least_1_day">Devi selezionare almeno 1 giorno della settimana.</string>
+    <string name="treatment_end_date_error">La data di fine trattamento deve essere successiva alla data di inizio. Riprova.</string>
+    <string name="changes_saved">Le modifiche sono state salvate</string>
+    <string name="medicine_form">Forma farmaceutica</string>
+    <string name="medicine_frequency">Frequenza del medicinale</string>
+    <string name="select_treatment_end_date">Seleziona la data di fine trattamento:</string>
+    <string name="select_usage_days">Seleziona i giorni di utilizzo:</string>
+    <string name="select_alarm_hour">Seleziona l\'ora dell\'allarme:</string>
+    <string name="Every">Ogni</string>
+    <string name="edit_medicine">Modifica medicinale</string>
+    <string name="end_treatment">Termina trattamento</string>
+    <string name="are_you_sure_end_treatment">Sei sicuro di voler interrompere il trattamento per il seguente medicinale?\n\nGli allarmi futuri verranno eliminati.\n\nMedicinale: %1$s</string>
+    <string name="mL">mL</string>
+    <string name="syringe">siringa</string>
+    <string name="puff">spruzzo</string>
+    <string name="mg">mg</string>
+    <string name="pill_unit">pillola</string>
+    <string name="drop">goccia</string>
+    <string name="application">applicazione</string>
+    <string name="ongoing_treatments">Trattamenti in corso</string>
+    <string name="ended_treatments">Trattamenti terminati</string>
+    <string name="filter">Filtra</string>
+    <string name="cannot_edit_finished_treatment">Non puoi modificare un trattamento terminato</string>
+    <string name="error_treatment_termination">Errore durante la terminazione del trattamento</string>
+    <string name="you_must_provide_a_interval">Devi fornire un intervallo. Riprova.</string>
+    <string name="settings">Impostazioni</string>
+    <string name="app_language">Lingua dell\'app</string>
+    <string name="request_permissions">Richiedi permessi app</string>
+    <string name="disable_battery_optimizations">Disattiva ottimizzazioni batteria</string>
+    <string name="optimizations_already_disabled">Le ottimizzazioni della batteria sono già disattivate</string>
+    <string name="quantity_syringe">Quantità: %1$d siringa/he</string>
+
+    <plurals name="take_pill">
+        <item quantity="one">Prendi %1$d pillola</item>
+        <item quantity="many">Prendi %1$d pillole</item>
+        <item quantity="other">Prendi %1$d pillole</item>
+    </plurals>
+
+    <plurals name="take_injection_syringe">
+        <item quantity="one">Inietta %1$d siringa</item>
+        <item quantity="many">Inietta %1$d siringhe</item>
+        <item quantity="other">Inietta %1$d siringhe</item>
+    </plurals>
+
+    <plurals name="take_drops">
+        <item quantity="one">Usa %1$d goccia</item>
+        <item quantity="many">Usa %1$d gocce</item>
+        <item quantity="other">Usa %1$d gocce</item>
+    </plurals>
+
+    <plurals name="inhale_puff">
+        <item quantity="one">Fai %1$d spruzzo</item>
+        <item quantity="many">Fai %1$d spruzzi</item>
+        <item quantity="other">Fai %1$d spruzzi</item>
+    </plurals>
+
+    <plurals name="pills">
+        <item quantity="one">pillola</item>
+        <item quantity="many">pillole</item>
+        <item quantity="other">pillole</item>
+    </plurals>
+
+    <plurals name="drops">
+        <item quantity="one">goccia</item>
+        <item quantity="many">gocce</item>
+        <item quantity="other">gocce</item>
+    </plurals>
+
+    <plurals name="puffs">
+        <item quantity="one">spruzzo</item>
+        <item quantity="many">spruzzi</item>
+        <item quantity="other">spruzzi</item>
+    </plurals>
+
+    <plurals name="pills_quantity">
+        <item quantity="one">%1$d pillola</item>
+        <item quantity="many">%1$d pillole</item>
+        <item quantity="other">%1$d pillole</item>
+    </plurals>
+
+    <plurals name="drops_quantity">
+        <item quantity="one">%1$d goccia</item>
+        <item quantity="many">%1$d gocce</item>
+        <item quantity="other">%1$d gocce</item>
+    </plurals>
+
+    <plurals name="syringe_quantity">
+        <item quantity="one">%1$d siringa</item>
+        <item quantity="many">%1$d siringhe</item>
+        <item quantity="other">%1$d siringhe</item>
+    </plurals>
+
+    <plurals name="pill_quantity">
+        <item quantity="one">%1$s pillola</item>
+        <item quantity="many">%1$s pillole</item>
+        <item quantity="other">%1$s pillole</item>
+    </plurals>
+
+    <plurals name="puffs_quantity">
+        <item quantity="one">%1$d spruzzo</item>
+        <item quantity="many">%1$d spruzzi</item>
+        <item quantity="other">%1$d spruzzi</item>
+    </plurals>
+
+    <plurals name="quantity_pills">
+        <item quantity="one">Quantità: %1$d pillola</item>
+        <item quantity="many">Quantità: %1$d pillole</item>
+        <item quantity="other">Quantità: %1$d pillole</item>
+    </plurals>
+
+    <plurals name="quantity_drops">
+        <item quantity="one">Quantità: %1$d goccia</item>
+        <item quantity="many">Quantità: %1$d gocce</item>
+        <item quantity="other">Quantità: %1$d gocce</item>
+    </plurals>
+
+    <plurals name="quantity_syringe">
+        <item quantity="one">Quantità: %1$d siringa</item>
+        <item quantity="many">Quantità: %1$d siringhe</item>
+        <item quantity="other">Quantità: %1$d siringhe</item>
+    </plurals>
+
+    <plurals name="quantity_pill">
+        <item quantity="one">Quantità: %1$s pillola</item>
+        <item quantity="many">Quantità: %1$s pillole</item>
+        <item quantity="other">Quantità: %1$s pillole</item>
+    </plurals>
+
+    <plurals name="quantity_puffs">
+        <item quantity="one">Quantità: %1$d spruzzo</item>
+        <item quantity="many">Quantità: %1$d spruzzi</item>
+        <item quantity="other">Quantità: %1$d spruzzi</item>
+    </plurals>
+
+    <plurals name="alarms_per_day_details">
+        <item quantity="one">Sveglie al giorno:\n\n%1$d sveglia</item>
+        <item quantity="many">Sveglie al giorno:\n\n%1$d sveglie</item>
+        <item quantity="other">Sveglie al giorno:\n\n%1$d sveglie</item>
+    </plurals>
+
+    <string-array name="medicine_forms">
+        <item>Pillola</item>
+        <item>Iniezione</item>
+        <item>Liquido</item>
+        <item>Gocce</item>
+        <item>Inalatore</item>
+        <item>Pomata</item>
+    </string-array>
+
+    <string-array name="units_injection">
+        <item>mL</item>
+        <item>siringa</item>
+    </string-array>
+
+    <string-array name="units_inhaler">
+        <item>mL</item>
+        <item>mg</item>
+        <item>spruzzo</item>
+    </string-array>
+
+    <string-array name="medicine_frequency">
+        <item>Ogni giorno</item>
+        <item>A giorni alterni</item>
+        <item>Giorni specifici della settimana</item>
+        <item>Ogni X giorni</item>
+        <item>Ogni X settimane</item>
+        <item>Ogni X mesi</item>
+    </string-array>
+
+    <string-array name="language_entries">
+        <item>English</item>
+        <item>Português (Brasil)</item>
+        <item>Español</item>
+        <item>Italiano</item>
+    </string-array>
+
+    <string-array name="language_values">
+        <item>en</item>
+        <item>pt-BR</item>
+        <item>es</item>
+        <item>it</item>
+    </string-array>
+</resources>

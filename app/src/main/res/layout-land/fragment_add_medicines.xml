@@ -62,7 +62,7 @@
         android:layout_marginTop="16dp"
         android:contentDescription="@string/what_medicine_would_you_like_to_add"
         android:text="@string/what_medicine_would_you_like_to_add"
-        android:textColor="?android:attr/textColorSecondary"
+        android:textColor="?android:attr/textColorTertiary"
         android:textSize="20sp"
         android:textStyle="bold"
         app:layout_constraintStart_toStartOf="parent"

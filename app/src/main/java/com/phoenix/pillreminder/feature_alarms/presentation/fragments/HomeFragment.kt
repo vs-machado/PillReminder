@@ -49,6 +49,7 @@ import com.phoenix.pillreminder.feature_alarms.presentation.HideFabScrollListene
 import com.phoenix.pillreminder.feature_alarms.presentation.PermissionManager
 import com.phoenix.pillreminder.feature_alarms.presentation.adapter.RvMedicinesListAdapter
 import com.phoenix.pillreminder.feature_alarms.presentation.utils.CalendarUtils
+import com.phoenix.pillreminder.feature_alarms.presentation.utils.LanguageConfig
 import com.phoenix.pillreminder.feature_alarms.presentation.utils.ThemeUtils
 import com.phoenix.pillreminder.feature_alarms.presentation.viewmodels.AlarmSettingsSharedViewModel
 import com.phoenix.pillreminder.feature_alarms.presentation.viewmodels.EditMedicinesViewModel
@@ -614,6 +615,14 @@ class HomeFragment: Fragment() {
         // State used in EditMedicinesFragment. Everytime user navigates to EditMedicinesFragment AlarmSettingsSharedViewModel must set the treatment data.
         // The viewmodel setters are called when isInitialized is set to false. isInitialized is set to false when user goes back to HomeFragment or saves the changes.
         editMedicinesViewModel.setInitialized(false)
+
+        // Setup app language
+        val appLanguageString = sharedPreferencesRepository.getAppLanguage()
+
+        appLanguageString?.let { language ->
+            LanguageConfig.changeLanguage(language)
+        }
+
     }
 
     override fun onPause() {

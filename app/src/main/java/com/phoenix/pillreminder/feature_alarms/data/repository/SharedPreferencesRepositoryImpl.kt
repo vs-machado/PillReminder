@@ -2,6 +2,7 @@ package com.phoenix.pillreminder.feature_alarms.data.repository
 
 import android.content.Context
 import com.phoenix.pillreminder.feature_alarms.domain.repository.SharedPreferencesRepository
+import java.util.Locale
 
 class SharedPreferencesRepositoryImpl(
     private val context: Context
@@ -10,6 +11,7 @@ class SharedPreferencesRepositoryImpl(
     private val sharedPreferencesPermissionRequest = context.getSharedPreferences("dont_show_again", Context.MODE_PRIVATE)
     private val sharedPreferencesPillbox = context.getSharedPreferences("pillbox_reminder", Context.MODE_PRIVATE)
     private val sharedPreferencesAlarmReschedule = context.getSharedPreferences("alarm_reschedule", Context.MODE_PRIVATE)
+    private val sharedPreferencesLanguage = context.getSharedPreferences("language", Context.MODE_PRIVATE)
 
     override fun setPermissionRequestPreferences(boolean: Boolean) {
         sharedPreferencesPermissionRequest.edit().putBoolean("dont_show_again", boolean).apply()
@@ -33,5 +35,13 @@ class SharedPreferencesRepositoryImpl(
 
     override fun getAlarmReschedulePreferences(): Boolean {
         return sharedPreferencesAlarmReschedule.getBoolean("alarms_rescheduled", false)
+    }
+
+    override fun getAppLanguage(): String? {
+        return sharedPreferencesLanguage.getString("language", Locale.getDefault().language.toString())
+    }
+
+    override fun setAppLanguage(language: String) {
+        sharedPreferencesLanguage.edit().putString("language", language).apply()
     }
 }

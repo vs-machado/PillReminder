@@ -2,6 +2,7 @@
     <!-- Base application theme. -->
     <style name="Base.Theme.PillReminder" parent="Theme.Material3.DayNight.NoActionBar">
         <item name="colorPrimary">#507DA4</item>
+        <item name="colorSecondary">@color/dialog_text</item>
         <item name="android:textColorPrimary">@color/white</item>
         <item name="android:textColorSecondary">@color/white</item>
         <item name="android:textColorTertiary">@color/white</item>
@@ -15,4 +16,5 @@
         <item name="android:windowLightNavigationBar">false</item>
         <item name="android:colorBackground">#16171C</item>
     </style>
+
 </resources>

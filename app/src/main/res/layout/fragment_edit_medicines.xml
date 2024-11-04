@@ -48,6 +48,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginStart="16dp"
                 android:layout_marginTop="16dp"
+                android:textColor="?android:attr/textColorPrimary"
                 android:text="@string/medicine_name"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />
@@ -58,6 +59,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="16dp"
                 android:text="@string/quantity"
+                android:textColor="?android:attr/textColorPrimary"
                 app:layout_constraintStart_toStartOf="@+id/textInputLayout2"
                 app:layout_constraintTop_toBottomOf="@+id/textInputLayout" />
 
@@ -83,6 +85,7 @@
                 android:layout_marginStart="16dp"
                 android:layout_marginTop="16dp"
                 android:text="@string/medicine_form"
+                android:textColor="?android:attr/textColorPrimary"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/tilMedicineName" />
 
@@ -109,6 +112,7 @@
                 android:layout_marginStart="16dp"
                 android:layout_marginTop="16dp"
                 android:text="@string/alarms_hour"
+                android:textColor="?android:attr/textColorPrimary"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/tvQuantityAlarms" />
 
@@ -131,6 +135,7 @@
                 android:layout_marginStart="16dp"
                 android:layout_marginTop="16dp"
                 android:text="@string/treatment_start_date"
+                android:textColor="?android:attr/textColorPrimary"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/textInputLayout2" />
 
@@ -159,6 +164,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="@string/treatment_end_date"
+                android:textColor="?android:attr/textColorPrimary"
                 app:layout_constraintStart_toStartOf="@+id/textInputLayout4"
                 app:layout_constraintTop_toTopOf="@+id/textView14" />
 
@@ -189,6 +195,7 @@
                 android:layout_marginStart="16dp"
                 android:layout_marginTop="16dp"
                 android:text="@string/medicine_frequency"
+                android:textColor="?android:attr/textColorPrimary"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/textInputLayout3" />
 
@@ -214,6 +221,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="16dp"
                 android:text="@string/alarms_per_day"
+                android:textColor="?android:attr/textColorPrimary"
                 app:layout_constraintStart_toStartOf="@+id/textInputLayout5"
                 app:layout_constraintTop_toBottomOf="@+id/textInputLayout5" />
 
@@ -228,6 +236,7 @@
                 <TextView
                     android:id="@+id/tvStrength"
                     android:layout_width="wrap_content"
+                    android:textColor="?android:attr/textColorPrimary"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center|start" />
 

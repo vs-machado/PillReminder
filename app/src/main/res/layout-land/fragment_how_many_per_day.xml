@@ -51,7 +51,7 @@
         android:layout_marginTop="16dp"
         android:contentDescription="@string/how_many_do_you_take_per_day"
         android:text="@string/how_many_do_you_take_per_day"
-        android:textColor="?android:attr/textColorSecondary"
+        android:textColor="?android:attr/textColorTertiary"
         android:textSize="20sp"
         android:textStyle="bold"
         app:layout_constraintStart_toStartOf="parent"

@@ -3,8 +3,10 @@
     <style name="Base.Theme.PillReminder" parent="Theme.Material3.DayNight.NoActionBar">
         <!-- Customize your light theme here. -->
         <item name="colorPrimary">@color/colorPrimary</item>
+        <item name="colorSecondary">@color/colorPrimary</item>
         <item name="android:textColorPrimary">@color/black</item>
-        <item name="android:textColorSecondary">@color/white</item>
+        <item name="android:textColorSecondary">@color/dark_gray</item>
+        <item name="android:textColorTertiary">@color/white</item>
         <item name="android:colorControlActivated">@color/fab</item>
         <item name="android:statusBarColor">@color/white_ice</item>
         <item name="android:navigationBarColor">@color/white_ice</item>
@@ -30,6 +32,11 @@
         <item name="cornerSize">20dp</item>
     </style>
 
+    <style name="DialogStyle" parent="android:Theme.Material.Dialog">
+        <item name="android:textColorSecondary">@color/dark_gray</item>
+        <item name="android:colorAccent">@color/dark_gray</item>
+    </style>
+
     <style name = "DefaultNumberPickerTheme" parent= "Base.Theme.PillReminder">
         <item name="colorControlNormal">?android:attr/textColorPrimary</item>
     </style>
@@ -40,6 +47,12 @@
 
     <style name="ToolbarTitleTheme" parent="Widget.AppCompat.Toolbar">
         <item name="titleTextColor">@color/white</item>
+        <item name="android:textColorSecondary">@color/white</item>
+        <item name="android:homeAsUpIndicator">@color/white</item>
+    </style>
+
+    <style name="PreferenceScreenStyle" parent="Theme.Material3.DayNight.NoActionBar">
+        <item name="android:textColorSecondary">@color/dark_gray</item>
     </style>
 
     <style name="Widget.App.NavigationView" parent="Widget.Material3.NavigationView">
@@ -59,6 +72,14 @@
         <item name="cornerRadius">24dp</item>
         <item name="strokeColor">@color/colorPrimary</item>
         <item name="strokeWidth">1dp</item>
+    </style>
+
+    <style name="CustomRadioButton" parent="@android:style/Widget.CompoundButton.RadioButton">
+        <item name="android:buttonTint">@color/fab</item>
+    </style>
+
+    <style name="CustomListPreference" parent="@style/Preference.DialogPreference.Material">
+        <item name="android:radioButtonStyle">@style/CustomRadioButton</item>
     </style>
 
     <style name="SearchViewTheme" parent="">

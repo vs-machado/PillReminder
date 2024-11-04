@@ -384,7 +384,7 @@
         android:background="@drawable/round_button_background"
         android:gravity="center"
         android:padding="5dp"
-        android:textColor="?android:attr/textColorSecondary"
+        android:textColor="?android:attr/textColorTertiary"
         android:textSize="14sp"
         app:layout_constraintStart_toEndOf="@+id/scrollDays"
         app:layout_constraintTop_toTopOf="parent"

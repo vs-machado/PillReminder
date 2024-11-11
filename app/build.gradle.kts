@@ -48,11 +48,11 @@ android {
 }
 
 dependencies {
-    implementation("androidx.test:core-ktx:1.5.0")
     implementation("androidx.test.ext:junit-ktx:1.1.5")
     implementation("androidx.cardview:cardview:1.0.0")
-    implementation("androidx.test:runner:1.6.2")
     implementation("com.google.dagger:hilt-android-testing:2.51.1")
+    implementation("androidx.navigation:navigation-testing:2.8.3")
+
     val navVersion = "2.7.5"
     val coreVersion = "1.12.0"
     val roomVersion = "2.6.1"
@@ -60,6 +60,8 @@ dependencies {
     val activityVersion = "1.8.2"
     val fragmentVersion = "1.6.2"
     val workVersion = "2.9.0"
+    val androidxTestVersion = "1.6.0"
+    val espressoVersion = "3.6.1"
 
     //Activity
     implementation("androidx.activity:activity-ktx:$activityVersion")
@@ -105,6 +107,11 @@ dependencies {
     implementation("androidx.drawerlayout:drawerlayout:1.2.0")
     implementation("androidx.preference:preference-ktx:1.2.1")
 
+    implementation("androidx.test:runner:$androidxTestVersion")
+    implementation("androidx.test:core-ktx:$androidxTestVersion")
+
+    implementation("org.mockito:mockito-android:5.2.0")
+
     // Swipe refresh layout
     implementation("androidx.swiperefreshlayout:swiperefreshlayout:1.1.0")
 
@@ -124,12 +131,31 @@ dependencies {
     testImplementation("org.robolectric:robolectric:4.13")
     kspTest("com.google.dagger:hilt-compiler:2.51.1")
 
-    androidTestImplementation("androidx.test.ext:junit:1.1.5")
-    androidTestImplementation("androidx.test.espresso:espresso-core:3.5.1")
+    androidTestImplementation("androidx.test.espresso:espresso-core:3.6.1")
+    androidTestImplementation("androidx.test.espresso:espresso-contrib:3.6.1")
+    androidTestImplementation("androidx.test:core:$androidxTestVersion")
+    androidTestImplementation("androidx.test:core-ktx:$androidxTestVersion")
+    androidTestImplementation("androidx.test:runner:$androidxTestVersion")
+    androidTestImplementation("androidx.test.ext:junit:" + rootProject.version)
+    androidTestImplementation("androidx.test.ext:junit-ktx:" + rootProject.version)
+    androidTestImplementation("androidx.test:rules:$androidxTestVersion")
     androidTestImplementation("org.jetbrains.kotlinx:kotlinx-coroutines-test:1.3.9")
     androidTestImplementation("com.google.truth:truth:1.4.2")
     androidTestImplementation("androidx.arch.core:core-testing:2.2.0")
     androidTestImplementation("com.google.dagger:hilt-android-testing:2.51.1")
+    androidTestImplementation("org.mockito:mockito-inline:5.2.0")
+    androidTestImplementation("org.hamcrest:hamcrest:2.2")
+    androidTestImplementation("androidx.fragment:fragment-testing:1.8.5")
+    androidTestImplementation("androidx.test:monitor:1.7.0")
+    androidTestImplementation("androidx.preference:preference-ktx:1.2.1")
+
+//    debugImplementation("androidx.fragment:fragment-testing:1.8.5"){
+//        exclude(group = "androidx.test", module = "monitor")
+//        exclude(group = "android.test", module = "core")
+//    }
+
+    debugImplementation("androidx.fragment:fragment-testing-manifest:1.8.5")
+
     kspAndroidTest("com.google.dagger:hilt-android-compiler:2.51.1")
 }
 java {

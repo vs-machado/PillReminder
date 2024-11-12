@@ -185,7 +185,8 @@
             android:layout_marginTop="16dp"
             android:src="@drawable/ic_clock_activity"
             app:layout_constraintStart_toStartOf="@+id/materialCardView3"
-            app:layout_constraintTop_toTopOf="parent" />
+            app:layout_constraintTop_toTopOf="parent"
+            android:contentDescription="@string/clock_icon"/>
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 </ScrollView>

@@ -197,7 +197,7 @@ class HomeFragment: Fragment() {
             context?.sendBroadcast(intent)
 
             // Set the flag to true
-            sharedPreferencesRepository.setAlarmReschedulePreferences(true)
+            hfViewModel.setAlarmReschedulePreferences(true)
         }
     }
 

@@ -156,11 +156,21 @@ class HomeFragmentViewModel @Inject constructor(
     }
 
     fun setPermissionRequestPreferences(boolean: Boolean){
-        spRepository.setPermissionRequestPreferences(boolean)
+        viewModelScope.launch(Dispatchers.IO) {
+            spRepository.setPermissionRequestPreferences(boolean)
+        }
     }
 
     fun setPillboxPreferences(boolean: Boolean){
-        spRepository.setPillboxPreferences(boolean)
+        viewModelScope.launch(Dispatchers.IO){
+            spRepository.setPillboxPreferences(boolean)
+        }
+    }
+
+    fun setAlarmReschedulePreferences(boolean: Boolean){
+        viewModelScope.launch(Dispatchers.IO) {
+            spRepository.setAlarmReschedulePreferences(boolean)
+        }
     }
 
     fun getPermissionRequestPreferences(): Boolean{

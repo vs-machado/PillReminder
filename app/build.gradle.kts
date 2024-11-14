@@ -110,8 +110,6 @@ dependencies {
     implementation("androidx.test:runner:$androidxTestVersion")
     implementation("androidx.test:core-ktx:$androidxTestVersion")
 
-    implementation("org.mockito:mockito-android:5.2.0")
-
     // Swipe refresh layout
     implementation("androidx.swiperefreshlayout:swiperefreshlayout:1.1.0")
 

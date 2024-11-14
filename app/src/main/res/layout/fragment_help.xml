@@ -71,6 +71,7 @@
                         android:layout_marginEnd="16dp"
                         android:background="@android:color/transparent"
                         android:src="@drawable/ic_keyboard_arrow_down"
+                        android:contentDescription="@string/arrow_down_icon"
                         app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintTop_toTopOf="parent"
                         app:tint="?android:attr/textColorPrimary" />
@@ -130,6 +131,7 @@
                         android:layout_marginEnd="16dp"
                         android:background="@android:color/transparent"
                         android:src="@drawable/ic_keyboard_arrow_down"
+                        android:contentDescription="@string/arrow_down_icon"
                         app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintTop_toTopOf="parent"
                         app:tint="?android:attr/textColorPrimary" />
@@ -189,6 +191,7 @@
                         android:layout_marginEnd="16dp"
                         android:background="@android:color/transparent"
                         android:src="@drawable/ic_keyboard_arrow_down"
+                        android:contentDescription="@string/arrow_down_icon"
                         app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintTop_toTopOf="parent"
                         app:tint="?android:attr/textColorPrimary" />
@@ -249,6 +252,7 @@
                         android:layout_marginEnd="16dp"
                         android:background="@android:color/transparent"
                         android:src="@drawable/ic_keyboard_arrow_down"
+                        android:contentDescription="@string/arrow_down_icon"
                         app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintTop_toTopOf="parent"
                         app:tint="?android:attr/textColorPrimary" />

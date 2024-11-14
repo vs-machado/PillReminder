@@ -14,6 +14,8 @@ import com.phoenix.pillreminder.feature_alarms.presentation.AlarmScheduler
 import dagger.hilt.android.lifecycle.HiltViewModel
 import dagger.hilt.android.qualifiers.ApplicationContext
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import java.time.Instant
@@ -32,6 +34,21 @@ class HomeFragmentViewModel @Inject constructor(
     @ApplicationContext private val appContext: Context
 ): ViewModel() {
 
+    private val _permissionRequestPreferences = MutableStateFlow(false)
+    val permissionRequestPreferences: StateFlow<Boolean> = _permissionRequestPreferences
+
+    private val _pillboxReminderPreferences = MutableStateFlow(false)
+    val pillboxReminderPreferences: StateFlow<Boolean> = _pillboxReminderPreferences
+
+    private val _alarmReschedulePreferences = MutableStateFlow(false)
+    val alarmReschedulePreferences: StateFlow<Boolean> = _alarmReschedulePreferences
+
+    init {
+        _permissionRequestPreferences.value = spRepository.getPermissionRequestPreferences()
+        _pillboxReminderPreferences.value = spRepository.getPillboxPreferences()
+        _alarmReschedulePreferences.value = spRepository.getAlarmReschedulePreferences()
+    }
+
     private var date: Date = Calendar.getInstance().time
 
     fun setDate(selectedDate: Date){
@@ -44,6 +61,7 @@ class HomeFragmentViewModel @Inject constructor(
 
     fun schedulePillboxReminder(hours: Int, minutes: Int){
         alarmScheduler.schedulePillboxReminder(hours, minutes)
+        setPillboxPreferences(true)
     }
 
     fun markMedicineUsage(medicine: Medicine) = viewModelScope.launch{
@@ -159,26 +177,20 @@ class HomeFragmentViewModel @Inject constructor(
         viewModelScope.launch(Dispatchers.IO) {
             spRepository.setPermissionRequestPreferences(boolean)
         }
+        _permissionRequestPreferences.value = boolean
     }
 
     fun setPillboxPreferences(boolean: Boolean){
         viewModelScope.launch(Dispatchers.IO){
             spRepository.setPillboxPreferences(boolean)
         }
+        _pillboxReminderPreferences.value = boolean
     }
 
     fun setAlarmReschedulePreferences(boolean: Boolean){
         viewModelScope.launch(Dispatchers.IO) {
             spRepository.setAlarmReschedulePreferences(boolean)
         }
+        _alarmReschedulePreferences.value = boolean
     }
-
-    fun getPermissionRequestPreferences(): Boolean{
-        return spRepository.getPermissionRequestPreferences()
-    }
-
-    fun getPillboxPreferences(): Boolean{
-        return spRepository.getPillboxPreferences()
-    }
-
 }

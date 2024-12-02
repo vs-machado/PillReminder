@@ -643,8 +643,7 @@ class HomeFragment: Fragment() {
 
         // Updates the medicines list.
         lifecycleScope.launch(Dispatchers.Main){
-            val currentDate = Date(System.currentTimeMillis())
-            adapter.setList(medicinesViewModel.getMedicines(), currentDate)
+            adapter.setList(medicinesViewModel.getMedicines(), binding.datePicker.selectedDate)
         }
 
         // State used in EditMedicinesFragment. Everytime user navigates to EditMedicinesFragment AlarmSettingsSharedViewModel must set the treatment data.

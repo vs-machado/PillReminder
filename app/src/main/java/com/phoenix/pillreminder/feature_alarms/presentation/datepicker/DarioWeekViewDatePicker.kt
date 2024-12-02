@@ -63,7 +63,10 @@ class DarioWeekViewDatePicker @JvmOverloads constructor(
     private val todayText: TextView
 
     private val shortWeekdays = DateFormatSymbols(Locale.getDefault()).shortWeekdays
-    private var selectedDate = Date(System.currentTimeMillis())
+
+    var selectedDate = Date(System.currentTimeMillis())
+         private set
+
     var onSelectionChanged: (Date) -> Unit = {}
 
     init {

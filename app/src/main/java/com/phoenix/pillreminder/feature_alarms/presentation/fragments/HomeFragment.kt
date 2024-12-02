@@ -30,7 +30,9 @@ import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.hilt.navigation.fragment.hiltNavGraphViewModels
+import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
+import androidx.lifecycle.repeatOnLifecycle
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.google.android.material.bottomnavigation.BottomNavigationView
@@ -44,7 +46,6 @@ import com.phoenix.pillreminder.databinding.LayoutWarnAboutMedicineUsageHourBind
 import com.phoenix.pillreminder.feature_alarms.domain.model.Medicine
 import com.phoenix.pillreminder.feature_alarms.domain.repository.MedicineRepository
 import com.phoenix.pillreminder.feature_alarms.domain.repository.SharedPreferencesRepository
-import com.phoenix.pillreminder.feature_alarms.domain.util.collectLatestLifecycleFlow
 import com.phoenix.pillreminder.feature_alarms.presentation.AlarmReceiver
 import com.phoenix.pillreminder.feature_alarms.presentation.HideFabScrollListener
 import com.phoenix.pillreminder.feature_alarms.presentation.PermissionManager
@@ -58,6 +59,7 @@ import com.phoenix.pillreminder.feature_alarms.presentation.viewmodels.HomeFragm
 import com.phoenix.pillreminder.feature_alarms.presentation.viewmodels.MedicinesViewModel
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import java.util.Calendar
@@ -74,11 +76,13 @@ class HomeFragment: Fragment() {
 
     private lateinit var binding: FragmentHomeBinding
     private lateinit var adapter: RvMedicinesListAdapter
+
     private val medicinesViewModel: MedicinesViewModel by hiltNavGraphViewModels(R.id.nav_graph)
     private val sharedViewModel: AlarmSettingsSharedViewModel by hiltNavGraphViewModels(R.id.nav_graph)
     private val editMedicinesViewModel: EditMedicinesViewModel by hiltNavGraphViewModels(R.id.nav_graph)
-    private var toast: Toast? = null
     private val hfViewModel: HomeFragmentViewModel by viewModels()
+
+    private var toast: Toast? = null
     private lateinit var dialog: Dialog
     private lateinit var gestureDetector: GestureDetector
     private var dontShowAgainPreference: Boolean = false
@@ -108,24 +112,35 @@ class HomeFragment: Fragment() {
         super.onViewCreated(view, savedInstanceState)
         val fab = requireActivity().findViewById<FloatingActionButton>(R.id.fabAddMedicine)
 
-        // Shows a dialog requesting for app permissions. If user click on don't show again,
-        // the permissionRequestPreference is updated
-        viewLifecycleOwner.collectLatestLifecycleFlow(hfViewModel.permissionRequestPreferences){ permissionPreference ->
-            dontShowAgainPreference = permissionPreference
+        viewLifecycleOwner.lifecycleScope.launch {
+            viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED){
 
-            if(!dontShowAgainPreference) {
-                requestPermissions(dontShowAgainPreference)
+                // Shows a dialog requesting for app permissions. If user click on don't show again,
+                // the permissionRequestPreference is updated
+                launch {
+                    hfViewModel.permissionRequestPreferences.collectLatest { permissionPreference ->
+                        dontShowAgainPreference = permissionPreference
+
+                        if(!dontShowAgainPreference) {
+                            requestPermissions(dontShowAgainPreference)
+                        }
+                    }
+                }
+
+                // Updates the datepicker and the pillbox reminder switch
+                launch {
+                    hfViewModel.pillboxReminderPreferences.collectLatest { pillboxPreference ->
+                        setupDatePicker(fab, pillboxPreference)
+                    }
+                }
+
+                // Reschedule alarms if app was uninstalled previously and it has a backup
+                launch {
+                    hfViewModel.alarmReschedulePreferences.collectLatest { alarmReschedulePreference ->
+                        checkAndRescheduleAlarms(alarmReschedulePreference)
+                    }
+                }
             }
-        }
-
-        // Updates the datepicker and the pillbox reminder switch
-        viewLifecycleOwner.collectLatestLifecycleFlow(hfViewModel.pillboxReminderPreferences){ pillboxPreference ->
-            setupDatePicker(fab, pillboxPreference)
-        }
-
-        // Reschedule alarms if app was uninstalled previously and it has a backup
-        viewLifecycleOwner.collectLatestLifecycleFlow(hfViewModel.alarmReschedulePreferences){ alarmReschedulePreference ->
-            checkAndRescheduleAlarms(alarmReschedulePreference)
         }
 
         initRecyclerView(hfViewModel.getDate(), fab)

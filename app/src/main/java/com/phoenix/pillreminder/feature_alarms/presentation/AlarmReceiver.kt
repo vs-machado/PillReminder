@@ -4,29 +4,32 @@ import android.app.NotificationManager
 import android.content.BroadcastReceiver
 import android.content.Context
 import android.content.Intent
-import android.util.Log
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import com.phoenix.pillreminder.R
 import com.phoenix.pillreminder.feature_alarms.domain.model.AlarmItem
 import com.phoenix.pillreminder.feature_alarms.domain.repository.MedicineRepository
+import com.phoenix.pillreminder.feature_alarms.domain.repository.SharedPreferencesRepository
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.launch
-import kotlinx.coroutines.withContext
 import java.time.LocalDateTime
 import java.time.ZoneOffset
 import java.util.TimeZone
 import javax.inject.Inject
 import kotlin.coroutines.CoroutineContext
 
+const val TEN_MINUTES = 1000 * 60 * 10L
+
+
 @AndroidEntryPoint
 class AlarmReceiver: BroadcastReceiver(), ActivityCompat.OnRequestPermissionsResultCallback, CoroutineScope {
 
     private lateinit var job: Job
     @Inject lateinit var repository: MedicineRepository
+    @Inject lateinit var sharedPreferencesRepository: SharedPreferencesRepository
 
     override val coroutineContext: CoroutineContext
         get() = Dispatchers.Default + job
@@ -59,13 +62,15 @@ class AlarmReceiver: BroadcastReceiver(), ActivityCompat.OnRequestPermissionsRes
         launch {
             val alarmScheduler = context?.let { AndroidAlarmScheduler(repository, it) }
 
-            //Example: If interval between alarms is equal to 1 hour a notification will be sent after 15 minutes if user don't mark the medicine as used
             if(alarmItem?.time != null) {
                 val alarmItemMillis = localDateTimeToMillis(alarmItem.time)
-                val followUpTime = System.currentTimeMillis() + aQuarterIntervalBetweenAlarms(alarmItem.medicineName, alarmItemMillis, repository)
+                val followUpTime = System.currentTimeMillis() + getFollowUpNotificationInterval(alarmItem.medicineName, alarmItemMillis, repository)
                 val medicine = repository.getCurrentAlarmData(alarmItemMillis)
 
                 if(medicine != null){
+                    /* A follow up alarm will be scheduled and triggered if user does not mark the medicine usage.
+                       The follow up alarm will trigger after 1/4 of the time between the current alarm and the next alarm.
+                       If the interval is greater than 10 minutes, the follow up alarm will trigger after 10 minutes.*/
                     alarmScheduler?.scheduleFollowUpAlarm(medicine, alarmItem, followUpTime)
 
                     //When an alarm is received by system the next alarm is automatically scheduled
@@ -132,15 +137,16 @@ class AlarmReceiver: BroadcastReceiver(), ActivityCompat.OnRequestPermissionsRes
         return millis
     }
 
-    private suspend fun aQuarterIntervalBetweenAlarms(medicineName: String, alarmInMillis: Long, repository: MedicineRepository): Long{
-        return withContext(Dispatchers.IO) {
-            val nextAlarm = repository.getNextAlarmData(medicineName, alarmInMillis)
+    private suspend fun getFollowUpNotificationInterval(medicineName: String, alarmInMillis: Long, repository: MedicineRepository): Long {
+        val nextAlarm = repository.getNextAlarmData(medicineName, alarmInMillis)
 
-            if (nextAlarm != null) {
-                (nextAlarm.alarmInMillis - alarmInMillis) / 4
-            } else {
-                0L
-            }
+        return if (nextAlarm != null) {
+            val intervalBetweenAlarms = nextAlarm.alarmInMillis - alarmInMillis
+
+            if(intervalBetweenAlarms >= TEN_MINUTES) TEN_MINUTES else intervalBetweenAlarms / 4
+
+        } else {
+            TEN_MINUTES
         }
     }
-    }
+}

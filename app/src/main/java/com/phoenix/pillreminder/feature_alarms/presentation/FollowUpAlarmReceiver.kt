@@ -3,10 +3,8 @@ package com.phoenix.pillreminder.feature_alarms.presentation
 import android.content.BroadcastReceiver
 import android.content.Context
 import android.content.Intent
-import android.util.Log
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
-import com.phoenix.pillreminder.feature_alarms.data.data_source.MedicineDatabase
 import com.phoenix.pillreminder.feature_alarms.domain.model.AlarmItem
 import com.phoenix.pillreminder.feature_alarms.domain.model.Medicine
 import com.phoenix.pillreminder.feature_alarms.domain.repository.MedicineRepository
@@ -19,6 +17,10 @@ import java.time.ZoneId
 import javax.inject.Inject
 import kotlin.coroutines.CoroutineContext
 
+/**
+* This class is responsible for receiving the follow-up alarm that reminder users when
+ * they already received an alarm but not marked the medicine usage.
+*/
 @AndroidEntryPoint
 class FollowUpAlarmReceiver: BroadcastReceiver(), ActivityCompat.OnRequestPermissionsResultCallback,
     CoroutineScope {
@@ -32,6 +34,7 @@ class FollowUpAlarmReceiver: BroadcastReceiver(), ActivityCompat.OnRequestPermis
         get() = Dispatchers.Default + job
 
 
+    // Receives the follow-up alarm. If the medicine was used, the alarm service does not start.
     override fun onReceive(context: Context?, intent: Intent?) {
         val medicineItem = intent?.getParcelableExtra("ALARM_ITEM", AlarmItem::class.java)
         val alarmTimeInMillis = medicineItem?.time?.atZone(ZoneId.systemDefault())?.toInstant()?.toEpochMilli()
@@ -39,6 +42,7 @@ class FollowUpAlarmReceiver: BroadcastReceiver(), ActivityCompat.OnRequestPermis
         launch(Dispatchers.IO) {
             val updatedMedicine = repository.getCurrentAlarmData(alarmTimeInMillis ?: 0)
 
+            // updatedMedicine determines if the alarm service will start or not.
             if(updatedMedicine?.medicineWasTaken == false && medicineItem != null){
                 startAlarmService(context, intent, updatedMedicine)
             }

@@ -30,7 +30,9 @@ import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.hilt.navigation.fragment.hiltNavGraphViewModels
+import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
+import androidx.lifecycle.repeatOnLifecycle
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.google.android.material.bottomnavigation.BottomNavigationView
@@ -57,6 +59,7 @@ import com.phoenix.pillreminder.feature_alarms.presentation.viewmodels.HomeFragm
 import com.phoenix.pillreminder.feature_alarms.presentation.viewmodels.MedicinesViewModel
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import java.util.Calendar
@@ -73,13 +76,16 @@ class HomeFragment: Fragment() {
 
     private lateinit var binding: FragmentHomeBinding
     private lateinit var adapter: RvMedicinesListAdapter
+
     private val medicinesViewModel: MedicinesViewModel by hiltNavGraphViewModels(R.id.nav_graph)
     private val sharedViewModel: AlarmSettingsSharedViewModel by hiltNavGraphViewModels(R.id.nav_graph)
     private val editMedicinesViewModel: EditMedicinesViewModel by hiltNavGraphViewModels(R.id.nav_graph)
-    private var toast: Toast? = null
     private val hfViewModel: HomeFragmentViewModel by viewModels()
+
+    private var toast: Toast? = null
     private lateinit var dialog: Dialog
     private lateinit var gestureDetector: GestureDetector
+    private var dontShowAgainPreference: Boolean = false
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -104,15 +110,43 @@ class HomeFragment: Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        val dontShowAgain = hfViewModel.getPermissionRequestPreferences()
         val fab = requireActivity().findViewById<FloatingActionButton>(R.id.fabAddMedicine)
+
+        viewLifecycleOwner.lifecycleScope.launch {
+            viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED){
+
+                // Shows a dialog requesting for app permissions. If user click on don't show again,
+                // the permissionRequestPreference is updated
+                launch {
+                    hfViewModel.permissionRequestPreferences.collectLatest { permissionPreference ->
+                        dontShowAgainPreference = permissionPreference
+
+                        if(!dontShowAgainPreference) {
+                            requestPermissions(dontShowAgainPreference)
+                        }
+                    }
+                }
+
+                // Updates the datepicker and the pillbox reminder switch
+                launch {
+                    hfViewModel.pillboxReminderPreferences.collectLatest { pillboxPreference ->
+                        setupDatePicker(fab, pillboxPreference)
+                    }
+                }
+
+                // Reschedule alarms if app was uninstalled previously and it has a backup
+                launch {
+                    hfViewModel.alarmReschedulePreferences.collectLatest { alarmReschedulePreference ->
+                        checkAndRescheduleAlarms(alarmReschedulePreference)
+                    }
+                }
+            }
+        }
 
         initRecyclerView(hfViewModel.getDate(), fab)
         setupGestureDetector()
         setupSwipeListener()
-        checkAndRescheduleAlarms() // Reschedule alarms if app was uninstalled previously and it has a backup
-        requestPermissions(dontShowAgain, fab)
-        setupDatePicker(fab)
+        makeFabAndRecyclerViewVisible(fab)
 
         fab.setOnClickListener {
             findNavController().navigate(R.id.action_homeFragment_to_addMedicinesFragment)
@@ -152,17 +186,18 @@ class HomeFragment: Fragment() {
 
         binding.btnCancelDialogPillbox.setOnClickListener {
             dialog.dismiss()
+            hfViewModel.setPillboxPreferences(false)
             uncheckSwitch()
         }
 
         dialog.show()
     }
 
-    private fun setupDatePicker(fab: FloatingActionButton){
-        val pillboxReminder = hfViewModel.getPillboxPreferences()
+    private fun setupDatePicker(fab: FloatingActionButton, pillboxPreference: Boolean){
+        val pillboxSwitch = binding.datePicker.findViewById<SwitchMaterial>(R.id.switchPillbox)
 
         //SharedPreference verification to check or uncheck the switch
-        binding.datePicker.findViewById<SwitchMaterial>(R.id.switchPillbox).isChecked = pillboxReminder
+        pillboxSwitch.isChecked = pillboxPreference
 
         //Updates the date picker and recyclerview
         binding.datePicker.onSelectionChanged = { date ->
@@ -175,7 +210,8 @@ class HomeFragment: Fragment() {
                 adapter.setList(medicines, hfViewModel.getDate())
             }
         }
-        binding.datePicker.findViewById<SwitchMaterial>(R.id.switchPillbox).setOnCheckedChangeListener { _, isChecked ->
+
+        pillboxSwitch.setOnCheckedChangeListener { _, isChecked ->
             if (isChecked) {
                 hfViewModel.setPillboxPreferences(true)
                 showPillboxReminderDialog()
@@ -187,9 +223,7 @@ class HomeFragment: Fragment() {
     }
 
     //If user has a app backup and reinstalls the app the alarms will be rescheduled at startup
-    private fun checkAndRescheduleAlarms(){
-        val alarmsRescheduled = sharedPreferencesRepository.getAlarmReschedulePreferences()
-        Log.d("debug", "alarms rescheduled: $alarmsRescheduled")
+    private fun checkAndRescheduleAlarms(alarmsRescheduled: Boolean) {
         if (!alarmsRescheduled) {
             val intent = Intent(requireContext(), AlarmReceiver::class.java)
             intent.addCategory(Intent.CATEGORY_DEFAULT)
@@ -197,15 +231,11 @@ class HomeFragment: Fragment() {
             context?.sendBroadcast(intent)
 
             // Set the flag to true
-            sharedPreferencesRepository.setAlarmReschedulePreferences(true)
+            hfViewModel.setAlarmReschedulePreferences(true)
         }
     }
 
-    private fun requestPermissions(dontShowAgain: Boolean, fab: FloatingActionButton){
-        if(ContextCompat.checkSelfPermission(requireContext(), Manifest.permission.POST_NOTIFICATIONS) == PackageManager.PERMISSION_GRANTED){
-            binding.rvMedicinesList.visibility = View.VISIBLE
-            fab.visibility = View.VISIBLE
-        }
+    private fun requestPermissions(dontShowAgain: Boolean){
         if(!Settings.canDrawOverlays(requireContext()) && !dontShowAgain){
             showOverlayAndNotificationPermissionDialog()
         }
@@ -289,9 +319,7 @@ class HomeFragment: Fragment() {
     }
 
     private fun showOverlayAndNotificationPermissionDialog(){
-        val dontShowAgain = hfViewModel.getPermissionRequestPreferences()
-
-        if (dontShowAgain){
+        if (dontShowAgainPreference){
             return
         }
 
@@ -584,6 +612,13 @@ class HomeFragment: Fragment() {
         }
     }
 
+    private fun makeFabAndRecyclerViewVisible(fab: FloatingActionButton) {
+        if(ContextCompat.checkSelfPermission(requireContext(), Manifest.permission.POST_NOTIFICATIONS) == PackageManager.PERMISSION_GRANTED){
+            binding.rvMedicinesList.visibility = View.VISIBLE
+            fab.visibility = View.VISIBLE
+        }
+
+    }
     override fun onResume() {
         super.onResume()
 
@@ -608,8 +643,7 @@ class HomeFragment: Fragment() {
 
         // Updates the medicines list.
         lifecycleScope.launch(Dispatchers.Main){
-            val currentDate = Date(System.currentTimeMillis())
-            adapter.setList(medicinesViewModel.getMedicines(), currentDate)
+            adapter.setList(medicinesViewModel.getMedicines(), binding.datePicker.selectedDate)
         }
 
         // State used in EditMedicinesFragment. Everytime user navigates to EditMedicinesFragment AlarmSettingsSharedViewModel must set the treatment data.

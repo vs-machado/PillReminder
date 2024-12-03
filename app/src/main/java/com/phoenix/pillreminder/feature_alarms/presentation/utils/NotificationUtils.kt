@@ -77,8 +77,11 @@ object NotificationUtils {
         }
     }
 
-     fun createFollowUpNotification(context: Context, item: AlarmItem, medicineHashCode: String): Notification{
-        val notificationIntent = Intent(context, MainActivity::class.java)
+     fun createFollowUpNotification(context: Context, item: AlarmItem, medicineHashCode: String): Notification {
+         val alarmUri = Uri.parse("android.resource://" + context.packageName + "/" + R.raw.alarm_sound)
+
+         val notificationIntent = Intent(context, MainActivity::class.java)
+
         val pendingIntent = PendingIntent.getActivity(
             context, medicineHashCode.toInt(), notificationIntent,
             PendingIntent.FLAG_IMMUTABLE or PendingIntent.FLAG_UPDATE_CURRENT
@@ -93,7 +96,7 @@ object NotificationUtils {
             markAsUsedIntent, PendingIntent.FLAG_IMMUTABLE
         )
 
-        createNotificationChannel(context)
+        createFollowUpNotificationChannel(context, alarmUri)
 
          val title = context.getString(R.string.did_you_forget_to_use_your_medicine, item.medicineName)
          val text = context.getString(R.string.do_not_forget_to_mark_the_medicine_as_used, checkMedicineForm(item.medicineForm,
@@ -138,14 +141,18 @@ object NotificationUtils {
             notificationManager.createNotificationChannel(channel)
         }
     }
-    private fun createNotificationChannel(context: Context){
+    private fun createFollowUpNotificationChannel(context: Context, alarmUri: Uri){
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
             val name = "PillReminderFollowUpChannel"
             val descriptionText =
                 context.getString(R.string.channel_for_reminding_users_to_take_their_medicines)
             val importance = NotificationManager.IMPORTANCE_HIGH
+            val audioAttributes = AudioAttributes.Builder()
+                .setUsage(AudioAttributes.USAGE_ALARM)
+                .build()
             val channel = NotificationChannel(followUpChannelId, name, importance).apply {
                 description = descriptionText
+                setSound(alarmUri, audioAttributes)
             }
             val notificationManager = context.getSystemService(NotificationManager::class.java)
             notificationManager.createNotificationChannel(channel)

@@ -24,7 +24,7 @@ abstract class MedicineDatabase : RoomDatabase() {
                         context.applicationContext,
                         MedicineDatabase::class.java,
                         "medicine_data_database"
-                    ).fallbackToDestructiveMigration().build()
+                    ).build()
                 }
                 return instance
             }

@@ -6,6 +6,7 @@ import android.os.Bundle
 import android.util.Log
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.app.AppCompatDelegate
+import androidx.lifecycle.lifecycleScope
 import androidx.navigation.NavOptions
 import androidx.navigation.fragment.NavHostFragment
 import androidx.navigation.ui.AppBarConfiguration
@@ -17,6 +18,8 @@ import com.phoenix.pillreminder.feature_alarms.domain.repository.MedicineReposit
 import com.phoenix.pillreminder.feature_alarms.domain.repository.SharedPreferencesRepository
 import com.phoenix.pillreminder.feature_alarms.presentation.utils.languageMapping
 import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
 import java.util.Locale
 import javax.inject.Inject
 
@@ -121,7 +124,10 @@ class MainActivity: AppCompatActivity() {
         val phoneLanguage = Locale.getDefault().toLanguageTag()
         Log.d("debug", phoneLanguage)
         val language = languageMapping[phoneLanguage] ?: "en"
-        sharedPreferencesRepository.setAppLanguage(language)
+
+        lifecycleScope.launch(Dispatchers.IO){
+            sharedPreferencesRepository.setAppLanguage(language)
+        }
     }
 
 //    override fun attachBaseContext(newBase: Context?) {

@@ -244,6 +244,7 @@
     <string name="disable_battery_optimizations">Desabilitar otimizações de bateria</string>
     <string name="optimizations_already_disabled">As otimizações de bateria já estão desabilitadas</string>
     <string name="arrow_down_icon">Clique para ver a resposta da pergunta</string>
+    <string name="snooze_alarm">Adiar alarme</string>
 
     <string-array name="medicine_forms">
         <item>Comprimido</item>

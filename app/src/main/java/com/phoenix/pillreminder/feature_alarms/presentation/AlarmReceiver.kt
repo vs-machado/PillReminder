@@ -4,6 +4,7 @@ import android.app.NotificationManager
 import android.content.BroadcastReceiver
 import android.content.Context
 import android.content.Intent
+import android.util.Log
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import com.phoenix.pillreminder.R
@@ -37,7 +38,8 @@ class AlarmReceiver: BroadcastReceiver(), ActivityCompat.OnRequestPermissionsRes
     override fun onReceive(context: Context?, intent: Intent?) {
         val alarmItem = intent?.getParcelableExtra("ALARM_ITEM", AlarmItem::class.java)
         val alarmItemAction = intent?.getParcelableExtra("ALARM_ITEM_ACTION", AlarmItem::class.java)
-        val actionString = context?.getString(R.string.mark_as_used)
+        val actionMarkAsUsed = context?.getString(R.string.mark_as_used)
+        val actionSnoozeAlarm = context?.getString(R.string.snooze_alarm)
         job = Job()
 
         // Automatically reschedule alarms if user reboots the device or install an app update
@@ -47,31 +49,38 @@ class AlarmReceiver: BroadcastReceiver(), ActivityCompat.OnRequestPermissionsRes
             }
             return
         }
-        if(intent?.action == actionString && alarmItemAction != null){
+        if(intent?.action == actionMarkAsUsed && alarmItemAction != null){
             markMedicineAsTaken(alarmItemAction, repository)
-
-            //Notification dismissal after pressing button
-            val notificationManager = context?.getSystemService(Context.NOTIFICATION_SERVICE) as? NotificationManager
-            notificationManager?.cancel(alarmItemAction.hashCode())
-            val stopServiceIntent = Intent(context, AlarmService::class.java)
-            context?.stopService(stopServiceIntent)
-
+            dismissNotification(context, alarmItemAction.hashCode())
+            return
+        }
+        if(intent?.action == actionSnoozeAlarm && alarmItemAction != null) {
+            snoozeAlarm(alarmItemAction, repository, context)
+            dismissNotification(context, alarmItemAction.hashCode())
             return
         }
 
         launch {
+            Log.d("debug", "inside launch block")
             val alarmScheduler = context?.let { AndroidAlarmScheduler(repository, it) }
 
             if(alarmItem?.time != null) {
+                Log.d("debug", "alarmitem not null")
                 val alarmItemMillis = localDateTimeToMillis(alarmItem.time)
                 val followUpTime = System.currentTimeMillis() + getFollowUpNotificationInterval(alarmItem.medicineName, alarmItemMillis, repository)
                 val medicine = repository.getCurrentAlarmData(alarmItemMillis)
 
                 if(medicine != null){
+                    Log.d("debug", "medicine not null")
                     /* A follow up alarm will be scheduled and triggered if user does not mark the medicine usage.
                        The follow up alarm will trigger after 1/4 of the time between the current alarm and the next alarm.
                        If the interval is greater than 10 minutes, the follow up alarm will trigger after 10 minutes.*/
                     alarmScheduler?.scheduleFollowUpAlarm(medicine, alarmItem, followUpTime)
+
+                    // The notification is only delivered if user does not confirm the medicine usage
+                    if(!medicine.medicineWasTaken){
+                        startAlarmService(context, intent)
+                    }
 
                     //When an alarm is received by system the next alarm is automatically scheduled
                     val medicineData =
@@ -86,8 +95,6 @@ class AlarmReceiver: BroadcastReceiver(), ActivityCompat.OnRequestPermissionsRes
                 }
             }
         }
-
-        startAlarmService(context, intent)
     }
 
     override fun onRequestPermissionsResult(
@@ -120,7 +127,7 @@ class AlarmReceiver: BroadcastReceiver(), ActivityCompat.OnRequestPermissionsRes
     }
 
     private fun markMedicineAsTaken(alarmItem: AlarmItem, repository: MedicineRepository) {
-        CoroutineScope(Dispatchers.IO).launch{
+        val job = CoroutineScope(Dispatchers.IO).launch{
             val alarmInMillis = localDateTimeToMillis(alarmItem.time)
             val medicine = repository.getCurrentAlarmData(alarmInMillis)
 
@@ -128,6 +135,30 @@ class AlarmReceiver: BroadcastReceiver(), ActivityCompat.OnRequestPermissionsRes
                 medicine.medicineWasTaken = true
                 repository.updateMedicine(medicine)
             }
+        }
+
+        job.invokeOnCompletion {
+            job.cancel()
+        }
+    }
+
+    /**
+     * Snoozes an alarm for a given amount of time.
+     *
+     * @param alarmItem The alarm to be snoozed
+     * @param repository Repository that handles alarm data
+     * @param context App context
+     *
+     * @see AndroidAlarmScheduler.snoozeAlarm
+     */
+     fun snoozeAlarm(alarmItem: AlarmItem, repository: MedicineRepository, context: Context?) {
+        val alarmScheduler = context?.let { AndroidAlarmScheduler(repository, it) }
+
+        val job = CoroutineScope(Dispatchers.Default).launch{
+            alarmScheduler?.snoozeAlarm(alarmItem, 5)
+        }
+        job.invokeOnCompletion {
+            job.cancel()
         }
     }
     private fun localDateTimeToMillis(localDateTime: LocalDateTime): Long{
@@ -148,5 +179,18 @@ class AlarmReceiver: BroadcastReceiver(), ActivityCompat.OnRequestPermissionsRes
         } else {
             TEN_MINUTES
         }
+    }
+
+    /**
+     * Notification dismissal after pressing button
+     *
+     * @param context App context
+     * @param alarmHashCode Hashcode of notification that needs to be cancelled
+     */
+    fun dismissNotification(context: Context?, alarmHashCode: Int){
+        val notificationManager = context?.getSystemService(Context.NOTIFICATION_SERVICE) as? NotificationManager
+        notificationManager?.cancel(alarmHashCode)
+        val stopServiceIntent = Intent(context, AlarmService::class.java)
+        context?.stopService(stopServiceIntent)
     }
 }

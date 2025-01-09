@@ -239,6 +239,7 @@ se l\'utente non segna un medicinale come assunto nell\'applicazione.\n• Perme
     <string name="optimizations_already_disabled">Le ottimizzazioni della batteria sono già disattivate</string>
     <string name="quantity_syringe">Quantità: %1$d siringa/he</string>
     <string name="arrow_down_icon">Clicca per vedere la risposta alla domanda</string>
+    <string name="snooze_alarm">Posponi sveglia</string>
 
     <plurals name="take_pill">
         <item quantity="one">Prendi %1$d pillola</item>

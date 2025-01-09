@@ -240,6 +240,7 @@
     <string name="disable_battery_optimizations">Disable battery optimizations</string>
     <string name="optimizations_already_disabled">Battery optimizations are already disabled</string>
     <string name="arrow_down_icon">Click to see the question answer</string>
+    <string name="snooze_alarm">Snooze alarm</string>
 
     <string name="quantity_syringe">Quantity: %1$d syringe(s)</string>
 
@@ -272,7 +273,6 @@
         <item quantity="one">drop</item>
         <item quantity="other">drops</item>
     </plurals>
-
 
     <plurals name="puffs">
         <item quantity="one">puff</item>

@@ -4,7 +4,6 @@ import android.content.Intent
 import android.content.res.Configuration
 import android.os.Build
 import android.os.Bundle
-import android.util.Log
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.app.AppCompatDelegate
@@ -14,6 +13,7 @@ import com.phoenix.pillreminder.R
 import com.phoenix.pillreminder.databinding.ActivityAlarmTriggeredBinding
 import com.phoenix.pillreminder.feature_alarms.domain.model.AlarmItem
 import com.phoenix.pillreminder.feature_alarms.domain.repository.MedicineRepository
+import com.phoenix.pillreminder.feature_alarms.presentation.AlarmReceiver
 import com.phoenix.pillreminder.feature_alarms.presentation.viewmodels.AlarmTriggeredViewModel
 import com.phoenix.pillreminder.feature_alarms.presentation.viewmodels.MedicinesViewModel
 import dagger.hilt.android.AndroidEntryPoint
@@ -47,6 +47,8 @@ class AlarmTriggeredActivity: AppCompatActivity() {
         mediaPlayer?.start()*/
         medicinesViewModel = ViewModelProvider(this)[MedicinesViewModel::class.java]
 
+        val alarmReceiver = AlarmReceiver()
+
         binding.apply{
             val alarmItem = if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU){
                 intent?.getParcelableExtra("ALARM_ITEM", AlarmItem::class.java)
@@ -79,6 +81,14 @@ class AlarmTriggeredActivity: AppCompatActivity() {
 
                     btnDismiss.setOnClickListener {
                         //stopMediaPlayer()
+                        val intent = Intent(applicationContext, MainActivity::class.java)
+                        startActivity(intent)
+                        finish()
+                    }
+
+                    btnSnooze?.setOnClickListener {
+                        alarmReceiver.snoozeAlarm(alarmItem, repository, applicationContext)
+                        alarmReceiver.dismissNotification(applicationContext, alarmItem.hashCode())
                         val intent = Intent(applicationContext, MainActivity::class.java)
                         startActivity(intent)
                         finish()

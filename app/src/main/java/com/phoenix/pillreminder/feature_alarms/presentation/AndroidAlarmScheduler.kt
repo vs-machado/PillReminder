@@ -53,11 +53,41 @@ class AndroidAlarmScheduler @Inject constructor(
 
     }
 
-    // cancelAll defines if the method will search for a valid pendingIntent or not.
-    // When user delete only one alarm, there's no need to search for a valid pendingIntent.
-    // If the pendingIntent is invalid, the valid alarm was already scheduled.
-    // When user deletes all alarms, the method will search for a valid pendingIntent,
-    // cancelling the alarm even if the medicine object clicked was not scheduled yet.
+    /**
+     * Snoozes a triggered alarm.
+     * The snooze duration will be configurable by users in settings in the future.
+     *
+     * @param item AlarmItem to be snoozed
+     * @param snoozeMinutes Number of minutes to snooze the alarm
+     */
+    override fun snoozeAlarm(item: AlarmItem, snoozeMinutes: Int) {
+        val intent = Intent(appContext, AlarmReceiver::class.java).apply {
+            putExtra("ALARM_ITEM", item)
+        }
+
+        val snoozeTime = System.currentTimeMillis() + (snoozeMinutes * 60 * 1000L)
+
+        alarmManager.setExactAndAllowWhileIdle(
+            AlarmManager.RTC_WAKEUP,
+            snoozeTime,
+            PendingIntent.getBroadcast(
+                appContext,
+                item.hashCode(),
+                intent,
+                PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE
+            )
+
+        )
+    }
+
+    /** Cancel one or all alarms for a specific medicine.
+     *
+     *  When user deletes all alarms (cancelAll = true), the method will search for a valid pendingIntent,
+     *  cancelling the alarm even if the medicine object clicked was not scheduled yet.
+     *
+     *  @param item AlarmItem containing medicine info
+     *  @param cancelAll If true, cancels all future alarms for the given medicine.
+     */
     override suspend fun cancelAlarm(item: AlarmItem, cancelAll: Boolean) {
         withContext(Dispatchers.Default) {
             when(cancelAll){
@@ -194,6 +224,7 @@ class AndroidAlarmScheduler @Inject constructor(
             PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE
         )
 
+        Log.d("debug", "alarm scheduled")
         alarmManager.setExactAndAllowWhileIdle(
             AlarmManager.RTC_WAKEUP,
             followUpTime,

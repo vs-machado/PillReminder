@@ -23,6 +23,17 @@ object NotificationUtils {
     private val followUpChannelId = "FollowUpAlarmChannel"
     private val pillboxReminderChannelId = "PillboxReminderChannel"
 
+    /**
+     * Creates a notification for the alarm.
+     * Alarms can be delivered to the user in two ways:
+     * 1. Notification with actions to mark medicine usage or snoozing alarms
+     * 2. Notification (only for draw user attention) and activity screen with medicine information and user options.
+     *
+     * @param context Application context
+     * @param item Item containing all alarm details.
+     *
+     * @see [AlarmItem]
+     */
     fun createNotification(context: Context, item: AlarmItem): Notification {
         val alarmUri = Uri.parse("android.resource://" + context.packageName + "/" + R.raw.alarm_sound)
 
@@ -54,6 +65,7 @@ object NotificationUtils {
                     PendingIntent.FLAG_IMMUTABLE or PendingIntent.FLAG_UPDATE_CURRENT
                 )
 
+                // Intent for marking medicines as used
                 val markAsUsedIntent = Intent(context, AlarmReceiver::class.java).apply {
                     action = context.getString(R.string.mark_as_used)
                     putExtra("ALARM_ITEM_ACTION", item)
@@ -61,6 +73,16 @@ object NotificationUtils {
                 val markAsUsedPendingIntent: PendingIntent = PendingIntent.getBroadcast(
                     context, item.hashCode(),
                     markAsUsedIntent, PendingIntent.FLAG_IMMUTABLE
+                )
+
+                // Intent for snoozing alarms
+                val snoozeAlarmIntent = Intent(context, AlarmReceiver::class.java).apply {
+                    action = context.getString(R.string.snooze_alarm)
+                    putExtra("ALARM_ITEM_ACTION", item)
+                }
+                val snoozeAlarmPendingIntent: PendingIntent = PendingIntent.getBroadcast(
+                    context, item.hashCode(),
+                    snoozeAlarmIntent, PendingIntent.FLAG_IMMUTABLE
                 )
 
                 createNotificationChannel(context, alarmUri)
@@ -71,7 +93,7 @@ object NotificationUtils {
 
                 return notificationBuilderWithActionButtons(
                     context, channelId, pendingIntent, title, text,
-                    markAsUsedPendingIntent
+                    markAsUsedPendingIntent, snoozeAlarmPendingIntent
                 )
             }
         }
@@ -87,6 +109,7 @@ object NotificationUtils {
             PendingIntent.FLAG_IMMUTABLE or PendingIntent.FLAG_UPDATE_CURRENT
         )
 
+         // Intent for marking medicine usage
         val markAsUsedIntent = Intent(context, AlarmReceiver::class.java).apply {
             action = context.getString(R.string.mark_as_used)
             putExtra("ALARM_ITEM_ACTION", item)
@@ -96,7 +119,7 @@ object NotificationUtils {
             markAsUsedIntent, PendingIntent.FLAG_IMMUTABLE
         )
 
-        createFollowUpNotificationChannel(context, alarmUri)
+         createFollowUpNotificationChannel(context, alarmUri)
 
          val title = context.getString(R.string.did_you_forget_to_use_your_medicine, item.medicineName)
          val text = context.getString(R.string.do_not_forget_to_mark_the_medicine_as_used, checkMedicineForm(item.medicineForm,
@@ -187,7 +210,8 @@ object NotificationUtils {
     private fun notificationBuilderWithActionButtons(
         context: Context, channelId: String, pendingIntent: PendingIntent,
         title: String, content: String,
-        actionButtonPendingIntent1: PendingIntent
+        actionButtonPendingIntent1: PendingIntent,
+        snoozeAlarmPendingIntent: PendingIntent? = null
     ): Notification {
         val largeIcon = BitmapFactory.decodeResource(context.resources, R.drawable.ic_pill)
 
@@ -200,6 +224,12 @@ object NotificationUtils {
             .setPriority(NotificationCompat.PRIORITY_MAX)
             .setContentIntent(pendingIntent)
             .addAction(0, context.getString(R.string.mark_as_used), actionButtonPendingIntent1)
+            // Snooze button is not added when the alarm is a follow up alarm (snoozeAlarmPendingIntent == null)
+            .apply {
+                snoozeAlarmPendingIntent?.let {
+                    addAction(0, context.getString(R.string.snooze_alarm), snoozeAlarmPendingIntent)
+                }
+            }
             .build()
     }
 

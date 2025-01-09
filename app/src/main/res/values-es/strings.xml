@@ -240,6 +240,7 @@
     <string name="disable_battery_optimizations">Desactivar optimizaciones de batería</string>
     <string name="optimizations_already_disabled">Las optimizaciones de batería ya están desactivadas</string>
     <string name="arrow_down_icon">Haz clic para ver la respuesta a la pregunta</string>
+    <string name="snooze_alarm">Posponer alarma</string>
 
     <string name="quantity_syringe">Cantidad: %1$d jeringa(s)</string>
 

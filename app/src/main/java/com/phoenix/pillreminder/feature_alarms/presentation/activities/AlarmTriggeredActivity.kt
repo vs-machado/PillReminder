@@ -9,30 +9,31 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.app.AppCompatDelegate
 import androidx.core.view.WindowInsetsControllerCompat
 import androidx.lifecycle.ViewModelProvider
+import androidx.lifecycle.lifecycleScope
 import com.phoenix.pillreminder.R
 import com.phoenix.pillreminder.databinding.ActivityAlarmTriggeredBinding
 import com.phoenix.pillreminder.feature_alarms.domain.model.AlarmItem
 import com.phoenix.pillreminder.feature_alarms.domain.repository.MedicineRepository
 import com.phoenix.pillreminder.feature_alarms.presentation.AlarmReceiver
+import com.phoenix.pillreminder.feature_alarms.presentation.AlarmScheduler
+import com.phoenix.pillreminder.feature_alarms.presentation.utils.DateUtil.localDateTimeToMillis
 import com.phoenix.pillreminder.feature_alarms.presentation.viewmodels.AlarmTriggeredViewModel
 import com.phoenix.pillreminder.feature_alarms.presentation.viewmodels.MedicinesViewModel
 import dagger.hilt.android.AndroidEntryPoint
-import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 import javax.inject.Inject
 
 @AndroidEntryPoint
 class AlarmTriggeredActivity: AppCompatActivity() {
 
-    @Inject
-    lateinit var repository: MedicineRepository
+    @Inject lateinit var repository: MedicineRepository
+    @Inject lateinit var alarmScheduler: AlarmScheduler
 
     private lateinit var medicinesViewModel: MedicinesViewModel
     private lateinit var binding: ActivityAlarmTriggeredBinding
-    //private var mediaPlayer: MediaPlayer? = null
     private val viewModel: AlarmTriggeredViewModel by viewModels()
-    //private lateinit var factory: MedicinesViewModelFactory
 
     override fun onCreate(savedInstanceState: Bundle?) {
         binding = ActivityAlarmTriggeredBinding.inflate(layoutInflater)
@@ -42,9 +43,6 @@ class AlarmTriggeredActivity: AppCompatActivity() {
 
         setupNotificationAndStatusBar()
 
-        /*mediaPlayer = MediaPlayer.create(this, R.raw.alarm_sound)
-        mediaPlayer?.isLooping = true
-        mediaPlayer?.start()*/
         medicinesViewModel = ViewModelProvider(this)[MedicinesViewModel::class.java]
 
         val alarmReceiver = AlarmReceiver()
@@ -64,14 +62,8 @@ class AlarmTriggeredActivity: AppCompatActivity() {
 
                     ivAlarmMedicineIcon.setImageResource(setMedicineImageView(medicineForm))
 
-                    /*btnPause.setOnClickListener {
-                        stopMediaPlayer()
-                    }*/
-
                     btnTaken.setOnClickListener{
-                        //stopMediaPlayer()
-
-                        CoroutineScope(Dispatchers.IO).launch {
+                        lifecycleScope.launch(Dispatchers.IO) {
                             viewModel.markMedicineAsTaken(alarmItem, medicinesViewModel)
                         }
                         val intent = Intent(applicationContext, MainActivity::class.java)
@@ -86,8 +78,22 @@ class AlarmTriggeredActivity: AppCompatActivity() {
                         finish()
                     }
 
-                    btnSnooze?.setOnClickListener {
+                    btnSnooze.setOnClickListener {
                         alarmReceiver.snoozeAlarm(alarmItem, repository, applicationContext)
+
+                        // Alarm was snoozed, there's no need to delivery the follow up alarm
+                        lifecycleScope.launch {
+                            val alarmItemMillis = localDateTimeToMillis(alarmItem.time)
+
+                            withContext(Dispatchers.IO) {
+                                val medicine = repository.getCurrentAlarmData(alarmItemMillis)
+
+                                withContext(Dispatchers.Default){
+                                    alarmScheduler.cancelFollowUpAlarm(medicine.hashCode())
+                                }
+                            }
+                        }
+
                         alarmReceiver.dismissNotification(applicationContext, alarmItem.hashCode())
                         val intent = Intent(applicationContext, MainActivity::class.java)
                         startActivity(intent)
@@ -117,18 +123,4 @@ class AlarmTriggeredActivity: AppCompatActivity() {
         }
 
     }
-
-    override fun onDestroy() {
-        super.onDestroy()
-        /*mediaPlayer?.stop()
-        mediaPlayer?.release()
-        mediaPlayer = null*/
-    }
-
-    /*private fun stopMediaPlayer(){
-        mediaPlayer?.stop()
-        mediaPlayer?.release()
-        mediaPlayer = null
-    }*/
-
 }

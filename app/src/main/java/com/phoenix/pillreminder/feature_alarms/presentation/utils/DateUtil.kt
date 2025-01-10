@@ -1,8 +1,11 @@
 package com.phoenix.pillreminder.feature_alarms.presentation.utils
 
 import java.text.SimpleDateFormat
+import java.time.LocalDateTime
+import java.time.ZoneOffset
 import java.util.Date
 import java.util.Locale
+import java.util.TimeZone
 
 object DateUtil {
     fun millisToDateString(text: String?, millis: Long): String {
@@ -15,5 +18,11 @@ object DateUtil {
         } else {
             dateFormat.format(date)
         }
+    }
+
+    fun localDateTimeToMillis(localDateTime: LocalDateTime): Long {
+        var millis = localDateTime.toInstant(ZoneOffset.UTC).toEpochMilli()
+        millis -= TimeZone.getDefault().getOffset(millis)
+        return millis
     }
 }

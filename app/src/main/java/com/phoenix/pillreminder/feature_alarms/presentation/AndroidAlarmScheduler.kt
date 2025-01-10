@@ -183,6 +183,25 @@ class AndroidAlarmScheduler @Inject constructor(
         return false
     }
 
+    /**
+     * Use to cancel follow-up alarms.
+     * Used when user snoozes an alarm, so there's no need to deliver the follow-up alarm.
+     *
+     * @param hashCode alarm hashcode used to cancel the alarm
+     */
+    override fun cancelFollowUpAlarm(hashCode: Int) {
+        val pendingIntent = PendingIntent.getBroadcast(
+            appContext,
+            hashCode,
+            Intent(appContext, FollowUpAlarmReceiver::class.java),
+            PendingIntent.FLAG_NO_CREATE or PendingIntent.FLAG_IMMUTABLE
+        )
+
+        pendingIntent?.let {
+            alarmManager.cancel(it)
+        }
+    }
+
 
     fun scheduleNextAlarm(medicine: Medicine){
         val alarmScheduler: AlarmScheduler = AndroidAlarmScheduler(medicineRepository, appContext)

@@ -11,14 +11,12 @@ import com.phoenix.pillreminder.R
 import com.phoenix.pillreminder.feature_alarms.domain.model.AlarmItem
 import com.phoenix.pillreminder.feature_alarms.domain.repository.MedicineRepository
 import com.phoenix.pillreminder.feature_alarms.domain.repository.SharedPreferencesRepository
+import com.phoenix.pillreminder.feature_alarms.presentation.utils.DateUtil.localDateTimeToMillis
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.launch
-import java.time.LocalDateTime
-import java.time.ZoneOffset
-import java.util.TimeZone
 import javax.inject.Inject
 import kotlin.coroutines.CoroutineContext
 
@@ -31,6 +29,7 @@ class AlarmReceiver: BroadcastReceiver(), ActivityCompat.OnRequestPermissionsRes
     private lateinit var job: Job
     @Inject lateinit var repository: MedicineRepository
     @Inject lateinit var sharedPreferencesRepository: SharedPreferencesRepository
+    @Inject lateinit var alarmScheduler: AlarmScheduler
 
     override val coroutineContext: CoroutineContext
         get() = Dispatchers.Default + job
@@ -56,6 +55,15 @@ class AlarmReceiver: BroadcastReceiver(), ActivityCompat.OnRequestPermissionsRes
         }
         if(intent?.action == actionSnoozeAlarm && alarmItemAction != null) {
             snoozeAlarm(alarmItemAction, repository, context)
+            Log.d("debug", "alarmitemaction hashcode: ${alarmItemAction.hashCode()}")
+
+            // Alarm was snoozed, there's no need to delivery the follow up alarm
+            launch {
+                val alarmItemMillis = localDateTimeToMillis(alarmItemAction.time)
+                val medicine = repository.getCurrentAlarmData(alarmItemMillis)
+                alarmScheduler.cancelFollowUpAlarm(medicine.hashCode())
+            }
+
             dismissNotification(context, alarmItemAction.hashCode())
             return
         }
@@ -160,12 +168,6 @@ class AlarmReceiver: BroadcastReceiver(), ActivityCompat.OnRequestPermissionsRes
         job.invokeOnCompletion {
             job.cancel()
         }
-    }
-    private fun localDateTimeToMillis(localDateTime: LocalDateTime): Long{
-        var millis = localDateTime.toInstant(ZoneOffset.UTC).toEpochMilli()
-        millis -= TimeZone.getDefault().getOffset(millis)
-
-        return millis
     }
 
     private suspend fun getFollowUpNotificationInterval(medicineName: String, alarmInMillis: Long, repository: MedicineRepository): Long {

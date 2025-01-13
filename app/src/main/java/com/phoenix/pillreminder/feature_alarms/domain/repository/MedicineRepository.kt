@@ -57,4 +57,6 @@ interface MedicineRepository {
     suspend fun getAlarmTimesForMedicine(medicineName: String, cutoffTime: Long, treatmentID: String): List<String>
 
     suspend fun getLastAlarm(medicineName: String, treatmentID: String): Medicine
+
+    suspend fun updateMedicinesAsSkipped(treatmentID: String, alarmInMillis: Long)
 }

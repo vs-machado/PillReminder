@@ -1,7 +1,5 @@
 package com.phoenix.pillreminder.feature_alarms.data.data_source
 
-import android.database.Cursor
-import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.room.Dao
 import androidx.room.Delete
@@ -153,4 +151,6 @@ interface MedicineDao {
     @Query("SELECT * FROM medicines_data_table WHERE name = :medicineName AND treatment_id = :treatmentID ORDER BY alarm_in_millis DESC LIMIT 1")
     suspend fun getLastAlarm(medicineName: String, treatmentID: String): Medicine
 
+    @Query("UPDATE medicines_data_table SET was_skipped = 1 WHERE treatment_id = :treatmentID AND alarm_in_millis < :alarmInMillis AND was_taken = 0")
+    suspend fun updateMedicinesAsSkipped(treatmentID: String, alarmInMillis: Long)
 }

@@ -140,8 +140,12 @@ class AlarmReceiver: BroadcastReceiver(), ActivityCompat.OnRequestPermissionsRes
             val medicine = repository.getCurrentAlarmData(alarmInMillis)
 
             if (medicine != null) {
+                // Marks the medicine usage
                 medicine.medicineWasTaken = true
                 repository.updateMedicine(medicine)
+
+                // Update the previous medicines not marked as used as skipped
+                repository.updateMedicinesAsSkipped(medicine.treatmentID, medicine.alarmInMillis)
             }
         }
 

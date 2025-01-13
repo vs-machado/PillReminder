@@ -134,4 +134,8 @@ class MedicineRepositoryImpl (
     override suspend fun getLastAlarm(medicineName: String, treatmentID: String): Medicine {
         return dao.getLastAlarm(medicineName, treatmentID)
     }
+
+    override suspend fun updateMedicinesAsSkipped(treatmentID: String, alarmInMillis: Long) {
+        return dao.updateMedicinesAsSkipped(treatmentID, alarmInMillis)
+    }
 }

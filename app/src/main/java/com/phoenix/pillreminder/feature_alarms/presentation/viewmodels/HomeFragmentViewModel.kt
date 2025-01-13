@@ -68,7 +68,11 @@ class HomeFragmentViewModel @Inject constructor(
         medicine.medicineWasTaken = true
 
         withContext(Dispatchers.IO){
+            // Mark medicine usage
             repository.updateMedicine(medicine)
+
+            // Mark previous not used medicines as skipped
+            repository.updateMedicinesAsSkipped(medicine.treatmentID, medicine.alarmInMillis)
         }
     }
 

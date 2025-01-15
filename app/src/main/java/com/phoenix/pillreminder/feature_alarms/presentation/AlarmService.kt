@@ -51,7 +51,7 @@ class AlarmService: Service() {
                         putExtra("ALARM_ITEM", alarmItem)
                     }
 
-                    activityIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
+                    activityIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TOP)
                     startActivity(activityIntent)
                 } else {
                     val activityIntent = Intent(this, MainActivity::class.java).apply{

@@ -6,7 +6,6 @@ import android.content.Context
 import android.content.Intent
 import android.content.pm.PackageManager
 import android.net.Uri
-import android.os.Build
 import android.os.Bundle
 import android.os.PowerManager
 import android.provider.Settings
@@ -62,6 +61,8 @@ class MySettingsFragment: PreferenceFragmentCompat() {
         val languagePreference = findPreference<ListPreference>("language")
         val appLanguage = sharedPreferencesRepository.getAppLanguage()
 
+        val snoozeIntervalPreference = findPreference<ListPreference>("snooze_interval")
+
         languagePreference?.apply {
             value = appLanguage
             setOnPreferenceChangeListener { _, newValue ->
@@ -84,6 +85,16 @@ class MySettingsFragment: PreferenceFragmentCompat() {
                 disableBatteryOptimizations()
                 true
             }
+
+        // Allow users to change the alarm snooze interval
+        snoozeIntervalPreference?.apply {
+            value = sharedPreferencesRepository.getSnoozeInterval().toString()
+            setOnPreferenceChangeListener { _, newValue ->
+                Log.d("snooze", newValue.toString())
+                sharedPreferencesRepository.setSnoozeInterval(newValue.toString().toInt())
+                true
+            }
+        }
     }
 
     // Request POST_NOTIFICATIONS permission and overlay permission

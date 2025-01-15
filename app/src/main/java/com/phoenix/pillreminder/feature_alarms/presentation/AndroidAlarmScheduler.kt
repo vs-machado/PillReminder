@@ -12,6 +12,7 @@ import com.phoenix.pillreminder.feature_alarms.data.worker.PillboxReminderWorker
 import com.phoenix.pillreminder.feature_alarms.domain.model.AlarmItem
 import com.phoenix.pillreminder.feature_alarms.domain.model.Medicine
 import com.phoenix.pillreminder.feature_alarms.domain.repository.MedicineRepository
+import com.phoenix.pillreminder.feature_alarms.domain.repository.SharedPreferencesRepository
 import dagger.hilt.android.qualifiers.ApplicationContext
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
@@ -23,6 +24,7 @@ import javax.inject.Inject
 
 class AndroidAlarmScheduler @Inject constructor(
     private val medicineRepository: MedicineRepository,
+    private val sharedPreferencesRepository: SharedPreferencesRepository,
    @ApplicationContext private val appContext: Context
 ): AlarmScheduler {
     private val alarmManager = appContext.getSystemService(AlarmManager::class.java)
@@ -55,16 +57,17 @@ class AndroidAlarmScheduler @Inject constructor(
 
     /**
      * Snoozes a triggered alarm.
-     * The snooze duration will be configurable by users in settings in the future.
+     * The snooze duration can be changed by user in app settings.
      *
      * @param item AlarmItem to be snoozed
-     * @param snoozeMinutes Number of minutes to snooze the alarm
      */
-    override fun snoozeAlarm(item: AlarmItem, snoozeMinutes: Int) {
+    override fun snoozeAlarm(item: AlarmItem) {
         val intent = Intent(appContext, AlarmReceiver::class.java).apply {
             putExtra("ALARM_ITEM", item)
         }
 
+        val snoozeMinutes = sharedPreferencesRepository.getSnoozeInterval()
+        Log.d("snooze get", snoozeMinutes.toString())
         val snoozeTime = System.currentTimeMillis() + (snoozeMinutes * 60 * 1000L)
 
         alarmManager.setExactAndAllowWhileIdle(
@@ -114,7 +117,7 @@ class AndroidAlarmScheduler @Inject constructor(
                                 break
                             }
 
-                            val alarmItemTime = nextAlarm.alarmInMillis?.let {
+                            val alarmItemTime = nextAlarm.alarmInMillis.let {
                                 Instant.ofEpochMilli(it).atZone(ZoneId.systemDefault()).toLocalDateTime()
                             }
 
@@ -203,9 +206,7 @@ class AndroidAlarmScheduler @Inject constructor(
     }
 
 
-    fun scheduleNextAlarm(medicine: Medicine){
-        val alarmScheduler: AlarmScheduler = AndroidAlarmScheduler(medicineRepository, appContext)
-
+    override fun scheduleNextAlarm(medicine: Medicine){
         val alarmItem = AlarmItem(
             time = Instant.ofEpochMilli(medicine.alarmInMillis).atZone(ZoneId.systemDefault()).toLocalDateTime(),
             medicineName = medicine.name,
@@ -215,7 +216,7 @@ class AndroidAlarmScheduler @Inject constructor(
             alarmHour = medicine.alarmHour.toString(),
             alarmMinute = medicine.alarmMinute.toString()
         )
-        alarmItem.let(alarmScheduler::scheduleAlarm)
+        scheduleAlarm(alarmItem)
     }
 
     override fun schedulePillboxReminder(hours: Int, minutes: Int) {
@@ -230,7 +231,7 @@ class AndroidAlarmScheduler @Inject constructor(
         )
     }
 
-    fun scheduleFollowUpAlarm(medicine: Medicine, item: AlarmItem, followUpTime: Long){
+    override fun scheduleFollowUpAlarm(medicine: Medicine, item: AlarmItem, followUpTime: Long){
         val intent = Intent(appContext, FollowUpAlarmReceiver::class.java).apply {
             putExtra("ALARM_ITEM", item)
         }

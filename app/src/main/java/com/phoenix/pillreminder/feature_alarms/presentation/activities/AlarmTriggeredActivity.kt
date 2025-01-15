@@ -1,5 +1,7 @@
 package com.phoenix.pillreminder.feature_alarms.presentation.activities
 
+import android.app.NotificationManager
+import android.content.Context
 import android.content.Intent
 import android.content.res.Configuration
 import android.os.Build
@@ -14,8 +16,8 @@ import com.phoenix.pillreminder.R
 import com.phoenix.pillreminder.databinding.ActivityAlarmTriggeredBinding
 import com.phoenix.pillreminder.feature_alarms.domain.model.AlarmItem
 import com.phoenix.pillreminder.feature_alarms.domain.repository.MedicineRepository
-import com.phoenix.pillreminder.feature_alarms.presentation.AlarmReceiver
 import com.phoenix.pillreminder.feature_alarms.presentation.AlarmScheduler
+import com.phoenix.pillreminder.feature_alarms.presentation.AlarmService
 import com.phoenix.pillreminder.feature_alarms.presentation.utils.DateUtil.localDateTimeToMillis
 import com.phoenix.pillreminder.feature_alarms.presentation.viewmodels.AlarmTriggeredViewModel
 import com.phoenix.pillreminder.feature_alarms.presentation.viewmodels.MedicinesViewModel
@@ -25,6 +27,15 @@ import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import javax.inject.Inject
 
+/**
+ *  Activity responsible for showing the medicine details when an alarm is triggered,
+ *  allowing user to mark the medicine usage, snooze alarms or dismiss the notification.
+ *  AlarmTriggeredActivity is only shown if user grants notification permission and enables
+ *  app overlay permission in phone settings.
+ *
+ *  The activity shows the following medicine properties:
+ *  Medicine name, alarm hour, medicine type image and dosage.
+ */
 @AndroidEntryPoint
 class AlarmTriggeredActivity: AppCompatActivity() {
 
@@ -45,8 +56,6 @@ class AlarmTriggeredActivity: AppCompatActivity() {
 
         medicinesViewModel = ViewModelProvider(this)[MedicinesViewModel::class.java]
 
-        val alarmReceiver = AlarmReceiver()
-
         binding.apply{
             val alarmItem = if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU){
                 intent?.getParcelableExtra("ALARM_ITEM", AlarmItem::class.java)
@@ -66,6 +75,7 @@ class AlarmTriggeredActivity: AppCompatActivity() {
                         lifecycleScope.launch(Dispatchers.IO) {
                             viewModel.markMedicineAsTaken(alarmItem, medicinesViewModel)
                         }
+                        dismissNotification(applicationContext, alarmItem.hashCode())
                         val intent = Intent(applicationContext, MainActivity::class.java)
                         startActivity(intent)
                         finish()
@@ -79,7 +89,7 @@ class AlarmTriggeredActivity: AppCompatActivity() {
                     }
 
                     btnSnooze.setOnClickListener {
-                        alarmReceiver.snoozeAlarm(alarmItem, repository, applicationContext)
+                        alarmScheduler.snoozeAlarm(alarmItem)
 
                         // Alarm was snoozed, there's no need to delivery the follow up alarm
                         lifecycleScope.launch {
@@ -94,7 +104,7 @@ class AlarmTriggeredActivity: AppCompatActivity() {
                             }
                         }
 
-                        alarmReceiver.dismissNotification(applicationContext, alarmItem.hashCode())
+                        dismissNotification(applicationContext, alarmItem.hashCode())
                         val intent = Intent(applicationContext, MainActivity::class.java)
                         startActivity(intent)
                         finish()
@@ -122,5 +132,12 @@ class AlarmTriggeredActivity: AppCompatActivity() {
             WindowInsetsControllerCompat(window, window.decorView).isAppearanceLightNavigationBars = true
         }
 
+    }
+
+    private fun dismissNotification(context: Context?, alarmHashCode: Int){
+        val notificationManager = context?.getSystemService(Context.NOTIFICATION_SERVICE) as? NotificationManager
+        notificationManager?.cancel(alarmHashCode)
+        val stopServiceIntent = Intent(context, AlarmService::class.java)
+        context?.stopService(stopServiceIntent)
     }
 }

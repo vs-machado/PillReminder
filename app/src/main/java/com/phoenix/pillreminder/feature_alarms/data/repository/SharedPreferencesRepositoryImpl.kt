@@ -12,6 +12,7 @@ class SharedPreferencesRepositoryImpl(
     private val sharedPreferencesPillbox = context.getSharedPreferences("pillbox_reminder", Context.MODE_PRIVATE)
     private val sharedPreferencesAlarmReschedule = context.getSharedPreferences("alarm_reschedule", Context.MODE_PRIVATE)
     private val sharedPreferencesLanguage = context.getSharedPreferences("language", Context.MODE_PRIVATE)
+    private val sharedPreferencesSnoozeInterval = context.getSharedPreferences("snooze_interval", Context.MODE_PRIVATE)
 
     override fun setPermissionRequestPreferences(boolean: Boolean) {
         sharedPreferencesPermissionRequest.edit().putBoolean("dont_show_again", boolean).apply()
@@ -43,5 +44,13 @@ class SharedPreferencesRepositoryImpl(
 
     override fun setAppLanguage(language: String) {
         sharedPreferencesLanguage.edit().putString("language", language).apply()
+    }
+
+    override fun setSnoozeInterval(minutes: Int) {
+        sharedPreferencesSnoozeInterval.edit().putInt("snooze_interval", minutes).apply()
+    }
+
+    override fun getSnoozeInterval(): Int {
+        return sharedPreferencesSnoozeInterval.getInt("snooze_interval", 5)
     }
 }

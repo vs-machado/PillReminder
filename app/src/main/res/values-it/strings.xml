@@ -240,6 +240,8 @@ se l\'utente non segna un medicinale come assunto nell\'applicazione.\n• Perme
     <string name="quantity_syringe">Quantità: %1$d siringa/he</string>
     <string name="arrow_down_icon">Clicca per vedere la risposta alla domanda</string>
     <string name="snooze_alarm">Posponi sveglia</string>
+    <string name="change_alarm_snooze_interval">Intervallo di ripetizione sveglia</string>
+
 
     <plurals name="take_pill">
         <item quantity="one">Prendi %1$d pillola</item>
@@ -348,6 +350,18 @@ se l\'utente non segna un medicinale come assunto nell\'applicazione.\n• Perme
         <item quantity="many">Sveglie al giorno:\n\n%1$d sveglie</item>
         <item quantity="other">Sveglie al giorno:\n\n%1$d sveglie</item>
     </plurals>
+
+    <string-array name="snooze_interval_entries">
+        <item>5 minuti</item>
+        <item>10 minuti</item>
+        <item>15 minuti</item>
+    </string-array>
+
+    <string-array name="snooze_interval_values">
+        <item>5</item>
+        <item>10</item>
+        <item>15</item>
+    </string-array>
 
     <string-array name="medicine_forms">
         <item>Pillola</item>

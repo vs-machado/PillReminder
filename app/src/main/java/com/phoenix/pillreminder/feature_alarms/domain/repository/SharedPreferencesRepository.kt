@@ -17,4 +17,16 @@ interface SharedPreferencesRepository {
     fun getAppLanguage(): String?
 
     fun setAppLanguage(language: String)
+
+    /**
+     *   Store the snooze interval selected by the user in app settings
+     *
+     *   @param minutes the snooze interval in minutes
+     */
+    fun setSnoozeInterval(minutes: Int)
+
+    /**
+     * Returns the snooze interval in minutes that was previously set by the user.
+     */
+    fun getSnoozeInterval(): Int
 }

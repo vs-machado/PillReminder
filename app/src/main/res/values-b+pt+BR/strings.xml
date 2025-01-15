@@ -245,6 +245,19 @@
     <string name="optimizations_already_disabled">As otimizações de bateria já estão desabilitadas</string>
     <string name="arrow_down_icon">Clique para ver a resposta da pergunta</string>
     <string name="snooze_alarm">Adiar alarme</string>
+    <string name="change_alarm_snooze_interval">Intervalo de adiamento do alarme</string>
+
+    <string-array name="snooze_interval_entries">
+        <item>5 minutos</item>
+        <item>10 minutos</item>
+        <item>15 minutos</item>
+    </string-array>
+
+    <string-array name="snooze_interval_values">
+        <item>5</item>
+        <item>10</item>
+        <item>15</item>
+    </string-array>
 
     <string-array name="medicine_forms">
         <item>Comprimido</item>

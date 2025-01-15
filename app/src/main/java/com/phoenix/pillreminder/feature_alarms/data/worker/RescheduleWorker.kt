@@ -7,7 +7,7 @@ import androidx.work.WorkerParameters
 import com.phoenix.pillreminder.feature_alarms.domain.model.AlarmItem
 import com.phoenix.pillreminder.feature_alarms.domain.model.Medicine
 import com.phoenix.pillreminder.feature_alarms.domain.repository.MedicineRepository
-import com.phoenix.pillreminder.feature_alarms.presentation.AndroidAlarmScheduler
+import com.phoenix.pillreminder.feature_alarms.presentation.AlarmScheduler
 import dagger.assisted.Assisted
 import dagger.assisted.AssistedInject
 import kotlinx.coroutines.Dispatchers
@@ -16,17 +16,31 @@ import java.time.Instant
 import java.time.ZoneId
 import java.util.Calendar
 
+/**
+ * Worker used to reschedule alarms without a treatment period set.
+ *
+ * @property repository Medicine data repository for storing alarms data
+ * @property alarmScheduler Responsible for scheduling and cancelling alarms
+ */
 @HiltWorker
 class RescheduleWorker @AssistedInject constructor(
     private val repository: MedicineRepository,
+    private val alarmScheduler: AlarmScheduler,
     @Assisted appContext: Context,
     @Assisted workerParams: WorkerParameters
 ) : CoroutineWorker(appContext, workerParams) {
 
+    /**
+     *  The worker gets all distinct medicines and checks which medicines require a reschedule.
+     *  The medicines that require a reschedule are medicines without treatment period set.
+     *  After getting the distinct medicines, the new alarms are calculated and inserted in the medicine database.
+     *  Then, the worker proceeds to schedule new alarms.
+     *
+     *  @return if the work was completed successfully or not
+     */
     override suspend fun doWork(): Result {
 
         val distinctMedicines = repository.getLastAlarmFromAllDistinctMedicines()
-        val alarmScheduler = AndroidAlarmScheduler(repository, applicationContext)
 
         val alarmsToReschedule = distinctMedicines.flatMap{ medicine ->
             repository.getAlarmsToRescheduleEveryMonth(medicine.name, medicine.alarmsPerDay)

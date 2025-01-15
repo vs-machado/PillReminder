@@ -24,4 +24,12 @@
         app:key="battery_optimizations"
         app:title="@string/disable_battery_optimizations" />
 
+    <ListPreference
+        app:entries="@array/snooze_interval_entries"
+        app:entryValues="@array/snooze_interval_values"
+        app:icon="@drawable/baseline_alarm_24"
+        app:key="snooze_interval"
+        app:title="@string/change_alarm_snooze_interval"
+        app:useSimpleSummaryProvider="true"/>
+
 </PreferenceScreen>

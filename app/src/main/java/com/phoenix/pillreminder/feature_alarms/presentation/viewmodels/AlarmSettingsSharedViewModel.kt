@@ -16,7 +16,6 @@ import com.phoenix.pillreminder.feature_alarms.domain.model.Medicine
 import com.phoenix.pillreminder.feature_alarms.domain.repository.MedicineRepository
 import com.phoenix.pillreminder.feature_alarms.domain.util.MedicineFrequency
 import com.phoenix.pillreminder.feature_alarms.presentation.AlarmScheduler
-import com.phoenix.pillreminder.feature_alarms.presentation.AndroidAlarmScheduler
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -41,7 +40,8 @@ import javax.inject.Inject
 @HiltViewModel
 class AlarmSettingsSharedViewModel @Inject constructor(
     private val repository: MedicineRepository,
-    private val workManager: WorkManager
+    private val workManager: WorkManager,
+    private val alarmScheduler: AlarmScheduler
 ) : ViewModel() {
     private var medicineName = ""
 
@@ -415,9 +415,7 @@ class AlarmSettingsSharedViewModel @Inject constructor(
         return alarms
     }
 
-    fun createAlarmItemAndSchedule(context: Context, interval: Long) {
-        val alarmScheduler: AlarmScheduler = AndroidAlarmScheduler(repository, context)
-
+    fun createAlarmItemAndSchedule(interval: Long) {
         val scheduleInterval = when (getMedicineFrequency()) {
             MedicineFrequency.EveryXWeeks -> interval * 7
             MedicineFrequency.EveryXMonths -> interval * 30
@@ -465,9 +463,7 @@ class AlarmSettingsSharedViewModel @Inject constructor(
     }
 
     //Used with frequency specific days of week
-    fun createAlarmItemAndSchedule(context: Context) {
-        val alarmScheduler: AlarmScheduler = AndroidAlarmScheduler(repository, context)
-
+    fun createAlarmItemAndSchedule() {
         val alarmItems = mutableListOf<AlarmItem>()
 
         for (i in getAlarmHoursList().indices) {

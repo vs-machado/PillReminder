@@ -22,7 +22,6 @@ class PillboxReminderWorker(appContext: Context,
                 // Show the notification
                 NotificationManagerCompat.from(applicationContext).notify(999, notification)
             } catch (e: SecurityException) {
-                Log.d("Error", "Failed to show notification", e)
                 return Result.failure()
             }
         } else {

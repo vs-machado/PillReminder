@@ -116,9 +116,7 @@ class MedicinesViewModel @Inject constructor(
 
     suspend fun getSelectedDaysList(medicineName: String, treatmentID: String): MutableSet<Int> {
         return withContext(Dispatchers.IO) {
-            Log.d("debug", "$medicineName $treatmentID")
             val daysString = medicineRepository.getSelectedDaysList(medicineName, treatmentID)
-            Log.d("debug", daysString)
             daysString.split(",").mapNotNull { it.toIntOrNull() }.toMutableSet()
         }
     }

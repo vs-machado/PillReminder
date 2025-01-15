@@ -6,8 +6,12 @@ import androidx.room.Room
 import androidx.work.WorkManager
 import com.phoenix.pillreminder.feature_alarms.data.data_source.MedicineDatabase
 import com.phoenix.pillreminder.feature_alarms.data.repository.MedicineRepositoryImpl
+import com.phoenix.pillreminder.feature_alarms.data.repository.SharedPreferencesRepositoryImpl
 import com.phoenix.pillreminder.feature_alarms.domain.repository.MedicineRepository
+import com.phoenix.pillreminder.feature_alarms.domain.repository.SharedPreferencesRepository
 import com.phoenix.pillreminder.feature_alarms.presentation.AlarmReceiver
+import com.phoenix.pillreminder.feature_alarms.presentation.AlarmScheduler
+import com.phoenix.pillreminder.feature_alarms.presentation.AndroidAlarmScheduler
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.android.qualifiers.ApplicationContext
@@ -48,5 +52,19 @@ object TestAppModule {
     fun provideAlarmReceiver(): AlarmReceiver {
         return AlarmReceiver()
     }
+    @Provides
+    @Singleton
+    fun provideAlarmScheduler(
+        medicineRepository: MedicineRepository,
+        sharedPreferencesRepository: SharedPreferencesRepository,
+        @ApplicationContext context: Context
+    ): AlarmScheduler {
+        return AndroidAlarmScheduler(medicineRepository, sharedPreferencesRepository, context)
+    }
 
+    @Provides
+    @Singleton
+    fun provideSharedPreferencesRepository(@ApplicationContext context: Context): SharedPreferencesRepository {
+        return SharedPreferencesRepositoryImpl(context)
+    }
 }

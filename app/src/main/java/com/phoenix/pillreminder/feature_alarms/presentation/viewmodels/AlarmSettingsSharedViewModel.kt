@@ -682,7 +682,6 @@ class AlarmSettingsSharedViewModel @Inject constructor(
             withContext(Dispatchers.Default){
                 if(!hasNextAlarm && workerID != "noID"){
                     workManager.cancelWorkById(workRequestID)
-                    Log.d("debug", "cancel work")
                 }
             }
         }

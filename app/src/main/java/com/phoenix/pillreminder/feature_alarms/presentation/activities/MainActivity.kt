@@ -122,7 +122,6 @@ class MainActivity: AppCompatActivity() {
 
     private fun setAppLanguagePreference() {
         val phoneLanguage = Locale.getDefault().toLanguageTag()
-        Log.d("debug", phoneLanguage)
         val language = languageMapping[phoneLanguage] ?: "en"
 
         lifecycleScope.launch(Dispatchers.IO){

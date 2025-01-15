@@ -67,7 +67,6 @@ class AndroidAlarmScheduler @Inject constructor(
         }
 
         val snoozeMinutes = sharedPreferencesRepository.getSnoozeInterval()
-        Log.d("snooze get", snoozeMinutes.toString())
         val snoozeTime = System.currentTimeMillis() + (snoozeMinutes * 60 * 1000L)
 
         alarmManager.setExactAndAllowWhileIdle(
@@ -244,7 +243,6 @@ class AndroidAlarmScheduler @Inject constructor(
             PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE
         )
 
-        Log.d("debug", "alarm scheduled")
         alarmManager.setExactAndAllowWhileIdle(
             AlarmManager.RTC_WAKEUP,
             followUpTime,

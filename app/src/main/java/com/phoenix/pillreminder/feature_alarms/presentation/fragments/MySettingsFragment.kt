@@ -90,7 +90,6 @@ class MySettingsFragment: PreferenceFragmentCompat() {
         snoozeIntervalPreference?.apply {
             value = sharedPreferencesRepository.getSnoozeInterval().toString()
             setOnPreferenceChangeListener { _, newValue ->
-                Log.d("snooze", newValue.toString())
                 sharedPreferencesRepository.setSnoozeInterval(newValue.toString().toInt())
                 true
             }

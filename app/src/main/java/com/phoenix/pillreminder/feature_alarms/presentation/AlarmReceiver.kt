@@ -55,7 +55,6 @@ class AlarmReceiver: BroadcastReceiver(), ActivityCompat.OnRequestPermissionsRes
         }
         if(intent?.action == actionSnoozeAlarm && alarmItemAction != null) {
             alarmScheduler.snoozeAlarm(alarmItemAction)
-            Log.d("debug", "alarmitemaction hashcode: ${alarmItemAction.hashCode()}")
 
             // Alarm was snoozed, there's no need to delivery the follow up alarm
             launch {
@@ -70,13 +69,11 @@ class AlarmReceiver: BroadcastReceiver(), ActivityCompat.OnRequestPermissionsRes
 
         launch {
             if(alarmItem?.time != null) {
-                Log.d("debug", "alarmitem not null")
                 val alarmItemMillis = localDateTimeToMillis(alarmItem.time)
                 val followUpTime = System.currentTimeMillis() + getFollowUpNotificationInterval(alarmItem.medicineName, alarmItemMillis, repository)
                 val medicine = repository.getCurrentAlarmData(alarmItemMillis)
 
                 if(medicine != null){
-                    Log.d("debug", "medicine not null")
                     /* A follow up alarm will be scheduled and triggered if user does not mark the medicine usage.
                        The follow up alarm will trigger after 1/4 of the time between the current alarm and the next alarm.
                        If the interval is greater than 10 minutes, the follow up alarm will trigger after 10 minutes.*/

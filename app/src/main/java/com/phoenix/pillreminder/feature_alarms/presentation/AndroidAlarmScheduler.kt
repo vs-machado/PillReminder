@@ -5,10 +5,6 @@ import android.app.PendingIntent
 import android.content.Context
 import android.content.Intent
 import android.util.Log
-import androidx.work.ExistingPeriodicWorkPolicy
-import androidx.work.PeriodicWorkRequestBuilder
-import androidx.work.WorkManager
-import com.phoenix.pillreminder.feature_alarms.data.worker.PillboxReminderWorker
 import com.phoenix.pillreminder.feature_alarms.domain.model.AlarmItem
 import com.phoenix.pillreminder.feature_alarms.domain.model.Medicine
 import com.phoenix.pillreminder.feature_alarms.domain.repository.MedicineRepository
@@ -19,7 +15,6 @@ import kotlinx.coroutines.withContext
 import java.time.Instant
 import java.time.ZoneId
 import java.util.Calendar
-import java.util.concurrent.TimeUnit
 import javax.inject.Inject
 
 class AndroidAlarmScheduler @Inject constructor(
@@ -185,6 +180,22 @@ class AndroidAlarmScheduler @Inject constructor(
         return false
     }
 
+    override fun cancelPillboxReminder(): Boolean {
+        val pendingIntent = PendingIntent.getBroadcast(
+            appContext,
+            999,
+            Intent(appContext, PillboxAlarmReceiver::class.java),
+            PendingIntent.FLAG_NO_CREATE or PendingIntent.FLAG_IMMUTABLE
+        )
+
+        if(pendingIntent != null) {
+            alarmManager.cancel(pendingIntent)
+            return true
+        }
+
+        return false
+    }
+
     /**
      * Use to cancel follow-up alarms.
      * Used when user snoozes an alarm, so there's no need to deliver the follow-up alarm.
@@ -219,14 +230,17 @@ class AndroidAlarmScheduler @Inject constructor(
     }
 
     override fun schedulePillboxReminder(hours: Int, minutes: Int) {
-        val workRequest = PeriodicWorkRequestBuilder<PillboxReminderWorker>(1, TimeUnit.DAYS)
-            .setInitialDelay(getInitialDelay(hours,minutes), TimeUnit.MILLISECONDS)
-            .build()
-
-        WorkManager.getInstance(appContext).enqueueUniquePeriodicWork(
-            "PillboxReminder",
-            ExistingPeriodicWorkPolicy.UPDATE,
-            workRequest
+        val intent = Intent(appContext, PillboxAlarmReceiver::class.java)
+        val pendingIntent = PendingIntent.getBroadcast(
+            appContext,
+            999,
+            intent,
+            PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE
+        )
+        alarmManager.setExactAndAllowWhileIdle(
+            AlarmManager.RTC_WAKEUP,
+            System.currentTimeMillis() + getInitialDelay(hours, minutes),
+            pendingIntent
         )
     }
 

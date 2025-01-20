@@ -6,9 +6,11 @@ import android.content.pm.ServiceInfo
 import android.os.Build
 import android.os.IBinder
 import android.provider.Settings
+import android.util.Log
 import com.phoenix.pillreminder.feature_alarms.domain.model.AlarmItem
 import com.phoenix.pillreminder.feature_alarms.presentation.activities.AlarmTriggeredActivity
 import com.phoenix.pillreminder.feature_alarms.presentation.activities.MainActivity
+import com.phoenix.pillreminder.feature_alarms.presentation.activities.PillboxReminderActivity
 import com.phoenix.pillreminder.feature_alarms.presentation.utils.NotificationUtils
 
 class AlarmService: Service() {
@@ -79,6 +81,26 @@ class AlarmService: Service() {
                     startActivity(activityIntent)
                 }
 
+            }
+            "pillboxReminder" -> {
+                val notification = NotificationUtils.schedulePillboxDailyReminder(applicationContext)
+
+                if (Build.VERSION.SDK_INT > Build.VERSION_CODES.TIRAMISU){
+                    if (notification != null) {
+                        startForeground(999, notification, ServiceInfo.FOREGROUND_SERVICE_TYPE_SPECIAL_USE)
+                    }
+                } else{
+                    startForeground(999, notification)
+                }
+                if(Settings.canDrawOverlays(applicationContext)) {
+                    val activityIntent = Intent(this, PillboxReminderActivity::class.java)
+                    activityIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TOP)
+                    startActivity(activityIntent)
+                } else {
+                    val activityIntent = Intent(this, MainActivity::class.java)
+                    activityIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
+                    startActivity(activityIntent)
+                }
             }
         }
 

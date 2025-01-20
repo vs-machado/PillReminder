@@ -242,6 +242,7 @@
     <string name="arrow_down_icon">Haz clic para ver la respuesta a la pregunta</string>
     <string name="snooze_alarm">Posponer alarma</string>
     <string name="change_alarm_snooze_interval">Intervalo de repetición de alarma</string>
+    <string name="time_to_refill_your_pillbox">Es hora de rellenar tu pastillero.</string>
 
     <string name="quantity_syringe">Cantidad: %1$d jeringa(s)</string>
 

@@ -29,4 +29,18 @@ interface SharedPreferencesRepository {
      * Returns the snooze interval in minutes that was previously set by the user.
      */
     fun getSnoozeInterval(): Int
+
+    /**
+     *  Stores the pillbox reminder hour.
+     */
+    fun setPillboxReminderHour(hours: Int, minutes: Int)
+
+    /**
+     *  Returns the previously stored pillbox reminder hour.
+     *  The stored hour is used to reschedule the reminders if user restarts the device or
+     *  updates the app.
+     *
+     *  If user does not set the pillbox reminder hour, it defaults to null
+     */
+    fun getPillboxReminderHour(): Pair<Int?, Int?>
 }

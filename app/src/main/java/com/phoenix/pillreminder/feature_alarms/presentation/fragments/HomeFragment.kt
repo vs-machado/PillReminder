@@ -179,13 +179,17 @@ class HomeFragment: Fragment() {
 
         binding.btnSaveDialogPillbox.setOnClickListener {
             if(hours != null && minutes != null){
+//                hfViewModel.schedulePillboxReminder(hours!!, minutes!!)
+                sharedPreferencesRepository.setPillboxReminderHour(hours!!, minutes!!)
                 hfViewModel.schedulePillboxReminder(hours!!, minutes!!)
+                hfViewModel.setPillboxPreferences(true)
             }
             dialog.dismiss()
         }
 
         binding.btnCancelDialogPillbox.setOnClickListener {
             dialog.dismiss()
+            sharedPreferencesRepository.setPillboxReminderHour(-1, -1) // -1 == null
             hfViewModel.setPillboxPreferences(false)
             uncheckSwitch()
         }
@@ -213,10 +217,10 @@ class HomeFragment: Fragment() {
 
         pillboxSwitch.setOnCheckedChangeListener { _, isChecked ->
             if (isChecked) {
-                hfViewModel.setPillboxPreferences(true)
                 showPillboxReminderDialog()
             } else {
                 hfViewModel.setPillboxPreferences(false)
+                sharedPreferencesRepository.setPillboxReminderHour(-1, -1) // -1 == null
                 hfViewModel.cancelReminderNotifications(requireContext().applicationContext)
             }
         }
@@ -663,15 +667,9 @@ class HomeFragment: Fragment() {
         super.onPause()
 
         //Dismiss the dialog to avoid window leakage
-        if(::dialog.isInitialized && dialog.isShowing){
+        if(::dialog.isInitialized && dialog.isShowing && !sharedPreferencesRepository.getPillboxPreferences()){
             dialog.dismiss()
-        }
-
-        val switchPillbox = binding.datePicker.findViewById<SwitchMaterial>(R.id.switchPillbox)
-
-        //If user minimizes or closes the app with pillbox reminder dialog opened, the switch is unchecked
-        if(switchPillbox.isChecked && !hfViewModel.isWorkerActive()){
-            switchPillbox.isChecked = false
+            uncheckSwitch()
         }
     }
 

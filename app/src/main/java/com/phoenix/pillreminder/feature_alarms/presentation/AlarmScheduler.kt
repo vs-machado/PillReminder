@@ -17,4 +17,6 @@ interface AlarmScheduler {
     suspend fun cancelAlarm(item: AlarmItem, cancelAll: Boolean)
 
     fun cancelFollowUpAlarm(hashCode: Int)
+
+    fun cancelPillboxReminder(): Boolean
 }

@@ -1,15 +1,15 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
-    tools:ignore="LockedOrientationActivity">
+    tools:ignore="LockedOrientationActivity" >
 
     <uses-permission android:name="android.permission.POST_NOTIFICATIONS" />
     <uses-permission android:name="android.permission.USE_EXACT_ALARM" />
-    <uses-permission android:name="android.permission.FOREGROUND_SERVICE"/>
-    <uses-permission android:name="android.permission.FOREGROUND_SERVICE_SPECIAL_USE"/>
-    <uses-permission android:name="android.permission.SYSTEM_ALERT_WINDOW"/>
+    <uses-permission android:name="android.permission.FOREGROUND_SERVICE" />
+    <uses-permission android:name="android.permission.FOREGROUND_SERVICE_SPECIAL_USE" />
+    <uses-permission android:name="android.permission.SYSTEM_ALERT_WINDOW" />
     <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED" />
-    <uses-permission android:name="android.permission.REQUEST_IGNORE_BATTERY_OPTIMIZATIONS"/>
+    <uses-permission android:name="android.permission.REQUEST_IGNORE_BATTERY_OPTIMIZATIONS" />
 
     <application
         android:name="com.phoenix.pillreminder.feature_alarms.AlarmApp"
@@ -21,9 +21,11 @@
         android:label="@string/app_name"
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
-        android:theme="@style/Theme.PillReminder"
-        android:enableOnBackInvokedCallback="true">
-
+        android:theme="@style/Theme.PillReminder" >
+        <activity
+            android:name=".feature_alarms.presentation.activities.PillboxReminderActivity"
+            android:exported="false"
+            android:theme="@style/Theme.PillReminder" />
         <activity
             android:name=".feature_alarms.presentation.activities.AlarmTriggeredActivity"
             android:exported="false" />
@@ -33,7 +35,7 @@
         <activity
             android:name=".feature_alarms.presentation.activities.MainActivity"
             android:exported="true"
-            android:windowSoftInputMode="adjustResize">
+            android:windowSoftInputMode="adjustResize" >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -50,6 +52,14 @@
                 <action android:name="Mark as used"/>
             </intent-filter>
          </receiver>
+        <receiver
+            android:name=".feature_alarms.presentation.PillboxAlarmReceiver"
+            android:exported="true">
+            <intent-filter>
+                <action android:name="android.intent.action.BOOT_COMPLETED"/>
+                <action android:name="android.intent.action.MY_PACKAGE_REPLACED"/>
+            </intent-filter>
+        </receiver>
 
         <receiver
             android:name=".feature_alarms.presentation.FollowUpAlarmReceiver"

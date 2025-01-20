@@ -137,8 +137,9 @@ object NotificationUtils {
             context, 999, notificationIntent,
             PendingIntent.FLAG_IMMUTABLE or PendingIntent.FLAG_UPDATE_CURRENT
         )
+        val alarmUri = Uri.parse("android.resource://" + context.packageName + "/" + R.raw.alarm_sound)
 
-        createPillboxNotificationChannel(context)
+        createPillboxNotificationChannel(context, alarmUri)
 
         val title = context.getString(R.string.it_s_time_to_refill_your_pillbox)
         val text =
@@ -182,13 +183,17 @@ object NotificationUtils {
         }
     }
 
-    private fun createPillboxNotificationChannel(context: Context){
+    private fun createPillboxNotificationChannel(context: Context, alarmUri: Uri){
         if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.O){
             val name = "PillboxReminderChannel"
             val descriptionText = "Channel for reminding users to refill their pillboxes"
             val importance = NotificationManager.IMPORTANCE_HIGH
+            val audioAttributes = AudioAttributes.Builder()
+                .setUsage(AudioAttributes.USAGE_ALARM)
+                .build()
             val channel = NotificationChannel(pillboxReminderChannelId, name, importance).apply{
                 description = descriptionText
+                setSound(alarmUri, audioAttributes)
             }
             val notificationManager = context.getSystemService(NotificationManager::class.java)
             notificationManager.createNotificationChannel(channel)

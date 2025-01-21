@@ -3,7 +3,6 @@ package com.phoenix.pillreminder.feature_alarms.presentation
 import android.content.BroadcastReceiver
 import android.content.Context
 import android.content.Intent
-import android.util.Log
 import androidx.core.content.ContextCompat
 import com.phoenix.pillreminder.feature_alarms.domain.repository.SharedPreferencesRepository
 import dagger.hilt.android.AndroidEntryPoint

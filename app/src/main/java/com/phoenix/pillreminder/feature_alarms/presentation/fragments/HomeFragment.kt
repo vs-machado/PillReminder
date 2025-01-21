@@ -245,7 +245,10 @@ class HomeFragment: Fragment() {
         }
     }
 
-     private fun initRecyclerView(dateToFilter: Date, fab: FloatingActionButton){
+     private fun initRecyclerView(
+         dateToFilter: Date,
+         fab: FloatingActionButton
+     ){
         binding.rvMedicinesList.layoutManager = LinearLayoutManager(activity)
         adapter = RvMedicinesListAdapter(
             showDeleteAlarmDialog = { selectedMedicine: Medicine ->
@@ -427,7 +430,9 @@ class HomeFragment: Fragment() {
         dialog.show()
     }
 
-    private fun showWarningMedicineUsageDialog(medicine: Medicine){
+    private fun showWarningMedicineUsageDialog(
+        medicine: Medicine
+    ){
         dialog = Dialog(this.requireContext())
         dialog.requestWindowFeature(Window.FEATURE_NO_TITLE)
         dialog.setCancelable(false)

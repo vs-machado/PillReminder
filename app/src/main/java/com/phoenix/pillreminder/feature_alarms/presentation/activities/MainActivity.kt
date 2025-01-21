@@ -3,7 +3,6 @@ package com.phoenix.pillreminder.feature_alarms.presentation.activities
 import android.content.Context
 import android.content.Intent
 import android.os.Bundle
-import android.util.Log
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.app.AppCompatDelegate
 import androidx.lifecycle.lifecycleScope
@@ -16,6 +15,7 @@ import com.phoenix.pillreminder.R
 import com.phoenix.pillreminder.databinding.ActivityMainBinding
 import com.phoenix.pillreminder.feature_alarms.domain.repository.MedicineRepository
 import com.phoenix.pillreminder.feature_alarms.domain.repository.SharedPreferencesRepository
+import com.phoenix.pillreminder.feature_alarms.presentation.utils.NotificationUtils
 import com.phoenix.pillreminder.feature_alarms.presentation.utils.languageMapping
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.Dispatchers
@@ -45,6 +45,13 @@ class MainActivity: AppCompatActivity() {
         AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_FOLLOW_SYSTEM)
         checkAndShowTutorial()
         setAppLanguagePreference()
+    }
+
+    override fun onResume() {
+        super.onResume()
+        // If user receives a pillbox reminder notification and click on it,
+        // the activity opens and dismisses the notification.
+        NotificationUtils.dismissNotification(context = this)
     }
 
     private fun setupToolbar() {

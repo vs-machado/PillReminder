@@ -15,7 +15,7 @@ import androidx.core.app.NotificationCompat
 import com.phoenix.pillreminder.R
 import com.phoenix.pillreminder.feature_alarms.domain.model.AlarmItem
 import com.phoenix.pillreminder.feature_alarms.presentation.AlarmReceiver
-import com.phoenix.pillreminder.feature_alarms.presentation.activities.AlarmTriggeredActivity
+import com.phoenix.pillreminder.feature_alarms.presentation.AlarmService
 import com.phoenix.pillreminder.feature_alarms.presentation.activities.MainActivity
 
 object NotificationUtils {
@@ -43,7 +43,7 @@ object NotificationUtils {
                 The user will mark the medicine as taken on the activity. Notification clicks will lead to the same activity, only opening
                  MainActivity after clicking on "Mark as used" or "Dismiss" button. */
 
-                val notificationIntent = Intent(context, AlarmTriggeredActivity::class.java)
+                val notificationIntent = Intent(context, MainActivity::class.java)
                 val pendingIntent = PendingIntent.getActivity(
                     context, item.hashCode(), notificationIntent,
                     PendingIntent.FLAG_IMMUTABLE or PendingIntent.FLAG_UPDATE_CURRENT
@@ -277,5 +277,10 @@ object NotificationUtils {
             }
             else -> ""
         }
+    }
+
+    fun dismissNotification(context: Context) {
+        val stopServiceIntent = Intent(context, AlarmService::class.java)
+        context.stopService(stopServiceIntent)
     }
 }

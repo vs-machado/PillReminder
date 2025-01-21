@@ -6,7 +6,6 @@ import android.content.pm.ServiceInfo
 import android.os.Build
 import android.os.IBinder
 import android.provider.Settings
-import android.util.Log
 import com.phoenix.pillreminder.feature_alarms.domain.model.AlarmItem
 import com.phoenix.pillreminder.feature_alarms.presentation.activities.AlarmTriggeredActivity
 import com.phoenix.pillreminder.feature_alarms.presentation.activities.MainActivity

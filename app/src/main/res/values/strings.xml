@@ -243,6 +243,7 @@
     <string name="snooze_alarm">Snooze alarm</string>
     <string name="change_alarm_snooze_interval">Alarm snooze interval</string>
     <string name="time_to_refill_your_pillbox">Time to refill your pillbox.</string>
+    <string name="com.crashlytics.android.build_id">1</string>
 
     <string name="quantity_syringe">Quantity: %1$d syringe(s)</string>
 

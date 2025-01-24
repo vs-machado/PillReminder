@@ -6,6 +6,7 @@ plugins {
     id("kotlin-parcelize")
     id("com.google.dagger.hilt.android")
     id("kotlin-android")
+    id("com.google.gms.google-services")
 }
 
 android {
@@ -25,7 +26,8 @@ android {
 
     buildTypes {
         release {
-            isMinifyEnabled = false
+            isMinifyEnabled = true
+            isShrinkResources = true
             proguardFiles(
                 getDefaultProguardFile("proguard-android-optimize.txt"),
                 "proguard-rules.pro"
@@ -52,6 +54,9 @@ dependencies {
     implementation("androidx.cardview:cardview:1.0.0")
     implementation("com.google.dagger:hilt-android-testing:2.51.1")
     implementation("androidx.navigation:navigation-testing:2.8.3")
+    implementation(platform("com.google.firebase:firebase-bom:33.8.0"))
+    implementation("com.google.firebase:firebase-analytics")
+    implementation("com.google.firebase:firebase-crashlytics")
 
     val navVersion = "2.7.5"
     val coreVersion = "1.12.0"

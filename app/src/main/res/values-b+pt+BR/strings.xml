@@ -247,6 +247,7 @@
     <string name="snooze_alarm">Adiar alarme</string>
     <string name="change_alarm_snooze_interval">Intervalo de adiamento do alarme</string>
     <string name="time_to_refill_your_pillbox">Hora de reabastecer sua caixa de remédios.</string>
+    <string name="com.crashlytics.android.build_id">1</string>
 
     <string-array name="snooze_interval_entries">
         <item>5 minutos</item>

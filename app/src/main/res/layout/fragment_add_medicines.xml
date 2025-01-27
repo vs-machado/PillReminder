@@ -34,7 +34,7 @@
             <com.google.android.material.tabs.TabLayout
                 android:id="@+id/clSecondaryToolbar"
                 android:layout_width="match_parent"
-                android:layout_height="110dp"
+                android:layout_height="120dp"
                 android:background="@color/toolbar"
                 android:contentDescription="."
                 tools:ignore="HardcodedText" />
@@ -57,9 +57,11 @@
 
     <TextView
         android:id="@+id/tvFrequency"
-        android:layout_width="wrap_content"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
+        android:layout_marginStart="32dp"
         android:layout_marginTop="16dp"
+        android:layout_marginEnd="32dp"
         android:contentDescription="@string/what_medicine_would_you_like_to_add"
         android:text="@string/what_medicine_would_you_like_to_add"
         android:textColor="?android:attr/textColorTertiary"

@@ -114,6 +114,7 @@
                 android:layout_marginTop="6dp"
                 android:text="@string/pills"
                 android:textSize="24sp"
+                android:textColor="?android:attr/textColorPrimary"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="@+id/guideline7" />

@@ -87,6 +87,8 @@ class HomeFragment: Fragment() {
     private lateinit var gestureDetector: GestureDetector
     private var dontShowAgainPreference: Boolean = false
 
+    private lateinit var fab: FloatingActionButton
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         val navController = findNavController()
@@ -110,7 +112,8 @@ class HomeFragment: Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        val fab = requireActivity().findViewById<FloatingActionButton>(R.id.fabAddMedicine)
+
+        fab = requireActivity().findViewById(R.id.fabAddMedicine)
 
         viewLifecycleOwner.lifecycleScope.launch {
             viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED){
@@ -649,6 +652,7 @@ class HomeFragment: Fragment() {
 
         requireActivity().findViewById<BottomNavigationView>(R.id.bottom_navigation).visibility = View.VISIBLE
         requireActivity().findViewById<View>(R.id.divider).visibility = View.VISIBLE
+        fab.visibility = View.VISIBLE
 
         // Updates the medicines list.
         lifecycleScope.launch(Dispatchers.Main){

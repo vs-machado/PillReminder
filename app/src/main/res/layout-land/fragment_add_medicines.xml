@@ -27,6 +27,7 @@
                 android:id="@+id/toolbarAddMedicines"
                 android:layout_width="match_parent"
                 android:layout_height="50dp"
+                android:theme="@style/ToolbarTitleTheme"
                 android:background="@color/toolbar"
                 android:elevation="4dp" />
 

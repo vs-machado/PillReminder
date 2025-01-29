@@ -9,7 +9,6 @@ import android.view.ViewGroup
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
-import androidx.navigation.findNavController
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.ui.AppBarConfiguration
 import androidx.navigation.ui.setupWithNavController
@@ -18,6 +17,7 @@ import com.google.android.material.floatingactionbutton.FloatingActionButton
 import com.google.android.material.textfield.TextInputLayout
 import com.phoenix.pillreminder.R
 import com.phoenix.pillreminder.databinding.FragmentAddMedicinesBinding
+import com.phoenix.pillreminder.feature_alarms.presentation.OnOneOffClickListener
 import com.phoenix.pillreminder.feature_alarms.presentation.utils.ThemeUtils
 import com.phoenix.pillreminder.feature_alarms.presentation.viewmodels.AlarmSettingsSharedViewModel
 
@@ -77,11 +77,13 @@ class AddMedicinesFragment : Fragment() {
                 override fun afterTextChanged(s: Editable?) {}
             })
 
-            fabNext.setOnClickListener {
-                // Save medicine name input by user
-                sharedViewModel.setMedicineName(medName.toString())
-                it.findNavController().navigate(R.id.action_addMedicinesFragment_to_medicineFormFragment)
-            }
+            fabNext.setOnClickListener(object: OnOneOffClickListener() {
+                override fun onSingleClick(fab: FloatingActionButton) {
+                    // Save medicine name input by user
+                    sharedViewModel.setMedicineName(medName.toString())
+                    findNavController().navigate(R.id.action_addMedicinesFragment_to_medicineFormFragment)
+                }
+            })
 
         }
 

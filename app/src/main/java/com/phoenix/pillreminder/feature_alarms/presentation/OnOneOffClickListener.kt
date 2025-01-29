@@ -6,7 +6,7 @@ import android.os.SystemClock
 import android.view.View
 import com.google.android.material.floatingactionbutton.FloatingActionButton
 
-abstract class OnOneOffFabClickListener: View.OnClickListener {
+abstract class OnOneOffClickListener: View.OnClickListener {
     companion object {
         private const val MIN_CLICK_INTERVAL = 600L
         private var isViewClicked = false

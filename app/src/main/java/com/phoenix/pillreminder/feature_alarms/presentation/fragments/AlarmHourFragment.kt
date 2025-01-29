@@ -18,7 +18,7 @@ import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.google.android.material.floatingactionbutton.FloatingActionButton
 import com.phoenix.pillreminder.R
 import com.phoenix.pillreminder.databinding.FragmentAlarmHourBinding
-import com.phoenix.pillreminder.feature_alarms.presentation.OnOneOffFabClickListener
+import com.phoenix.pillreminder.feature_alarms.presentation.OnOneOffClickListener
 import com.phoenix.pillreminder.feature_alarms.presentation.utils.ThemeUtils
 import com.phoenix.pillreminder.feature_alarms.presentation.viewmodels.AlarmHourViewModel
 import com.phoenix.pillreminder.feature_alarms.presentation.viewmodels.AlarmSettingsSharedViewModel
@@ -95,7 +95,7 @@ class AlarmHourFragment : Fragment() {
 
                 // Asks the user the next alarm hour. The custom click listener is used to prevent fast tapping.
                 // Fast tapping can break the quantity of alarms being set.
-                fabNext.setOnClickListener(object: OnOneOffFabClickListener() {
+                fabNext.setOnClickListener(object: OnOneOffClickListener() {
 
                     override fun onSingleClick(fab: FloatingActionButton) {
                         sharedViewModel.position++

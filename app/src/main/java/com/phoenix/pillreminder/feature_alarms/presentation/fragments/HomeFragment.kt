@@ -11,7 +11,6 @@ import android.content.pm.PackageManager
 import android.graphics.Color
 import android.graphics.drawable.ColorDrawable
 import android.os.Bundle
-import android.provider.Settings
 import android.text.format.DateFormat.is24HourFormat
 import android.util.Log
 import android.view.GestureDetector
@@ -243,7 +242,7 @@ class HomeFragment: Fragment() {
     }
 
     private fun requestPermissions(dontShowAgain: Boolean){
-        if(!Settings.canDrawOverlays(requireContext()) && !dontShowAgain){
+        if(!dontShowAgain){
             showOverlayAndNotificationPermissionDialog()
         }
     }
@@ -343,13 +342,14 @@ class HomeFragment: Fragment() {
         val dismissRequest: Button = dialog.findViewById(R.id.btnDismissRequest)
         val checkboxDontShowAgain: CheckBox = dialog.findViewById(R.id.cbDontShowAgain)
 
+        checkboxDontShowAgain.setOnCheckedChangeListener { _, isChecked ->
+            hfViewModel.setPermissionRequestPreferences(isChecked)
+        }
+
         requestPermission.setOnClickListener {
             requestPermissionLauncher.launch(Manifest.permission.POST_NOTIFICATIONS)
         }
         dismissRequest.setOnClickListener {
-            if(checkboxDontShowAgain.isChecked){
-                hfViewModel.setPermissionRequestPreferences(true)
-            }
             dialog.dismiss()
         }
 

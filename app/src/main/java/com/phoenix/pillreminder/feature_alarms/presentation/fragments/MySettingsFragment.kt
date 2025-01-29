@@ -9,14 +9,17 @@ import android.net.Uri
 import android.os.Bundle
 import android.os.PowerManager
 import android.provider.Settings
-import android.util.Log
+import android.util.TypedValue
+import android.view.LayoutInflater
 import android.view.View
+import android.view.ViewGroup
 import android.widget.Toast
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.core.content.ContextCompat
 import androidx.preference.ListPreference
 import androidx.preference.Preference
 import androidx.preference.PreferenceFragmentCompat
+import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.floatingactionbutton.FloatingActionButton
 import com.phoenix.pillreminder.R
 import com.phoenix.pillreminder.feature_alarms.domain.repository.SharedPreferencesRepository
@@ -35,6 +38,28 @@ class MySettingsFragment: PreferenceFragmentCompat() {
     override fun onCreatePreferences(savedInstanceState: Bundle?, rootKey: String?) {
         setPreferencesFromResource(R.xml.preferences, rootKey)
         setupPreferenceListeners()
+    }
+
+    // Overrides recyclerview properties to add a 80dp bottom margin, avoiding settings overlapping with
+    // the bottom navigation bar
+    override fun onCreateRecyclerView(
+        inflater: LayoutInflater,
+        parent: ViewGroup,
+        savedInstanceState: Bundle?
+    ): RecyclerView {
+        val recyclerView = super.onCreateRecyclerView(inflater, parent, savedInstanceState)
+        val marginBottom = TypedValue.applyDimension(
+            TypedValue.COMPLEX_UNIT_DIP,
+            80f,
+            resources.displayMetrics
+        ).toInt()
+
+        (recyclerView.layoutParams as ViewGroup.MarginLayoutParams).let { params ->
+            params.bottomMargin = marginBottom
+            recyclerView.layoutParams = params
+        }
+
+        return recyclerView
     }
 
     override fun onResume() {

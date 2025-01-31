@@ -11,7 +11,7 @@ plugins {
 
 android {
     namespace = "com.phoenix.pillreminder"
-    compileSdk = 34
+    compileSdk = 35
 
     defaultConfig {
         applicationId = "com.phoenix.pillreminder"

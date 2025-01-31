@@ -3,6 +3,7 @@ package com.phoenix.pillreminder.feature_alarms.presentation.activities
 import android.content.Context
 import android.content.Intent
 import android.os.Bundle
+import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.app.AppCompatDelegate
 import androidx.lifecycle.lifecycleScope
@@ -25,17 +26,14 @@ import javax.inject.Inject
 
 @AndroidEntryPoint
 class MainActivity: AppCompatActivity() {
-    @Inject
-    lateinit var repository: MedicineRepository
-
+    @Inject lateinit var repository: MedicineRepository
     @Inject lateinit var sharedPreferencesRepository: SharedPreferencesRepository
 
     private lateinit var binding: ActivityMainBinding
     private lateinit var appBarConfiguration: AppBarConfiguration
 
-
-
     override fun onCreate(savedInstanceState: Bundle?) {
+        enableEdgeToEdge()
         super.onCreate(savedInstanceState)
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)

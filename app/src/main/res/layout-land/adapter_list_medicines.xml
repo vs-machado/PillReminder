@@ -16,6 +16,7 @@
         android:layout_weight="1"
         android:gravity="center"
         android:text="@string/hour"
+        android:textColor="?android:attr/textColorPrimary"
         android:textSize="16sp" />
 
     <com.google.android.material.card.MaterialCardView

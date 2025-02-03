@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="app_name">Recordatorio de Medicamentos</string>
+    <string name="app_name">Remedi</string>
     <string name="hello_blank_fragment">Hola fragmento en blanco</string>
     <string name="hour">08:00</string>
     <string name="strength">Concentración</string>
@@ -111,7 +111,7 @@
     <string name="medicine_not_taken">Medicamento no tomado</string>
     <string name="menu_with_medicine_options">Menú con opciones de medicamento</string>
     <string name="welcome">¡Bienvenido!</string>
-    <string name="app_explanation">Recordatorio de Medicamentos es una aplicación para ayudarte a llevar un registro de tus dosis de medicamentos.</string>
+    <string name="app_explanation">Remedi es una aplicación para ayudarte a llevar un registro de tus dosis de medicación.</string>
     <string name="app_needs_permissions">…Pero primero necesitamos tu permiso.</string>
     <string name="notification_mandatory">"El envío de notificaciones es obligatorio para el correcto funcionamiento de la aplicación."</string>
     <string name="pillbox_reminders">Recordatorios de pastillero</string>
@@ -128,7 +128,7 @@
         \n• Advertir a los usuarios si intentan marcar un medicamento como usado cerca del próximo horario de dosis.</string>
     <string name="about_us_text">Aplicación desarrollada por Vinícius Santos como su proyecto final para su licenciatura en Ingeniería Informática.</string>
     <string name="contact_me">Contáctame</string>
-    <string name="pill_reminder">Recordatorio de Medicamentos</string>
+    <string name="pill_reminder">Remedi</string>
     <string name="app_description">Una aplicación de Android de código abierto para ayudar a los usuarios a realizar un seguimiento de sus dosis de medicamentos.</string>
     <string name="features">Características</string>
     <string name="about_me">Sobre mí</string>

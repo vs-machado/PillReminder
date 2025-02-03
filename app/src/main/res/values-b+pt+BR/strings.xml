@@ -1,6 +1,5 @@
 <resources>
-    <string name="app_name">Pill Reminder</string>
-    <!-- TODO: Remove or change this placeholder text -->
+    <string name="app_name">Remedi</string>
     <string name="hello_blank_fragment">Hello blank fragment</string>
     <string name="hour">08:00</string>
     <string name="strength">Strength</string>
@@ -113,8 +112,8 @@
     <string name="medicine_not_taken">Medicamento não utilizado</string>
     <string name="menu_with_medicine_options">Menu com opções do remédio</string>
     <string name="welcome">Bem-vindo!</string>
-    <string name="app_explanation">O Pill Reminder é um app que te ajuda a controlar as doses de seus medicamentos.</string>
-    <string name="app_needs_permissions">...Mas primeiro precisamos de sua permissão.</string>
+    <string name="app_explanation">O Remedi é um aplicativo que te ajuda a acompanhar suas doses de medicamentos.</string>
+    <string name="app_needs_permissions">…Mas primeiro precisamos de sua permissão.</string>
     <string name="notification_mandatory">"O envio de notificações é obrigatório para o funcionamento ideal do aplicativo."</string>
     <string name="pillbox_reminders">Lembrete de recarga</string>
     <string name="click_on_pillbox">Clique no botão Lembrete de recarga e defina um horário para receber lembretes diários.</string>
@@ -129,7 +128,7 @@
         \n• Alertar o usuário caso tente marcar uma medicação como utilizada perto do horário da próxima dose.</string>
     <string name="about_us_text">Aplicativo desenvolvido por Vinícius Santos como trabalho de conclusão de curso de Engenharia da Computação.</string>
     <string name="contact_me">Contato</string>
-    <string name="pill_reminder">Pill Reminder</string>
+    <string name="pill_reminder">Remedi</string>
     <string name="app_description">Um aplicativo Android de código aberto para auxiliar os usuários a acompanharem seus medicamentos. </string>
     <string name="features">Recursos</string>
     <string name="about_me">Sobre mim</string>

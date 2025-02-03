@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">Pill Reminder</string>
+    <string name="app_name">Remedi</string>
     <string name="hello_blank_fragment">Hello blank fragment</string>
     <string name="hour">08:00</string>
     <string name="strength">Strength</string>
@@ -111,7 +111,7 @@
     <string name="medicine_not_taken">Medicine not taken</string>
     <string name="menu_with_medicine_options">Menu with medicine options</string>
     <string name="welcome">Welcome!</string>
-    <string name="app_explanation">Pill Reminder is an app to help you to keep track of your medicine doses.</string>
+    <string name="app_explanation">Remedi is an app to help you keep track of your medication doses.</string>
     <string name="app_needs_permissions">…But first we need your permission.</string>
     <string name="notification_mandatory">"Sending notifications is mandatory for the proper functioning of the application."</string>
     <string name="pillbox_reminders">Pillbox reminders</string>
@@ -128,7 +128,7 @@
         \n• Warn users if they attempt to mark a medicine as used close to the next dose time.</string>
     <string name="about_us_text">Application developed by Vinícius Santos as his final project for his bachelor\'s degree in Computer Engineering.</string>
     <string name="contact_me">Contact me</string>
-    <string name="pill_reminder">Pill Reminder</string>
+    <string name="pill_reminder">Remedi</string>
     <string name="app_description">An Android open source application for helping users to track their medicines doses.</string>
     <string name="features">Features</string>
     <string name="about_me">About me</string>

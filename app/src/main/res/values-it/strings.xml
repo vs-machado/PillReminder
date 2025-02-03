@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="app_name">Promemoria Medicinali</string>
+    <string name="app_name">Remedi</string>
     <string name="hello_blank_fragment">Ciao blank fragment</string>
     <string name="hour">08:00</string>
     <string name="strength">Dosaggio</string>
@@ -109,7 +109,7 @@
     <string name="medicine_not_taken">Medicinale non assunto</string>
     <string name="menu_with_medicine_options">Menu con opzioni medicinale</string>
     <string name="welcome">Benvenuto!</string>
-    <string name="app_explanation">Promemoria Medicinali è un\'app che ti aiuta a tenere traccia delle tue dosi di medicinali.</string>
+    <string name="app_explanation">Remedi è un\'app per aiutarti a tenere traccia delle dosi dei tuoi farmaci.</string>
     <string name="app_needs_permissions">…Ma prima abbiamo bisogno del tuo permesso.</string>
     <string name="notification_mandatory">L\'invio di notifiche è obbligatorio per il corretto funzionamento dell\'applicazione.</string>
     <string name="pillbox_reminders">Promemoria portapillole</string>
@@ -126,7 +126,7 @@ se l\'utente non segna un medicinale come assunto nell\'applicazione.\n• Perme
     \n• Avvisa gli utenti se tentano di segnare un medicinale come assunto vicino al prossimo orario di assunzione.</string>
     <string name="about_us_text">Applicazione sviluppata da Vinícius Santos come suo progetto finale per la laurea in Ingegneria Informatica.</string>
     <string name="contact_me">Contattami</string>
-    <string name="pill_reminder">Promemoria Medicinali</string>
+    <string name="pill_reminder">Remedi</string>
     <string name="app_description">Un\'applicazione Android open source per aiutare gli utenti a tenere traccia delle loro dosi di medicinali.</string>
     <string name="features">Funzionalità</string>
     <string name="about_me">Chi sono</string>

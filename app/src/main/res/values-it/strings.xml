@@ -407,4 +407,9 @@ se l\'utente non segna un medicinale come assunto nell\'applicazione.\n• Perme
         <item>es</item>
         <item>it</item>
     </string-array>
+
+    <string name="ad_inspector" translatable="false">Ad Inspector</string>
+    <string name="more_menu" translatable="false">More</string>
+    <string name="privacy_settings" translatable="false">Privacy Settings</string>
+
 </resources>

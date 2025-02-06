@@ -411,4 +411,7 @@
         <item quantity="many">Alarmes por dia:\n\n%1$d alarmes</item>
     </plurals>
 
+    <string name="ad_inspector" translatable="false">Ad Inspector</string>
+    <string name="more_menu" translatable="false">More</string>
+    <string name="privacy_settings" translatable="false">Privacy Settings</string>
 </resources>

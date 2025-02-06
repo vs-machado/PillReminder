@@ -21,6 +21,7 @@ import com.google.android.material.datepicker.MaterialDatePicker
 import com.google.android.material.floatingactionbutton.FloatingActionButton
 import com.phoenix.pillreminder.R
 import com.phoenix.pillreminder.databinding.FragmentTreatmentDurationBinding
+import com.phoenix.pillreminder.feature_alarms.data.ads.Admob
 import com.phoenix.pillreminder.feature_alarms.domain.util.MedicineFrequency
 import com.phoenix.pillreminder.feature_alarms.presentation.utils.ThemeUtils
 import com.phoenix.pillreminder.feature_alarms.presentation.viewmodels.AlarmSettingsSharedViewModel
@@ -138,6 +139,8 @@ class TreatmentDurationFragment : Fragment(), ActivityCompat.OnRequestPermission
                                 getString(R.string.alarms_successfully_created),
                                 Toast.LENGTH_LONG).show()
 
+                            // Show an ad before going back to HomeFragment
+                            Admob.showInterstitial(requireActivity())
                             popBackStack()
                         }
                     }
@@ -191,6 +194,8 @@ class TreatmentDurationFragment : Fragment(), ActivityCompat.OnRequestPermission
                     getString(R.string.alarms_successfully_created),
                     Toast.LENGTH_LONG).show()
 
+                // Show an ad before going back to HomeFragment
+                Admob.showInterstitial(requireActivity())
                 popBackStack()
             }
             dateRangePicker.show(childFragmentManager, "DATE_RANGE_PICKER")

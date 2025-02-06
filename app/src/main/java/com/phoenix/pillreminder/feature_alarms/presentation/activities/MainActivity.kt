@@ -3,6 +3,11 @@ package com.phoenix.pillreminder.feature_alarms.presentation.activities
 import android.content.Context
 import android.content.Intent
 import android.os.Bundle
+import android.util.Log
+import android.view.MenuItem
+import android.view.View
+import android.widget.PopupMenu
+import android.widget.Toast
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.app.AppCompatDelegate
@@ -12,13 +17,18 @@ import androidx.navigation.fragment.NavHostFragment
 import androidx.navigation.ui.AppBarConfiguration
 import androidx.navigation.ui.setupActionBarWithNavController
 import androidx.navigation.ui.setupWithNavController
+import com.google.android.gms.ads.MobileAds
 import com.phoenix.pillreminder.R
 import com.phoenix.pillreminder.databinding.ActivityMainBinding
+import com.phoenix.pillreminder.feature_alarms.data.ads.Admob
+import com.phoenix.pillreminder.feature_alarms.data.ads.Admob.loadAd
+import com.phoenix.pillreminder.feature_alarms.data.ads.GoogleMobileAdsConsentManager
 import com.phoenix.pillreminder.feature_alarms.domain.repository.MedicineRepository
 import com.phoenix.pillreminder.feature_alarms.domain.repository.SharedPreferencesRepository
 import com.phoenix.pillreminder.feature_alarms.presentation.utils.NotificationUtils
 import com.phoenix.pillreminder.feature_alarms.presentation.utils.languageMapping
 import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import java.util.Locale
@@ -32,6 +42,10 @@ class MainActivity: AppCompatActivity() {
     private lateinit var binding: ActivityMainBinding
     private lateinit var appBarConfiguration: AppBarConfiguration
 
+    // Admob setup
+    private lateinit var googleMobileAdsConsentManager: GoogleMobileAdsConsentManager
+
+
     override fun onCreate(savedInstanceState: Bundle?) {
         enableEdgeToEdge()
         super.onCreate(savedInstanceState)
@@ -43,6 +57,57 @@ class MainActivity: AppCompatActivity() {
         AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_FOLLOW_SYSTEM)
         checkAndShowTutorial()
         setAppLanguagePreference()
+
+        val initializeAds: () -> Unit = {
+            CoroutineScope(Dispatchers.IO).launch {
+                // Initialize the Google Mobile Ads SDK on a background thread.
+                MobileAds.initialize(this@MainActivity) {}
+                runOnUiThread {
+                    // Load an ad on the main thread.
+                    loadAd(this@MainActivity)
+                }
+            }
+        }
+
+        Admob.gatherUserConsent(this, initializeAds)
+
+        // Log the Mobile Ads SDK version.
+        Log.d(TAG, "Google Mobile Ads SDK Version: " + MobileAds.getVersion())
+    }
+
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        val menuItemView = findViewById<View>(item.itemId)
+        val activity = this
+        PopupMenu(this, menuItemView).apply {
+            menuInflater.inflate(R.menu.popup_menu, menu)
+            menu
+                .findItem(R.id.privacy_settings)
+                .setVisible(googleMobileAdsConsentManager.isPrivacyOptionsRequired)
+            show()
+            setOnMenuItemClickListener { popupMenuItem ->
+                when (popupMenuItem.itemId) {
+                    R.id.privacy_settings -> {
+                        // Handle changes to user consent.
+                        googleMobileAdsConsentManager.showPrivacyOptionsForm(activity) { formError ->
+                            if (formError != null) {
+                                Toast.makeText(activity, formError.message, Toast.LENGTH_SHORT).show()
+                            }
+                        }
+                        true
+                    }
+                    R.id.ad_inspector -> {
+                        MobileAds.openAdInspector(activity) { error ->
+                            // Error will be non-null if ad inspector closed due to an error.
+                            error?.let { Toast.makeText(activity, it.message, Toast.LENGTH_SHORT).show() }
+                        }
+                        true
+                    }
+                    // Handle other branches here.
+                    else -> false
+                }
+            }
+            return super.onOptionsItemSelected(item)
+        }
     }
 
     override fun onResume() {
@@ -134,15 +199,14 @@ class MainActivity: AppCompatActivity() {
         }
     }
 
-//    override fun attachBaseContext(newBase: Context?) {
-//        val languageCode = sharedPreferencesRepository.getAppLanguage()
-//
-//        if(languageCode != null && newBase != null){
-//            val context: Context = LanguageConfig.changeLanguage(newBase, languageCode)
-//            super.attachBaseContext(context)
-//            return
-//        }
-//
-//        super.attachBaseContext(newBase)
-//    }
+    companion object {
+        private const val TAG = "MainActivity"
+
+        // Check your logcat output for the test device hashed ID e.g.
+        // "Use RequestConfiguration.Builder().setTestDeviceIds(Arrays.asList("ABCDEF012345"))
+        // to get test ads on this device" or
+        // "Use new ConsentDebugSettings.Builder().addTestDeviceHashedId("ABCDEF012345") to set this as
+        // a debug device".
+        const val TEST_DEVICE_HASHED_ID = "ABCDEF012345"
+    }
 }

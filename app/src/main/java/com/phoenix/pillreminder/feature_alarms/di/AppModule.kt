@@ -30,7 +30,7 @@ object AppModule {
             app,
             MedicineDatabase::class.java,
             "medicine_data_database"
-        ).fallbackToDestructiveMigration().build()
+        ).build()
     }
 
     @Provides

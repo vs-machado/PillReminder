@@ -42,6 +42,7 @@ import com.phoenix.pillreminder.databinding.FragmentHomeBinding
 import com.phoenix.pillreminder.databinding.LayoutEndTreatmentDialogBinding
 import com.phoenix.pillreminder.databinding.LayoutSetPillboxReminderDialogBinding
 import com.phoenix.pillreminder.databinding.LayoutWarnAboutMedicineUsageHourBinding
+import com.phoenix.pillreminder.feature_alarms.data.ads.Admob
 import com.phoenix.pillreminder.feature_alarms.domain.model.Medicine
 import com.phoenix.pillreminder.feature_alarms.domain.repository.MedicineRepository
 import com.phoenix.pillreminder.feature_alarms.domain.repository.SharedPreferencesRepository
@@ -267,12 +268,14 @@ class HomeFragment: Fragment() {
                     else{
                         hfViewModel.markMedicineUsage(selectedMedicine)
                         displayMedicinesList(hfViewModel.getDate())
+                        Admob.showInterstitial(requireActivity())
                     }
                 }
             },
             markMedicinesAsSkipped = { selectedMedicine ->
                 hfViewModel.markMedicinesAsSkipped(selectedMedicine)
                 displayMedicinesList(hfViewModel.getDate())
+                Admob.showInterstitial(requireActivity())
             },
             goToEditMedicines = { selectedMedicine ->
                 viewLifecycleOwner.lifecycleScope.launch(Dispatchers.IO) {
@@ -383,6 +386,7 @@ class HomeFragment: Fragment() {
 
                     withContext(Dispatchers.Main){
                         displayMedicinesList(hfViewModel.getDate())
+                        Admob.showInterstitial(requireActivity())
                         dialog.dismiss()
                         showToastAlarmDeleted()
                     }
@@ -419,6 +423,7 @@ class HomeFragment: Fragment() {
 
                     withContext(Dispatchers.Main){
                         displayMedicinesList(getDate())
+                        Admob.showInterstitial(requireActivity())
                         dialog.dismiss()
                         showToastAlarmDeleted()
                     }
@@ -484,6 +489,7 @@ class HomeFragment: Fragment() {
 
                     withContext(Dispatchers.Main) {
                         displayMedicinesList(hfViewModel.getDate())
+                        Admob.showInterstitial(requireActivity())
                         dialog.dismiss()
                     }
                 } catch (e: Exception) {

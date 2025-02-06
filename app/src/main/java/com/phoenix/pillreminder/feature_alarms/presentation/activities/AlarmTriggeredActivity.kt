@@ -12,8 +12,11 @@ import androidx.appcompat.app.AppCompatDelegate
 import androidx.core.view.WindowInsetsControllerCompat
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
+import com.google.android.gms.ads.MobileAds
 import com.phoenix.pillreminder.R
 import com.phoenix.pillreminder.databinding.ActivityAlarmTriggeredBinding
+import com.phoenix.pillreminder.feature_alarms.data.ads.Admob
+import com.phoenix.pillreminder.feature_alarms.data.ads.Admob.loadAd
 import com.phoenix.pillreminder.feature_alarms.domain.model.AlarmItem
 import com.phoenix.pillreminder.feature_alarms.domain.repository.MedicineRepository
 import com.phoenix.pillreminder.feature_alarms.presentation.AlarmScheduler
@@ -22,6 +25,7 @@ import com.phoenix.pillreminder.feature_alarms.presentation.utils.DateUtil.local
 import com.phoenix.pillreminder.feature_alarms.presentation.viewmodels.AlarmTriggeredViewModel
 import com.phoenix.pillreminder.feature_alarms.presentation.viewmodels.MedicinesViewModel
 import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
@@ -54,6 +58,19 @@ class AlarmTriggeredActivity: AppCompatActivity() {
 
         setupNotificationAndStatusBar()
 
+        val initializeAds: () -> Unit = {
+            CoroutineScope(Dispatchers.IO).launch {
+                // Initialize the Google Mobile Ads SDK on a background thread.
+                MobileAds.initialize(this@AlarmTriggeredActivity) {}
+                runOnUiThread {
+                    // Load an ad on the main thread.
+                    loadAd(this@AlarmTriggeredActivity)
+                }
+            }
+        }
+
+        Admob.gatherUserConsent(this, initializeAds)
+
         medicinesViewModel = ViewModelProvider(this)[MedicinesViewModel::class.java]
 
         binding.apply{
@@ -78,6 +95,7 @@ class AlarmTriggeredActivity: AppCompatActivity() {
                         dismissNotification(applicationContext, alarmItem.hashCode())
                         val intent = Intent(applicationContext, MainActivity::class.java)
                         startActivity(intent)
+                        Admob.showInterstitial(this@AlarmTriggeredActivity)
                         finish()
                     }
 
@@ -107,6 +125,7 @@ class AlarmTriggeredActivity: AppCompatActivity() {
                         dismissNotification(applicationContext, alarmItem.hashCode())
                         val intent = Intent(applicationContext, MainActivity::class.java)
                         startActivity(intent)
+                        Admob.showInterstitial(this@AlarmTriggeredActivity)
                         finish()
                     }
                 }

@@ -3,6 +3,8 @@ package com.phoenix.pillreminder.feature_alarms.presentation.fragments
 import android.annotation.SuppressLint
 import android.app.Dialog
 import android.graphics.Color
+import android.graphics.PorterDuff
+import android.graphics.PorterDuffColorFilter
 import android.graphics.drawable.ColorDrawable
 import android.os.Bundle
 import android.text.format.DateFormat.is24HourFormat
@@ -691,6 +693,7 @@ class EditMedicinesFragment: Fragment() {
         val toolbar = requireActivity().findViewById<androidx.appcompat.widget.Toolbar>(R.id.toolbarHome)
         toolbar.setupWithNavController(navController, appBarConfiguration)
         toolbar.visibility = View.VISIBLE
+        toolbar.navigationIcon?.colorFilter = PorterDuffColorFilter(ContextCompat.getColor(requireContext(), R.color.white), PorterDuff.Mode.SRC_ATOP)
     }
 
     private fun setupViewTheme(){

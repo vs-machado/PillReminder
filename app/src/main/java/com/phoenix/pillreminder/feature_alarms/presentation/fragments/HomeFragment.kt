@@ -89,6 +89,9 @@ class HomeFragment: Fragment() {
 
     private lateinit var fab: FloatingActionButton
 
+    // Prevents permission request dialog from being shown multiple times simultaneously
+    private var isPermissionDialogShowing = false
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         val navController = findNavController()
@@ -331,10 +334,11 @@ class HomeFragment: Fragment() {
     }
 
     private fun showOverlayAndNotificationPermissionDialog(){
-        if (dontShowAgainPreference){
+        if (dontShowAgainPreference || isPermissionDialogShowing){
             return
         }
 
+        isPermissionDialogShowing = true
         val dialog = Dialog(this.requireContext())
         dialog.requestWindowFeature(Window.FEATURE_NO_TITLE)
         dialog.setCancelable(false)
@@ -352,6 +356,9 @@ class HomeFragment: Fragment() {
         requestPermission.setOnClickListener {
             requestPermissionLauncher.launch(Manifest.permission.POST_NOTIFICATIONS)
         }
+
+        dialog.setOnDismissListener { isPermissionDialogShowing = false }
+
         dismissRequest.setOnClickListener {
             dialog.dismiss()
         }

@@ -18,6 +18,7 @@ import com.phoenix.pillreminder.feature_alarms.domain.util.MedicineFrequency
 import com.phoenix.pillreminder.feature_alarms.presentation.AlarmScheduler
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import java.time.Instant
@@ -82,6 +83,10 @@ class AlarmSettingsSharedViewModel @Inject constructor(
     var position = 0
 
     private lateinit var workRequestID: UUID
+
+    // Used to track if the permission dialog was shown in the app session. If user marks the checkbox "don't show again",
+    // this value is ignored.
+    private val _permissionDialogShown = MutableStateFlow(false)
 
     init{
         _currentAlarmNumber.postValue(1)
@@ -849,5 +854,13 @@ class AlarmSettingsSharedViewModel @Inject constructor(
         }
 
         return (startDateMillis + (repeatInterval * 86400000L))
+    }
+
+    fun setPermissionDialogExhibition(shown: Boolean) {
+        _permissionDialogShown.value = shown
+    }
+
+    fun getPermissionDialogExhibition(): Boolean {
+        return _permissionDialogShown.value
     }
 }

@@ -29,7 +29,7 @@ import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.hilt.navigation.fragment.hiltNavGraphViewModels
-import androidx.lifecycle.Lifecycle
+import androidx.lifecycle.Lifecycle.State
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
 import androidx.navigation.fragment.findNavController
@@ -85,12 +85,9 @@ class HomeFragment: Fragment() {
     private var toast: Toast? = null
     private lateinit var dialog: Dialog
     private lateinit var gestureDetector: GestureDetector
-    private var dontShowAgainPreference: Boolean = false
+    private var isPermissionDialogDisabled: Boolean = false
 
     private lateinit var fab: FloatingActionButton
-
-    // Prevents permission request dialog from being shown multiple times simultaneously
-    private var isPermissionDialogShowing = false
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -119,16 +116,15 @@ class HomeFragment: Fragment() {
         fab = requireActivity().findViewById(R.id.fabAddMedicine)
 
         viewLifecycleOwner.lifecycleScope.launch {
-            viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED){
-
+            viewLifecycleOwner.repeatOnLifecycle(State.STARTED) {
                 // Shows a dialog requesting for app permissions. If user click on don't show again,
                 // the permissionRequestPreference is updated
                 launch {
                     hfViewModel.permissionRequestPreferences.collectLatest { permissionPreference ->
-                        dontShowAgainPreference = permissionPreference
+                        isPermissionDialogDisabled = permissionPreference
 
-                        if(!dontShowAgainPreference) {
-                            requestPermissions(dontShowAgainPreference)
+                        if(!isPermissionDialogDisabled) {
+                            showRequestPermissionsDialog()
                         }
                     }
                 }
@@ -245,12 +241,6 @@ class HomeFragment: Fragment() {
         }
     }
 
-    private fun requestPermissions(dontShowAgain: Boolean){
-        if(!dontShowAgain){
-            showOverlayAndNotificationPermissionDialog()
-        }
-    }
-
      private fun initRecyclerView(
          dateToFilter: Date,
          fab: FloatingActionButton
@@ -333,12 +323,12 @@ class HomeFragment: Fragment() {
             })
     }
 
-    private fun showOverlayAndNotificationPermissionDialog(){
-        if (dontShowAgainPreference || isPermissionDialogShowing){
+    private fun showRequestPermissionsDialog(){
+        if (isPermissionDialogDisabled || sharedViewModel.getPermissionDialogExhibition()){
             return
         }
+        sharedViewModel.setPermissionDialogExhibition(true)
 
-        isPermissionDialogShowing = true
         val dialog = Dialog(this.requireContext())
         dialog.requestWindowFeature(Window.FEATURE_NO_TITLE)
         dialog.setCancelable(false)
@@ -357,7 +347,6 @@ class HomeFragment: Fragment() {
             requestPermissionLauncher.launch(Manifest.permission.POST_NOTIFICATIONS)
         }
 
-        dialog.setOnDismissListener { isPermissionDialogShowing = false }
 
         dismissRequest.setOnClickListener {
             dialog.dismiss()

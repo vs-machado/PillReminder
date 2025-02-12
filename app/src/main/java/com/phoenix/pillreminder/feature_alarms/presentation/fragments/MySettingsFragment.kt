@@ -9,6 +9,7 @@ import android.net.Uri
 import android.os.Bundle
 import android.os.PowerManager
 import android.provider.Settings
+import android.util.Log
 import android.util.TypedValue
 import android.view.LayoutInflater
 import android.view.View
@@ -18,10 +19,12 @@ import androidx.activity.result.contract.ActivityResultContracts
 import androidx.core.content.ContextCompat
 import androidx.preference.ListPreference
 import androidx.preference.Preference
+import androidx.preference.PreferenceCategory
 import androidx.preference.PreferenceFragmentCompat
 import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.floatingactionbutton.FloatingActionButton
 import com.phoenix.pillreminder.R
+import com.phoenix.pillreminder.feature_alarms.data.ads.GoogleMobileAdsConsentManager
 import com.phoenix.pillreminder.feature_alarms.domain.repository.SharedPreferencesRepository
 import com.phoenix.pillreminder.feature_alarms.presentation.PermissionManager
 import com.phoenix.pillreminder.feature_alarms.presentation.utils.LanguageConfig
@@ -34,9 +37,19 @@ import javax.inject.Inject
 class MySettingsFragment: PreferenceFragmentCompat() {
 
     @Inject lateinit var sharedPreferencesRepository: SharedPreferencesRepository
+    private lateinit var googleMobileAdsConsentManager: GoogleMobileAdsConsentManager
 
     override fun onCreatePreferences(savedInstanceState: Bundle?, rootKey: String?) {
         setPreferencesFromResource(R.xml.preferences, rootKey)
+
+        googleMobileAdsConsentManager = GoogleMobileAdsConsentManager.getInstance(requireActivity())
+
+        // Only show the consent options preference if user lives on EU.
+        if(googleMobileAdsConsentManager.isPrivacyOptionsRequired){
+            findPreference<PreferenceCategory>("header_privacy")?.isVisible = true
+            findPreference<Preference>("consent_options")?.isVisible = true
+        }
+
         setupPreferenceListeners()
     }
 
@@ -118,6 +131,19 @@ class MySettingsFragment: PreferenceFragmentCompat() {
                 sharedPreferencesRepository.setSnoozeInterval(newValue.toString().toInt())
                 true
             }
+        }
+
+        // Allows the users to change their data usage consent
+        if(googleMobileAdsConsentManager.isPrivacyOptionsRequired) {
+            findPreference<Preference>("consent_options")
+                ?.setOnPreferenceClickListener {
+                    googleMobileAdsConsentManager.showPrivacyOptionsForm(requireActivity()) { formError ->
+                        if(formError != null) {
+                            Log.d("MySettingsFragment", formError.message.toString())
+                        }
+                    }
+                    true
+                }
         }
     }
 

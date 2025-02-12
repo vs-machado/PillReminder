@@ -411,5 +411,6 @@ se l\'utente non segna un medicinale come assunto nell\'applicazione.\n• Perme
     <string name="ad_inspector" translatable="false">Ad Inspector</string>
     <string name="more_menu" translatable="false">More</string>
     <string name="privacy_settings" translatable="false">Privacy Settings</string>
-
+    <string name="privacy_setting">Impostazioni privacy</string>
+    <string name="manage_data_consent_options">Consenso sulla protezione dei dati</string>
 </resources>

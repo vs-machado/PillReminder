@@ -4,7 +4,7 @@
 
     <PreferenceCategory
         app:key="header_category"
-        app:layout="@layout/custom_preference_category"></PreferenceCategory>
+        app:layout="@layout/custom_preference_category" />
 
     <ListPreference
         app:entries="@array/language_entries"
@@ -31,5 +31,19 @@
         app:key="snooze_interval"
         app:title="@string/change_alarm_snooze_interval"
         app:useSimpleSummaryProvider="true"/>
+
+    <PreferenceCategory
+        app:isPreferenceVisible="false"
+        app:allowDividerAbove="false"
+        app:key="header_privacy"
+        app:layout="@layout/privacy_preference_category" />
+
+    <Preference
+        app:icon="@drawable/ic_analytics_24"
+        app:isPreferenceVisible="false"
+        app:key="consent_options"
+        app:title="@string/manage_data_consent_options" />
+
+
 
 </PreferenceScreen>

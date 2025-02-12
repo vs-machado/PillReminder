@@ -11,6 +11,7 @@ import com.google.android.gms.ads.MobileAds
 import com.google.android.gms.ads.RequestConfiguration
 import com.google.android.gms.ads.interstitial.InterstitialAd
 import com.google.android.gms.ads.interstitial.InterstitialAdLoadCallback
+import com.phoenix.pillreminder.BuildConfig
 import com.phoenix.pillreminder.feature_alarms.data.ads.Admob.gatherUserConsent
 import com.phoenix.pillreminder.feature_alarms.data.ads.Admob.showInterstitial
 import com.phoenix.pillreminder.feature_alarms.presentation.activities.MainActivity.Companion.TEST_DEVICE_HASHED_ID
@@ -30,7 +31,7 @@ object Admob {
     private var adIsLoading: Boolean = false
 
     // This is an ad unit ID for a test ad. Replace with your own interstitial ad unit ID.
-    private const val AD_UNIT_ID = "ca-app-pub-3940256099942544/1033173712"
+    private const val AD_UNIT_ID = BuildConfig.AD_UNIT_ID
 
     fun gatherUserConsent(activity: Activity, initCallback: (() -> Unit)) {
         googleMobileAdsConsentManager = GoogleMobileAdsConsentManager.getInstance(activity)

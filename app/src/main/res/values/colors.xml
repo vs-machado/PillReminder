@@ -41,6 +41,7 @@
     <color name="search_icon">#1E1E18</color>
     <color name="ib_details">@color/button_gray</color>
     <color name="treatment_status">#278505</color>
+    <color name="data_consent_header">#212121</color>
 
     <color name ="selected_item_array_list_dialog">#4AC384</color>
     <color name ="array_list_background_dialog">@color/white</color>

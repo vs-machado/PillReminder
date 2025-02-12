@@ -414,4 +414,6 @@
     <string name="ad_inspector" translatable="false">Ad Inspector</string>
     <string name="more_menu" translatable="false">More</string>
     <string name="privacy_settings" translatable="false">Privacy Settings</string>
+    <string name="privacy_setting">Configurações de privacidade</string>
+    <string name="manage_data_consent_options">Consentimento de proteção de dados</string>
 </resources>

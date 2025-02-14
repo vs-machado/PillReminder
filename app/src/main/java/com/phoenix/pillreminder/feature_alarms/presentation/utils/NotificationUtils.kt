@@ -228,13 +228,13 @@ object NotificationUtils {
             .setLargeIcon(largeIcon)
             .setPriority(NotificationCompat.PRIORITY_MAX)
             .setContentIntent(pendingIntent)
-            .addAction(0, context.getString(R.string.mark_as_used), actionButtonPendingIntent1)
             // Snooze button is not added when the alarm is a follow up alarm (snoozeAlarmPendingIntent == null)
             .apply {
                 snoozeAlarmPendingIntent?.let {
                     addAction(0, context.getString(R.string.snooze_alarm), snoozeAlarmPendingIntent)
                 }
             }
+            .addAction(0, context.getString(R.string.mark_as_used), actionButtonPendingIntent1)
             .build()
     }
 

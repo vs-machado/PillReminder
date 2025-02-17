@@ -5,6 +5,7 @@ import com.phoenix.pillreminder.feature_alarms.data.data_source.MedicineDao
 import com.phoenix.pillreminder.feature_alarms.domain.model.AlarmTimeData
 import com.phoenix.pillreminder.feature_alarms.domain.model.Medicine
 import com.phoenix.pillreminder.feature_alarms.domain.repository.MedicineRepository
+import java.util.Calendar
 
 class MedicineRepositoryImpl (
     private val dao: MedicineDao
@@ -137,5 +138,21 @@ class MedicineRepositoryImpl (
 
     override suspend fun updateMedicinesAsSkipped(treatmentID: String, alarmInMillis: Long) {
         return dao.updateMedicinesAsSkipped(treatmentID, alarmInMillis)
+    }
+
+    override suspend fun checkForMultipleAlarmsAtSameTime(hour: String, minute: String): Boolean {
+        val calendar = Calendar.getInstance().apply{
+            set(Calendar.HOUR_OF_DAY, hour.toInt())
+            set(Calendar.MINUTE, minute.toInt())
+            set(Calendar.SECOND, 0)
+            set(Calendar.MILLISECOND, 0)
+        }
+        val timeInMillis = calendar.timeInMillis
+
+        return dao.checkForMultipleAlarmsAtSameTime(timeInMillis)
+    }
+
+    override suspend fun getMedicinesScheduledForTime(timeInMillis: Long): List<Medicine> {
+        return dao.getMedicinesScheduledForTime(timeInMillis)
     }
 }

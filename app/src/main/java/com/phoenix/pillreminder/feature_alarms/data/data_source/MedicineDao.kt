@@ -153,4 +153,11 @@ interface MedicineDao {
 
     @Query("UPDATE medicines_data_table SET was_skipped = 1 WHERE treatment_id = :treatmentID AND alarm_in_millis < :alarmInMillis AND was_taken = 0")
     suspend fun updateMedicinesAsSkipped(treatmentID: String, alarmInMillis: Long)
+
+    @Query("SELECT COUNT(*) > 1 FROM medicines_data_table WHERE alarm_in_millis = :timeInMillis")
+    suspend fun checkForMultipleAlarmsAtSameTime(timeInMillis: Long): Boolean
+
+    @Query("SELECT * FROM medicines_data_table WHERE alarm_in_millis = :timeInMillis")
+    suspend fun getMedicinesScheduledForTime(timeInMillis: Long): List<Medicine>
+
 }

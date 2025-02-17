@@ -59,4 +59,8 @@ interface MedicineRepository {
     suspend fun getLastAlarm(medicineName: String, treatmentID: String): Medicine
 
     suspend fun updateMedicinesAsSkipped(treatmentID: String, alarmInMillis: Long)
+
+    suspend fun checkForMultipleAlarmsAtSameTime(hour: String, minute: String): Boolean
+
+    suspend fun getMedicinesScheduledForTime(timeInMillis: Long): List<Medicine>
 }

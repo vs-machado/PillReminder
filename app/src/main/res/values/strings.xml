@@ -397,5 +397,10 @@
     <string name="privacy_settings" translatable="false">Privacy Settings</string>
     <string name="privacy_setting">Privacy Settings</string>
     <string name="manage_data_consent_options">Data protection consent</string>
-
+    <string name="mark_all_as_used">Mark all as used</string>
+    <string name="time_to_use_your_medicines">Time to use your medicines!</string>
+    <string name="check_the_app">Open the app to see the medicines that need to be used.</string>
+    <string name="more_than_one_medicine_to_be_used">You have more than one medicine to be used.\n\nPlease open the app.</string>
+    <string name="did_you_forget_to_use_your_medicines">Did you forget to use your medicines?</string>
+    <string name="open_app_pending_medicines">Open the app to view your pending medicines.</string>
 </resources>

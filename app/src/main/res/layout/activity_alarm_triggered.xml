@@ -31,14 +31,6 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/imageView3" />
 
-    <androidx.constraintlayout.widget.Guideline
-        android:id="@+id/guideline6"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:orientation="vertical"
-        app:layout_constrainedHeight="true"
-        app:layout_constraintGuide_percent="0.54" />
-
         <com.google.android.material.card.MaterialCardView
             android:id="@+id/materialCardView3"
             android:layout_width="0dp"
@@ -63,6 +55,7 @@
                 app:layout_constraintBottom_toTopOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/textView19"
                 app:layout_constraintVertical_bias="0.5">
+
 
                 <TextView
                     android:id="@+id/tvAlarmMedicineName"
@@ -137,17 +130,42 @@
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@+id/tv16" />
 
+                <TextView
+                    android:id="@+id/textView2"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="16dp"
+                    android:layout_marginTop="16dp"
+                    android:layout_marginEnd="16dp"
+                    android:gravity="center|center_vertical"
+                    android:text="@string/more_than_one_medicine_to_be_used"
+                    android:textColor="@color/black"
+                    android:textSize="20sp"
+                    android:visibility="gone"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/imageView4" />
+
+                <androidx.constraintlayout.widget.Barrier
+                    android:id="@+id/bottomBarrier"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    app:barrierDirection="bottom"
+                    app:constraint_referenced_ids="tvAlarmHourMedicine,textView2" />
+
                 <View
                     android:id="@+id/divider5"
                     android:layout_width="match_parent"
                     android:layout_height="1dp"
                     android:layout_marginStart="16dp"
-                    android:layout_marginTop="16dp"
+                    android:layout_marginTop="24dp"
                     android:layout_marginEnd="16dp"
+                    android:layout_marginBottom="16dp"
                     android:background="?android:attr/listDivider"
+                    app:layout_constraintBottom_toTopOf="@+id/btnTaken"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@+id/tvAlarmHourMedicine" />
+                    app:layout_constraintTop_toBottomOf="@+id/bottomBarrier" />
 
                 <com.google.android.material.button.MaterialButton
                     android:id="@+id/btnTaken"
@@ -191,6 +209,17 @@
                     app:layout_constraintEnd_toEndOf="@+id/btnTaken"
                     app:layout_constraintStart_toStartOf="@+id/btnTaken"
                     app:layout_constraintTop_toBottomOf="@+id/btnTaken" />
+
+                <ImageView
+                    android:id="@+id/imageView4"
+                    android:layout_width="180dp"
+                    android:layout_height="180dp"
+                    android:layout_marginTop="16dp"
+                    android:src="@drawable/medicine_icon"
+                    android:visibility="gone"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
 
             </androidx.constraintlayout.widget.ConstraintLayout>
         </com.google.android.material.card.MaterialCardView>

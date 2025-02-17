@@ -34,7 +34,7 @@ object NotificationUtils {
      *
      * @see [AlarmItem]
      */
-    fun createNotification(context: Context, item: AlarmItem): Notification {
+    fun createNotification(context: Context, item: AlarmItem, hasMultipleAlarmsAtSameTime: Boolean): Notification {
         val alarmUri = Uri.parse("android.resource://" + context.packageName + "/" + R.raw.alarm_sound)
 
         when(Settings.canDrawOverlays(context)){
@@ -48,12 +48,23 @@ object NotificationUtils {
                     context, item.hashCode(), notificationIntent,
                     PendingIntent.FLAG_IMMUTABLE or PendingIntent.FLAG_UPDATE_CURRENT
                 )
-                createNotificationChannel(context, alarmUri)
 
-                return notificationBuilder(context, channelId, pendingIntent,
-                    context.getString(R.string.time_to_use_your_medicine),
-                    context.getString(R.string.do_not_forget_to_mark_the_medicine_as_taken, item.medicineName,
-                        checkMedicineForm(item.medicineForm, item.medicineQuantity, item.doseUnit, context)))
+                if(hasMultipleAlarmsAtSameTime) {
+                    createNotificationChannel(context, alarmUri)
+
+                    val title = context.getString(R.string.time_to_use_your_medicines)
+                    val text = context.getString(R.string.check_the_app)
+
+                    return notificationBuilder(context, channelId, pendingIntent, title, text)
+                }
+                else {
+                    createNotificationChannel(context, alarmUri)
+
+                    return notificationBuilder(context, channelId, pendingIntent,
+                        context.getString(R.string.time_to_use_your_medicine),
+                        context.getString(R.string.do_not_forget_to_mark_the_medicine_as_taken, item.medicineName,
+                            checkMedicineForm(item.medicineForm, item.medicineQuantity, item.doseUnit, context)))
+                }
             }
             false -> {
                 /* If user does not give overlay permissions he will mark medicine as used through an action button in notification.
@@ -65,41 +76,75 @@ object NotificationUtils {
                     PendingIntent.FLAG_IMMUTABLE or PendingIntent.FLAG_UPDATE_CURRENT
                 )
 
-                // Intent for marking medicines as used
-                val markAsUsedIntent = Intent(context, AlarmReceiver::class.java).apply {
-                    action = context.getString(R.string.mark_as_used)
-                    putExtra("ALARM_ITEM_ACTION", item)
+                if(hasMultipleAlarmsAtSameTime) {
+                    // Intent for marking medicines as used
+                    val markAllUsages = Intent(context, AlarmReceiver::class.java).apply{
+                        action = context.getString(R.string.mark_all_as_used)
+                        putExtra("ALARM_ITEM_ACTION", item)
+                    }
+                    val markAllUsagesPendingIntent: PendingIntent = PendingIntent.getBroadcast(
+                        context, item.hashCode(), markAllUsages, PendingIntent.FLAG_IMMUTABLE
+                    )
+
+                    // Intent for snoozing alarms
+                    val snoozeAlarmIntent = Intent(context, AlarmReceiver::class.java).apply {
+                        action = context.getString(R.string.snooze_alarm)
+                        putExtra("ALARM_ITEM_ACTION", item)
+                    }
+                    val snoozeAlarmPendingIntent: PendingIntent = PendingIntent.getBroadcast(
+                        context, item.hashCode(),
+                        snoozeAlarmIntent, PendingIntent.FLAG_IMMUTABLE
+                    )
+                    createNotificationChannel(context, alarmUri)
+
+                    val title = context.getString(R.string.time_to_use_your_medicines)
+                    val text = context.getString(R.string.more_than_one_medicine_to_be_used)
+
+                    return notificationBuilderWithActionButtons(context, channelId, pendingIntent,
+                        title, text, context.getString(R.string.mark_all_as_used), markAllUsagesPendingIntent,
+                        snoozeAlarmPendingIntent
+                    )
                 }
-                val markAsUsedPendingIntent: PendingIntent = PendingIntent.getBroadcast(
-                    context, item.hashCode(),
-                    markAsUsedIntent, PendingIntent.FLAG_IMMUTABLE
-                )
+                else {
+                    // Intent for marking medicines as used
+                    val markAsUsedIntent = Intent(context, AlarmReceiver::class.java).apply {
+                        action = context.getString(R.string.mark_as_used)
+                        putExtra("ALARM_ITEM_ACTION", item)
+                    }
+                    val markAsUsedPendingIntent: PendingIntent = PendingIntent.getBroadcast(
+                        context, item.hashCode(),
+                        markAsUsedIntent, PendingIntent.FLAG_IMMUTABLE
+                    )
 
-                // Intent for snoozing alarms
-                val snoozeAlarmIntent = Intent(context, AlarmReceiver::class.java).apply {
-                    action = context.getString(R.string.snooze_alarm)
-                    putExtra("ALARM_ITEM_ACTION", item)
+                    // Intent for snoozing alarms
+                    val snoozeAlarmIntent = Intent(context, AlarmReceiver::class.java).apply {
+                        action = context.getString(R.string.snooze_alarm)
+                        putExtra("ALARM_ITEM_ACTION", item)
+                    }
+                    val snoozeAlarmPendingIntent: PendingIntent = PendingIntent.getBroadcast(
+                        context, item.hashCode(),
+                        snoozeAlarmIntent, PendingIntent.FLAG_IMMUTABLE
+                    )
+
+                    createNotificationChannel(context, alarmUri)
+
+                    val title = context.getString(R.string.time_to_use_your_medicine)
+                    val text = context.getString(R.string.do_not_forget_to_mark_the_medicine_as_taken, item.medicineName, checkMedicineForm(item.medicineForm,
+                        item.medicineQuantity, item.doseUnit, context))
+
+                    return notificationBuilderWithActionButtons(
+                        context, channelId, pendingIntent, title, text,
+                        context.getString(R.string.mark_as_used),
+                        markAsUsedPendingIntent, snoozeAlarmPendingIntent
+                    )
                 }
-                val snoozeAlarmPendingIntent: PendingIntent = PendingIntent.getBroadcast(
-                    context, item.hashCode(),
-                    snoozeAlarmIntent, PendingIntent.FLAG_IMMUTABLE
-                )
-
-                createNotificationChannel(context, alarmUri)
-
-                val title = context.getString(R.string.time_to_use_your_medicine)
-                val text = context.getString(R.string.do_not_forget_to_mark_the_medicine_as_taken, item.medicineName, checkMedicineForm(item.medicineForm,
-                    item.medicineQuantity, item.doseUnit, context))
-
-                return notificationBuilderWithActionButtons(
-                    context, channelId, pendingIntent, title, text,
-                    markAsUsedPendingIntent, snoozeAlarmPendingIntent
-                )
             }
         }
     }
 
-     fun createFollowUpNotification(context: Context, item: AlarmItem, medicineHashCode: String): Notification {
+     fun createFollowUpNotification(context: Context, item: AlarmItem,
+         medicineHashCode: String, hasMultipleAlarmsAtSameTime: Boolean): Notification {
+         
          val alarmUri = Uri.parse("android.resource://" + context.packageName + "/" + R.raw.alarm_sound)
 
          val notificationIntent = Intent(context, MainActivity::class.java)
@@ -109,26 +154,69 @@ object NotificationUtils {
             PendingIntent.FLAG_IMMUTABLE or PendingIntent.FLAG_UPDATE_CURRENT
         )
 
-         // Intent for marking medicine usage
-        val markAsUsedIntent = Intent(context, AlarmReceiver::class.java).apply {
-            action = context.getString(R.string.mark_as_used)
-            putExtra("ALARM_ITEM_ACTION", item)
-        }
-        val markAsUsedPendingIntent: PendingIntent = PendingIntent.getBroadcast(
-            context, medicineHashCode.toInt(),
-            markAsUsedIntent, PendingIntent.FLAG_IMMUTABLE
-        )
+         when(Settings.canDrawOverlays(context)){
+             true -> {
+                 if (hasMultipleAlarmsAtSameTime) {
+                     createFollowUpNotificationChannel(context, alarmUri)
 
-         createFollowUpNotificationChannel(context, alarmUri)
+                     val title = context.getString(R.string.did_you_forget_to_use_your_medicines)
+                     val text = context.getString(R.string.open_app_pending_medicines)
 
-         val title = context.getString(R.string.did_you_forget_to_use_your_medicine, item.medicineName)
-         val text = context.getString(R.string.do_not_forget_to_mark_the_medicine_as_used, checkMedicineForm(item.medicineForm,
-             item.medicineQuantity, item.doseUnit, context))
+                     return notificationBuilder(context, followUpChannelId, pendingIntent, title, text)
+                 }
+                 else {
+                     createFollowUpNotificationChannel(context, alarmUri)
 
-        return notificationBuilderWithActionButtons(
-            context, followUpChannelId, pendingIntent, title, text,
-            markAsUsedPendingIntent
-        )
+                     val title = context.getString(R.string.did_you_forget_to_use_your_medicine, item.medicineName)
+                     val text = context.getString(R.string.do_not_forget_to_mark_the_medicine_as_used, checkMedicineForm(item.medicineForm,
+                         item.medicineQuantity, item.doseUnit, context))
+
+                     return notificationBuilder(context, followUpChannelId, pendingIntent, title, text)
+                 }
+             }
+             false -> {
+                 if (hasMultipleAlarmsAtSameTime) {
+                     val markAllUsages = Intent(context, AlarmReceiver::class.java).apply{
+                         action = context.getString(R.string.mark_all_as_used)
+                         putExtra("ALARM_ITEM_ACTION", item)
+                     }
+                     val markAllUsagesPendingIntent: PendingIntent = PendingIntent.getBroadcast(
+                         context, item.hashCode(), markAllUsages, PendingIntent.FLAG_IMMUTABLE
+                     )
+                     createFollowUpNotificationChannel(context, alarmUri)
+
+                     val title = context.getString(R.string.did_you_forget_to_use_your_medicines)
+                     val text = context.getString(R.string.open_app_pending_medicines)
+
+                     return notificationBuilderWithActionButtons(
+                         context, followUpChannelId, pendingIntent, title,
+                         text, context.getString(R.string.mark_all_as_used), markAllUsagesPendingIntent
+                     )
+                 }
+                 else {
+                     // Intent for marking medicine usage
+                     val markAsUsedIntent = Intent(context, AlarmReceiver::class.java).apply {
+                         action = context.getString(R.string.mark_as_used)
+                         putExtra("ALARM_ITEM_ACTION", item)
+                     }
+                     val markAsUsedPendingIntent: PendingIntent = PendingIntent.getBroadcast(
+                         context, medicineHashCode.toInt(),
+                         markAsUsedIntent, PendingIntent.FLAG_IMMUTABLE
+                     )
+
+                     createFollowUpNotificationChannel(context, alarmUri)
+
+                     val title = context.getString(R.string.did_you_forget_to_use_your_medicine, item.medicineName)
+                     val text = context.getString(R.string.do_not_forget_to_mark_the_medicine_as_used, checkMedicineForm(item.medicineForm,
+                         item.medicineQuantity, item.doseUnit, context))
+
+                     return notificationBuilderWithActionButtons(
+                         context, followUpChannelId, pendingIntent, title, text,
+                         context.getString(R.string.mark_as_used), markAsUsedPendingIntent
+                     )
+                 }
+             }
+         }
     }
 
     fun schedulePillboxDailyReminder(context: Context): Notification {
@@ -215,6 +303,7 @@ object NotificationUtils {
     private fun notificationBuilderWithActionButtons(
         context: Context, channelId: String, pendingIntent: PendingIntent,
         title: String, content: String,
+        actionName: String,
         actionButtonPendingIntent1: PendingIntent,
         snoozeAlarmPendingIntent: PendingIntent? = null
     ): Notification {
@@ -234,7 +323,7 @@ object NotificationUtils {
                     addAction(0, context.getString(R.string.snooze_alarm), snoozeAlarmPendingIntent)
                 }
             }
-            .addAction(0, context.getString(R.string.mark_as_used), actionButtonPendingIntent1)
+            .addAction(0, actionName, actionButtonPendingIntent1)
             .build()
     }
 

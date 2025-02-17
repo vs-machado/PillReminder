@@ -6,6 +6,8 @@ import android.content.Intent
 import android.content.res.Configuration
 import android.os.Build
 import android.os.Bundle
+import android.util.Log
+import android.view.View
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.app.AppCompatDelegate
@@ -80,25 +82,59 @@ class AlarmTriggeredActivity: AppCompatActivity() {
                 intent?.getParcelableExtra("ALARM_ITEM")
             }
 
+            alarmItem?.let {
+                val alarmMillis = localDateTimeToMillis(it.time)
+
+                lifecycleScope.launch(Dispatchers.IO) {
+                    val medicinesList = medicinesViewModel.getMedicinesScheduledForTime(alarmMillis)
+
+                    // When there's more than one medicine to be used, instead of showing the
+                    // medicine details, user must go to the app and check the medicines.
+                    if(medicinesList.size > 1) {
+                        withContext(Dispatchers.Main) {
+                            hideMedicineDetails(binding)
+                            showCheckAppMessage(binding)
+                            btnTaken.text = getString(R.string.mark_all_as_used)
+
+                            btnTaken.setOnClickListener {
+                                medicinesList.forEach { medicine ->
+                                    medicine.medicineWasTaken = true
+                                    medicinesViewModel.updateMedicines(medicine)
+                                }
+                                dismissNotification(applicationContext, alarmItem.hashCode())
+                                val intent = Intent(applicationContext, MainActivity::class.java)
+                                startActivity(intent)
+                                Admob.showInterstitial(this@AlarmTriggeredActivity)
+                                finish()
+                            }
+                        }
+                    } else {
+                        viewModel.apply {
+                            alarmItem.apply {
+                                tvAlarmMedicineName.text = medicineName
+                                tvAlarmHourMedicine.text = checkDateFormat(alarmHour.toInt(), alarmMinute.toInt(), context = applicationContext)
+                                tvAlarmQuantity.text = checkMedicineForm(medicineForm, doseUnit, medicineQuantity, context = applicationContext)
+
+                                ivAlarmMedicineIcon.setImageResource(setMedicineImageView(medicineForm))
+
+                                btnTaken.setOnClickListener{
+                                    lifecycleScope.launch(Dispatchers.IO) {
+                                        viewModel.markMedicineAsTaken(alarmItem, medicinesViewModel)
+                                    }
+                                    dismissNotification(applicationContext, alarmItem.hashCode())
+                                    val intent = Intent(applicationContext, MainActivity::class.java)
+                                    startActivity(intent)
+                                    Admob.showInterstitial(this@AlarmTriggeredActivity)
+                                    finish()
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+
             viewModel.apply{
                 alarmItem?.apply{
-                    tvAlarmMedicineName.text = medicineName
-                    tvAlarmHourMedicine.text = checkDateFormat(alarmHour.toInt(), alarmMinute.toInt(), context = applicationContext)
-                    tvAlarmQuantity.text = checkMedicineForm(medicineForm, doseUnit, medicineQuantity, context = applicationContext)
-
-                    ivAlarmMedicineIcon.setImageResource(setMedicineImageView(medicineForm))
-
-                    btnTaken.setOnClickListener{
-                        lifecycleScope.launch(Dispatchers.IO) {
-                            viewModel.markMedicineAsTaken(alarmItem, medicinesViewModel)
-                        }
-                        dismissNotification(applicationContext, alarmItem.hashCode())
-                        val intent = Intent(applicationContext, MainActivity::class.java)
-                        startActivity(intent)
-                        Admob.showInterstitial(this@AlarmTriggeredActivity)
-                        finish()
-                    }
-
                     btnDismiss.setOnClickListener {
                         //stopMediaPlayer()
                         val intent = Intent(applicationContext, MainActivity::class.java)
@@ -132,9 +168,6 @@ class AlarmTriggeredActivity: AppCompatActivity() {
             }
 
         }
-
-
-
     }
 
     private fun setupNotificationAndStatusBar(){
@@ -158,5 +191,19 @@ class AlarmTriggeredActivity: AppCompatActivity() {
         notificationManager?.cancel(alarmHashCode)
         val stopServiceIntent = Intent(context, AlarmService::class.java)
         context?.stopService(stopServiceIntent)
+    }
+
+    private fun hideMedicineDetails(binding: ActivityAlarmTriggeredBinding) {
+        binding.tvAlarmMedicineName.visibility = View.GONE
+        binding.ivAlarmMedicineIcon.visibility = View.GONE
+        binding.tv15.visibility = View.GONE
+        binding.tvAlarmQuantity.visibility = View.GONE
+        binding.tv16.visibility = View.GONE
+        binding.tvAlarmHourMedicine.visibility = View.GONE
+    }
+
+    private fun showCheckAppMessage(binding: ActivityAlarmTriggeredBinding) {
+        binding.textView2.visibility = View.VISIBLE
+        binding.imageView4.visibility = View.VISIBLE
     }
 }

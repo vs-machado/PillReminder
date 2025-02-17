@@ -40,11 +40,22 @@ class FollowUpAlarmReceiver: BroadcastReceiver(), ActivityCompat.OnRequestPermis
         val alarmTimeInMillis = medicineItem?.time?.atZone(ZoneId.systemDefault())?.toInstant()?.toEpochMilli()
 
         launch(Dispatchers.IO) {
-            val updatedMedicine = repository.getCurrentAlarmData(alarmTimeInMillis ?: 0)
+            alarmTimeInMillis?.let {
+                val updatedMedicine = repository.getCurrentAlarmData(alarmTimeInMillis)
+                val medicinesList = updatedMedicine?.let { it1 ->
+                    repository.getMedicinesScheduledForTime(
+                        it1.alarmInMillis)
+                }
 
-            // updatedMedicine determines if the alarm service will start or not.
-            if(updatedMedicine?.medicineWasTaken == false && medicineItem != null){
-                startAlarmService(context, intent, updatedMedicine)
+                // Check if any medicine in the list hasn't been taken
+                val anyMedicineNotTaken = medicinesList?.any { medicine ->
+                    !medicine.medicineWasTaken
+                }
+
+                // updatedMedicine determines if the alarm service will start or not.
+                if(anyMedicineNotTaken == true){
+                    startAlarmService(context, intent, updatedMedicine)
+                }
             }
         }
     }

@@ -184,4 +184,10 @@ class MedicinesViewModel @Inject constructor(
         }
     }
 
+    suspend fun getMedicinesScheduledForTime(timeInMillis: Long): List<Medicine> {
+        return withContext(Dispatchers.IO){
+            medicineRepository.getMedicinesScheduledForTime(timeInMillis)
+        }
+    }
+
 }

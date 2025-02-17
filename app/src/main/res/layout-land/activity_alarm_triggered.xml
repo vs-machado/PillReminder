@@ -23,7 +23,7 @@
             android:layout_marginStart="16dp"
             android:text="@string/medicine_time"
             android:textColor="?android:attr/textColorTertiary"
-            android:textSize="28dp"
+            android:textSize="28sp"
             android:textStyle="bold"
             app:layout_constraintBottom_toBottomOf="@+id/imageView3"
             app:layout_constraintStart_toEndOf="@+id/imageView3"
@@ -67,8 +67,8 @@
                     android:layout_marginTop="16dp"
                     android:layout_marginEnd="16dp"
                     android:text="Ibuprofen"
-                    android:textSize="24sp"
                     android:textColor="@color/black"
+                    android:textSize="24sp"
                     app:layout_constraintEnd_toStartOf="@+id/ivAlarmMedicineIcon"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toTopOf="parent" />
@@ -103,8 +103,8 @@
                     android:layout_height="wrap_content"
                     android:layout_marginStart="16dp"
                     android:text="1 pill"
-                    android:textSize="20sp"
                     android:textColor="@color/black"
+                    android:textSize="20sp"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@+id/tv15" />
 
@@ -130,17 +130,43 @@
                     app:layout_constraintStart_toStartOf="@+id/tv16"
                     app:layout_constraintTop_toBottomOf="@+id/tv16" />
 
+                <TextView
+                    android:id="@+id/textView2"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="16dp"
+                    android:layout_marginTop="16dp"
+                    android:layout_marginEnd="16dp"
+                    android:gravity="center"
+                    android:text="@string/more_than_one_medicine_to_be_used"
+                    android:textColor="@color/black"
+                    android:textSize="18sp"
+                    android:visibility="gone"
+                    app:layout_constraintBottom_toBottomOf="@+id/imageView4"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toEndOf="@+id/imageView4"
+                    app:layout_constraintTop_toTopOf="parent" />
+
+                <androidx.constraintlayout.widget.Barrier
+                    android:id="@+id/bottomBarrier"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    app:barrierDirection="bottom"
+                    app:constraint_referenced_ids="tvAlarmHourMedicine,textView2" />
+
                 <View
                     android:id="@+id/divider5"
                     android:layout_width="match_parent"
                     android:layout_height="1dp"
                     android:layout_marginStart="16dp"
-                    android:layout_marginTop="16dp"
+                    android:layout_marginTop="24dp"
                     android:layout_marginEnd="16dp"
+                    android:layout_marginBottom="16dp"
                     android:background="?android:attr/listDivider"
+                    app:layout_constraintBottom_toTopOf="@+id/btnTaken"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@+id/tvAlarmHourMedicine" />
+                    app:layout_constraintTop_toBottomOf="@+id/bottomBarrier" />
 
                 <com.google.android.material.button.MaterialButton
                     android:id="@+id/btnTaken"
@@ -184,6 +210,17 @@
                     app:layout_constraintEnd_toEndOf="@+id/btnTaken"
                     app:layout_constraintStart_toStartOf="@+id/btnTaken"
                     app:layout_constraintTop_toBottomOf="@+id/btnTaken" />
+
+                <ImageView
+                    android:id="@+id/imageView4"
+                    android:layout_width="72dp"
+                    android:layout_height="72dp"
+                    android:layout_marginStart="16dp"
+                    android:layout_marginTop="16dp"
+                    android:src="@drawable/medicine_icon"
+                    android:visibility="gone"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
 
             </androidx.constraintlayout.widget.ConstraintLayout>
         </com.google.android.material.card.MaterialCardView>

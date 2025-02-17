@@ -4,6 +4,7 @@ import android.app.NotificationManager
 import android.content.BroadcastReceiver
 import android.content.Context
 import android.content.Intent
+import android.util.Log
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import com.phoenix.pillreminder.R
@@ -16,6 +17,7 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.launch
+import java.time.LocalDateTime
 import javax.inject.Inject
 import kotlin.coroutines.CoroutineContext
 
@@ -38,6 +40,8 @@ class AlarmReceiver: BroadcastReceiver(), ActivityCompat.OnRequestPermissionsRes
         val alarmItemAction = intent?.getParcelableExtra("ALARM_ITEM_ACTION", AlarmItem::class.java)
         val actionMarkAsUsed = context?.getString(R.string.mark_as_used)
         val actionSnoozeAlarm = context?.getString(R.string.snooze_alarm)
+        val actionMarkAllUsages = context?.getString(R.string.mark_all_as_used)
+
         job = Job()
 
         // Automatically reschedule alarms if user reboots the device or install an app update
@@ -62,6 +66,11 @@ class AlarmReceiver: BroadcastReceiver(), ActivityCompat.OnRequestPermissionsRes
                 alarmScheduler.cancelFollowUpAlarm(medicine.hashCode())
             }
 
+            dismissNotification(context, alarmItemAction.hashCode())
+            return
+        }
+        if(intent?.action == actionMarkAllUsages && alarmItemAction != null) {
+            markMultipleMedicinesAsUsed(alarmItemAction.time)
             dismissNotification(context, alarmItemAction.hashCode())
             return
         }
@@ -138,6 +147,23 @@ class AlarmReceiver: BroadcastReceiver(), ActivityCompat.OnRequestPermissionsRes
 
                 // Update the previous medicines not marked as used as skipped
                 repository.updateMedicinesAsSkipped(medicine.treatmentID, medicine.alarmInMillis)
+            }
+        }
+
+        job.invokeOnCompletion {
+            job.cancel()
+        }
+    }
+
+    private fun markMultipleMedicinesAsUsed(alarmTime: LocalDateTime) {
+        val alarmMillis = localDateTimeToMillis(alarmTime)
+
+        val job = CoroutineScope(Dispatchers.IO).launch {
+            val medicines = repository.getMedicinesScheduledForTime(alarmMillis)
+
+            medicines.forEach {
+                it.medicineWasTaken = true
+                repository.updateMedicine(it)
             }
         }
 

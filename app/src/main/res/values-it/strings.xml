@@ -76,7 +76,7 @@
     <string name="inhaler">Inalatore</string>
     <string name="pomade">Pomata</string>
     <string name="channel_for_reminding_users_to_take_their_medicines">Canale per ricordare agli utenti di prendere i medicinali</string>
-    <string name="time_to_use_your_medicine">È ora di prendere il medicinale!</string>
+    <string name="time_to_use_your_medicine">È ora di usare la medicina!</string>
     <string name="did_you_forget_to_use_your_medicine">Hai dimenticato di prendere %1$s?</string>
     <string name="do_not_forget_to_mark_the_medicine_as_used">Non dimenticare di segnare il medicinale come assunto.\n%1$s</string>
     <string name="do_not_forget_to_mark_the_medicine_as_taken">Medicinale: %1$s\n%2$s</string>
@@ -413,4 +413,11 @@ se l\'utente non segna un medicinale come assunto nell\'applicazione.\n• Perme
     <string name="privacy_settings" translatable="false">Privacy Settings</string>
     <string name="privacy_setting">Impostazioni privacy</string>
     <string name="manage_data_consent_options">Consenso sulla protezione dei dati</string>
+    <string name="mark_all_as_used">Contrassegnare tutti come usati</string>
+    <string name="time_to_use_your_medicines">È ora di usare i rimedi!</string>
+    <string name="check_the_app">Abre la aplicación para ver los medicamentos que debes tomar.</string>
+    <string name="more_than_one_medicine_to_be_used">Hai più di un farmaco da assumere.\n\nPer favore, apri l\'applicazione.</string>
+    <string name="did_you_forget_to_use_your_medicines">Hai dimenticato di prendere i tuoi medicinali?</string>
+    <string name="open_app_pending_medicines">Aprire l\'app per visualizzare i farmaci in attesa</string>
+
 </resources>

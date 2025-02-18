@@ -244,6 +244,7 @@ se l\'utente non segna un medicinale come assunto nell\'applicazione.\n• Perme
     <string name="time_to_refill_your_pillbox">È ora di ricaricare il tuo portapillole.</string>
     <string name="com.crashlytics.android.build_id">1</string>
 
+    <string name="all_permissions_granted">Tutte le autorizzazioni sono già state concesse.</string>
 
     <plurals name="take_pill">
         <item quantity="one">Prendi %1$d pillola</item>

@@ -44,7 +44,7 @@ class MySettingsFragment: PreferenceFragmentCompat() {
 
         googleMobileAdsConsentManager = GoogleMobileAdsConsentManager.getInstance(requireActivity())
 
-        // Only show the consent options preference if user lives on EU.
+        // Only show the consent options preference if user lives on EU or in certain states of US.
         if(googleMobileAdsConsentManager.isPrivacyOptionsRequired){
             findPreference<PreferenceCategory>("header_privacy")?.isVisible = true
             findPreference<Preference>("consent_options")?.isVisible = true
@@ -154,6 +154,9 @@ class MySettingsFragment: PreferenceFragmentCompat() {
         }
         if(!Settings.canDrawOverlays(context)){
             requestOverlayPermissionLauncher.launch(PermissionManager.getOverlayPermissionIntent(requireContext()))
+        }
+        if(ContextCompat.checkSelfPermission(requireContext(), Manifest.permission.POST_NOTIFICATIONS) == PackageManager.PERMISSION_GRANTED && Settings.canDrawOverlays(requireContext())){
+            Toast.makeText(requireContext(), getString(R.string.all_permissions_granted), Toast.LENGTH_SHORT).show()
         }
     }
 

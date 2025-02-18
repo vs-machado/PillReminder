@@ -1,6 +1,7 @@
 package com.phoenix.pillreminder.presentation.activities
 
 import android.content.Context
+import android.content.Intent
 import android.view.InputDevice
 import android.view.View
 import android.widget.NumberPicker
@@ -36,6 +37,10 @@ import androidx.test.rule.GrantPermissionRule
 import com.phoenix.pillreminder.R
 import com.phoenix.pillreminder.feature_alarms.data.data_source.MedicineDatabase
 import com.phoenix.pillreminder.feature_alarms.di.AppModule
+import com.phoenix.pillreminder.feature_alarms.domain.repository.MedicineRepository
+import com.phoenix.pillreminder.feature_alarms.domain.repository.SharedPreferencesRepository
+import com.phoenix.pillreminder.feature_alarms.presentation.AlarmReceiver
+import com.phoenix.pillreminder.feature_alarms.presentation.AlarmScheduler
 import com.phoenix.pillreminder.feature_alarms.presentation.activities.MainActivity
 import dagger.hilt.android.testing.HiltAndroidRule
 import dagger.hilt.android.testing.HiltAndroidTest
@@ -58,19 +63,20 @@ import javax.inject.Inject
 class MainActivityUITest {
     private lateinit var context: Context
     private lateinit var navController: NavController
+    private lateinit var alarmReceiver: AlarmReceiver
     @Inject lateinit var database: MedicineDatabase
 
     companion object {
         private var tutorialSkipped = false
     }
 
-    @get:Rule
-    val activityRule = ActivityScenarioRule(MainActivity::class.java)
-
-    @get:Rule
+    @get:Rule(order = 0)
     val hiltRule = HiltAndroidRule(this)
 
-    @Rule @JvmField
+    @get:Rule(order = 1)
+    val activityRule = ActivityScenarioRule(MainActivity::class.java)
+
+    @Rule(order = 2) @JvmField
     val grantPermissionRule: GrantPermissionRule = GrantPermissionRule.grant(
         android.Manifest.permission.POST_NOTIFICATIONS
     )
@@ -79,6 +85,7 @@ class MainActivityUITest {
     fun setUp(){
         hiltRule.inject()
         context = ApplicationProvider.getApplicationContext()
+        alarmReceiver = AlarmReceiver()
         navController = TestNavHostController(context)
 
         when(tutorialSkipped) {
@@ -191,6 +198,9 @@ class MainActivityUITest {
         // Click to add medicine
         onView(withId(R.id.fabAddMedicine)).perform(click())
 
+        // Add a wait to ensure the view is stable
+        Thread.sleep(1000)
+
         // Navigates to fragment_add_medicines and display the medicine name form
         onView(withId(R.id.tietMedicineName)).check(matches(isDisplayed()))
 
@@ -202,6 +212,9 @@ class MainActivityUITest {
 
         // Navigates to fragment_medicine_form
         onView(withId(R.id.fabNext)).perform(click())
+
+        // Add a wait to ensure the view is stable
+        Thread.sleep(1000)
 
         // Select medicine form "Pill" and navigates to fragment_quantity_and_strength
         onData(anything())
@@ -218,21 +231,36 @@ class MainActivityUITest {
         // Navigates to fragment_frequency
         onView(withId(R.id.fabNext)).perform(click())
 
+        // Add a wait to ensure the view is stable
+        Thread.sleep(1000)
+
         // Select frequency "Every day" and navigates to fragment_how_many_per_day
         onData(anything())
             .inAdapterView(withId(R.id.lvFrequency))
             .atPosition(0)
             .perform(click())
 
+        // Add a wait to ensure the view is stable
+        Thread.sleep(1000)
+
         // Input the number of doses per day
         onView(withId(R.id.npHowOften)).perform(setNumberPickerValue(0))
+
+        // Add a wait to ensure the view is stable
+        Thread.sleep(1000)
 
         // Navigates to fragment_alarm_hour
         onView(withId(R.id.fabNext)).perform(click())
 
+        // Add a wait to ensure the view is stable
+        Thread.sleep(1000)
+
         // Set the alarm time and navigate to fragment_treatment_duration
         onView(withId(R.id.tpAlarm)).perform(setTime(hour = 22, minute = 32))
         onView(withId(R.id.fabNext)).perform(click())
+
+        // Add a wait to ensure the view is stable
+        Thread.sleep(1000)
 
         // Set a temporary treatment duration
         onData(anything())
@@ -317,5 +345,13 @@ class MainActivityUITest {
             val y = screenHeight * 0.9f // 90% from the top (10% from the bottom)
             return floatArrayOf(x, y)
         }
+    }
+
+    private fun disableAnimations() {
+        val command = "settings put global window_animation_scale 0.0" +
+                " && settings put global transition_animation_scale 0.0" +
+                " && settings put global animator_duration_scale 0.0"
+
+        Runtime.getRuntime().exec(arrayOf("su", "-c", command))
     }
 }

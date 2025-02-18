@@ -1,15 +1,18 @@
-package com.phoenix.pillreminder.feature_alarms.di
+package com.phoenix.pillreminder.di
 
 import android.app.Application
 import android.content.Context
 import androidx.room.Room
+import androidx.work.Configuration
 import androidx.work.WorkManager
+import androidx.work.impl.utils.SynchronousExecutor
+import androidx.work.testing.WorkManagerTestInitHelper
 import com.phoenix.pillreminder.feature_alarms.data.data_source.MedicineDatabase
 import com.phoenix.pillreminder.feature_alarms.data.repository.MedicineRepositoryImpl
 import com.phoenix.pillreminder.feature_alarms.data.repository.SharedPreferencesRepositoryImpl
+import com.phoenix.pillreminder.feature_alarms.di.AppModule
 import com.phoenix.pillreminder.feature_alarms.domain.repository.MedicineRepository
 import com.phoenix.pillreminder.feature_alarms.domain.repository.SharedPreferencesRepository
-import com.phoenix.pillreminder.feature_alarms.presentation.AlarmReceiver
 import com.phoenix.pillreminder.feature_alarms.presentation.AlarmScheduler
 import com.phoenix.pillreminder.feature_alarms.presentation.AndroidAlarmScheduler
 import dagger.Module
@@ -44,14 +47,14 @@ object TestAppModule {
     @Provides
     @Singleton
     fun provideWorkManager(app: Application): WorkManager {
+        val config = Configuration.Builder()
+            .setMinimumLoggingLevel(android.util.Log.DEBUG)
+            .setExecutor(SynchronousExecutor())
+            .build()
+        WorkManagerTestInitHelper.initializeTestWorkManager(app, config)
         return WorkManager.getInstance(app)
     }
 
-    @Provides
-    @Singleton
-    fun provideAlarmReceiver(): AlarmReceiver {
-        return AlarmReceiver()
-    }
     @Provides
     @Singleton
     fun provideAlarmScheduler(

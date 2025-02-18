@@ -1,4 +1,4 @@
-package com.phoenix.pillreminder.feature_alarms
+package com.phoenix.pillreminder
 
 import android.app.Application
 import android.content.Context

@@ -73,7 +73,6 @@ class HomeFragment: Fragment() {
 
     @Inject lateinit var repository: MedicineRepository
     @Inject lateinit var sharedPreferencesRepository: SharedPreferencesRepository
-    @Inject lateinit var alarmReceiver: AlarmReceiver
 
     private lateinit var binding: FragmentHomeBinding
     private lateinit var adapter: RvMedicinesListAdapter

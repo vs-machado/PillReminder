@@ -9,7 +9,6 @@ import com.phoenix.pillreminder.feature_alarms.data.repository.MedicineRepositor
 import com.phoenix.pillreminder.feature_alarms.data.repository.SharedPreferencesRepositoryImpl
 import com.phoenix.pillreminder.feature_alarms.domain.repository.MedicineRepository
 import com.phoenix.pillreminder.feature_alarms.domain.repository.SharedPreferencesRepository
-import com.phoenix.pillreminder.feature_alarms.presentation.AlarmReceiver
 import com.phoenix.pillreminder.feature_alarms.presentation.AlarmScheduler
 import com.phoenix.pillreminder.feature_alarms.presentation.AndroidAlarmScheduler
 import dagger.Module
@@ -43,12 +42,6 @@ object AppModule {
     @Singleton
     fun provideWorkManager(app: Application): WorkManager{
         return WorkManager.getInstance(app)
-    }
-
-    @Provides
-    @Singleton
-    fun provideAlarmReceiver(): AlarmReceiver {
-        return AlarmReceiver()
     }
 
     @Provides

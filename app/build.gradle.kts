@@ -22,7 +22,7 @@ android {
         versionCode = 1
         versionName = "1.0"
 
-        testInstrumentationRunner = "com.phoenix.pillreminder.feature_alarms.CustomTestRunner"
+        testInstrumentationRunner = "com.phoenix.pillreminder.CustomTestRunner"
     }
 
     buildTypes {
@@ -54,7 +54,6 @@ android {
 dependencies {
     implementation("androidx.test.ext:junit-ktx:1.1.5")
     implementation("androidx.cardview:cardview:1.0.0")
-    implementation("com.google.dagger:hilt-android-testing:2.51.1")
     implementation("androidx.navigation:navigation-testing:2.8.3")
     implementation(platform("com.google.firebase:firebase-bom:33.8.0"))
     implementation("com.google.firebase:firebase-analytics")
@@ -141,6 +140,7 @@ dependencies {
     testImplementation("org.robolectric:robolectric:4.13")
     kspTest("com.google.dagger:hilt-compiler:2.51.1")
 
+    androidTestImplementation("androidx.work:work-testing:$workVersion")
     androidTestImplementation("androidx.test.espresso:espresso-core:3.6.1")
     androidTestImplementation("androidx.test.espresso:espresso-contrib:3.6.1")
     androidTestImplementation("androidx.test:core:$androidxTestVersion")

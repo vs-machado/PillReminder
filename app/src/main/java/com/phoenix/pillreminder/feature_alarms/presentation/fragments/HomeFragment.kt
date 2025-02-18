@@ -11,6 +11,7 @@ import android.content.pm.PackageManager
 import android.graphics.Color
 import android.graphics.drawable.ColorDrawable
 import android.os.Bundle
+import android.provider.Settings
 import android.text.format.DateFormat.is24HourFormat
 import android.util.Log
 import android.view.GestureDetector
@@ -345,6 +346,12 @@ class HomeFragment: Fragment() {
 
         requestPermission.setOnClickListener {
             requestPermissionLauncher.launch(Manifest.permission.POST_NOTIFICATIONS)
+
+            if(ContextCompat.checkSelfPermission(requireContext(), Manifest.permission.POST_NOTIFICATIONS) == PackageManager.PERMISSION_GRANTED && Settings.canDrawOverlays(requireContext())){
+               Toast.makeText(requireContext(), R.string.all_permissions_granted, Toast.LENGTH_LONG).show()
+                checkboxDontShowAgain.isChecked = true
+                dialog.dismiss()
+            }
         }
 
 

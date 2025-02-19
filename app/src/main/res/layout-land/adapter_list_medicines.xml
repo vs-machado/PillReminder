@@ -119,13 +119,27 @@
                 android:backgroundTint="#4CAF50"
                 android:text="@string/mark_as_used"
                 android:textColor="?android:attr/textColorTertiary"
-                android:visibility="gone"
+                android:visibility="visible"
                 app:icon="@drawable/baseline_check_24"
                 app:iconPadding="4dp"
                 app:iconTint="@color/white"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintStart_toStartOf="@+id/tvMedicineTaken"
                 app:layout_constraintTop_toBottomOf="@+id/tvMedicineTaken" />
+
+            <Button
+                android:id="@+id/btnSkip"
+                style="@style/Widget.Material3.Button.IconButton.Filled.Tonal"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="8dp"
+                android:text="@string/skip_dose"
+                android:textColor="@color/white"
+                app:icon="@drawable/baseline_close_24"
+                app:iconTint="@color/white"
+                android:backgroundTint="@color/button_gray"
+                app:layout_constraintStart_toEndOf="@+id/btnMarkUsage"
+                app:layout_constraintTop_toTopOf="@+id/btnMarkUsage" />
 
         </androidx.constraintlayout.widget.ConstraintLayout>
 

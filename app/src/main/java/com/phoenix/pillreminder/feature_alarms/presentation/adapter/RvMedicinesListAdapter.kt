@@ -258,8 +258,17 @@ class MyViewHolder(private val medicinesBinding: AdapterListMedicinesBinding):Re
                     View.VISIBLE
                 }  else View.GONE
 
+            btnSkip.visibility =
+                if (currentTimeInMillis > medicine.alarmInMillis && !medicine.medicineWasTaken && !medicine.wasSkipped){
+                    View.VISIBLE
+                }  else View.GONE
+
             btnMarkUsage.setOnClickListener {
                 markMedicineUsage(medicine)
+            }
+
+            btnSkip.setOnClickListener {
+                markMedicinesAsSkipped(medicine)
             }
         }
     }

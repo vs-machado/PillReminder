@@ -6,7 +6,6 @@ import android.content.Intent
 import android.content.res.Configuration
 import android.os.Build
 import android.os.Bundle
-import android.util.Log
 import android.view.View
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
@@ -155,6 +154,27 @@ class AlarmTriggeredActivity: AppCompatActivity() {
                                 withContext(Dispatchers.Default){
                                     alarmScheduler.cancelFollowUpAlarm(medicine.hashCode())
                                 }
+                            }
+                        }
+
+                        dismissNotification(applicationContext, alarmItem.hashCode())
+                        val intent = Intent(applicationContext, MainActivity::class.java)
+                        startActivity(intent)
+                        Admob.showInterstitial(this@AlarmTriggeredActivity)
+                        finish()
+                    }
+                }
+
+                btnSkipDoseActivity.setOnClickListener {
+                    if(alarmItem != null) {
+                        val alarmMillis = localDateTimeToMillis(alarmItem.time)
+
+                        lifecycleScope.launch(Dispatchers.IO) {
+                            val medicines = repository.getMedicinesScheduledForTime(alarmMillis)
+
+                            medicines.forEach {
+                                it.wasSkipped = true
+                                repository.updateMedicine(it)
                             }
                         }
 

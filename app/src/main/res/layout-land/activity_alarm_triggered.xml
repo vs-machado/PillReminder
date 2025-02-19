@@ -183,6 +183,20 @@
                     app:layout_constraintTop_toBottomOf="@+id/divider5" />
 
                 <com.google.android.material.button.MaterialButton
+                    android:id="@+id/btnSkipDoseActivity"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:text="@string/skip_dose"
+                    android:textColor="@color/white"
+                    android:textSize="16sp"
+                    app:backgroundTint="#AB747272"
+                    app:cornerRadius="8dp"
+                    app:layout_constraintEnd_toEndOf="@+id/btnSnooze"
+                    app:layout_constraintStart_toStartOf="@+id/btnSnooze"
+                    app:layout_constraintTop_toBottomOf="@+id/btnSnooze" />
+
+
+                <com.google.android.material.button.MaterialButton
                     android:id="@+id/btnDismiss"
                     style="@style/Widget.Material3.Button.OutlinedButton"
                     android:layout_width="0dp"
@@ -194,9 +208,9 @@
                     android:theme="@style/Theme.MaterialComponents"
                     app:cornerRadius="8dp"
                     app:layout_constraintBottom_toBottomOf="parent"
-                    app:layout_constraintEnd_toEndOf="@+id/btnTaken"
-                    app:layout_constraintStart_toStartOf="@+id/btnTaken"
-                    app:layout_constraintTop_toBottomOf="@+id/btnSnooze" />
+                    app:layout_constraintEnd_toEndOf="@+id/btnSkipDoseActivity"
+                    app:layout_constraintStart_toStartOf="@+id/btnSkipDoseActivity"
+                    app:layout_constraintTop_toBottomOf="@+id/btnSkipDoseActivity" />
 
                 <com.google.android.material.button.MaterialButton
                     android:id="@+id/btnSnooze"

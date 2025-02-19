@@ -1,5 +1,9 @@
 name: Run test
 
+permissions:
+  checks: write
+  contents: read
+
 on:
   pull_request:
     branches: [main]

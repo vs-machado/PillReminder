@@ -183,9 +183,13 @@ class AlarmReceiver: BroadcastReceiver(), ActivityCompat.OnRequestPermissionsRes
         val job = CoroutineScope(Dispatchers.IO).launch {
             val medicines = repository.getMedicinesScheduledForTime(alarmMillis)
 
+            // If statement ensures that medicines already used can't be marked as skipped.
+            // Useful when skipping only a part of the medicines triggered on the same milliseconds date.
             medicines.forEach {
-                it.wasSkipped = true
-                repository.updateMedicine(it)
+                if(!it.medicineWasTaken){
+                    it.wasSkipped = true
+                    repository.updateMedicine(it)
+                }
             }
         }
 

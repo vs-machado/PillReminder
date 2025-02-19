@@ -21,12 +21,20 @@ import com.google.android.material.datepicker.MaterialDatePicker
 import com.google.android.material.floatingactionbutton.FloatingActionButton
 import com.phoenix.pillreminder.R
 import com.phoenix.pillreminder.databinding.FragmentTreatmentDurationBinding
+import com.phoenix.pillreminder.feature_alarms.data.ads.Admob
 import com.phoenix.pillreminder.feature_alarms.domain.util.MedicineFrequency
 import com.phoenix.pillreminder.feature_alarms.presentation.utils.ThemeUtils
 import com.phoenix.pillreminder.feature_alarms.presentation.viewmodels.AlarmSettingsSharedViewModel
 import com.phoenix.pillreminder.feature_alarms.presentation.viewmodels.MedicinesViewModel
 import dagger.hilt.android.AndroidEntryPoint
+import com.phoenix.pillreminder.feature_alarms.data.worker.RescheduleWorker
 
+/**
+ * Allow users to set the medicine treatment period.
+ * If user wants to set the treatment period, they will be presented with a date range picker to choose the desired duration.
+ * If not, the treatment duration will be temporarily set to a month, with alarms being rescheduled monthly using a worker.
+ * @see RescheduleWorker for details on alarms automatic rescheduling.
+ */
 @AndroidEntryPoint
 class TreatmentDurationFragment : Fragment(), ActivityCompat.OnRequestPermissionsResultCallback {
     private lateinit var binding: FragmentTreatmentDurationBinding
@@ -107,19 +115,19 @@ class TreatmentDurationFragment : Fragment(), ActivityCompat.OnRequestPermission
                             when (getMedicineFrequency()){
                                 MedicineFrequency.EveryDay -> {
                                     medicinesViewModel.insertMedicines(getAlarmsList(1L, workerID, null, true))
-                                    createAlarmItemAndSchedule(requireActivity().applicationContext, 1L)
+                                    createAlarmItemAndSchedule(1L)
                                 }
                                 MedicineFrequency.EveryOtherDay -> {
                                     medicinesViewModel.insertMedicines(getAlarmsList(2L, workerID, null, true))
-                                    createAlarmItemAndSchedule(requireActivity().applicationContext, 2L)
+                                    createAlarmItemAndSchedule(2L)
                                 }
                                 MedicineFrequency.SpecificDaysOfWeek -> {
                                     medicinesViewModel.insertMedicines(getAlarmsListForSpecificDays(workerID, null, true))
-                                    createAlarmItemAndSchedule(requireActivity().applicationContext)
+                                    createAlarmItemAndSchedule()
                                 }
                                 MedicineFrequency.EveryXDays, MedicineFrequency.EveryXWeeks, MedicineFrequency.EveryXMonths -> {
                                     medicinesViewModel.insertMedicines(getAlarmsList(interval, workerID, null, true))
-                                    createAlarmItemAndSchedule(requireActivity().applicationContext, interval)
+                                    createAlarmItemAndSchedule(interval)
                                 }
                             }
 
@@ -131,6 +139,8 @@ class TreatmentDurationFragment : Fragment(), ActivityCompat.OnRequestPermission
                                 getString(R.string.alarms_successfully_created),
                                 Toast.LENGTH_LONG).show()
 
+                            // Show an ad before going back to HomeFragment
+                            Admob.showInterstitial(requireActivity())
                             popBackStack()
                         }
                     }
@@ -160,19 +170,19 @@ class TreatmentDurationFragment : Fragment(), ActivityCompat.OnRequestPermission
                 when (getMedicineFrequency()){
                     MedicineFrequency.EveryDay -> {
                         medicinesViewModel.insertMedicines(getAlarmsList(1L, null, true))
-                        createAlarmItemAndSchedule(requireActivity().applicationContext, 1L)
+                        createAlarmItemAndSchedule(1L)
                     }
                     MedicineFrequency.EveryOtherDay -> {
                         medicinesViewModel.insertMedicines(getAlarmsList(2L, null, true))
-                        createAlarmItemAndSchedule(requireActivity().applicationContext, 2L)
+                        createAlarmItemAndSchedule(2L)
                     }
                     MedicineFrequency.SpecificDaysOfWeek -> {
                         medicinesViewModel.insertMedicines(getAlarmsListForSpecificDays(null, true))
-                        createAlarmItemAndSchedule(requireActivity().applicationContext)
+                        createAlarmItemAndSchedule()
                     }
                     MedicineFrequency.EveryXDays, MedicineFrequency.EveryXWeeks, MedicineFrequency.EveryXMonths -> {
                         medicinesViewModel.insertMedicines(getAlarmsList(getInterval, null, true))
-                        createAlarmItemAndSchedule(requireActivity().applicationContext, getInterval)
+                        createAlarmItemAndSchedule(getInterval)
                     }
                 }
 
@@ -184,6 +194,8 @@ class TreatmentDurationFragment : Fragment(), ActivityCompat.OnRequestPermission
                     getString(R.string.alarms_successfully_created),
                     Toast.LENGTH_LONG).show()
 
+                // Show an ad before going back to HomeFragment
+                Admob.showInterstitial(requireActivity())
                 popBackStack()
             }
             dateRangePicker.show(childFragmentManager, "DATE_RANGE_PICKER")

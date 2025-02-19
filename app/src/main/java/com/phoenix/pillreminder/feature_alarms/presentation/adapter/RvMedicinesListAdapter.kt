@@ -10,6 +10,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.phoenix.pillreminder.R
 import com.phoenix.pillreminder.databinding.AdapterListMedicinesBinding
 import com.phoenix.pillreminder.feature_alarms.domain.model.Medicine
+import com.phoenix.pillreminder.feature_alarms.presentation.utils.CalendarUtils
 import java.text.SimpleDateFormat
 import java.util.Calendar
 import java.util.Date
@@ -39,8 +40,27 @@ class RvMedicinesListAdapter (private val showDeleteAlarmDialog: (Medicine) -> U
     }
 
     override fun onBindViewHolder(holder: MyViewHolder, position: Int) {
-        holder.bind(medicineList[position], holder, showDeleteAlarmDialog, showDeleteAllAlarmsDialog,
-            markMedicineUsage, markMedicinesAsSkipped, goToEditMedicines, showEndTreatmentDialog)
+        val context = holder.itemView.context
+        val previousTime = if (position > 0) {
+            val previousMedicine = medicineList[position - 1]
+            val format = when {
+                DateFormat.is24HourFormat(context) -> HOUR_24_FORMAT
+                else -> HOUR_12_FORMAT
+            }
+            CalendarUtils.formatHour(previousMedicine.alarmHour, previousMedicine.alarmMinute, format)
+        } else null
+
+        holder.bind(
+            medicine = medicineList[position],
+            holder = holder,
+            showDeleteAlarmDialog = showDeleteAlarmDialog,
+            showDeleteAllAlarmsDialog = showDeleteAllAlarmsDialog,
+            markMedicineUsage = markMedicineUsage,
+            markMedicinesAsSkipped = markMedicinesAsSkipped,
+            goToEditMedicines = goToEditMedicines,
+            showEndTreatmentDialog = showEndTreatmentDialog,
+            previousTime = previousTime
+        )
     }
 
     fun setList(medicines: List<Medicine>, selectedDate: Date){
@@ -79,13 +99,30 @@ class MyViewHolder(private val medicinesBinding: AdapterListMedicinesBinding):Re
              markMedicineUsage: (Medicine) -> Unit,
              markMedicinesAsSkipped: (Medicine) -> Unit,
              goToEditMedicines: (Medicine) -> Unit,
-             showEndTreatmentDialog: (Medicine) -> Unit){
+             showEndTreatmentDialog: (Medicine) -> Unit,
+             previousTime: String?
+    ){
 
         val context = holder.itemView.context
         val currentTimeInMillis = System.currentTimeMillis()
 
         //Formats the textview to show the hour in format HH:MM
         medicinesBinding.apply{
+
+            // Format current time
+            val currentTime = when {
+                DateFormat.is24HourFormat(context) -> {
+                    formatHour(medicine.alarmHour, medicine.alarmMinute, HOUR_24_FORMAT)
+                }
+                else -> {
+                    formatHour(medicine.alarmHour, medicine.alarmMinute, HOUR_12_FORMAT)
+                }
+            }
+
+            // Hide tvHour if it's the same as previous time
+            tvHour.isVisible = currentTime != previousTime
+            tvHour.text = currentTime
+
             when {
                 DateFormat.is24HourFormat(context) -> {
                     formatHour(medicine.alarmHour, medicine.alarmMinute, HOUR_24_FORMAT).let{
@@ -157,7 +194,7 @@ class MyViewHolder(private val medicinesBinding: AdapterListMedicinesBinding):Re
                 true -> {
                     tvMedicineTaken.isVisible = true
 
-                    if(medicine.form == "pomade" || medicine.form == "inhaler" || medicine.form == "injection" || medicine.form == "drops" || medicine.form == "liquid"){
+                    if(medicine.form == "pomade" || medicine.form == "inhaler" || medicine.form == "injection" || medicine.form == "drop" || medicine.form == "liquid"){
                         tvMedicineTaken.text = context.getString(R.string.medicine_already_used)
                     } else{
                         tvMedicineTaken.text = context.getString(R.string.medicine_already_taken)
@@ -173,7 +210,7 @@ class MyViewHolder(private val medicinesBinding: AdapterListMedicinesBinding):Re
                                 context.getString(R.string.medicine_skipped)
                         }
                         false -> {
-                            if(medicine.form == "pomade" || medicine.form == "inhaler" || medicine.form == "injection" || medicine.form == "drops" || medicine.form == "liquid"){
+                            if(medicine.form == "pomade" || medicine.form == "inhaler" || medicine.form == "injection" || medicine.form == "drop" || medicine.form == "liquid"){
                                 tvMedicineTaken.text = context.getString(R.string.medicine_not_used_yet)
                             } else{
                                 tvMedicineTaken.text = context.getString(R.string.medicine_not_taken_yet)

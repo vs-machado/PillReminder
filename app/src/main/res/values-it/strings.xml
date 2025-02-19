@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="app_name">Promemoria Medicinali</string>
+    <string name="app_name">Remedi</string>
     <string name="hello_blank_fragment">Ciao blank fragment</string>
     <string name="hour">08:00</string>
     <string name="strength">Dosaggio</string>
@@ -76,7 +76,7 @@
     <string name="inhaler">Inalatore</string>
     <string name="pomade">Pomata</string>
     <string name="channel_for_reminding_users_to_take_their_medicines">Canale per ricordare agli utenti di prendere i medicinali</string>
-    <string name="time_to_use_your_medicine">È ora di prendere il medicinale!</string>
+    <string name="time_to_use_your_medicine">È ora di usare la medicina!</string>
     <string name="did_you_forget_to_use_your_medicine">Hai dimenticato di prendere %1$s?</string>
     <string name="do_not_forget_to_mark_the_medicine_as_used">Non dimenticare di segnare il medicinale come assunto.\n%1$s</string>
     <string name="do_not_forget_to_mark_the_medicine_as_taken">Medicinale: %1$s\n%2$s</string>
@@ -109,7 +109,7 @@
     <string name="medicine_not_taken">Medicinale non assunto</string>
     <string name="menu_with_medicine_options">Menu con opzioni medicinale</string>
     <string name="welcome">Benvenuto!</string>
-    <string name="app_explanation">Promemoria Medicinali è un\'app che ti aiuta a tenere traccia delle tue dosi di medicinali.</string>
+    <string name="app_explanation">Remedi è un\'app per aiutarti a tenere traccia delle dosi dei tuoi farmaci.</string>
     <string name="app_needs_permissions">…Ma prima abbiamo bisogno del tuo permesso.</string>
     <string name="notification_mandatory">L\'invio di notifiche è obbligatorio per il corretto funzionamento dell\'applicazione.</string>
     <string name="pillbox_reminders">Promemoria portapillole</string>
@@ -126,7 +126,7 @@ se l\'utente non segna un medicinale come assunto nell\'applicazione.\n• Perme
     \n• Avvisa gli utenti se tentano di segnare un medicinale come assunto vicino al prossimo orario di assunzione.</string>
     <string name="about_us_text">Applicazione sviluppata da Vinícius Santos come suo progetto finale per la laurea in Ingegneria Informatica.</string>
     <string name="contact_me">Contattami</string>
-    <string name="pill_reminder">Promemoria Medicinali</string>
+    <string name="pill_reminder">Remedi</string>
     <string name="app_description">Un\'applicazione Android open source per aiutare gli utenti a tenere traccia delle loro dosi di medicinali.</string>
     <string name="features">Funzionalità</string>
     <string name="about_me">Chi sono</string>
@@ -239,6 +239,12 @@ se l\'utente non segna un medicinale come assunto nell\'applicazione.\n• Perme
     <string name="optimizations_already_disabled">Le ottimizzazioni della batteria sono già disattivate</string>
     <string name="quantity_syringe">Quantità: %1$d siringa/he</string>
     <string name="arrow_down_icon">Clicca per vedere la risposta alla domanda</string>
+    <string name="snooze_alarm">Posponi sveglia</string>
+    <string name="change_alarm_snooze_interval">Intervallo di ripetizione sveglia</string>
+    <string name="time_to_refill_your_pillbox">È ora di ricaricare il tuo portapillole.</string>
+    <string name="com.crashlytics.android.build_id">1</string>
+
+    <string name="all_permissions_granted">Tutte le autorizzazioni sono già state concesse.</string>
 
     <plurals name="take_pill">
         <item quantity="one">Prendi %1$d pillola</item>
@@ -348,6 +354,18 @@ se l\'utente non segna un medicinale come assunto nell\'applicazione.\n• Perme
         <item quantity="other">Sveglie al giorno:\n\n%1$d sveglie</item>
     </plurals>
 
+    <string-array name="snooze_interval_entries">
+        <item>5 minuti</item>
+        <item>10 minuti</item>
+        <item>15 minuti</item>
+    </string-array>
+
+    <string-array name="snooze_interval_values">
+        <item>5</item>
+        <item>10</item>
+        <item>15</item>
+    </string-array>
+
     <string-array name="medicine_forms">
         <item>Pillola</item>
         <item>Iniezione</item>
@@ -390,4 +408,17 @@ se l\'utente non segna un medicinale come assunto nell\'applicazione.\n• Perme
         <item>es</item>
         <item>it</item>
     </string-array>
+
+    <string name="ad_inspector" translatable="false">Ad Inspector</string>
+    <string name="more_menu" translatable="false">More</string>
+    <string name="privacy_settings" translatable="false">Privacy Settings</string>
+    <string name="privacy_setting">Impostazioni privacy</string>
+    <string name="manage_data_consent_options">Consenso sulla protezione dei dati</string>
+    <string name="mark_all_as_used">Contrassegnare tutti come usati</string>
+    <string name="time_to_use_your_medicines">È ora di usare i rimedi!</string>
+    <string name="check_the_app">Abre la aplicación para ver los medicamentos que debes tomar.</string>
+    <string name="more_than_one_medicine_to_be_used">Hai più di un farmaco da assumere.\n\nPer favore, apri l\'applicazione.</string>
+    <string name="did_you_forget_to_use_your_medicines">Hai dimenticato di prendere i tuoi medicinali?</string>
+    <string name="open_app_pending_medicines">Aprire l\'app per visualizzare i farmaci in attesa</string>
+
 </resources>

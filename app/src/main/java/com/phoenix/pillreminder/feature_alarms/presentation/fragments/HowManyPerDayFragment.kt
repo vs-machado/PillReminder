@@ -7,7 +7,6 @@ import android.view.ViewGroup
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
-import androidx.navigation.findNavController
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.ui.AppBarConfiguration
 import androidx.navigation.ui.setupWithNavController
@@ -15,6 +14,7 @@ import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.google.android.material.floatingactionbutton.FloatingActionButton
 import com.phoenix.pillreminder.R
 import com.phoenix.pillreminder.databinding.FragmentHowManyPerDayBinding
+import com.phoenix.pillreminder.feature_alarms.presentation.OnOneOffClickListener
 import com.phoenix.pillreminder.feature_alarms.presentation.utils.ThemeUtils
 import com.phoenix.pillreminder.feature_alarms.presentation.viewmodels.AlarmSettingsSharedViewModel
 
@@ -62,11 +62,13 @@ class HowManyPerDayFragment : Fragment() {
                 sharedViewModel.setNumberOfAlarms(newVal + 1)
             }
 
-            fabNext.setOnClickListener {
-                sharedViewModel.position = 0
-                sharedViewModel.resetCurrentAlarmNumber()
-                it.findNavController().navigate(R.id.action_howManyPerDayFragment_to_alarmHourFragment)
-            }
+            fabNext.setOnClickListener(object: OnOneOffClickListener() {
+                override fun onSingleClick(fab: FloatingActionButton) {
+                    sharedViewModel.position = 0
+                    sharedViewModel.resetCurrentAlarmNumber()
+                    findNavController().navigate(R.id.action_howManyPerDayFragment_to_alarmHourFragment)
+                }
+            })
         }
 
     }

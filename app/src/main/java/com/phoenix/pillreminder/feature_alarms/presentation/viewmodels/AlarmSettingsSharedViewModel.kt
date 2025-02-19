@@ -16,9 +16,9 @@ import com.phoenix.pillreminder.feature_alarms.domain.model.Medicine
 import com.phoenix.pillreminder.feature_alarms.domain.repository.MedicineRepository
 import com.phoenix.pillreminder.feature_alarms.domain.util.MedicineFrequency
 import com.phoenix.pillreminder.feature_alarms.presentation.AlarmScheduler
-import com.phoenix.pillreminder.feature_alarms.presentation.AndroidAlarmScheduler
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import java.time.Instant
@@ -41,7 +41,8 @@ import javax.inject.Inject
 @HiltViewModel
 class AlarmSettingsSharedViewModel @Inject constructor(
     private val repository: MedicineRepository,
-    private val workManager: WorkManager
+    private val workManager: WorkManager,
+    private val alarmScheduler: AlarmScheduler
 ) : ViewModel() {
     private var medicineName = ""
 
@@ -82,6 +83,10 @@ class AlarmSettingsSharedViewModel @Inject constructor(
     var position = 0
 
     private lateinit var workRequestID: UUID
+
+    // Used to track if the permission dialog was shown in the app session. If user marks the checkbox "don't show again",
+    // this value is ignored.
+    private val _permissionDialogShown = MutableStateFlow(false)
 
     init{
         _currentAlarmNumber.postValue(1)
@@ -415,9 +420,7 @@ class AlarmSettingsSharedViewModel @Inject constructor(
         return alarms
     }
 
-    fun createAlarmItemAndSchedule(context: Context, interval: Long) {
-        val alarmScheduler: AlarmScheduler = AndroidAlarmScheduler(repository, context)
-
+    fun createAlarmItemAndSchedule(interval: Long) {
         val scheduleInterval = when (getMedicineFrequency()) {
             MedicineFrequency.EveryXWeeks -> interval * 7
             MedicineFrequency.EveryXMonths -> interval * 30
@@ -465,9 +468,7 @@ class AlarmSettingsSharedViewModel @Inject constructor(
     }
 
     //Used with frequency specific days of week
-    fun createAlarmItemAndSchedule(context: Context) {
-        val alarmScheduler: AlarmScheduler = AndroidAlarmScheduler(repository, context)
-
+    fun createAlarmItemAndSchedule() {
         val alarmItems = mutableListOf<AlarmItem>()
 
         for (i in getAlarmHoursList().indices) {
@@ -686,7 +687,6 @@ class AlarmSettingsSharedViewModel @Inject constructor(
             withContext(Dispatchers.Default){
                 if(!hasNextAlarm && workerID != "noID"){
                     workManager.cancelWorkById(workRequestID)
-                    Log.d("debug", "cancel work")
                 }
             }
         }
@@ -854,5 +854,13 @@ class AlarmSettingsSharedViewModel @Inject constructor(
         }
 
         return (startDateMillis + (repeatInterval * 86400000L))
+    }
+
+    fun setPermissionDialogExhibition(shown: Boolean) {
+        _permissionDialogShown.value = shown
+    }
+
+    fun getPermissionDialogExhibition(): Boolean {
+        return _permissionDialogShown.value
     }
 }

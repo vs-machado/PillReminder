@@ -5,24 +5,21 @@ import android.app.PendingIntent
 import android.content.Context
 import android.content.Intent
 import android.util.Log
-import androidx.work.ExistingPeriodicWorkPolicy
-import androidx.work.PeriodicWorkRequestBuilder
-import androidx.work.WorkManager
-import com.phoenix.pillreminder.feature_alarms.data.worker.PillboxReminderWorker
 import com.phoenix.pillreminder.feature_alarms.domain.model.AlarmItem
 import com.phoenix.pillreminder.feature_alarms.domain.model.Medicine
 import com.phoenix.pillreminder.feature_alarms.domain.repository.MedicineRepository
+import com.phoenix.pillreminder.feature_alarms.domain.repository.SharedPreferencesRepository
 import dagger.hilt.android.qualifiers.ApplicationContext
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 import java.time.Instant
 import java.time.ZoneId
 import java.util.Calendar
-import java.util.concurrent.TimeUnit
 import javax.inject.Inject
 
 class AndroidAlarmScheduler @Inject constructor(
     private val medicineRepository: MedicineRepository,
+    private val sharedPreferencesRepository: SharedPreferencesRepository,
    @ApplicationContext private val appContext: Context
 ): AlarmScheduler {
     private val alarmManager = appContext.getSystemService(AlarmManager::class.java)
@@ -53,11 +50,41 @@ class AndroidAlarmScheduler @Inject constructor(
 
     }
 
-    // cancelAll defines if the method will search for a valid pendingIntent or not.
-    // When user delete only one alarm, there's no need to search for a valid pendingIntent.
-    // If the pendingIntent is invalid, the valid alarm was already scheduled.
-    // When user deletes all alarms, the method will search for a valid pendingIntent,
-    // cancelling the alarm even if the medicine object clicked was not scheduled yet.
+    /**
+     * Snoozes a triggered alarm.
+     * The snooze duration can be changed by user in app settings.
+     *
+     * @param item AlarmItem to be snoozed
+     */
+    override fun snoozeAlarm(item: AlarmItem) {
+        val intent = Intent(appContext, AlarmReceiver::class.java).apply {
+            putExtra("ALARM_ITEM", item)
+        }
+
+        val snoozeMinutes = sharedPreferencesRepository.getSnoozeInterval()
+        val snoozeTime = System.currentTimeMillis() + (snoozeMinutes * 60 * 1000L)
+
+        alarmManager.setExactAndAllowWhileIdle(
+            AlarmManager.RTC_WAKEUP,
+            snoozeTime,
+            PendingIntent.getBroadcast(
+                appContext,
+                item.hashCode(),
+                intent,
+                PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE
+            )
+
+        )
+    }
+
+    /** Cancel one or all alarms for a specific medicine.
+     *
+     *  When user deletes all alarms (cancelAll = true), the method will search for a valid pendingIntent,
+     *  cancelling the alarm even if the medicine object clicked was not scheduled yet.
+     *
+     *  @param item AlarmItem containing medicine info
+     *  @param cancelAll If true, cancels all future alarms for the given medicine.
+     */
     override suspend fun cancelAlarm(item: AlarmItem, cancelAll: Boolean) {
         withContext(Dispatchers.Default) {
             when(cancelAll){
@@ -84,7 +111,7 @@ class AndroidAlarmScheduler @Inject constructor(
                                 break
                             }
 
-                            val alarmItemTime = nextAlarm.alarmInMillis?.let {
+                            val alarmItemTime = nextAlarm.alarmInMillis.let {
                                 Instant.ofEpochMilli(it).atZone(ZoneId.systemDefault()).toLocalDateTime()
                             }
 
@@ -153,10 +180,43 @@ class AndroidAlarmScheduler @Inject constructor(
         return false
     }
 
+    override fun cancelPillboxReminder(): Boolean {
+        val pendingIntent = PendingIntent.getBroadcast(
+            appContext,
+            999,
+            Intent(appContext, PillboxAlarmReceiver::class.java),
+            PendingIntent.FLAG_NO_CREATE or PendingIntent.FLAG_IMMUTABLE
+        )
 
-    fun scheduleNextAlarm(medicine: Medicine){
-        val alarmScheduler: AlarmScheduler = AndroidAlarmScheduler(medicineRepository, appContext)
+        if(pendingIntent != null) {
+            alarmManager.cancel(pendingIntent)
+            return true
+        }
 
+        return false
+    }
+
+    /**
+     * Use to cancel follow-up alarms.
+     * Used when user snoozes an alarm, so there's no need to deliver the follow-up alarm.
+     *
+     * @param hashCode alarm hashcode used to cancel the alarm
+     */
+    override fun cancelFollowUpAlarm(hashCode: Int) {
+        val pendingIntent = PendingIntent.getBroadcast(
+            appContext,
+            hashCode,
+            Intent(appContext, FollowUpAlarmReceiver::class.java),
+            PendingIntent.FLAG_NO_CREATE or PendingIntent.FLAG_IMMUTABLE
+        )
+
+        pendingIntent?.let {
+            alarmManager.cancel(it)
+        }
+    }
+
+
+    override fun scheduleNextAlarm(medicine: Medicine){
         val alarmItem = AlarmItem(
             time = Instant.ofEpochMilli(medicine.alarmInMillis).atZone(ZoneId.systemDefault()).toLocalDateTime(),
             medicineName = medicine.name,
@@ -166,22 +226,25 @@ class AndroidAlarmScheduler @Inject constructor(
             alarmHour = medicine.alarmHour.toString(),
             alarmMinute = medicine.alarmMinute.toString()
         )
-        alarmItem.let(alarmScheduler::scheduleAlarm)
+        scheduleAlarm(alarmItem)
     }
 
     override fun schedulePillboxReminder(hours: Int, minutes: Int) {
-        val workRequest = PeriodicWorkRequestBuilder<PillboxReminderWorker>(1, TimeUnit.DAYS)
-            .setInitialDelay(getInitialDelay(hours,minutes), TimeUnit.MILLISECONDS)
-            .build()
-
-        WorkManager.getInstance(appContext).enqueueUniquePeriodicWork(
-            "PillboxReminder",
-            ExistingPeriodicWorkPolicy.UPDATE,
-            workRequest
+        val intent = Intent(appContext, PillboxAlarmReceiver::class.java)
+        val pendingIntent = PendingIntent.getBroadcast(
+            appContext,
+            999,
+            intent,
+            PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE
+        )
+        alarmManager.setExactAndAllowWhileIdle(
+            AlarmManager.RTC_WAKEUP,
+            System.currentTimeMillis() + getInitialDelay(hours, minutes),
+            pendingIntent
         )
     }
 
-    fun scheduleFollowUpAlarm(medicine: Medicine, item: AlarmItem, followUpTime: Long){
+    override fun scheduleFollowUpAlarm(medicine: Medicine, item: AlarmItem, followUpTime: Long){
         val intent = Intent(appContext, FollowUpAlarmReceiver::class.java).apply {
             putExtra("ALARM_ITEM", item)
         }

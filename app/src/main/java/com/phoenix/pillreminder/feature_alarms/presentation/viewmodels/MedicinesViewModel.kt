@@ -116,9 +116,7 @@ class MedicinesViewModel @Inject constructor(
 
     suspend fun getSelectedDaysList(medicineName: String, treatmentID: String): MutableSet<Int> {
         return withContext(Dispatchers.IO) {
-            Log.d("debug", "$medicineName $treatmentID")
             val daysString = medicineRepository.getSelectedDaysList(medicineName, treatmentID)
-            Log.d("debug", daysString)
             daysString.split(",").mapNotNull { it.toIntOrNull() }.toMutableSet()
         }
     }
@@ -183,6 +181,12 @@ class MedicinesViewModel @Inject constructor(
     suspend fun getLastAlarm(medicineName: String, treatmentID: String): Medicine {
         return withContext(Dispatchers.IO){
             medicineRepository.getLastAlarm(medicineName, treatmentID)
+        }
+    }
+
+    suspend fun getMedicinesScheduledForTime(timeInMillis: Long): List<Medicine> {
+        return withContext(Dispatchers.IO){
+            medicineRepository.getMedicinesScheduledForTime(timeInMillis)
         }
     }
 

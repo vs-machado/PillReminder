@@ -30,7 +30,7 @@ import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.hilt.navigation.fragment.hiltNavGraphViewModels
-import androidx.lifecycle.Lifecycle
+import androidx.lifecycle.Lifecycle.State
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
 import androidx.navigation.fragment.findNavController
@@ -43,6 +43,7 @@ import com.phoenix.pillreminder.databinding.FragmentHomeBinding
 import com.phoenix.pillreminder.databinding.LayoutEndTreatmentDialogBinding
 import com.phoenix.pillreminder.databinding.LayoutSetPillboxReminderDialogBinding
 import com.phoenix.pillreminder.databinding.LayoutWarnAboutMedicineUsageHourBinding
+import com.phoenix.pillreminder.feature_alarms.data.ads.Admob
 import com.phoenix.pillreminder.feature_alarms.domain.model.Medicine
 import com.phoenix.pillreminder.feature_alarms.domain.repository.MedicineRepository
 import com.phoenix.pillreminder.feature_alarms.domain.repository.SharedPreferencesRepository
@@ -72,7 +73,6 @@ class HomeFragment: Fragment() {
 
     @Inject lateinit var repository: MedicineRepository
     @Inject lateinit var sharedPreferencesRepository: SharedPreferencesRepository
-    @Inject lateinit var alarmReceiver: AlarmReceiver
 
     private lateinit var binding: FragmentHomeBinding
     private lateinit var adapter: RvMedicinesListAdapter
@@ -85,7 +85,9 @@ class HomeFragment: Fragment() {
     private var toast: Toast? = null
     private lateinit var dialog: Dialog
     private lateinit var gestureDetector: GestureDetector
-    private var dontShowAgainPreference: Boolean = false
+    private var isPermissionDialogDisabled: Boolean = false
+
+    private lateinit var fab: FloatingActionButton
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -110,19 +112,19 @@ class HomeFragment: Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        val fab = requireActivity().findViewById<FloatingActionButton>(R.id.fabAddMedicine)
+
+        fab = requireActivity().findViewById(R.id.fabAddMedicine)
 
         viewLifecycleOwner.lifecycleScope.launch {
-            viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED){
-
+            viewLifecycleOwner.repeatOnLifecycle(State.STARTED) {
                 // Shows a dialog requesting for app permissions. If user click on don't show again,
                 // the permissionRequestPreference is updated
                 launch {
                     hfViewModel.permissionRequestPreferences.collectLatest { permissionPreference ->
-                        dontShowAgainPreference = permissionPreference
+                        isPermissionDialogDisabled = permissionPreference
 
-                        if(!dontShowAgainPreference) {
-                            requestPermissions(dontShowAgainPreference)
+                        if(!isPermissionDialogDisabled) {
+                            showRequestPermissionsDialog()
                         }
                     }
                 }
@@ -179,13 +181,17 @@ class HomeFragment: Fragment() {
 
         binding.btnSaveDialogPillbox.setOnClickListener {
             if(hours != null && minutes != null){
+//                hfViewModel.schedulePillboxReminder(hours!!, minutes!!)
+                sharedPreferencesRepository.setPillboxReminderHour(hours!!, minutes!!)
                 hfViewModel.schedulePillboxReminder(hours!!, minutes!!)
+                hfViewModel.setPillboxPreferences(true)
             }
             dialog.dismiss()
         }
 
         binding.btnCancelDialogPillbox.setOnClickListener {
             dialog.dismiss()
+            sharedPreferencesRepository.setPillboxReminderHour(-1, -1) // -1 == null
             hfViewModel.setPillboxPreferences(false)
             uncheckSwitch()
         }
@@ -213,10 +219,10 @@ class HomeFragment: Fragment() {
 
         pillboxSwitch.setOnCheckedChangeListener { _, isChecked ->
             if (isChecked) {
-                hfViewModel.setPillboxPreferences(true)
                 showPillboxReminderDialog()
             } else {
                 hfViewModel.setPillboxPreferences(false)
+                sharedPreferencesRepository.setPillboxReminderHour(-1, -1) // -1 == null
                 hfViewModel.cancelReminderNotifications(requireContext().applicationContext)
             }
         }
@@ -235,13 +241,10 @@ class HomeFragment: Fragment() {
         }
     }
 
-    private fun requestPermissions(dontShowAgain: Boolean){
-        if(!Settings.canDrawOverlays(requireContext()) && !dontShowAgain){
-            showOverlayAndNotificationPermissionDialog()
-        }
-    }
-
-     private fun initRecyclerView(dateToFilter: Date, fab: FloatingActionButton){
+     private fun initRecyclerView(
+         dateToFilter: Date,
+         fab: FloatingActionButton
+     ){
         binding.rvMedicinesList.layoutManager = LinearLayoutManager(activity)
         adapter = RvMedicinesListAdapter(
             showDeleteAlarmDialog = { selectedMedicine: Medicine ->
@@ -258,12 +261,14 @@ class HomeFragment: Fragment() {
                     else{
                         hfViewModel.markMedicineUsage(selectedMedicine)
                         displayMedicinesList(hfViewModel.getDate())
+                        Admob.showInterstitial(requireActivity())
                     }
                 }
             },
             markMedicinesAsSkipped = { selectedMedicine ->
                 hfViewModel.markMedicinesAsSkipped(selectedMedicine)
                 displayMedicinesList(hfViewModel.getDate())
+                Admob.showInterstitial(requireActivity())
             },
             goToEditMedicines = { selectedMedicine ->
                 viewLifecycleOwner.lifecycleScope.launch(Dispatchers.IO) {
@@ -318,10 +323,11 @@ class HomeFragment: Fragment() {
             })
     }
 
-    private fun showOverlayAndNotificationPermissionDialog(){
-        if (dontShowAgainPreference){
+    private fun showRequestPermissionsDialog(){
+        if (isPermissionDialogDisabled || sharedViewModel.getPermissionDialogExhibition()){
             return
         }
+        sharedViewModel.setPermissionDialogExhibition(true)
 
         val dialog = Dialog(this.requireContext())
         dialog.requestWindowFeature(Window.FEATURE_NO_TITLE)
@@ -333,13 +339,22 @@ class HomeFragment: Fragment() {
         val dismissRequest: Button = dialog.findViewById(R.id.btnDismissRequest)
         val checkboxDontShowAgain: CheckBox = dialog.findViewById(R.id.cbDontShowAgain)
 
+        checkboxDontShowAgain.setOnCheckedChangeListener { _, isChecked ->
+            hfViewModel.setPermissionRequestPreferences(isChecked)
+        }
+
         requestPermission.setOnClickListener {
             requestPermissionLauncher.launch(Manifest.permission.POST_NOTIFICATIONS)
-        }
-        dismissRequest.setOnClickListener {
-            if(checkboxDontShowAgain.isChecked){
-                hfViewModel.setPermissionRequestPreferences(true)
+
+            if(ContextCompat.checkSelfPermission(requireContext(), Manifest.permission.POST_NOTIFICATIONS) == PackageManager.PERMISSION_GRANTED && Settings.canDrawOverlays(requireContext())){
+               Toast.makeText(requireContext(), R.string.all_permissions_granted, Toast.LENGTH_LONG).show()
+                checkboxDontShowAgain.isChecked = true
+                dialog.dismiss()
             }
+        }
+
+
+        dismissRequest.setOnClickListener {
             dialog.dismiss()
         }
 
@@ -373,6 +388,7 @@ class HomeFragment: Fragment() {
 
                     withContext(Dispatchers.Main){
                         displayMedicinesList(hfViewModel.getDate())
+                        Admob.showInterstitial(requireActivity())
                         dialog.dismiss()
                         showToastAlarmDeleted()
                     }
@@ -409,6 +425,7 @@ class HomeFragment: Fragment() {
 
                     withContext(Dispatchers.Main){
                         displayMedicinesList(getDate())
+                        Admob.showInterstitial(requireActivity())
                         dialog.dismiss()
                         showToastAlarmDeleted()
                     }
@@ -423,7 +440,9 @@ class HomeFragment: Fragment() {
         dialog.show()
     }
 
-    private fun showWarningMedicineUsageDialog(medicine: Medicine){
+    private fun showWarningMedicineUsageDialog(
+        medicine: Medicine
+    ){
         dialog = Dialog(this.requireContext())
         dialog.requestWindowFeature(Window.FEATURE_NO_TITLE)
         dialog.setCancelable(false)
@@ -472,6 +491,7 @@ class HomeFragment: Fragment() {
 
                     withContext(Dispatchers.Main) {
                         displayMedicinesList(hfViewModel.getDate())
+                        Admob.showInterstitial(requireActivity())
                         dialog.dismiss()
                     }
                 } catch (e: Exception) {
@@ -640,6 +660,7 @@ class HomeFragment: Fragment() {
 
         requireActivity().findViewById<BottomNavigationView>(R.id.bottom_navigation).visibility = View.VISIBLE
         requireActivity().findViewById<View>(R.id.divider).visibility = View.VISIBLE
+        fab.visibility = View.VISIBLE
 
         // Updates the medicines list.
         lifecycleScope.launch(Dispatchers.Main){
@@ -663,15 +684,9 @@ class HomeFragment: Fragment() {
         super.onPause()
 
         //Dismiss the dialog to avoid window leakage
-        if(::dialog.isInitialized && dialog.isShowing){
+        if(::dialog.isInitialized && dialog.isShowing && !sharedPreferencesRepository.getPillboxPreferences()){
             dialog.dismiss()
-        }
-
-        val switchPillbox = binding.datePicker.findViewById<SwitchMaterial>(R.id.switchPillbox)
-
-        //If user minimizes or closes the app with pillbox reminder dialog opened, the switch is unchecked
-        if(switchPillbox.isChecked && !hfViewModel.isWorkerActive()){
-            switchPillbox.isChecked = false
+            uncheckSwitch()
         }
     }
 

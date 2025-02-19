@@ -40,9 +40,7 @@ class AlarmTriggeredViewModel : ViewModel() {
     }
 
     fun checkMedicineForm(medicineForm: String, doseUnit: String, medicineQuantity: String, context: Context): String{
-        Log.d("alarmItem", "medicineQuantityString: $medicineQuantity")
         val quantity = medicineQuantity.toFloatOrNull()?.toInt() ?: 0
-        Log.d("alarmItem", "quantity parsed: $quantity")
 
         return when(medicineForm){
             "pill" -> context.resources.getQuantityString(R.plurals.pill_quantity, quantity, quantity)

@@ -9,9 +9,11 @@
 /.idea/assetWizardSettings.xml
 /.idea/vcs.xml
 /.idea/misc.xml
+/.idea/ChatHistory_schema_v2.xml
 .DS_Store
 /build
 /captures
 .externalNativeBuild
 .cxx
 local.properties
+key.jks

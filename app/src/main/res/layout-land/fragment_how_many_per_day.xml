@@ -20,6 +20,7 @@
             android:id="@+id/toolbarHowMany"
             android:layout_width="match_parent"
             android:layout_height="50dp"
+            android:theme="@style/ToolbarTitleTheme"
             android:background="@color/toolbar"
             android:elevation="4dp" />
 
@@ -81,6 +82,7 @@
         android:layout_marginStart="16dp"
         android:text="@string/time"
         android:textSize="20sp"
+        android:textColor="?android:attr/textColorPrimary"
         app:layout_constraintBottom_toBottomOf="@+id/npHowOften"
         app:layout_constraintStart_toStartOf="@+id/guideline2"
         app:layout_constraintTop_toTopOf="@+id/npHowOften" />

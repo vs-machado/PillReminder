@@ -4,7 +4,7 @@
     <selectionStates>
       <SelectionState runConfigName="app">
         <option name="selectionMode" value="DROPDOWN" />
-        <DropdownSelection timestamp="2024-11-04T16:34:28.377702800Z">
+        <DropdownSelection timestamp="2025-02-18T21:37:54.155237Z">
           <Target type="DEFAULT_BOOT">
             <handle>
               <DeviceId pluginId="LocalEmulator" identifier="path=C:\Users\axdxs\.android\avd\Resizable_Experimental_API_34.avd" />
@@ -15,8 +15,16 @@
       </SelectionState>
       <SelectionState runConfigName="MainActivityUITest">
         <option name="selectionMode" value="DROPDOWN" />
+        <DropdownSelection timestamp="2025-02-18T20:52:15.511233Z">
+          <Target type="DEFAULT_BOOT">
+            <handle>
+              <DeviceId pluginId="PhysicalDevice" identifier="serial=RX8T10184XA" />
+            </handle>
+          </Target>
+        </DropdownSelection>
+        <DialogSelection />
       </SelectionState>
-      <SelectionState runConfigName="navigate_to_medicine_details_fragment_when_clicking_on_a_medicine_item_in_my_medicines_fragment()">
+      <SelectionState runConfigName="MainActivityTest">
         <option name="selectionMode" value="DROPDOWN" />
       </SelectionState>
     </selectionStates>

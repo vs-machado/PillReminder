@@ -3,6 +3,8 @@ package com.phoenix.pillreminder.feature_alarms.presentation.fragments
 import android.annotation.SuppressLint
 import android.app.Dialog
 import android.graphics.Color
+import android.graphics.PorterDuff
+import android.graphics.PorterDuffColorFilter
 import android.graphics.drawable.ColorDrawable
 import android.os.Bundle
 import android.text.format.DateFormat.is24HourFormat
@@ -47,8 +49,10 @@ import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import java.util.TimeZone
 
-/* Class used to edit the medicines data. It allows the change of the medicine name,
-   form, quantity, dose unit, treatment end date, frequency and the alarms hour. */
+/**
+ * Used to edit the medicines data. It allows the change of the medicine name,
+ * form, quantity, dose unit, treatment end date, frequency and the alarm hour.
+ */
 @AndroidEntryPoint
 class EditMedicinesFragment: Fragment() {
     private lateinit var binding: FragmentEditMedicinesBinding
@@ -329,7 +333,7 @@ class EditMedicinesFragment: Fragment() {
                                         editMedicinesViewModel.cancelAlarm(medicine, true)
                                         medicinesViewModel.insertMedicines(getAlarmsList(1L, cutoffTime, false))
                                         withContext(Dispatchers.Default){
-                                            createAlarmItemAndSchedule(requireActivity().applicationContext, 1L)
+                                            createAlarmItemAndSchedule(1L)
                                         }
                                     }
                                     context?.getString(R.string.every_other_day) -> {
@@ -338,7 +342,7 @@ class EditMedicinesFragment: Fragment() {
                                         editMedicinesViewModel.cancelAlarm(medicine, true)
                                         medicinesViewModel.insertMedicines(getAlarmsList(2L, cutoffTime, false))
                                         withContext(Dispatchers.Default){
-                                            createAlarmItemAndSchedule(requireActivity().applicationContext, 2L)
+                                            createAlarmItemAndSchedule(2L)
                                         }
                                     }
                                     context?.getString(R.string.specific_days_of_the_week) -> {
@@ -347,7 +351,7 @@ class EditMedicinesFragment: Fragment() {
                                         editMedicinesViewModel.cancelAlarm(medicine, true)
                                         medicinesViewModel.insertMedicines(getAlarmsListForSpecificDays(cutoffTime, false))
                                         withContext(Dispatchers.Default){
-                                            createAlarmItemAndSchedule(requireActivity().applicationContext)
+                                            createAlarmItemAndSchedule()
                                         }
                                     }
                                     context?.getString(R.string.every_x_days),
@@ -358,7 +362,7 @@ class EditMedicinesFragment: Fragment() {
                                         editMedicinesViewModel.cancelAlarm(medicine, true)
                                         medicinesViewModel.insertMedicines(getAlarmsList(getInterval().toLong(), cutoffTime, false))
                                         withContext(Dispatchers.Default){
-                                            createAlarmItemAndSchedule(requireActivity().applicationContext, interval)
+                                            createAlarmItemAndSchedule(interval)
                                         }
                                     }
                                 }
@@ -382,7 +386,7 @@ class EditMedicinesFragment: Fragment() {
                                         editMedicinesViewModel.cancelAlarm(medicine, true)
                                         medicinesViewModel.insertMedicines(getAlarmsList(1L, workerID, cutoffTime, false))
                                         withContext(Dispatchers.Default){
-                                            createAlarmItemAndSchedule(requireActivity().applicationContext, 1L)
+                                            createAlarmItemAndSchedule(1L)
                                         }
                                     }
                                     context?.getString(R.string.every_other_day) -> {
@@ -392,7 +396,7 @@ class EditMedicinesFragment: Fragment() {
                                         editMedicinesViewModel.cancelAlarm(medicine, true)
                                         medicinesViewModel.insertMedicines(getAlarmsList(2L, workerID, cutoffTime, false))
                                         withContext(Dispatchers.Default){
-                                            createAlarmItemAndSchedule(requireActivity().applicationContext, 2L)
+                                            createAlarmItemAndSchedule(2L)
                                         }
                                     }
                                     context?.getString(R.string.specific_days_of_the_week) -> {
@@ -402,7 +406,7 @@ class EditMedicinesFragment: Fragment() {
                                         editMedicinesViewModel.cancelAlarm(medicine, true)
                                         medicinesViewModel.insertMedicines(getAlarmsListForSpecificDays(workerID, cutoffTime, false))
                                         withContext(Dispatchers.Default){
-                                            createAlarmItemAndSchedule(requireActivity().applicationContext)
+                                            createAlarmItemAndSchedule()
                                         }
                                     }
                                     context?.getString(R.string.every_x_days),
@@ -414,7 +418,7 @@ class EditMedicinesFragment: Fragment() {
                                         editMedicinesViewModel.cancelAlarm(medicine, true)
                                         medicinesViewModel.insertMedicines(getAlarmsList(interval, workerID, cutoffTime, false))
                                         withContext(Dispatchers.Default){
-                                            createAlarmItemAndSchedule(requireActivity().applicationContext, interval)
+                                            createAlarmItemAndSchedule(interval)
                                         }
                                     }
                                 }
@@ -689,6 +693,7 @@ class EditMedicinesFragment: Fragment() {
         val toolbar = requireActivity().findViewById<androidx.appcompat.widget.Toolbar>(R.id.toolbarHome)
         toolbar.setupWithNavController(navController, appBarConfiguration)
         toolbar.visibility = View.VISIBLE
+        toolbar.navigationIcon?.colorFilter = PorterDuffColorFilter(ContextCompat.getColor(requireContext(), R.color.white), PorterDuff.Mode.SRC_ATOP)
     }
 
     private fun setupViewTheme(){

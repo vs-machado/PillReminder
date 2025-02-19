@@ -19,6 +19,7 @@ import com.google.android.material.floatingactionbutton.FloatingActionButton
 import com.phoenix.pillreminder.R
 import com.phoenix.pillreminder.databinding.FragmentEveryXPeriodBinding
 import com.phoenix.pillreminder.feature_alarms.domain.util.MedicineFrequency
+import com.phoenix.pillreminder.feature_alarms.presentation.OnOneOffClickListener
 import com.phoenix.pillreminder.feature_alarms.presentation.utils.ThemeUtils
 import com.phoenix.pillreminder.feature_alarms.presentation.viewmodels.AlarmSettingsSharedViewModel
 
@@ -87,32 +88,34 @@ class EveryXPeriodFragment: Fragment() {
             })
 
             // Saves the interval and navigates to the next fragment
-            fabNext.setOnClickListener {
-                val interval = etInterval.text
+            fabNext.setOnClickListener(object: OnOneOffClickListener() {
+                override fun onSingleClick(fab: FloatingActionButton) {
+                    val interval = etInterval.text
 
-                try{
-                    val intervalInt = interval.toString().toInt()
+                    try{
+                        val intervalInt = interval.toString().toInt()
 
-                    if(intervalInt == 0){
+                        if(intervalInt == 0){
+                            Toast.makeText(
+                                context,
+                                "Interval cannot be zero. Please enter a valid interval.",
+                                Toast.LENGTH_LONG
+                            ).show()
+                            return
+                        }
+
+                        sharedViewModel.setInterval(intervalInt)
+                        findNavController().navigate(R.id.action_everyXPeriodFragment_to_howManyPerDayFragment)
+
+                    } catch (e: NumberFormatException) {
                         Toast.makeText(
                             context,
-                            "Interval cannot be zero. Please enter a valid interval.",
+                            "Invalid input. Please enter a valid number.",
                             Toast.LENGTH_LONG
                         ).show()
-                        return@setOnClickListener
                     }
-
-                    sharedViewModel.setInterval(intervalInt)
-                    findNavController().navigate(R.id.action_everyXPeriodFragment_to_howManyPerDayFragment)
-
-                } catch (e: NumberFormatException) {
-                    Toast.makeText(
-                        context,
-                        "Invalid input. Please enter a valid number.",
-                        Toast.LENGTH_LONG
-                    ).show()
                 }
-            }
+            })
         }
 
     }

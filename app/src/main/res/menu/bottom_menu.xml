@@ -13,7 +13,7 @@
     <item
         android:id="@+id/settings"
         android:title="@string/settings"
-        android:icon="@drawable/baseline_settings_24"/>
+        android:icon="@drawable/ic_settings_selector"/>
 
     <item
         android:id="@+id/bottom_help"

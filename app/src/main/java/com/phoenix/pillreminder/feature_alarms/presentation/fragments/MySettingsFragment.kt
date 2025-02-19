@@ -6,20 +6,25 @@ import android.content.Context
 import android.content.Intent
 import android.content.pm.PackageManager
 import android.net.Uri
-import android.os.Build
 import android.os.Bundle
 import android.os.PowerManager
 import android.provider.Settings
 import android.util.Log
+import android.util.TypedValue
+import android.view.LayoutInflater
 import android.view.View
+import android.view.ViewGroup
 import android.widget.Toast
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.core.content.ContextCompat
 import androidx.preference.ListPreference
 import androidx.preference.Preference
+import androidx.preference.PreferenceCategory
 import androidx.preference.PreferenceFragmentCompat
+import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.floatingactionbutton.FloatingActionButton
 import com.phoenix.pillreminder.R
+import com.phoenix.pillreminder.feature_alarms.data.ads.GoogleMobileAdsConsentManager
 import com.phoenix.pillreminder.feature_alarms.domain.repository.SharedPreferencesRepository
 import com.phoenix.pillreminder.feature_alarms.presentation.PermissionManager
 import com.phoenix.pillreminder.feature_alarms.presentation.utils.LanguageConfig
@@ -32,10 +37,42 @@ import javax.inject.Inject
 class MySettingsFragment: PreferenceFragmentCompat() {
 
     @Inject lateinit var sharedPreferencesRepository: SharedPreferencesRepository
+    private lateinit var googleMobileAdsConsentManager: GoogleMobileAdsConsentManager
 
     override fun onCreatePreferences(savedInstanceState: Bundle?, rootKey: String?) {
         setPreferencesFromResource(R.xml.preferences, rootKey)
+
+        googleMobileAdsConsentManager = GoogleMobileAdsConsentManager.getInstance(requireActivity())
+
+        // Only show the consent options preference if user lives on EU or in certain states of US.
+        if(googleMobileAdsConsentManager.isPrivacyOptionsRequired){
+            findPreference<PreferenceCategory>("header_privacy")?.isVisible = true
+            findPreference<Preference>("consent_options")?.isVisible = true
+        }
+
         setupPreferenceListeners()
+    }
+
+    // Overrides recyclerview properties to add a 80dp bottom margin, avoiding settings overlapping with
+    // the bottom navigation bar
+    override fun onCreateRecyclerView(
+        inflater: LayoutInflater,
+        parent: ViewGroup,
+        savedInstanceState: Bundle?
+    ): RecyclerView {
+        val recyclerView = super.onCreateRecyclerView(inflater, parent, savedInstanceState)
+        val marginBottom = TypedValue.applyDimension(
+            TypedValue.COMPLEX_UNIT_DIP,
+            80f,
+            resources.displayMetrics
+        ).toInt()
+
+        (recyclerView.layoutParams as ViewGroup.MarginLayoutParams).let { params ->
+            params.bottomMargin = marginBottom
+            recyclerView.layoutParams = params
+        }
+
+        return recyclerView
     }
 
     override fun onResume() {
@@ -62,6 +99,8 @@ class MySettingsFragment: PreferenceFragmentCompat() {
         val languagePreference = findPreference<ListPreference>("language")
         val appLanguage = sharedPreferencesRepository.getAppLanguage()
 
+        val snoozeIntervalPreference = findPreference<ListPreference>("snooze_interval")
+
         languagePreference?.apply {
             value = appLanguage
             setOnPreferenceChangeListener { _, newValue ->
@@ -84,6 +123,28 @@ class MySettingsFragment: PreferenceFragmentCompat() {
                 disableBatteryOptimizations()
                 true
             }
+
+        // Allow users to change the alarm snooze interval
+        snoozeIntervalPreference?.apply {
+            value = sharedPreferencesRepository.getSnoozeInterval().toString()
+            setOnPreferenceChangeListener { _, newValue ->
+                sharedPreferencesRepository.setSnoozeInterval(newValue.toString().toInt())
+                true
+            }
+        }
+
+        // Allows the users to change their data usage consent
+        if(googleMobileAdsConsentManager.isPrivacyOptionsRequired) {
+            findPreference<Preference>("consent_options")
+                ?.setOnPreferenceClickListener {
+                    googleMobileAdsConsentManager.showPrivacyOptionsForm(requireActivity()) { formError ->
+                        if(formError != null) {
+                            Log.d("MySettingsFragment", formError.message.toString())
+                        }
+                    }
+                    true
+                }
+        }
     }
 
     // Request POST_NOTIFICATIONS permission and overlay permission
@@ -93,6 +154,9 @@ class MySettingsFragment: PreferenceFragmentCompat() {
         }
         if(!Settings.canDrawOverlays(context)){
             requestOverlayPermissionLauncher.launch(PermissionManager.getOverlayPermissionIntent(requireContext()))
+        }
+        if(ContextCompat.checkSelfPermission(requireContext(), Manifest.permission.POST_NOTIFICATIONS) == PackageManager.PERMISSION_GRANTED && Settings.canDrawOverlays(requireContext())){
+            Toast.makeText(requireContext(), getString(R.string.all_permissions_granted), Toast.LENGTH_SHORT).show()
         }
     }
 

@@ -1,38 +1,56 @@
 package com.phoenix.pillreminder.feature_alarms.presentation.activities
 
+import android.app.NotificationManager
+import android.content.Context
 import android.content.Intent
 import android.content.res.Configuration
 import android.os.Build
 import android.os.Bundle
 import android.util.Log
+import android.view.View
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.app.AppCompatDelegate
 import androidx.core.view.WindowInsetsControllerCompat
 import androidx.lifecycle.ViewModelProvider
+import androidx.lifecycle.lifecycleScope
+import com.google.android.gms.ads.MobileAds
 import com.phoenix.pillreminder.R
 import com.phoenix.pillreminder.databinding.ActivityAlarmTriggeredBinding
+import com.phoenix.pillreminder.feature_alarms.data.ads.Admob
+import com.phoenix.pillreminder.feature_alarms.data.ads.Admob.loadAd
 import com.phoenix.pillreminder.feature_alarms.domain.model.AlarmItem
 import com.phoenix.pillreminder.feature_alarms.domain.repository.MedicineRepository
+import com.phoenix.pillreminder.feature_alarms.presentation.AlarmScheduler
+import com.phoenix.pillreminder.feature_alarms.presentation.AlarmService
+import com.phoenix.pillreminder.feature_alarms.presentation.utils.DateUtil.localDateTimeToMillis
 import com.phoenix.pillreminder.feature_alarms.presentation.viewmodels.AlarmTriggeredViewModel
 import com.phoenix.pillreminder.feature_alarms.presentation.viewmodels.MedicinesViewModel
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 import javax.inject.Inject
 
+/**
+ *  Activity responsible for showing the medicine details when an alarm is triggered,
+ *  allowing user to mark the medicine usage, snooze alarms or dismiss the notification.
+ *  AlarmTriggeredActivity is only shown if user grants notification permission and enables
+ *  app overlay permission in phone settings.
+ *
+ *  The activity shows the following medicine properties:
+ *  Medicine name, alarm hour, medicine type image and dosage.
+ */
 @AndroidEntryPoint
 class AlarmTriggeredActivity: AppCompatActivity() {
 
-    @Inject
-    lateinit var repository: MedicineRepository
+    @Inject lateinit var repository: MedicineRepository
+    @Inject lateinit var alarmScheduler: AlarmScheduler
 
     private lateinit var medicinesViewModel: MedicinesViewModel
     private lateinit var binding: ActivityAlarmTriggeredBinding
-    //private var mediaPlayer: MediaPlayer? = null
     private val viewModel: AlarmTriggeredViewModel by viewModels()
-    //private lateinit var factory: MedicinesViewModelFactory
 
     override fun onCreate(savedInstanceState: Bundle?) {
         binding = ActivityAlarmTriggeredBinding.inflate(layoutInflater)
@@ -42,9 +60,19 @@ class AlarmTriggeredActivity: AppCompatActivity() {
 
         setupNotificationAndStatusBar()
 
-        /*mediaPlayer = MediaPlayer.create(this, R.raw.alarm_sound)
-        mediaPlayer?.isLooping = true
-        mediaPlayer?.start()*/
+        val initializeAds: () -> Unit = {
+            CoroutineScope(Dispatchers.IO).launch {
+                // Initialize the Google Mobile Ads SDK on a background thread.
+                MobileAds.initialize(this@AlarmTriggeredActivity) {}
+                runOnUiThread {
+                    // Load an ad on the main thread.
+                    loadAd(this@AlarmTriggeredActivity)
+                }
+            }
+        }
+
+        Admob.gatherUserConsent(this, initializeAds)
+
         medicinesViewModel = ViewModelProvider(this)[MedicinesViewModel::class.java]
 
         binding.apply{
@@ -54,42 +82,92 @@ class AlarmTriggeredActivity: AppCompatActivity() {
                 intent?.getParcelableExtra("ALARM_ITEM")
             }
 
+            alarmItem?.let {
+                val alarmMillis = localDateTimeToMillis(it.time)
+
+                lifecycleScope.launch(Dispatchers.IO) {
+                    val medicinesList = medicinesViewModel.getMedicinesScheduledForTime(alarmMillis)
+
+                    // When there's more than one medicine to be used, instead of showing the
+                    // medicine details, user must go to the app and check the medicines.
+                    if(medicinesList.size > 1) {
+                        withContext(Dispatchers.Main) {
+                            hideMedicineDetails(binding)
+                            showCheckAppMessage(binding)
+                            btnTaken.text = getString(R.string.mark_all_as_used)
+
+                            btnTaken.setOnClickListener {
+                                medicinesList.forEach { medicine ->
+                                    medicine.medicineWasTaken = true
+                                    medicinesViewModel.updateMedicines(medicine)
+                                }
+                                dismissNotification(applicationContext, alarmItem.hashCode())
+                                val intent = Intent(applicationContext, MainActivity::class.java)
+                                startActivity(intent)
+                                Admob.showInterstitial(this@AlarmTriggeredActivity)
+                                finish()
+                            }
+                        }
+                    } else {
+                        viewModel.apply {
+                            alarmItem.apply {
+                                tvAlarmMedicineName.text = medicineName
+                                tvAlarmHourMedicine.text = checkDateFormat(alarmHour.toInt(), alarmMinute.toInt(), context = applicationContext)
+                                tvAlarmQuantity.text = checkMedicineForm(medicineForm, doseUnit, medicineQuantity, context = applicationContext)
+
+                                ivAlarmMedicineIcon.setImageResource(setMedicineImageView(medicineForm))
+
+                                btnTaken.setOnClickListener{
+                                    lifecycleScope.launch(Dispatchers.IO) {
+                                        viewModel.markMedicineAsTaken(alarmItem, medicinesViewModel)
+                                    }
+                                    dismissNotification(applicationContext, alarmItem.hashCode())
+                                    val intent = Intent(applicationContext, MainActivity::class.java)
+                                    startActivity(intent)
+                                    Admob.showInterstitial(this@AlarmTriggeredActivity)
+                                    finish()
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+
             viewModel.apply{
                 alarmItem?.apply{
-                    tvAlarmMedicineName.text = medicineName
-                    tvAlarmHourMedicine.text = checkDateFormat(alarmHour.toInt(), alarmMinute.toInt(), context = applicationContext)
-                    tvAlarmQuantity.text = checkMedicineForm(medicineForm, doseUnit, medicineQuantity, context = applicationContext)
-
-                    ivAlarmMedicineIcon.setImageResource(setMedicineImageView(medicineForm))
-
-                    /*btnPause.setOnClickListener {
-                        stopMediaPlayer()
-                    }*/
-
-                    btnTaken.setOnClickListener{
-                        //stopMediaPlayer()
-
-                        CoroutineScope(Dispatchers.IO).launch {
-                            viewModel.markMedicineAsTaken(alarmItem, medicinesViewModel)
-                        }
-                        val intent = Intent(applicationContext, MainActivity::class.java)
-                        startActivity(intent)
-                        finish()
-                    }
-
                     btnDismiss.setOnClickListener {
                         //stopMediaPlayer()
                         val intent = Intent(applicationContext, MainActivity::class.java)
                         startActivity(intent)
                         finish()
                     }
+
+                    btnSnooze.setOnClickListener {
+                        alarmScheduler.snoozeAlarm(alarmItem)
+
+                        // Alarm was snoozed, there's no need to delivery the follow up alarm
+                        lifecycleScope.launch {
+                            val alarmItemMillis = localDateTimeToMillis(alarmItem.time)
+
+                            withContext(Dispatchers.IO) {
+                                val medicine = repository.getCurrentAlarmData(alarmItemMillis)
+
+                                withContext(Dispatchers.Default){
+                                    alarmScheduler.cancelFollowUpAlarm(medicine.hashCode())
+                                }
+                            }
+                        }
+
+                        dismissNotification(applicationContext, alarmItem.hashCode())
+                        val intent = Intent(applicationContext, MainActivity::class.java)
+                        startActivity(intent)
+                        Admob.showInterstitial(this@AlarmTriggeredActivity)
+                        finish()
+                    }
                 }
             }
 
         }
-
-
-
     }
 
     private fun setupNotificationAndStatusBar(){
@@ -108,17 +186,24 @@ class AlarmTriggeredActivity: AppCompatActivity() {
 
     }
 
-    override fun onDestroy() {
-        super.onDestroy()
-        /*mediaPlayer?.stop()
-        mediaPlayer?.release()
-        mediaPlayer = null*/
+    private fun dismissNotification(context: Context?, alarmHashCode: Int){
+        val notificationManager = context?.getSystemService(Context.NOTIFICATION_SERVICE) as? NotificationManager
+        notificationManager?.cancel(alarmHashCode)
+        val stopServiceIntent = Intent(context, AlarmService::class.java)
+        context?.stopService(stopServiceIntent)
     }
 
-    /*private fun stopMediaPlayer(){
-        mediaPlayer?.stop()
-        mediaPlayer?.release()
-        mediaPlayer = null
-    }*/
+    private fun hideMedicineDetails(binding: ActivityAlarmTriggeredBinding) {
+        binding.tvAlarmMedicineName.visibility = View.GONE
+        binding.ivAlarmMedicineIcon.visibility = View.GONE
+        binding.tv15.visibility = View.GONE
+        binding.tvAlarmQuantity.visibility = View.GONE
+        binding.tv16.visibility = View.GONE
+        binding.tvAlarmHourMedicine.visibility = View.GONE
+    }
 
+    private fun showCheckAppMessage(binding: ActivityAlarmTriggeredBinding) {
+        binding.textView2.visibility = View.VISIBLE
+        binding.imageView4.visibility = View.VISIBLE
+    }
 }

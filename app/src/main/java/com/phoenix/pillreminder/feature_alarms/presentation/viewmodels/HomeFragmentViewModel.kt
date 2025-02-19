@@ -4,7 +4,6 @@ import android.content.Context
 import androidx.core.app.NotificationManagerCompat
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import androidx.work.WorkInfo
 import androidx.work.WorkManager
 import com.phoenix.pillreminder.feature_alarms.domain.model.AlarmItem
 import com.phoenix.pillreminder.feature_alarms.domain.model.Medicine
@@ -30,7 +29,6 @@ class HomeFragmentViewModel @Inject constructor(
     private val spRepository: SharedPreferencesRepository,
     private val alarmScheduler: AlarmScheduler,
     private val repository: MedicineRepository,
-    private val workManager: WorkManager,
     @ApplicationContext private val appContext: Context
 ): ViewModel() {
 
@@ -68,7 +66,11 @@ class HomeFragmentViewModel @Inject constructor(
         medicine.medicineWasTaken = true
 
         withContext(Dispatchers.IO){
+            // Mark medicine usage
             repository.updateMedicine(medicine)
+
+            // Mark previous not used medicines as skipped
+            repository.updateMedicinesAsSkipped(medicine.treatmentID, medicine.alarmInMillis)
         }
     }
 
@@ -132,17 +134,6 @@ class HomeFragmentViewModel @Inject constructor(
         }
     }
 
-    fun isWorkerActive(): Boolean{
-        val workInfoList = workManager.getWorkInfosForUniqueWork("PillboxReminder").get()
-
-        for(workInfo in workInfoList){
-            if(workInfo.state == WorkInfo.State.ENQUEUED) {
-                return true
-            }
-        }
-        return false
-    }
-
     fun deleteAllMedicinesWithSameName(name: String) =  viewModelScope.launch(Dispatchers.IO){
             val alarmsToDelete = repository.getAllMedicinesWithSameName(name)
             repository.deleteAllSelectedMedicines(alarmsToDelete)
@@ -150,9 +141,10 @@ class HomeFragmentViewModel @Inject constructor(
 //14:10
 
     fun cancelReminderNotifications(context: Context){
-        WorkManager.getInstance(context).cancelUniqueWork("PillboxReminder")
+//        WorkManager.getInstance(context).cancelUniqueWork("PillboxReminder")
         val notificationManager = NotificationManagerCompat.from(context)
         notificationManager.cancel(999)
+        alarmScheduler.cancelPillboxReminder()
     }
 
     fun cancelAlarm(medicine: Medicine, cancelAll: Boolean){

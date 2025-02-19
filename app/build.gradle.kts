@@ -6,11 +6,13 @@ plugins {
     id("kotlin-parcelize")
     id("com.google.dagger.hilt.android")
     id("kotlin-android")
+    id("com.google.gms.google-services")
+    id("com.google.android.libraries.mapsplatform.secrets-gradle-plugin")
 }
 
 android {
     namespace = "com.phoenix.pillreminder"
-    compileSdk = 34
+    compileSdk = 35
 
     defaultConfig {
         applicationId = "com.phoenix.pillreminder"
@@ -20,12 +22,13 @@ android {
         versionCode = 1
         versionName = "1.0"
 
-        testInstrumentationRunner = "com.phoenix.pillreminder.feature_alarms.CustomTestRunner"
+        testInstrumentationRunner = "com.phoenix.pillreminder.CustomTestRunner"
     }
 
     buildTypes {
         release {
-            isMinifyEnabled = false
+            isMinifyEnabled = true
+            isShrinkResources = true
             proguardFiles(
                 getDefaultProguardFile("proguard-android-optimize.txt"),
                 "proguard-rules.pro"
@@ -41,6 +44,7 @@ android {
     }
     buildFeatures {
         viewBinding = true
+        buildConfig = true
     }
     packaging{
         resources.excludes.add("META-INF/*")
@@ -50,8 +54,11 @@ android {
 dependencies {
     implementation("androidx.test.ext:junit-ktx:1.1.5")
     implementation("androidx.cardview:cardview:1.0.0")
-    implementation("com.google.dagger:hilt-android-testing:2.51.1")
     implementation("androidx.navigation:navigation-testing:2.8.3")
+    implementation(platform("com.google.firebase:firebase-bom:33.8.0"))
+    implementation("com.google.firebase:firebase-analytics")
+    implementation("com.google.firebase:firebase-crashlytics")
+    implementation("androidx.activity:activity:1.10.0")
 
     val navVersion = "2.7.5"
     val coreVersion = "1.12.0"
@@ -100,6 +107,10 @@ dependencies {
     implementation("androidx.hilt:hilt-work:1.2.0")
     implementation("androidx.hilt:hilt-navigation-fragment:1.2.0")
 
+    // AdMob
+    implementation("com.google.android.gms:play-services-ads:23.6.0")
+    implementation("com.google.android.ump:user-messaging-platform:3.1.0")
+
     implementation("androidx.core:core-ktx:$coreVersion")
     implementation("androidx.appcompat:appcompat:1.6.1")
     implementation("com.google.android.material:material:1.12.0")
@@ -129,6 +140,7 @@ dependencies {
     testImplementation("org.robolectric:robolectric:4.13")
     kspTest("com.google.dagger:hilt-compiler:2.51.1")
 
+    androidTestImplementation("androidx.work:work-testing:$workVersion")
     androidTestImplementation("androidx.test.espresso:espresso-core:3.6.1")
     androidTestImplementation("androidx.test.espresso:espresso-contrib:3.6.1")
     androidTestImplementation("androidx.test:core:$androidxTestVersion")

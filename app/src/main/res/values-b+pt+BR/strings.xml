@@ -1,6 +1,5 @@
 <resources>
-    <string name="app_name">Pill Reminder</string>
-    <!-- TODO: Remove or change this placeholder text -->
+    <string name="app_name">Remedi</string>
     <string name="hello_blank_fragment">Hello blank fragment</string>
     <string name="hour">08:00</string>
     <string name="strength">Strength</string>
@@ -113,8 +112,8 @@
     <string name="medicine_not_taken">Medicamento não utilizado</string>
     <string name="menu_with_medicine_options">Menu com opções do remédio</string>
     <string name="welcome">Bem-vindo!</string>
-    <string name="app_explanation">O Pill Reminder é um app que te ajuda a controlar as doses de seus medicamentos.</string>
-    <string name="app_needs_permissions">...Mas primeiro precisamos de sua permissão.</string>
+    <string name="app_explanation">O Remedi é um aplicativo que te ajuda a acompanhar suas doses de medicamentos.</string>
+    <string name="app_needs_permissions">…Mas primeiro precisamos de sua permissão.</string>
     <string name="notification_mandatory">"O envio de notificações é obrigatório para o funcionamento ideal do aplicativo."</string>
     <string name="pillbox_reminders">Lembrete de recarga</string>
     <string name="click_on_pillbox">Clique no botão Lembrete de recarga e defina um horário para receber lembretes diários.</string>
@@ -129,7 +128,7 @@
         \n• Alertar o usuário caso tente marcar uma medicação como utilizada perto do horário da próxima dose.</string>
     <string name="about_us_text">Aplicativo desenvolvido por Vinícius Santos como trabalho de conclusão de curso de Engenharia da Computação.</string>
     <string name="contact_me">Contato</string>
-    <string name="pill_reminder">Pill Reminder</string>
+    <string name="pill_reminder">Remedi</string>
     <string name="app_description">Um aplicativo Android de código aberto para auxiliar os usuários a acompanharem seus medicamentos. </string>
     <string name="features">Recursos</string>
     <string name="about_me">Sobre mim</string>
@@ -244,6 +243,22 @@
     <string name="disable_battery_optimizations">Desabilitar otimizações de bateria</string>
     <string name="optimizations_already_disabled">As otimizações de bateria já estão desabilitadas</string>
     <string name="arrow_down_icon">Clique para ver a resposta da pergunta</string>
+    <string name="snooze_alarm">Adiar alarme</string>
+    <string name="change_alarm_snooze_interval">Intervalo de adiamento do alarme</string>
+    <string name="time_to_refill_your_pillbox">Hora de reabastecer sua caixa de remédios.</string>
+    <string name="com.crashlytics.android.build_id">1</string>
+
+    <string-array name="snooze_interval_entries">
+        <item>5 minutos</item>
+        <item>10 minutos</item>
+        <item>15 minutos</item>
+    </string-array>
+
+    <string-array name="snooze_interval_values">
+        <item>5</item>
+        <item>10</item>
+        <item>15</item>
+    </string-array>
 
     <string-array name="medicine_forms">
         <item>Comprimido</item>
@@ -396,4 +411,16 @@
         <item quantity="many">Alarmes por dia:\n\n%1$d alarmes</item>
     </plurals>
 
+    <string name="ad_inspector" translatable="false">Ad Inspector</string>
+    <string name="more_menu" translatable="false">More</string>
+    <string name="privacy_settings" translatable="false">Privacy Settings</string>
+    <string name="privacy_setting">Configurações de privacidade</string>
+    <string name="manage_data_consent_options">Consentimento de proteção de dados</string>
+    <string name="mark_all_as_used">Marcar todos como utilizados</string>
+    <string name="time_to_use_your_medicines">É hora de usar seus medicamentos!</string>
+    <string name="check_the_app">Abra o aplicativo para ver os medicamentos que precisam ser usados.</string>
+    <string name="more_than_one_medicine_to_be_used">Você tem mais de um medicamento para ser utilizado.\n\nPor favor, abra o aplicativo.</string>
+    <string name="did_you_forget_to_use_your_medicines">Você esqueceu de tomar seus medicamentos?</string>
+    <string name="open_app_pending_medicines">Abra o aplicativo para ver seus medicamentos pendentes.</string>
+    <string name="all_permissions_granted">Todas as permissões já foram concedidas.</string>
 </resources>

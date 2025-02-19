@@ -48,12 +48,12 @@ class FollowUpAlarmReceiver: BroadcastReceiver(), ActivityCompat.OnRequestPermis
                 }
 
                 // Check if any medicine in the list hasn't been taken
-                val anyMedicineNotTaken = medicinesList?.any { medicine ->
-                    !medicine.medicineWasTaken
+                val anyMedicineNotTakenNorSkipped = medicinesList?.any { medicine ->
+                    !medicine.medicineWasTaken && !medicine.wasSkipped
                 }
 
-                // updatedMedicine determines if the alarm service will start or not.
-                if(anyMedicineNotTaken == true){
+                // Determines if the alarm service will start or not.
+                if(anyMedicineNotTakenNorSkipped == true){
                     startAlarmService(context, intent, updatedMedicine)
                 }
             }

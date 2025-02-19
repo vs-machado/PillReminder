@@ -48,9 +48,8 @@ class EditMedicinesViewModel @Inject constructor(
     }
 
     fun resetCalendarHourToMidnight(millis: Long, timeZone: TimeZone): Long {
-        val timeZoneOffset = timeZone.getOffset(millis)
-        val date = Calendar.getInstance().apply {
-            timeInMillis = millis - timeZoneOffset
+        val date = Calendar.getInstance(timeZone).apply {
+            timeInMillis = millis
             set(Calendar.HOUR_OF_DAY, 0)
             set(Calendar.MINUTE, 0)
             set(Calendar.SECOND, 0)

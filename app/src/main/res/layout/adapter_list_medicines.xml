@@ -128,6 +128,20 @@
                 app:layout_constraintStart_toEndOf="@+id/ivMedicineType"
                 app:layout_constraintTop_toBottomOf="@+id/tvMedicineTaken" />
 
+            <Button
+                android:id="@+id/btnSkip"
+                style="@style/Widget.Material3.Button.IconButton.Filled.Tonal"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="8dp"
+                android:text="@string/skip_dose"
+                android:textColor="@color/white"
+                app:icon="@drawable/baseline_close_24"
+                app:iconTint="@color/white"
+                android:backgroundTint="@color/button_gray"
+                app:layout_constraintStart_toEndOf="@+id/btnMarkUsage"
+                app:layout_constraintTop_toTopOf="@+id/btnMarkUsage" />
+
         </androidx.constraintlayout.widget.ConstraintLayout>
 
     </com.google.android.material.card.MaterialCardView>

@@ -95,14 +95,26 @@ object NotificationUtils {
                         context, item.hashCode(),
                         snoozeAlarmIntent, PendingIntent.FLAG_IMMUTABLE
                     )
+
+                    // Intent for skip medicines
+                    val skipMedicineIntent = Intent(context, AlarmReceiver::class.java).apply {
+                        action = context.getString(R.string.skip_dose)
+                        putExtra("ALARM_ITEM_ACTION", item)
+                    }
+                    val skipMedicinePendingIntent: PendingIntent = PendingIntent.getBroadcast(
+                        context, item.hashCode(),
+                        skipMedicineIntent, PendingIntent.FLAG_IMMUTABLE
+                    )
+
                     createNotificationChannel(context, alarmUri)
 
                     val title = context.getString(R.string.time_to_use_your_medicines)
                     val text = context.getString(R.string.more_than_one_medicine_to_be_used)
 
                     return notificationBuilderWithActionButtons(context, channelId, pendingIntent,
-                        title, text, context.getString(R.string.mark_all_as_used), markAllUsagesPendingIntent,
-                        snoozeAlarmPendingIntent
+                        title, text, context.getString(R.string.mark_all_as_used),
+                        markAllUsagesPendingIntent, snoozeAlarmPendingIntent, skipMedicinePendingIntent,
+                        context.getString(R.string.skip_dose)
                     )
                 }
                 else {
@@ -126,6 +138,16 @@ object NotificationUtils {
                         snoozeAlarmIntent, PendingIntent.FLAG_IMMUTABLE
                     )
 
+                    // Intent for skip medicines
+                    val skipMedicineIntent = Intent(context, AlarmReceiver::class.java).apply {
+                        action = context.getString(R.string.skip_dose)
+                        putExtra("ALARM_ITEM_ACTION", item)
+                    }
+                    val skipMedicinePendingIntent: PendingIntent = PendingIntent.getBroadcast(
+                        context, item.hashCode(),
+                        skipMedicineIntent, PendingIntent.FLAG_IMMUTABLE
+                    )
+
                     createNotificationChannel(context, alarmUri)
 
                     val title = context.getString(R.string.time_to_use_your_medicine)
@@ -135,7 +157,8 @@ object NotificationUtils {
                     return notificationBuilderWithActionButtons(
                         context, channelId, pendingIntent, title, text,
                         context.getString(R.string.mark_as_used),
-                        markAsUsedPendingIntent, snoozeAlarmPendingIntent
+                        markAsUsedPendingIntent, snoozeAlarmPendingIntent,
+                        skipMedicinePendingIntent, context.getString(R.string.skip_dose)
                     )
                 }
             }
@@ -183,6 +206,16 @@ object NotificationUtils {
                      val markAllUsagesPendingIntent: PendingIntent = PendingIntent.getBroadcast(
                          context, item.hashCode(), markAllUsages, PendingIntent.FLAG_IMMUTABLE
                      )
+
+                     // Intent for skip medicines
+                     val skipMedicineIntent = Intent(context, AlarmReceiver::class.java).apply {
+                         action = context.getString(R.string.skip_dose)
+                         putExtra("ALARM_ITEM_ACTION", item)
+                     }
+                     val skipMedicinePendingIntent: PendingIntent = PendingIntent.getBroadcast(
+                         context, item.hashCode(),
+                         skipMedicineIntent, PendingIntent.FLAG_IMMUTABLE
+                     )
                      createFollowUpNotificationChannel(context, alarmUri)
 
                      val title = context.getString(R.string.did_you_forget_to_use_your_medicines)
@@ -190,7 +223,8 @@ object NotificationUtils {
 
                      return notificationBuilderWithActionButtons(
                          context, followUpChannelId, pendingIntent, title,
-                         text, context.getString(R.string.mark_all_as_used), markAllUsagesPendingIntent
+                         text, context.getString(R.string.mark_all_as_used), markAllUsagesPendingIntent,
+                         null, skipMedicinePendingIntent, context.getString(R.string.skip_dose)
                      )
                  }
                  else {
@@ -203,6 +237,15 @@ object NotificationUtils {
                          context, medicineHashCode.toInt(),
                          markAsUsedIntent, PendingIntent.FLAG_IMMUTABLE
                      )
+                     // Intent for skip medicines
+                     val skipMedicineIntent = Intent(context, AlarmReceiver::class.java).apply {
+                         action = context.getString(R.string.skip_dose)
+                         putExtra("ALARM_ITEM_ACTION", item)
+                     }
+                     val skipMedicinePendingIntent: PendingIntent = PendingIntent.getBroadcast(
+                         context, item.hashCode(),
+                         skipMedicineIntent, PendingIntent.FLAG_IMMUTABLE
+                     )
 
                      createFollowUpNotificationChannel(context, alarmUri)
 
@@ -212,7 +255,8 @@ object NotificationUtils {
 
                      return notificationBuilderWithActionButtons(
                          context, followUpChannelId, pendingIntent, title, text,
-                         context.getString(R.string.mark_as_used), markAsUsedPendingIntent
+                         context.getString(R.string.mark_as_used), markAsUsedPendingIntent,
+                         null, skipMedicinePendingIntent, context.getString(R.string.skip_dose)
                      )
                  }
              }
@@ -305,7 +349,9 @@ object NotificationUtils {
         title: String, content: String,
         actionName: String,
         actionButtonPendingIntent1: PendingIntent,
-        snoozeAlarmPendingIntent: PendingIntent? = null
+        snoozeAlarmPendingIntent: PendingIntent? = null,
+        skipMedicinePendingIntent: PendingIntent,
+        skipMedicineString: String
     ): Notification {
         val largeIcon = BitmapFactory.decodeResource(context.resources, R.drawable.ic_pill)
 
@@ -317,6 +363,7 @@ object NotificationUtils {
             .setLargeIcon(largeIcon)
             .setPriority(NotificationCompat.PRIORITY_MAX)
             .setContentIntent(pendingIntent)
+            .addAction(0, skipMedicineString, skipMedicinePendingIntent)
             // Snooze button is not added when the alarm is a follow up alarm (snoozeAlarmPendingIntent == null)
             .apply {
                 snoozeAlarmPendingIntent?.let {

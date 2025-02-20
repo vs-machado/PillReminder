@@ -4,7 +4,6 @@ import android.app.NotificationManager
 import android.content.BroadcastReceiver
 import android.content.Context
 import android.content.Intent
-import android.util.Log
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import com.phoenix.pillreminder.R
@@ -41,6 +40,7 @@ class AlarmReceiver: BroadcastReceiver(), ActivityCompat.OnRequestPermissionsRes
         val actionMarkAsUsed = context?.getString(R.string.mark_as_used)
         val actionSnoozeAlarm = context?.getString(R.string.snooze_alarm)
         val actionMarkAllUsages = context?.getString(R.string.mark_all_as_used)
+        val actionSkipMedicines = context?.getString(R.string.skip_dose)
 
         job = Job()
 
@@ -71,6 +71,11 @@ class AlarmReceiver: BroadcastReceiver(), ActivityCompat.OnRequestPermissionsRes
         }
         if(intent?.action == actionMarkAllUsages && alarmItemAction != null) {
             markMultipleMedicinesAsUsed(alarmItemAction.time)
+            dismissNotification(context, alarmItemAction.hashCode())
+            return
+        }
+        if(intent?.action == actionSkipMedicines && alarmItemAction != null) {
+            skipMedicines(alarmItemAction.time)
             dismissNotification(context, alarmItemAction.hashCode())
             return
         }
@@ -164,6 +169,27 @@ class AlarmReceiver: BroadcastReceiver(), ActivityCompat.OnRequestPermissionsRes
             medicines.forEach {
                 it.medicineWasTaken = true
                 repository.updateMedicine(it)
+            }
+        }
+
+        job.invokeOnCompletion {
+            job.cancel()
+        }
+    }
+
+    private fun skipMedicines(alarmTime: LocalDateTime) {
+        val alarmMillis = localDateTimeToMillis(alarmTime)
+
+        val job = CoroutineScope(Dispatchers.IO).launch {
+            val medicines = repository.getMedicinesScheduledForTime(alarmMillis)
+
+            // If statement ensures that medicines already used can't be marked as skipped.
+            // Useful when skipping only a part of the medicines triggered on the same milliseconds date.
+            medicines.forEach {
+                if(!it.medicineWasTaken){
+                    it.wasSkipped = true
+                    repository.updateMedicine(it)
+                }
             }
         }
 

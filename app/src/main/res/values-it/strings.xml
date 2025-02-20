@@ -84,9 +84,9 @@
     <string name="no_i_don_t">No</string>
     <string name="alarms_successfully_created">Promemoria creati con successo!</string>
     <string name="select_the_treatment_duration">Seleziona la durata del trattamento:</string>
-    <string name="medicine_already_taken">Medicinale già assunto</string>
+    <string name="medicine_already_taken">Medicinale già assunto &#9989;</string>
     <string name="medicine_not_taken_yet">Medicinale non ancora assunto.</string>
-    <string name="medicine_skipped">Dose saltata.</string>
+    <string name="medicine_skipped">Dose saltata. &#10060;</string>
     <string name="quantity">Quantità</string>
     <string name="dose_quantity">Quantità dose</string>
     <string name="set_the_quantity_per_dosage">Imposta la quantità per dose:</string>
@@ -188,7 +188,7 @@ se l\'utente non segna un medicinale come assunto nell\'applicazione.\n• Perme
     <string name="ongoing_treatment">Trattamento in corso</string>
     <string name="treatment_ended">Trattamento terminato</string>
     <string name="treatment_hasnt_started_yet">Il trattamento non è ancora iniziato</string>
-    <string name="medicine_already_used">Medicinale già utilizzato</string>
+    <string name="medicine_already_used">Medicinale già utilizzato &#9989;</string>
     <string name="medicine_not_used_yet">Non ancora utilizzato</string>
     <string name="frequency">Frequenza</string>
     <string name="alarms_per_day">Allarmi al giorno</string>

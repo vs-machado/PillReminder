@@ -6,7 +6,6 @@ import android.content.Intent
 import android.content.res.Configuration
 import android.os.Build
 import android.os.Bundle
-import android.util.Log
 import android.view.View
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
@@ -97,15 +96,20 @@ class AlarmTriggeredActivity: AppCompatActivity() {
                             btnTaken.text = getString(R.string.mark_all_as_used)
 
                             btnTaken.setOnClickListener {
-                                medicinesList.forEach { medicine ->
-                                    medicine.medicineWasTaken = true
-                                    medicinesViewModel.updateMedicines(medicine)
+                                lifecycleScope.launch(Dispatchers.Main) {
+                                    withContext(Dispatchers.IO){
+                                        medicinesList.forEach { medicine ->
+                                            medicine.medicineWasTaken = true
+                                            medicinesViewModel.updateMedicines(medicine)
+                                            repository.updateMedicinesAsSkipped(medicine.treatmentID, medicine.alarmInMillis)
+                                        }
+                                    }
+                                    dismissNotification(applicationContext, alarmItem.hashCode())
+                                    val intent = Intent(applicationContext, MainActivity::class.java)
+                                    startActivity(intent)
+                                    Admob.showInterstitial(this@AlarmTriggeredActivity)
+                                    finish()
                                 }
-                                dismissNotification(applicationContext, alarmItem.hashCode())
-                                val intent = Intent(applicationContext, MainActivity::class.java)
-                                startActivity(intent)
-                                Admob.showInterstitial(this@AlarmTriggeredActivity)
-                                finish()
                             }
                         }
                     } else {
@@ -120,6 +124,8 @@ class AlarmTriggeredActivity: AppCompatActivity() {
                                 btnTaken.setOnClickListener{
                                     lifecycleScope.launch(Dispatchers.IO) {
                                         viewModel.markMedicineAsTaken(alarmItem, medicinesViewModel)
+                                        val medicine = medicinesList.first()
+                                        repository.updateMedicinesAsSkipped(medicine.treatmentID, medicine.alarmInMillis)
                                     }
                                     dismissNotification(applicationContext, alarmItem.hashCode())
                                     val intent = Intent(applicationContext, MainActivity::class.java)
@@ -155,6 +161,27 @@ class AlarmTriggeredActivity: AppCompatActivity() {
                                 withContext(Dispatchers.Default){
                                     alarmScheduler.cancelFollowUpAlarm(medicine.hashCode())
                                 }
+                            }
+                        }
+
+                        dismissNotification(applicationContext, alarmItem.hashCode())
+                        val intent = Intent(applicationContext, MainActivity::class.java)
+                        startActivity(intent)
+                        Admob.showInterstitial(this@AlarmTriggeredActivity)
+                        finish()
+                    }
+                }
+
+                btnSkipDoseActivity.setOnClickListener {
+                    if(alarmItem != null) {
+                        val alarmMillis = localDateTimeToMillis(alarmItem.time)
+
+                        lifecycleScope.launch(Dispatchers.IO) {
+                            val medicines = repository.getMedicinesScheduledForTime(alarmMillis)
+
+                            medicines.forEach {
+                                it.wasSkipped = true
+                                repository.updateMedicine(it)
                             }
                         }
 

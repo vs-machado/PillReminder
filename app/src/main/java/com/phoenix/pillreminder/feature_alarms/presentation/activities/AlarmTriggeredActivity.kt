@@ -96,15 +96,20 @@ class AlarmTriggeredActivity: AppCompatActivity() {
                             btnTaken.text = getString(R.string.mark_all_as_used)
 
                             btnTaken.setOnClickListener {
-                                medicinesList.forEach { medicine ->
-                                    medicine.medicineWasTaken = true
-                                    medicinesViewModel.updateMedicines(medicine)
+                                lifecycleScope.launch(Dispatchers.Main) {
+                                    withContext(Dispatchers.IO){
+                                        medicinesList.forEach { medicine ->
+                                            medicine.medicineWasTaken = true
+                                            medicinesViewModel.updateMedicines(medicine)
+                                            repository.updateMedicinesAsSkipped(medicine.treatmentID, medicine.alarmInMillis)
+                                        }
+                                    }
+                                    dismissNotification(applicationContext, alarmItem.hashCode())
+                                    val intent = Intent(applicationContext, MainActivity::class.java)
+                                    startActivity(intent)
+                                    Admob.showInterstitial(this@AlarmTriggeredActivity)
+                                    finish()
                                 }
-                                dismissNotification(applicationContext, alarmItem.hashCode())
-                                val intent = Intent(applicationContext, MainActivity::class.java)
-                                startActivity(intent)
-                                Admob.showInterstitial(this@AlarmTriggeredActivity)
-                                finish()
                             }
                         }
                     } else {
@@ -119,6 +124,8 @@ class AlarmTriggeredActivity: AppCompatActivity() {
                                 btnTaken.setOnClickListener{
                                     lifecycleScope.launch(Dispatchers.IO) {
                                         viewModel.markMedicineAsTaken(alarmItem, medicinesViewModel)
+                                        val medicine = medicinesList.first()
+                                        repository.updateMedicinesAsSkipped(medicine.treatmentID, medicine.alarmInMillis)
                                     }
                                     dismissNotification(applicationContext, alarmItem.hashCode())
                                     val intent = Intent(applicationContext, MainActivity::class.java)

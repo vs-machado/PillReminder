@@ -87,9 +87,9 @@
     <string name="no_i_don_t">Não</string>
     <string name="alarms_successfully_created">Alarmes criados com sucesso!</string>
     <string name="select_the_treatment_duration">Selecione a duração do tratamento:</string>
-    <string name="medicine_already_taken">Medicamento foi tomado</string>
+    <string name="medicine_already_taken">Medicamento foi tomado &#9989;</string>
     <string name="medicine_not_taken_yet">Ainda não foi tomado</string>
-    <string name="medicine_skipped">Dose pulada.</string>
+    <string name="medicine_skipped">Dose pulada &#10060;</string>
     <string name="quantity">Quantidade</string>
     <string name="dose_quantity">Quantidade por dose</string>
     <string name="set_the_quantity_per_dosage">Insira a quantidade por dose:</string>
@@ -192,7 +192,7 @@
     <string name="ongoing_treatment">Tratamento em andamento</string>
     <string name="treatment_ended">Tratamento encerrado</string>
     <string name="treatment_hasnt_started_yet">Tratamento ainda não começou</string>
-    <string name="medicine_already_used">Medicamento utilizado</string>
+    <string name="medicine_already_used">Medicamento utilizado &#9989;</string>
     <string name="medicine_not_used_yet">Ainda não foi utilizado</string>
     <string name="frequency">Frequência</string>
     <string name="alarms_per_day">Alarmes por dia</string>

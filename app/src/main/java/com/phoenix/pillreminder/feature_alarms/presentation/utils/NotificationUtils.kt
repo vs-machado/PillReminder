@@ -340,6 +340,7 @@ object NotificationUtils {
             //.setColor(ContextCompat.getColor(context, R.color.colorPrimary))
             .setSmallIcon(R.drawable.ic_pill)
             .setPriority(NotificationCompat.PRIORITY_MAX)
+            .setCategory(NotificationCompat.CATEGORY_ALARM)
             .setContentIntent(pendingIntent)
             .build()
     }
@@ -362,6 +363,7 @@ object NotificationUtils {
             .setSmallIcon(R.drawable.ic_pill)
             .setLargeIcon(largeIcon)
             .setPriority(NotificationCompat.PRIORITY_MAX)
+            .setCategory(NotificationCompat.CATEGORY_ALARM)
             .setContentIntent(pendingIntent)
             .addAction(0, skipMedicineString, skipMedicinePendingIntent)
             // Snooze button is not added when the alarm is a follow up alarm (snoozeAlarmPendingIntent == null)

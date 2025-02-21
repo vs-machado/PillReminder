@@ -20,4 +20,4 @@
 # hide the original source file name.
 #-renamesourcefileattribute SourceFile
 
--keep class com.phoenix.pillreminder.feature_alarms.domain.model.** { *; }
+-keep class com.phoenix.remedi.feature_alarms.domain.model.** { *; }

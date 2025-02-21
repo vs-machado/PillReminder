@@ -25,7 +25,7 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent">
 
-            <com.phoenix.pillreminder.feature_alarms.presentation.datepicker.DarioWeekViewDatePicker
+            <com.phoenix.remedi.feature_alarms.presentation.datepicker.DarioWeekViewDatePicker
                 android:id="@+id/datePicker"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
@@ -39,7 +39,7 @@
                 tools:layout_conversion_absoluteWidth="411dp">
 
 
-            </com.phoenix.pillreminder.feature_alarms.presentation.datepicker.DarioWeekViewDatePicker>
+            </com.phoenix.remedi.feature_alarms.presentation.datepicker.DarioWeekViewDatePicker>
 
         </androidx.constraintlayout.widget.ConstraintLayout>
 

@@ -11,18 +11,18 @@ plugins {
 }
 
 android {
-    namespace = "com.phoenix.pillreminder"
+    namespace = "com.phoenix.remedi"
     compileSdk = 35
 
     defaultConfig {
-        applicationId = "com.phoenix.pillreminder"
+        applicationId = "com.phoenix.remedi"
         minSdk = 33
         //noinspection EditedTargetSdkVersion
         targetSdk = 35
         versionCode = 1
         versionName = "1.0"
 
-        testInstrumentationRunner = "com.phoenix.pillreminder.CustomTestRunner"
+        testInstrumentationRunner = "com.phoenix.remedi.CustomTestRunner"
     }
 
     buildTypes {

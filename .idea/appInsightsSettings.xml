@@ -9,8 +9,8 @@
             <InsightsFilterSettings>
               <option name="connection">
                 <ConnectionSetting>
-                  <option name="appId" value="com.phoenix.pillreminder" />
-                  <option name="mobileSdkAppId" value="1:24740833167:android:1087e6586a639dc362cdfa" />
+                  <option name="appId" value="com.phoenix.remedi" />
+                  <option name="mobileSdkAppId" value="1:24740833167:android:3af30f70d29d73ee62cdfa" />
                   <option name="projectId" value="pill-reminder-e1726" />
                   <option name="projectNumber" value="24740833167" />
                 </ConnectionSetting>

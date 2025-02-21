@@ -7,7 +7,7 @@
 
     <fragment
         android:id="@+id/homeFragment"
-        android:name="com.phoenix.pillreminder.feature_alarms.presentation.fragments.HomeFragment"
+        android:name="com.phoenix.remedi.feature_alarms.presentation.fragments.HomeFragment"
         android:label="Pill Reminder"
         tools:layout="@layout/fragment_home" >
         <action
@@ -39,7 +39,7 @@
     </fragment>
     <fragment
         android:id="@+id/addMedicinesFragment"
-        android:name="com.phoenix.pillreminder.feature_alarms.presentation.fragments.AddMedicinesFragment"
+        android:name="com.phoenix.remedi.feature_alarms.presentation.fragments.AddMedicinesFragment"
         android:label=""
         tools:layout="@layout/fragment_add_medicines" >
         <action
@@ -52,7 +52,7 @@
     </fragment>
     <fragment
         android:id="@+id/medicineFormFragment"
-        android:name="com.phoenix.pillreminder.feature_alarms.presentation.fragments.MedicineFormFragment"
+        android:name="com.phoenix.remedi.feature_alarms.presentation.fragments.MedicineFormFragment"
         android:label=""
         tools:layout="@layout/fragment_medicine_form" >
         <action
@@ -72,7 +72,7 @@
     </fragment>
     <fragment
         android:id="@+id/frequencyFragment"
-        android:name="com.phoenix.pillreminder.feature_alarms.presentation.fragments.FrequencyFragment"
+        android:name="com.phoenix.remedi.feature_alarms.presentation.fragments.FrequencyFragment"
         android:label=""
         tools:layout="@layout/fragment_frequency" >
         <action
@@ -99,7 +99,7 @@
     </fragment>
     <fragment
         android:id="@+id/howManyPerDayFragment"
-        android:name="com.phoenix.pillreminder.feature_alarms.presentation.fragments.HowManyPerDayFragment"
+        android:name="com.phoenix.remedi.feature_alarms.presentation.fragments.HowManyPerDayFragment"
         android:label=""
         tools:layout="@layout/fragment_how_many_per_day" >
         <action
@@ -112,7 +112,7 @@
     </fragment>
     <fragment
         android:id="@+id/alarmHourFragment"
-        android:name="com.phoenix.pillreminder.feature_alarms.presentation.fragments.AlarmHourFragment"
+        android:name="com.phoenix.remedi.feature_alarms.presentation.fragments.AlarmHourFragment"
         android:label=""
         tools:layout="@layout/fragment_alarm_hour" >
         <action
@@ -125,7 +125,7 @@
     </fragment>
     <fragment
         android:id="@+id/treatmentDurationFragment"
-        android:name="com.phoenix.pillreminder.feature_alarms.presentation.fragments.TreatmentDurationFragment"
+        android:name="com.phoenix.remedi.feature_alarms.presentation.fragments.TreatmentDurationFragment"
         android:label=""
         tools:layout="@layout/fragment_treatment_duration" >
         <action
@@ -138,7 +138,7 @@
     </fragment>
     <fragment
         android:id="@+id/quantityAndStrengthFragment"
-        android:name="com.phoenix.pillreminder.feature_alarms.presentation.fragments.QuantityAndStrengthFragment"
+        android:name="com.phoenix.remedi.feature_alarms.presentation.fragments.QuantityAndStrengthFragment"
         android:label=""
         tools:layout="@layout/fragment_quantity_and_strength" >
         <action
@@ -151,7 +151,7 @@
     </fragment>
     <fragment
         android:id="@+id/myMedicinesFragment"
-        android:name="com.phoenix.pillreminder.feature_alarms.presentation.fragments.MyMedicinesFragment"
+        android:name="com.phoenix.remedi.feature_alarms.presentation.fragments.MyMedicinesFragment"
         android:label="@string/my_medicines"
         tools:layout="@layout/fragment_my_medicines" >
         <action
@@ -165,17 +165,17 @@
     </fragment>
     <fragment
         android:id="@+id/helpFragment"
-        android:name="com.phoenix.pillreminder.feature_alarms.presentation.fragments.HelpFragment"
+        android:name="com.phoenix.remedi.feature_alarms.presentation.fragments.HelpFragment"
         android:label="@string/help"
         tools:layout="@layout/fragment_help" />
     <fragment
         android:id="@+id/aboutFragment"
-        android:name="com.phoenix.pillreminder.feature_alarms.presentation.fragments.AboutFragment"
+        android:name="com.phoenix.remedi.feature_alarms.presentation.fragments.AboutFragment"
         android:label="@string/about"
         tools:layout="@layout/fragment_about" />
     <fragment
         android:id="@+id/specificDaysFragment"
-        android:name="com.phoenix.pillreminder.feature_alarms.presentation.fragments.SpecificDaysFragment"
+        android:name="com.phoenix.remedi.feature_alarms.presentation.fragments.SpecificDaysFragment"
         android:label=""
         tools:layout="@layout/fragment_specific_days" >
         <action
@@ -188,7 +188,7 @@
     </fragment>
     <fragment
         android:id="@+id/everyXPeriodFragment"
-        android:name="com.phoenix.pillreminder.feature_alarms.presentation.fragments.EveryXPeriodFragment"
+        android:name="com.phoenix.remedi.feature_alarms.presentation.fragments.EveryXPeriodFragment"
         android:label="" >
         <action
             android:id="@+id/action_everyXPeriodFragment_to_howManyPerDayFragment"
@@ -200,22 +200,22 @@
     </fragment>
     <fragment
         android:id="@+id/medicineDetailsFragment"
-        android:name="com.phoenix.pillreminder.feature_alarms.presentation.fragments.MedicineDetailsFragment"
+        android:name="com.phoenix.remedi.feature_alarms.presentation.fragments.MedicineDetailsFragment"
         android:label= "@string/details">
         <argument
             android:name="medicine"
-            app:argType="com.phoenix.pillreminder.feature_alarms.domain.model.Medicine" />
+            app:argType="com.phoenix.remedi.feature_alarms.domain.model.Medicine" />
     </fragment>
     <fragment
         android:id="@+id/editMedicinesFragment"
-        android:name="com.phoenix.pillreminder.feature_alarms.presentation.fragments.EditMedicinesFragment"
+        android:name="com.phoenix.remedi.feature_alarms.presentation.fragments.EditMedicinesFragment"
         android:label="@string/edit_medicine" >
         <argument
             android:name="edit_medicine"
-            app:argType="com.phoenix.pillreminder.feature_alarms.domain.model.Medicine" />
+            app:argType="com.phoenix.remedi.feature_alarms.domain.model.Medicine" />
     </fragment>
     <fragment
         android:id="@+id/mySettingsFragment"
-        android:name="com.phoenix.pillreminder.feature_alarms.presentation.fragments.MySettingsFragment"
+        android:name="com.phoenix.remedi.feature_alarms.presentation.fragments.MySettingsFragment"
         android:label="MySettingsFragment" />
 </navigation>

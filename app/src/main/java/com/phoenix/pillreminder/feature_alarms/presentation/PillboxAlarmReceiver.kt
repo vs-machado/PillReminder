@@ -20,24 +20,27 @@ class PillboxAlarmReceiver: BroadcastReceiver() {
 
     override fun onReceive(context: Context?, intent: Intent?) {
         val (hours, minutes) = sharedPreferencesRepository.getPillboxReminderHour()
+        val isPillboxReminderEnabled = sharedPreferencesRepository.getPillboxPreferences()
 
         // If user reboots the phone or install an app update the alarm will be rescheduled.
         if(intent?.action == Intent.ACTION_BOOT_COMPLETED || intent?.action == Intent.ACTION_MY_PACKAGE_REPLACED) {
 
-            if(hours != null && minutes != null) {
+            if(isPillboxReminderEnabled && hours != null && minutes != null) {
                 alarmScheduler.schedulePillboxReminder(hours, minutes)
                 return
             }
         }
 
         context?.let {
-            val serviceIntent = Intent(context, AlarmService::class.java).apply {
-                putExtra("NOTIFICATION_TYPE", "pillboxReminder")
+            if(isPillboxReminderEnabled) {
+                val serviceIntent = Intent(context, AlarmService::class.java).apply {
+                    putExtra("NOTIFICATION_TYPE", "pillboxReminder")
+                }
+                ContextCompat.startForegroundService(context, serviceIntent)
             }
-            ContextCompat.startForegroundService(context, serviceIntent)
         }
 
-        if (hours != null && minutes != null) {
+        if (isPillboxReminderEnabled && hours != null && minutes != null) {
             alarmScheduler.schedulePillboxReminder(hours, minutes)
         }
     }

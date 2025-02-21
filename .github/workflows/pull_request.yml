@@ -34,6 +34,11 @@ jobs:
           echo "sdk.dir=$ANDROID_SDK_ROOT" > local.properties
           echo "ADMOB_APP_ID=$ADMOB_APP_ID" >> local.properties
           echo "AD_UNIT_ID=$AD_UNIT_ID" >> local.properties
+          
+      - name: Decode google-services.json
+        env:
+          FIREBASE_SECRET: ${{ secrets.FIREBASE_SECRET }}
+        run: echo $FIREBASE_SECRET > /app/google-services.json
 
       - name: Grant execute permissions for gradlew
         run: chmod +x gradlew

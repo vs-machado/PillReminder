@@ -38,7 +38,7 @@ jobs:
       - name: Decode google-services.json
         env:
           FIREBASE_SECRET: ${{ secrets.FIREBASE_SECRET }}
-        run: echo $FIREBASE_SECRET > /app/google-services.json
+        run: echo $FIREBASE_SECRET > PillReminder/app/google-services.json
 
       - name: Grant execute permissions for gradlew
         run: chmod +x gradlew

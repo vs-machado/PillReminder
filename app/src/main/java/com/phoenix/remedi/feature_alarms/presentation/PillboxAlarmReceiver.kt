@@ -1,10 +1,13 @@
 package com.phoenix.remedi.feature_alarms.presentation
 
+import android.app.NotificationManager
 import android.content.BroadcastReceiver
 import android.content.Context
 import android.content.Intent
 import androidx.core.content.ContextCompat
+import com.phoenix.remedi.feature_alarms.domain.model.NotificationType
 import com.phoenix.remedi.feature_alarms.domain.repository.SharedPreferencesRepository
+import com.phoenix.remedi.feature_alarms.presentation.utils.NotificationUtils
 import dagger.hilt.android.AndroidEntryPoint
 import javax.inject.Inject
 
@@ -33,8 +36,12 @@ class PillboxAlarmReceiver: BroadcastReceiver() {
 
         context?.let {
             if(isPillboxReminderEnabled) {
+                val notification = NotificationUtils.schedulePillboxDailyReminder(context)
+                val notificationManager = it.getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
+                notificationManager.notify(999, notification)
+
                 val serviceIntent = Intent(context, AlarmService::class.java).apply {
-                    putExtra("NOTIFICATION_TYPE", "pillboxReminder")
+                    putExtra("NOTIFICATION_TYPE", NotificationType.PILLBOX_REMINDER)
                 }
                 ContextCompat.startForegroundService(context, serviceIntent)
             }

@@ -6,10 +6,11 @@ import android.content.pm.ServiceInfo
 import android.os.Build
 import android.os.IBinder
 import android.provider.Settings
+import com.phoenix.remedi.R
 import com.phoenix.remedi.feature_alarms.domain.model.AlarmItem
+import com.phoenix.remedi.feature_alarms.domain.model.NotificationType
 import com.phoenix.remedi.feature_alarms.domain.repository.MedicineRepository
 import com.phoenix.remedi.feature_alarms.presentation.activities.AlarmTriggeredActivity
-import com.phoenix.remedi.feature_alarms.presentation.activities.MainActivity
 import com.phoenix.remedi.feature_alarms.presentation.activities.PillboxReminderActivity
 import com.phoenix.remedi.feature_alarms.presentation.utils.NotificationUtils
 import dagger.hilt.android.AndroidEntryPoint
@@ -17,10 +18,20 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.cancel
-import kotlinx.coroutines.launch
-import kotlinx.coroutines.withContext
 import javax.inject.Inject
 
+/**
+ * Service responsible for handling medication alarms and displaying them to the user.
+ * 
+ * This service creates a foreground notification and starts the appropriate activity
+ * to show medication information. It operates based on the following flow:
+ * 
+ * 1. Starts a foreground notification with "Opening the app..." message in the user's language
+ * 2. If overlay permissions are granted:
+ *    - Opens AlarmTriggeredActivity with the alarm details
+ * 3. Stops itself after launching the activity
+ *
+ */
 @AndroidEntryPoint
 class AlarmService: Service() {
     private val serviceScope = CoroutineScope(Dispatchers.IO + Job())
@@ -37,7 +48,7 @@ class AlarmService: Service() {
     }
 
     override fun onStartCommand(intent: Intent?, flags: Int, startId: Int): Int{
-        val notificationType = intent?.getStringExtra("NOTIFICATION_TYPE")
+        val notificationType = intent?.getParcelableExtra("NOTIFICATION_TYPE", NotificationType::class.java)
 
         val alarmItem = if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU){
             intent?.getParcelableExtra("ALARM_ITEM", AlarmItem::class.java)
@@ -45,104 +56,42 @@ class AlarmService: Service() {
             intent?.getParcelableExtra("ALARM_ITEM")
         }
 
-        val hashCode = if (notificationType == "follow_up"){
-            intent.getStringExtra("HASH_CODE")
-        } else {null}
+        val notification = NotificationUtils.createSimpleNotification(
+            applicationContext,
+            getString(R.string.opening_app)
+        )
+        
+        if (Build.VERSION.SDK_INT > Build.VERSION_CODES.TIRAMISU){
+            startForeground(1, notification, ServiceInfo.FOREGROUND_SERVICE_TYPE_SHORT_SERVICE)
+        } else{
+            startForeground(1, notification)
+        }
 
-        when(notificationType){
-            "normal" -> {
-                serviceScope.launch {
-                    alarmItem?.let {
-                        val hasMultipleAlarmsAtSameTime = medicineRepository.checkForMultipleAlarmsAtSameTime(
-                            alarmItem.alarmHour,
-                            alarmItem.alarmMinute
-                        )
-
-                        withContext(Dispatchers.Main) {
-                            val notification = NotificationUtils.createNotification(applicationContext, alarmItem, hasMultipleAlarmsAtSameTime)
-
-                            if (Build.VERSION.SDK_INT > Build.VERSION_CODES.TIRAMISU){
-                                startForeground(1, notification, ServiceInfo.FOREGROUND_SERVICE_TYPE_SPECIAL_USE)
-                            } else{
-                                startForeground(1, notification)
-                            }
-
-                            if(Settings.canDrawOverlays(applicationContext)){
-                                val activityIntent = Intent(this@AlarmService, AlarmTriggeredActivity::class.java).apply{
-                                    putExtra("ALARM_ITEM", alarmItem)
-                                }
-
-                                activityIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TOP)
-                                startActivity(activityIntent)
-                            } else {
-                                val activityIntent = Intent(this@AlarmService, MainActivity::class.java).apply{
-                                    putExtra("ALARM_ITEM", alarmItem)
-                                }
-                                activityIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
-                                startActivity(activityIntent)
-                            }
-                        }
+        when(notificationType) {
+            NotificationType.NORMAL, NotificationType.FOLLOWUP -> {
+                if(Settings.canDrawOverlays(applicationContext)){
+                    val activityIntent = Intent(this@AlarmService, AlarmTriggeredActivity::class.java).apply{
+                        putExtra("ALARM_ITEM", alarmItem)
                     }
-                }
-            }
-            "follow_up" -> {
-                serviceScope.launch(Dispatchers.IO) {
-                    alarmItem?.let {
-                        val hasMultipleAlarmsAtSameTime = medicineRepository.checkForMultipleAlarmsAtSameTime(
-                            alarmItem.alarmHour,
-                            alarmItem.alarmMinute
-                        )
 
-                        withContext(Dispatchers.Main){
-                            if(hashCode != null){
-                                val notification = NotificationUtils.createFollowUpNotification(applicationContext, alarmItem, hashCode, hasMultipleAlarmsAtSameTime)
-
-                                if (Build.VERSION.SDK_INT > Build.VERSION_CODES.TIRAMISU){
-                                    startForeground(1, notification, ServiceInfo.FOREGROUND_SERVICE_TYPE_SPECIAL_USE)
-                                } else{
-                                    startForeground(1, notification)
-                                }
-
-                                if(Settings.canDrawOverlays(applicationContext)){
-                                    val activityIntent = Intent(this@AlarmService, AlarmTriggeredActivity::class.java).apply{
-                                        putExtra("ALARM_ITEM", alarmItem)
-                                    }
-
-                                    activityIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TOP)
-                                    startActivity(activityIntent)
-                                } else {
-                                    val activityIntent = Intent(this@AlarmService, MainActivity::class.java).apply{
-                                        putExtra("ALARM_ITEM", alarmItem)
-                                    }
-                                    activityIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
-                                    startActivity(activityIntent)
-                                }
-                            }
-                        }
-                    }
-                }
-            }
-            "pillboxReminder" -> {
-                val notification = NotificationUtils.schedulePillboxDailyReminder(applicationContext)
-
-                if (Build.VERSION.SDK_INT > Build.VERSION_CODES.TIRAMISU){
-                    if (notification != null) {
-                        startForeground(999, notification, ServiceInfo.FOREGROUND_SERVICE_TYPE_SPECIAL_USE)
-                    }
-                } else{
-                    startForeground(999, notification)
-                }
-                if(Settings.canDrawOverlays(applicationContext)) {
-                    val activityIntent = Intent(this, PillboxReminderActivity::class.java)
                     activityIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TOP)
                     startActivity(activityIntent)
-                } else {
-                    val activityIntent = Intent(this, MainActivity::class.java)
-                    activityIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
+                }
+            }
+
+            NotificationType.PILLBOX_REMINDER -> {
+                if(Settings.canDrawOverlays(applicationContext)){
+                    val activityIntent = Intent(this@AlarmService, PillboxReminderActivity::class.java).apply{
+                        putExtra("ALARM_ITEM", alarmItem)
+                    }
+
+                    activityIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TOP)
                     startActivity(activityIntent)
                 }
             }
+            null -> {}
         }
+        stopSelf()
 
         return START_NOT_STICKY
     }

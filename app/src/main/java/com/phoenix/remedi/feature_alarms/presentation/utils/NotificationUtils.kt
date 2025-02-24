@@ -22,6 +22,7 @@ object NotificationUtils {
     private val channelId = "AlarmChannel"
     private val followUpChannelId = "FollowUpAlarmChannel"
     private val pillboxReminderChannelId = "PillboxReminderChannel"
+    private val simpleNotificationChannelId = "SimpleNotificationChannel"
 
     /**
      * Creates a notification for the alarm.
@@ -278,6 +279,31 @@ object NotificationUtils {
             context.getString(R.string.refill_your_pillbox_and_avoid_forgetting_to_use_your_medicine)
 
         return notificationBuilder(context, pillboxReminderChannelId, pendingIntent, title, text)
+    }
+
+    // Dummy notification used exclusively for running AlarmService
+    fun createSimpleNotification(context: Context, title: String): Notification {
+        val notificationIntent = Intent(context, MainActivity::class.java)
+        val pendingIntent = PendingIntent.getActivity(
+            context, 1, notificationIntent,
+            PendingIntent.FLAG_IMMUTABLE or PendingIntent.FLAG_UPDATE_CURRENT
+        )
+
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            val name = "SimpleNotificationChannel"
+            val importance = NotificationManager.IMPORTANCE_DEFAULT
+            val channel = NotificationChannel(simpleNotificationChannelId, name, importance)
+            val notificationManager = context.getSystemService(NotificationManager::class.java)
+            notificationManager.createNotificationChannel(channel)
+        }
+
+        return NotificationCompat.Builder(context, simpleNotificationChannelId)
+            .setContentTitle(title)
+            .setAutoCancel(true)
+            .setSmallIcon(R.drawable.ic_pill)
+            .setPriority(NotificationCompat.PRIORITY_DEFAULT)
+            .setContentIntent(pendingIntent)
+            .build()
     }
 
     private fun createNotificationChannel(context: Context, alarmUri: Uri){

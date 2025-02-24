@@ -143,6 +143,7 @@ class AlarmTriggeredActivity: AppCompatActivity() {
                 alarmItem?.apply{
                     btnDismiss.setOnClickListener {
                         //stopMediaPlayer()
+                        dismissNotification(applicationContext, alarmItem.hashCode())
                         val intent = Intent(applicationContext, MainActivity::class.java)
                         startActivity(intent)
                         finish()

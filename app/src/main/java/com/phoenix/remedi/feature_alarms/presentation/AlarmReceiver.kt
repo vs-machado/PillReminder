@@ -8,9 +8,11 @@ import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import com.phoenix.remedi.R
 import com.phoenix.remedi.feature_alarms.domain.model.AlarmItem
+import com.phoenix.remedi.feature_alarms.domain.model.NotificationType
 import com.phoenix.remedi.feature_alarms.domain.repository.MedicineRepository
 import com.phoenix.remedi.feature_alarms.domain.repository.SharedPreferencesRepository
 import com.phoenix.remedi.feature_alarms.presentation.utils.DateUtil.localDateTimeToMillis
+import com.phoenix.remedi.feature_alarms.presentation.utils.NotificationUtils
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -94,7 +96,18 @@ class AlarmReceiver: BroadcastReceiver(), ActivityCompat.OnRequestPermissionsRes
 
                     // The notification is only delivered if user does not confirm the medicine usage
                     if(!medicine.medicineWasTaken){
-                        startAlarmService(context, intent)
+                        context?.let {
+                            val hasMultipleAlarmsAtSameTime = repository.checkForMultipleAlarmsAtSameTime(
+                                alarmItem.alarmHour,
+                                alarmItem.alarmMinute
+                            )
+
+                            val notification = NotificationUtils.createNotification(context, alarmItem, hasMultipleAlarmsAtSameTime)
+                            val notificationManager = it.getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
+
+                            notificationManager.notify(alarmItem.hashCode(), notification)
+                            startAlarmService(context, intent)
+                        }
                     }
 
                     //When an alarm is received by system the next alarm is automatically scheduled
@@ -123,7 +136,7 @@ class AlarmReceiver: BroadcastReceiver(), ActivityCompat.OnRequestPermissionsRes
     private fun startAlarmService(context: Context?, intent: Intent?){
         val serviceIntent = Intent(context, AlarmService::class.java).apply{
             putExtra("ALARM_ITEM", intent?.getParcelableExtra("ALARM_ITEM", AlarmItem::class.java))
-            putExtra("NOTIFICATION_TYPE", "normal")
+            putExtra("NOTIFICATION_TYPE", NotificationType.NORMAL)
         }
         ContextCompat.startForegroundService(context!!, serviceIntent)
     }

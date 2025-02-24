@@ -1,13 +1,15 @@
 package com.phoenix.remedi.feature_alarms.presentation
 
+import android.app.NotificationManager
 import android.content.BroadcastReceiver
 import android.content.Context
 import android.content.Intent
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import com.phoenix.remedi.feature_alarms.domain.model.AlarmItem
-import com.phoenix.remedi.feature_alarms.domain.model.Medicine
+import com.phoenix.remedi.feature_alarms.domain.model.NotificationType
 import com.phoenix.remedi.feature_alarms.domain.repository.MedicineRepository
+import com.phoenix.remedi.feature_alarms.presentation.utils.NotificationUtils
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -28,6 +30,7 @@ class FollowUpAlarmReceiver: BroadcastReceiver(), ActivityCompat.OnRequestPermis
 
     @Inject lateinit var repository: MedicineRepository
     @Inject lateinit var alarmScheduler: AlarmScheduler
+    private lateinit var firstPendingMedicineAlarmItem: AlarmItem
 
     private var job: Job = Job()
 
@@ -61,7 +64,7 @@ class FollowUpAlarmReceiver: BroadcastReceiver(), ActivityCompat.OnRequestPermis
                     !medicine.medicineWasTaken && !medicine.wasSkipped
                 }
                 firstPendingMedicine?.let {
-                    val firstPendingMedicineAlarmItem = AlarmItem(
+                     firstPendingMedicineAlarmItem = AlarmItem(
                         Instant.ofEpochMilli(firstPendingMedicine.alarmInMillis).atZone(ZoneId.systemDefault()).toLocalDateTime(),
                         firstPendingMedicine.name,
                         firstPendingMedicine.form,
@@ -79,7 +82,20 @@ class FollowUpAlarmReceiver: BroadcastReceiver(), ActivityCompat.OnRequestPermis
 
                 // Determines if the alarm service will start or not.
                 if(anyMedicineNotTakenNorSkipped == true){
-                    startAlarmService(context, intent, updatedMedicine)
+                    context?.let {
+                        val hasMultipleAlarmsAtSameTime = repository.checkForMultipleAlarmsAtSameTime(
+                            medicineItem.alarmHour,
+                            medicineItem.alarmMinute
+                        )
+                        if(firstPendingMedicine != null) {
+                            val notification = NotificationUtils.createFollowUpNotification(context, firstPendingMedicineAlarmItem,
+                                firstPendingMedicineAlarmItem.hashCode().toString(), hasMultipleAlarmsAtSameTime)
+                            val notificationManager = it.getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
+                            notificationManager.notify(firstPendingMedicineAlarmItem.hashCode(), notification)
+
+                            startAlarmService(context, intent)
+                        }
+                    }
                 }
             }
         }
@@ -93,11 +109,11 @@ class FollowUpAlarmReceiver: BroadcastReceiver(), ActivityCompat.OnRequestPermis
         return
     }
 
-    private fun startAlarmService(context: Context?, intent: Intent?, updatedMedicine: Medicine){
+    private fun startAlarmService(context: Context?, intent: Intent?){
         val serviceIntent = Intent(context, AlarmService::class.java).apply{
             putExtra("ALARM_ITEM", intent?.getParcelableExtra("ALARM_ITEM", AlarmItem::class.java))
-            putExtra("NOTIFICATION_TYPE", "follow_up")
-            putExtra("HASH_CODE", updatedMedicine.hashCode().toString())
+            putExtra("NOTIFICATION_TYPE", NotificationType.FOLLOWUP)
+//            putExtra("HASH_CODE", updatedMedicine.hashCode().toString())
         }
         ContextCompat.startForegroundService(context!!, serviceIntent)
     }

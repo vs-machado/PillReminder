@@ -420,5 +420,6 @@ se l\'utente non segna un medicinale come assunto nell\'applicazione.\n• Perme
     <string name="more_than_one_medicine_to_be_used">Hai più di un farmaco da assumere.\n\nPer favore, apri l\'applicazione.</string>
     <string name="did_you_forget_to_use_your_medicines">Hai dimenticato di prendere i tuoi medicinali?</string>
     <string name="open_app_pending_medicines">Aprire l\'app per visualizzare i farmaci in attesa</string>
+    <string name="opening_app">Apertura dell\'applicazione…</string>
 
 </resources>

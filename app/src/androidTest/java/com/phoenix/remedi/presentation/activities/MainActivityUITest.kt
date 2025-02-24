@@ -102,7 +102,11 @@ class MainActivityUITest {
     fun registered_medicine_is_displayed_at_home_fragment() {
         createPillReminder()
 
-        Thread.sleep(2000) // Wait for 2 seconds
+        Thread.sleep(6000) // Wait for 6 seconds
+
+        // Perform a click on the top-left corner of the screen (close ad)
+        onView(isRoot()).perform(clickTopLeftCorner())
+
 
         // Check if RecyclerView is displayed in HomeFragment
         onView(withId(R.id.rvMedicinesList)).check(matches(isDisplayed()))
@@ -349,5 +353,30 @@ class MainActivityUITest {
                 " && settings put global animator_duration_scale 0.0"
 
         Runtime.getRuntime().exec(arrayOf("su", "-c", command))
+    }
+
+    private fun clickTopLeftCorner(): ViewAction {
+        return object : ViewAction {
+            override fun getConstraints() = isRoot()
+            override fun getDescription() = "Click on the top left corner of the screen"
+            override fun perform(uiController: UiController, view: View) {
+                val clickAction = GeneralClickAction(
+                    Tap.SINGLE,
+                    TopLeftCornerProvider(),
+                    Press.FINGER,
+                    InputDevice.SOURCE_UNKNOWN,
+                    0
+                )
+                clickAction.perform(uiController, view)
+            }
+        }
+    }
+
+    private class TopLeftCornerProvider : CoordinatesProvider {
+        override fun calculateCoordinates(view: View): FloatArray {
+            val x = view.width * 0.05f // 5% from the left edge
+            val y = view.height * 0.05f // 5% from the top edge
+            return floatArrayOf(x, y)
+        }
     }
 }

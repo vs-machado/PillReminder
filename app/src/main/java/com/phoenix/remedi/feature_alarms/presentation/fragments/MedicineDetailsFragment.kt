@@ -37,7 +37,12 @@ class MedicineDetailsFragment: Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        val medicine = arguments?.getParcelable("medicine", Medicine::class.java)
+        val medicine = if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.TIRAMISU) {
+            arguments?.getParcelable("medicine", Medicine::class.java)
+        } else {
+            @Suppress("DEPRECATION")
+            arguments?.getParcelable("medicine") as? Medicine
+        }
 
         binding.apply{
             tvNameMed.text = medicine?.name

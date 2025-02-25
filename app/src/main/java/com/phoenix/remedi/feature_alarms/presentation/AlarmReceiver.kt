@@ -4,6 +4,8 @@ import android.app.NotificationManager
 import android.content.BroadcastReceiver
 import android.content.Context
 import android.content.Intent
+import android.os.Build
+import android.os.Parcelable
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import com.phoenix.remedi.R
@@ -37,8 +39,18 @@ class AlarmReceiver: BroadcastReceiver(), ActivityCompat.OnRequestPermissionsRes
         get() = Dispatchers.Default + job
 
     override fun onReceive(context: Context?, intent: Intent?) {
-        val alarmItem = intent?.getParcelableExtra("ALARM_ITEM", AlarmItem::class.java)
-        val alarmItemAction = intent?.getParcelableExtra("ALARM_ITEM_ACTION", AlarmItem::class.java)
+        val alarmItem = if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU){
+            intent?.getParcelableExtra("ALARM_ITEM", AlarmItem::class.java)
+        }else{
+            intent?.getParcelableExtra("ALARM_ITEM")
+        }
+
+        val alarmItemAction = if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU){
+            intent?.getParcelableExtra("ALARM_ITEM_ACTION", AlarmItem::class.java)
+        } else {
+            intent?.getParcelableExtra("ALARM_ITEM_ACTION")
+        }
+
         val actionMarkAsUsed = context?.getString(R.string.mark_as_used)
         val actionSnoozeAlarm = context?.getString(R.string.snooze_alarm)
         val actionMarkAllUsages = context?.getString(R.string.mark_all_as_used)
@@ -134,10 +146,16 @@ class AlarmReceiver: BroadcastReceiver(), ActivityCompat.OnRequestPermissionsRes
     }
 
     private fun startAlarmService(context: Context?, intent: Intent?){
-        val serviceIntent = Intent(context, AlarmService::class.java).apply{
-            putExtra("ALARM_ITEM", intent?.getParcelableExtra("ALARM_ITEM", AlarmItem::class.java))
-            putExtra("NOTIFICATION_TYPE", NotificationType.NORMAL)
+        val serviceIntent = Intent(context, AlarmService::class.java).apply {
+            putExtra("NOTIFICATION_TYPE", NotificationType.NORMAL as Parcelable)
         }
+
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+            serviceIntent.putExtra("ALARM_ITEM", intent?.getParcelableExtra("ALARM_ITEM", AlarmItem::class.java))
+        } else {
+            serviceIntent.putExtra("ALARM_ITEM", intent?.getParcelableExtra("ALARM_ITEM") as AlarmItem?)
+        }
+   
         ContextCompat.startForegroundService(context!!, serviceIntent)
     }
 

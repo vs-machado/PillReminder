@@ -405,4 +405,5 @@
     <string name="open_app_pending_medicines">Abre la aplicación para ver tus medicamentos pendientes.</string>
     <string name="all_permissions_granted">Todos los permisos ya fueron concedidos.</string>
     <string name="opening_app">Abriendo la aplicación…</string>
+    <string name="date_picker_today">Hoy</string>
 </resources>

@@ -1,11 +1,12 @@
 package com.phoenix.remedi.feature_alarms.presentation.utils
 
+import android.app.Activity
 import androidx.appcompat.app.AppCompatDelegate
 import androidx.core.os.LocaleListCompat
 
 class LanguageConfig {
     companion object {
-        fun changeLanguage(languageCode: String) {
+        fun changeLanguage(languageCode: String, activity: Activity? = null) {
             val appLocale: LocaleListCompat = LocaleListCompat.forLanguageTags(languageCode)
             AppCompatDelegate.setApplicationLocales(appLocale)
         }

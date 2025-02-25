@@ -424,4 +424,5 @@
     <string name="did_you_forget_to_use_your_medicines">Você esqueceu de tomar seus medicamentos?</string>
     <string name="open_app_pending_medicines">Abra o aplicativo para ver seus medicamentos pendentes.</string>
     <string name="all_permissions_granted">Todas as permissões já foram concedidas.</string>
+    <string name="date_picker_today">Hoje</string>
 </resources>

@@ -2,13 +2,13 @@ package com.phoenix.remedi.feature_alarms.presentation.datepicker
 
 import android.content.Context
 import android.text.SpannableString
-import android.text.format.DateUtils
 import android.util.AttributeSet
 import android.view.GestureDetector
 import android.view.MotionEvent
 import android.view.View
 import android.widget.ImageView
 import android.widget.TextView
+import androidx.appcompat.app.AppCompatDelegate
 import androidx.appcompat.widget.AppCompatImageButton
 import androidx.constraintlayout.widget.ConstraintLayout
 import com.phoenix.remedi.R
@@ -62,7 +62,10 @@ class DarioWeekViewDatePicker @JvmOverloads constructor(
     private val rightArrow: AppCompatImageButton
     private val todayText: TextView
 
-    private val shortWeekdays = DateFormatSymbols(Locale.getDefault()).shortWeekdays
+    // Get the first locale from the application's locale configuration
+    private val appLocale = AppCompatDelegate.getApplicationLocales()[0] ?: Locale.getDefault()
+
+    private val shortWeekdays = DateFormatSymbols(appLocale).shortWeekdays
 
     var selectedDate = Date(System.currentTimeMillis())
          private set
@@ -127,8 +130,8 @@ class DarioWeekViewDatePicker @JvmOverloads constructor(
             }
         }
 
-        val dayOfWeekString =  DateUtils.getRelativeTimeSpanString(selectedDate.time, System.currentTimeMillis(), DateUtils.DAY_IN_MILLIS, DateUtils.FORMAT_SHOW_WEEKDAY or DateUtils.FORMAT_ABBREV_WEEKDAY)
-        val mSpannableString = SpannableString(context.getString(R.string.today, dayOfWeekString))
+//        val dayOfWeekString =  DateUtils.getRelativeTimeSpanString(selectedDate.time, System.currentTimeMillis(), DateUtils.DAY_IN_MILLIS, DateUtils.FORMAT_SHOW_WEEKDAY or DateUtils.FORMAT_ABBREV_WEEKDAY)
+        val mSpannableString = SpannableString(context.getString(R.string.date_picker_today))
         todayText.text = mSpannableString
 
 
@@ -145,12 +148,13 @@ class DarioWeekViewDatePicker @JvmOverloads constructor(
         selectedDate = date
 
         // update long text for selected day
-        val dateFormat = DateFormat.getDateInstance(DateFormat.LONG, Locale.getDefault())
+        val dateFormat = DateFormat.getDateInstance(DateFormat.LONG, appLocale)
 
         if (isToday(date)) {
             todayText.visibility = View.INVISIBLE
-            val formattedDate =  DateUtils.getRelativeTimeSpanString(selectedDate.time, System.currentTimeMillis(), DateUtils.DAY_IN_MILLIS, DateUtils.FORMAT_SHOW_WEEKDAY or DateUtils.FORMAT_ABBREV_WEEKDAY)
-            selectedDayText.text = context.getString(R.string.today_date, formattedDate)
+//            val formattedDate =  DateUtils.getRelativeTimeSpanString(selectedDate.time, System.currentTimeMillis(), DateUtils.DAY_IN_MILLIS, DateUtils.FORMAT_SHOW_WEEKDAY or DateUtils.FORMAT_ABBREV_WEEKDAY)
+//            selectedDayText.text = context.getString(R.string.today_date, formattedDate)
+            selectedDayText.text = context.getString(R.string.date_picker_today)
         }
         else {
             todayText.visibility = View.VISIBLE

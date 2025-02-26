@@ -19,3 +19,5 @@
 local.properties
 key.jks
 /app/release/app-release.aab
+app/release/**
+.idea/**

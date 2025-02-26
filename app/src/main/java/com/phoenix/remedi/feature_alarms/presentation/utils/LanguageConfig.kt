@@ -28,7 +28,7 @@ val languageMapping = mapOf(
     "es-CU" to "es", "es-BO" to "es", "es-DO" to "es",
     "es-HN" to "es", "es-PY" to "es", "es-SV" to "es",
     "es-NI" to "es", "es-CR" to "es", "es-PR" to "es",
-    "es-PA" to "es", "es-UY" to "es", "es" to "es",
+    "es-PA" to "es", "es-UY" to "es", "es" to "es", "es-US" to "es",
     // Italian regions
     "it-IT" to "it", "it-CH" to "it", "it-SM" to "it", "it" to "it"
 )

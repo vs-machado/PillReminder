@@ -18,5 +18,5 @@
 local.properties
 key.jks
 /app/google-services.json
-app/release
-.idea
+app/release/**
+.idea/**

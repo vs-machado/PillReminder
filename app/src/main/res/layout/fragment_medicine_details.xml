@@ -20,101 +20,110 @@
 
             <TextView
                 android:id="@+id/tvAlarmsPerDay"
-                android:layout_width="wrap_content"
+                android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="16dp"
                 android:text="@string/alarms_per_day"
                 android:textColor="?android:attr/textColorPrimary"
                 android:textSize="24sp"
                 android:textStyle="bold"
+                app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="@+id/tvFrequencyMed"
                 app:layout_constraintTop_toBottomOf="@+id/tvFrequencyMed" />
 
             <TextView
                 android:id="@+id/tvAlarmsQuantity"
-                android:layout_width="wrap_content"
+                android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:text="3 alarms"
                 android:textColor="?android:attr/textColorPrimary"
                 android:textSize="16sp"
+                app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="@+id/tvAlarmsPerDay"
                 app:layout_constraintTop_toBottomOf="@+id/tvAlarmsPerDay" />
 
             <TextView
                 android:id="@+id/tvFrequencyMed"
-                android:layout_width="wrap_content"
+                android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:text="Every day"
                 android:textColor="?android:attr/textColorPrimary"
                 android:textSize="16sp"
+                app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="@+id/tvFrequencyTitle"
                 app:layout_constraintTop_toBottomOf="@+id/tvFrequencyTitle" />
 
             <TextView
                 android:id="@+id/tvFrequencyTitle"
-                android:layout_width="wrap_content"
+                android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="16dp"
                 android:text="@string/frequency"
                 android:textColor="?android:attr/textColorPrimary"
                 android:textSize="24sp"
                 android:textStyle="bold"
+                app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="@+id/tvQuantityMed"
                 app:layout_constraintTop_toBottomOf="@+id/tvQuantityMed" />
 
             <TextView
                 android:id="@+id/tvTreatmentStatus"
-                android:layout_width="wrap_content"
+                android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:text="Ongoing"
                 android:textColor="?android:attr/textColorPrimary"
                 android:textSize="16sp"
-                app:layout_constraintVertical_bias="0"
                 app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="@+id/tvTreatmentStatusTitle"
-                app:layout_constraintTop_toBottomOf="@+id/tvTreatmentStatusTitle" />
+                app:layout_constraintTop_toBottomOf="@+id/tvTreatmentStatusTitle"
+                app:layout_constraintVertical_bias="0" />
 
             <TextView
                 android:id="@+id/tvTreatmentEndDate"
-                android:layout_width="wrap_content"
+                android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:text="24/07/2024"
-                android:textSize="16sp"
                 android:textColor="?android:attr/textColorPrimary"
+                android:textSize="16sp"
+                app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="@+id/tvTreatmentEndDateTitle"
                 app:layout_constraintTop_toBottomOf="@+id/tvTreatmentEndDateTitle" />
 
             <TextView
                 android:id="@+id/tvTreatmentStartDate"
-                android:layout_width="wrap_content"
+                android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:textColor="?android:attr/textColorPrimary"
                 android:text="24/07/2024"
+                android:textColor="?android:attr/textColorPrimary"
                 android:textSize="16sp"
+                app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="@+id/tvTreatmentStartDateTitle"
                 app:layout_constraintTop_toBottomOf="@+id/tvTreatmentStartDateTitle" />
 
             <TextView
                 android:id="@+id/tvTreatmentEndDateTitle"
-                android:layout_width="wrap_content"
+                android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="16dp"
                 android:text="@string/treatment_end_date"
                 android:textColor="?android:attr/textColorPrimary"
                 android:textSize="24sp"
                 android:textStyle="bold"
+                app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="@+id/tvTreatmentStartDate"
                 app:layout_constraintTop_toBottomOf="@+id/tvTreatmentStartDate" />
 
             <TextView
                 android:id="@+id/tvTreatmentStatusTitle"
-                android:layout_width="wrap_content"
+                android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="16dp"
                 android:text="@string/treatment_status"
                 android:textColor="?android:attr/textColorPrimary"
                 android:textSize="24sp"
                 android:textStyle="bold"
+                app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="@+id/tvTreatmentEndDate"
                 app:layout_constraintTop_toBottomOf="@+id/tvTreatmentEndDate" />
 
@@ -157,7 +166,7 @@
 
             <TextView
                 android:id="@+id/tvQuantityTitle"
-                android:layout_width="wrap_content"
+                android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="8dp"
                 android:layout_marginTop="56dp"
@@ -165,50 +174,55 @@
                 android:textColor="?android:attr/textColorPrimary"
                 android:textSize="24sp"
                 android:textStyle="bold"
+                app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/tvNameMed" />
 
             <TextView
                 android:id="@+id/tvQuantityMed"
-                android:layout_width="wrap_content"
+                android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:text="1 application"
                 android:textColor="?android:attr/textColorPrimary"
                 android:textSize="16sp"
+                app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="@+id/tvQuantityTitle"
                 app:layout_constraintTop_toBottomOf="@+id/tvQuantityTitle" />
 
             <TextView
                 android:id="@+id/tvAlarmsHourTitle"
-                android:layout_width="wrap_content"
+                android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="16dp"
                 android:text="@string/alarms_hour"
                 android:textColor="?android:attr/textColorPrimary"
                 android:textSize="24sp"
                 android:textStyle="bold"
+                app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="@+id/tvAlarmsQuantity"
                 app:layout_constraintTop_toBottomOf="@+id/tvAlarmsQuantity" />
 
             <TextView
                 android:id="@+id/tvAlarmsHour"
-                android:layout_width="wrap_content"
+                android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:text="16:00, 18:00, 22:30"
-                android:textSize="16sp"
                 android:textColor="?android:attr/textColorPrimary"
+                android:textSize="16sp"
+                app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="@+id/tvAlarmsHourTitle"
                 app:layout_constraintTop_toBottomOf="@+id/tvAlarmsHourTitle" />
 
             <TextView
                 android:id="@+id/tvTreatmentStartDateTitle"
-                android:layout_width="wrap_content"
+                android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="16dp"
                 android:text="@string/treatment_start_date"
                 android:textColor="?android:attr/textColorPrimary"
                 android:textSize="24sp"
                 android:textStyle="bold"
+                app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="@+id/tvAlarmsHour"
                 app:layout_constraintTop_toBottomOf="@+id/tvAlarmsHour" />
 

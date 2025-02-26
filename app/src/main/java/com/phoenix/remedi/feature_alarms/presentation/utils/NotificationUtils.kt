@@ -6,6 +6,7 @@ import android.app.NotificationManager
 import android.app.PendingIntent
 import android.content.Context
 import android.content.Intent
+import android.content.res.Configuration
 import android.graphics.BitmapFactory
 import android.media.AudioAttributes
 import android.net.Uri
@@ -15,6 +16,7 @@ import android.provider.Settings
 import android.util.Log
 import androidx.appcompat.app.AppCompatDelegate
 import androidx.core.app.NotificationCompat
+import androidx.core.os.ConfigurationCompat.setLocales
 import com.phoenix.remedi.R
 import com.phoenix.remedi.feature_alarms.domain.model.AlarmItem
 import com.phoenix.remedi.feature_alarms.presentation.AlarmReceiver
@@ -50,7 +52,7 @@ object NotificationUtils {
             Log.d("locale", "current locale is empty")
             context
         } else {
-            val config = context.resources.configuration.apply {
+            val config = Configuration(context.resources.configuration).apply {
                 setLocales(currentLocale)
             }
             context.createConfigurationContext(config)

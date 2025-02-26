@@ -1,11 +1,13 @@
 package com.phoenix.remedi.feature_alarms.presentation.fragments
 
 import android.Manifest
+import android.app.NotificationManager
 import android.content.ActivityNotFoundException
 import android.content.Context
 import android.content.Intent
 import android.content.pm.PackageManager
 import android.net.Uri
+import android.os.Build
 import android.os.Bundle
 import android.os.PowerManager
 import android.provider.Settings
@@ -17,6 +19,7 @@ import android.view.ViewGroup
 import android.widget.Toast
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.core.content.ContextCompat
+import androidx.core.content.ContextCompat.getSystemService
 import androidx.preference.ListPreference
 import androidx.preference.Preference
 import androidx.preference.PreferenceCategory
@@ -106,6 +109,16 @@ class MySettingsFragment: PreferenceFragmentCompat() {
             setOnPreferenceChangeListener { _, newValue ->
                 sharedPreferencesRepository.setAppLanguage(newValue as String)
                 LanguageConfig.changeLanguage(newValue)
+
+                // Language changes does not update the created notification channel on phones below Android 13,
+                // so it's necessary to delete the channel and recreate it on the next NotificationUtils.createNotification() call
+                if(Build.VERSION.SDK_INT < Build.VERSION_CODES.TIRAMISU) {
+                    val notificationManager = context.getSystemService(NotificationManager::class.java)
+                    notificationManager.deleteNotificationChannel("PillReminderChannel")
+                    notificationManager.deleteNotificationChannel("PillReminderFollowUpChannel")
+                    notificationManager.deleteNotificationChannel("PillboxReminderChannel")
+                }
+
                 true
             }
         }

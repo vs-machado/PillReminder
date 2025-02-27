@@ -1,6 +1,10 @@
 package com.phoenix.remedi.feature_alarms.domain.model
 
-enum class NotificationType {
+import android.os.Parcelable
+import kotlinx.parcelize.Parcelize
+
+@Parcelize
+enum class NotificationType : Parcelable {
     NORMAL,
     FOLLOWUP,
     PILLBOX_REMINDER

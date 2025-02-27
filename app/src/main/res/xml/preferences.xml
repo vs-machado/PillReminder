@@ -7,6 +7,7 @@
         app:layout="@layout/custom_preference_category" />
 
     <ListPreference
+        app:isPreferenceVisible="false"
         app:entries="@array/language_entries"
         app:entryValues="@array/language_values"
         app:icon="@drawable/baseline_language_24"

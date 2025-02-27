@@ -4,6 +4,7 @@ import android.app.NotificationManager
 import android.content.BroadcastReceiver
 import android.content.Context
 import android.content.Intent
+import android.os.Parcelable
 import androidx.core.content.ContextCompat
 import com.phoenix.remedi.feature_alarms.domain.model.NotificationType
 import com.phoenix.remedi.feature_alarms.domain.repository.SharedPreferencesRepository
@@ -41,7 +42,7 @@ class PillboxAlarmReceiver: BroadcastReceiver() {
                 notificationManager.notify(999, notification)
 
                 val serviceIntent = Intent(context, AlarmService::class.java).apply {
-                    putExtra("NOTIFICATION_TYPE", NotificationType.PILLBOX_REMINDER)
+                    putExtra("NOTIFICATION_TYPE", NotificationType.PILLBOX_REMINDER as Parcelable)
                 }
                 ContextCompat.startForegroundService(context, serviceIntent)
             }

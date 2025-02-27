@@ -191,11 +191,19 @@ class MainActivity: AppCompatActivity() {
     }
 
     private fun setAppLanguagePreference() {
-        val phoneLanguage = Locale.getDefault().toLanguageTag()
-        val language = languageMapping[phoneLanguage] ?: "en"
-
-        lifecycleScope.launch(Dispatchers.IO){
-            sharedPreferencesRepository.setAppLanguage(language)
+        lifecycleScope.launch(Dispatchers.IO) {
+            // Check if this is the first time running the app
+            val isFirstRun = sharedPreferencesRepository.isFirstRun()
+            
+            if (isFirstRun) {
+                // Set the default language based on device locale
+                val phoneLanguage = Locale.getDefault().toLanguageTag()
+                val language = languageMapping[phoneLanguage] ?: "en"
+                sharedPreferencesRepository.setAppLanguage(language)
+                
+                // Mark that first run is complete
+                sharedPreferencesRepository.setFirstRunComplete()
+            }
         }
     }
 

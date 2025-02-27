@@ -2,6 +2,7 @@ package com.phoenix.remedi.feature_alarms.presentation.activities
 
 import android.Manifest
 import android.content.Intent
+import android.os.Build
 import android.os.Bundle
 import androidx.fragment.app.Fragment
 import com.github.appintro.AppIntro2
@@ -26,17 +27,20 @@ class MyAppIntro: AppIntro2() {
                 titleTypefaceFontRes = R.font.manrope_semibold,
                 descriptionTypefaceFontRes = R.font.manrope_semibold
             ))
-            addSlide(
-                AppIntroFragment.createInstance(
-                    title = getString(R.string.app_needs_permissions),
-                    description = getString(R.string.notification_mandatory),
-                    backgroundColorRes = R.color.gradient_end_color,
-                    imageDrawable = R.drawable.ic_permission_storyset_painted,
-                    titleColorRes = R.color.intro_text_blue,
-                    descriptionColorRes = R.color.intro_text_blue,
-                    titleTypefaceFontRes = R.font.manrope_semibold,
-                    descriptionTypefaceFontRes = R.font.manrope_semibold
-                ))
+            if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU){
+                addSlide(
+                    AppIntroFragment.createInstance(
+                        title = getString(R.string.app_needs_permissions),
+                        description = getString(R.string.notification_mandatory),
+                        backgroundColorRes = R.color.gradient_end_color,
+                        imageDrawable = R.drawable.ic_permission_storyset_painted,
+                        titleColorRes = R.color.intro_text_blue,
+                        descriptionColorRes = R.color.intro_text_blue,
+                        titleTypefaceFontRes = R.font.manrope_semibold,
+                        descriptionTypefaceFontRes = R.font.manrope_semibold
+                    )
+                )
+            }
             addSlide(
                 AppIntroFragment.createInstance(
                     title = getString(R.string.pillbox_reminders),
@@ -98,11 +102,13 @@ class MyAppIntro: AppIntro2() {
             showStatusBar(true)
             setStatusBarColorRes(R.color.gradient_end_color)
 
-            askForPermissions(
-                permissions = arrayOf(Manifest.permission.POST_NOTIFICATIONS),
-                slideNumber = 2,
-                required = true
-            )
+            if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU){
+                askForPermissions(
+                    permissions = arrayOf(Manifest.permission.POST_NOTIFICATIONS),
+                    slideNumber = 2,
+                    required = true
+                )
+            }
         }
 
     }

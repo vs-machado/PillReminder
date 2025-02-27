@@ -43,4 +43,14 @@ interface SharedPreferencesRepository {
      *  If user does not set the pillbox reminder hour, it defaults to null
      */
     fun getPillboxReminderHour(): Pair<Int?, Int?>
+
+    /**
+     * Checks if this is the first time the app is being run
+     */
+    fun isFirstRun(): Boolean
+
+    /**
+     * Marks that the app's first run setup is complete
+     */
+    suspend fun setFirstRunComplete()
 }

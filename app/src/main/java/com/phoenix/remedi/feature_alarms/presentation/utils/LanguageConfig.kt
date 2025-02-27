@@ -1,11 +1,12 @@
 package com.phoenix.remedi.feature_alarms.presentation.utils
 
+import android.app.Activity
 import androidx.appcompat.app.AppCompatDelegate
 import androidx.core.os.LocaleListCompat
 
 class LanguageConfig {
     companion object {
-        fun changeLanguage(languageCode: String) {
+        fun changeLanguage(languageCode: String, activity: Activity? = null) {
             val appLocale: LocaleListCompat = LocaleListCompat.forLanguageTags(languageCode)
             AppCompatDelegate.setApplicationLocales(appLocale)
         }
@@ -27,7 +28,7 @@ val languageMapping = mapOf(
     "es-CU" to "es", "es-BO" to "es", "es-DO" to "es",
     "es-HN" to "es", "es-PY" to "es", "es-SV" to "es",
     "es-NI" to "es", "es-CR" to "es", "es-PR" to "es",
-    "es-PA" to "es", "es-UY" to "es", "es" to "es",
+    "es-PA" to "es", "es-UY" to "es", "es" to "es", "es-US" to "es",
     // Italian regions
     "it-IT" to "it", "it-CH" to "it", "it-SM" to "it", "it" to "it"
 )

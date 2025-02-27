@@ -4,6 +4,8 @@ import android.app.NotificationManager
 import android.content.BroadcastReceiver
 import android.content.Context
 import android.content.Intent
+import android.os.Build
+import android.os.Parcelable
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import com.phoenix.remedi.feature_alarms.domain.model.AlarmItem
@@ -42,7 +44,13 @@ class FollowUpAlarmReceiver: BroadcastReceiver(), ActivityCompat.OnRequestPermis
     // If any of the medicines triggered by the alarm was not marked as used or skipped,
     // it schedules a new follow up alarm.
     override fun onReceive(context: Context?, intent: Intent?) {
-        val medicineItem = intent?.getParcelableExtra("ALARM_ITEM", AlarmItem::class.java)
+
+        val medicineItem = if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU){
+            intent?.getParcelableExtra("ALARM_ITEM", AlarmItem::class.java)
+        } else {
+            intent?.getParcelableExtra("ALARM_ITEM")
+        }
+
         val alarmTimeInMillis = medicineItem?.time?.atZone(ZoneId.systemDefault())?.toInstant()?.toEpochMilli()
 
         launch(Dispatchers.IO) {
@@ -111,10 +119,15 @@ class FollowUpAlarmReceiver: BroadcastReceiver(), ActivityCompat.OnRequestPermis
 
     private fun startAlarmService(context: Context?, intent: Intent?){
         val serviceIntent = Intent(context, AlarmService::class.java).apply{
-            putExtra("ALARM_ITEM", intent?.getParcelableExtra("ALARM_ITEM", AlarmItem::class.java))
-            putExtra("NOTIFICATION_TYPE", NotificationType.FOLLOWUP)
-//            putExtra("HASH_CODE", updatedMedicine.hashCode().toString())
+            putExtra("NOTIFICATION_TYPE", NotificationType.FOLLOWUP as Parcelable)
+
+            if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+                putExtra("ALARM_ITEM", intent?.getParcelableExtra("ALARM_ITEM", AlarmItem::class.java))
+            } else {
+                putExtra("ALARM_ITEM", intent?.getParcelableExtra("ALARM_ITEM") as AlarmItem?)
+            }
         }
+
         ContextCompat.startForegroundService(context!!, serviceIntent)
     }
 

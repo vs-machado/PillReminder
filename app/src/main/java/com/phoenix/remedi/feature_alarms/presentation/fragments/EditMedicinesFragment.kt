@@ -71,7 +71,13 @@ class EditMedicinesFragment: Fragment() {
         savedInstanceState: Bundle?
     ): View {
         binding = FragmentEditMedicinesBinding.inflate(layoutInflater)
-        val medicine = arguments?.getParcelable("edit_medicine", Medicine::class.java)
+        
+        val medicine = if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.TIRAMISU) {
+            arguments?.getParcelable("edit_medicine", Medicine::class.java)
+        } else {
+            @Suppress("DEPRECATION")
+            arguments?.getParcelable("edit_medicine") as? Medicine
+        }
         medicine?.let { setupAdapters(it) }
 
         hideFabAndBottomNav()
@@ -90,7 +96,12 @@ class EditMedicinesFragment: Fragment() {
         val tvSave = requireActivity().findViewById<TextView>(R.id.tvSave)
         tvSave.visibility = View.VISIBLE
 
-        val medicine = arguments?.getParcelable("edit_medicine", Medicine::class.java)
+        val medicine = if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.TIRAMISU) {
+            arguments?.getParcelable("edit_medicine", Medicine::class.java)
+        } else {
+            @Suppress("DEPRECATION")
+            arguments?.getParcelable("edit_medicine") as? Medicine
+        }
 
         binding.apply{
             if(medicine != null) {

@@ -6,6 +6,7 @@ import android.content.Context
 import android.content.Intent
 import android.content.pm.PackageManager
 import android.net.Uri
+import android.os.Build
 import android.os.Bundle
 import android.os.PowerManager
 import android.provider.Settings
@@ -48,6 +49,11 @@ class MySettingsFragment: PreferenceFragmentCompat() {
         if(googleMobileAdsConsentManager.isPrivacyOptionsRequired){
             findPreference<PreferenceCategory>("header_privacy")?.isVisible = true
             findPreference<Preference>("consent_options")?.isVisible = true
+        }
+
+        // Language change disabled on Android 12 due to a bug
+        if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+            findPreference<ListPreference>("language")?.isVisible = true
         }
 
         setupPreferenceListeners()

@@ -14,6 +14,7 @@ class SharedPreferencesRepositoryImpl(
     private val sharedPreferencesLanguage = context.getSharedPreferences("language", Context.MODE_PRIVATE)
     private val sharedPreferencesSnoozeInterval = context.getSharedPreferences("snooze_interval", Context.MODE_PRIVATE)
     private val sharedPreferencesPillboxReminderHour = context.getSharedPreferences("pillbox_reminder_hour", Context.MODE_PRIVATE)
+    private val sharedPreferencesFirstRun = context.getSharedPreferences("first_run", Context.MODE_PRIVATE)
 
     override fun setPermissionRequestPreferences(boolean: Boolean) {
         sharedPreferencesPermissionRequest.edit().putBoolean("dont_show_again", boolean).apply()
@@ -67,5 +68,13 @@ class SharedPreferencesRepositoryImpl(
             if (hour == -1) null else hour,
             if (minute == -1) null else minute
         )
+    }
+
+    override fun isFirstRun(): Boolean {
+        return !sharedPreferencesFirstRun.contains("first_run_complete")
+    }
+
+    override suspend fun setFirstRunComplete() {
+        sharedPreferencesFirstRun.edit().putBoolean("first_run_complete", true).apply()
     }
 }

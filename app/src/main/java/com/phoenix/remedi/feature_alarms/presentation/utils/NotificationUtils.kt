@@ -40,7 +40,6 @@ object NotificationUtils {
         }
 
         val compatLocaleList = AppCompatDelegate.getApplicationLocales()
-        Log.d("locale", compatLocaleList.toString())
 
         // Convert LocaleListCompat to LocaleList
         val currentLocale = LocaleList(*compatLocaleList.toLanguageTags().split(",")
@@ -49,7 +48,6 @@ object NotificationUtils {
             .toTypedArray())
 
         return if (currentLocale.isEmpty) {
-            Log.d("locale", "current locale is empty")
             context
         } else {
             val config = Configuration(context.resources.configuration).apply {

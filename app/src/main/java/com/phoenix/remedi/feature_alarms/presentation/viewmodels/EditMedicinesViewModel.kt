@@ -100,9 +100,13 @@ class EditMedicinesViewModel @Inject constructor(
     }
 
     fun parseAlarmTime(alarmHourString: String): Pair<Int, Int>{
-        val formatter = DateTimeFormatter.ofPattern("[h:mm a][H:mm]")
+        // Replaces spanish 12-hour format
+        val standardizedString = alarmHourString
+            .replace("a. m.", "AM", ignoreCase = true)
+            .replace("p. m.", "PM", ignoreCase = true)
 
-        val localTime = LocalTime.parse(alarmHourString.trim().uppercase(), formatter)
+        val formatter = DateTimeFormatter.ofPattern("[h:mm a][H:mm]")
+        val localTime = LocalTime.parse(standardizedString.trim(), formatter)
         return Pair(localTime.hour, localTime.minute)
     }
 

@@ -1,17 +1,24 @@
-<h1 align="center">Pill Reminder</h1>
+<p align="center">
+  <img src="https://github.com/user-attachments/assets/c8a38019-e5f9-41af-ae30-100d2b74e5c2" alt="Remedi app banner" width="200">
+</p>
+
+<h1 align="center">Remedi - Pill Reminder</h1>
+<br>
 <p align="center">An Android application for helping users to track their medicines doses</p>
+<br>
+<br>
 
 <div align="center">
   <table>
     <tr>
-      <td><img src="https://github.com/user-attachments/assets/a50477e4-b429-43a9-8082-2ec9e68c37f7" alt="Screenshot 1" width="200"></td>
-      <td><img src="https://github.com/user-attachments/assets/e28d9270-90f8-480f-9bfc-e610afabf5d6" alt="Screenshot 2" width="200"></td>
-      <td><img src="https://github.com/user-attachments/assets/233da499-b311-4d3b-bb65-f1df0a5ba158" alt="Screenshot 3" width="200"></td>
+      <td><img src="https://github.com/user-attachments/assets/2e7cd136-6aec-457f-b977-d466f8376b17" alt="Screenshot 1" width="200"></td>
+      <td><img src="https://github.com/user-attachments/assets/427eef60-c6e2-4262-b411-1d38bc7ab94b" alt="Screenshot 2" width="200"></td>
+      <td><img src="https://github.com/user-attachments/assets/4ffd3c63-a6d0-4a73-b6d4-e04dfcfc84aa" alt="Screenshot 3" width="200"></td>
     </tr>
     <tr>
-     <td><img src="https://github.com/user-attachments/assets/f13f7c44-2372-4255-a9de-8f20e85ba6e8" alt="Screenshot 4" width="200"></td>
-     <td><img src="https://github.com/user-attachments/assets/a6994074-30ea-40c7-9270-f99356ac3e2d" alt="Screenshot 5" width="200"></td>
-     <td><img src="https://github.com/user-attachments/assets/4029d968-dc99-4677-8614-05172c329c44" alt="Screenshot 6" width="200"></td>
+     <td><img src="https://github.com/user-attachments/assets/d603b724-dbf3-4e33-9389-2f9fe56b8994" alt="Screenshot 4" width="200"></td>
+     <td><img src="https://github.com/user-attachments/assets/62700b82-611f-4031-84f3-5c3d1a10c632" alt="Screenshot 5" width="200"></td>
+     <td><img src="https://github.com/user-attachments/assets/936ae039-0c15-4e64-b211-4648319de53c" alt="Screenshot 6" width="200"></td>
     </tr>
   </table>
 </div>
@@ -19,17 +26,22 @@
 <h2>Features</h2>
 <ul>
   <li>Schedule alarms to remind users about their medicines</li>
-  <li>Receive notifications if user does not mark medicine as used in the application</li>
-  <li>Allows users to set a treatment period or receive alarms until medicine deletion</li>
-  <li>Receive daily notifications after setting a pillbox refill reminder</li>
-  <li>List all ongoing and ended treatments</li>
-  <li>Warn user if he pretends to mark a medicine as used close to the next dose hour</li>
+  <li>Receive notifications if a medicine is not marked as used</li>
+  <li>Set a treatment period or keep receiving alarms until medicine is deleted</li>
+  <li>Pillbox refill reminders with daily notifications</li>
+  <li>Track treatments with a list of ongoing and completed ones</li>
+  <li>Warning system for marking a dose close to the next scheduled time</li>
 </ul>
 
 <h2>Installation</h2>
-<a href="https://github.com/vs-machado/PillReminder/releases/tag/1.0.0">
-    <img alt="GitHub installation" width="200px" src="https://github.com/user-attachments/assets/aece0484-443f-46a8-9c81-d08efe0268b2" />
-</a>
+<div>
+    <a href="https://github.com/vs-machado/PillReminder/releases/tag/1.0.0">
+        <img alt="GitHub installation" width="220px" src="https://github.com/user-attachments/assets/53aae1f9-a9f7-4882-88c8-315351942a0a" />
+    </a>
+    &nbsp;&nbsp;&nbsp;
+    <img alt="Coming Soon" width="220px" height="67px" src="https://github.com/user-attachments/assets/726b9cc1-a75b-4fc7-b21b-2bd02f211cc1" />
+</div>
+
 
 <h2>License</h2>
 This project is licensed under the Creative Commons Attribution-NonCommercial 4.0 International (CC BY-NC 4.0) license.<br>

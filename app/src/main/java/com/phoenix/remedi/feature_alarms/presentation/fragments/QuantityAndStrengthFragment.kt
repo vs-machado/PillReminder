@@ -1,11 +1,13 @@
 package com.phoenix.remedi.feature_alarms.presentation.fragments
 
+import android.content.Context
 import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.view.inputmethod.InputMethodManager
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
@@ -62,6 +64,12 @@ class QuantityAndStrengthFragment : Fragment() {
             sharedViewModel.medicineForm.observe(viewLifecycleOwner) {
                 setEditTextMedicineForm(it)
             }
+
+            etQuantity.requestFocus()
+            etQuantity.postDelayed({
+                val imm = requireContext().getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
+                imm.showSoftInput(etQuantity, InputMethodManager.SHOW_IMPLICIT)
+            }, 300)
 
             etQuantity.addTextChangedListener(object: TextWatcher{
                 override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {}

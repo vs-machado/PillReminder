@@ -45,7 +45,7 @@ class TreatmentDurationFragment : Fragment(), ActivityCompat.OnRequestPermission
         super.onCreate(savedInstanceState)
 
         requireActivity().onBackPressedDispatcher.addCallback(this) {
-            sharedViewModel.position--
+            sharedViewModel.alarmIndex--
             sharedViewModel.decreaseCurrentAlarmNumber()
             findNavController().popBackStack()
         }

@@ -24,6 +24,15 @@ import com.phoenix.remedi.feature_alarms.presentation.viewmodels.AlarmHourViewMo
 import com.phoenix.remedi.feature_alarms.presentation.viewmodels.AlarmSettingsSharedViewModel
 import java.util.Calendar
 
+/**
+ * Allow the user to select the alarm hour using a TimePicker and handle the input accordingly.
+ * The quantity of alarm hours will be determined by [AlarmSettingsSharedViewModel.setNumberOfAlarms] parameter value
+ * passed on [HowManyPerDayFragment] by the user.
+ * There's two variables for tracking the alarm position to be saved. [AlarmSettingsSharedViewModel.alarmIndex]
+ * is used to define the position of the alarm on the array to be stored in a variable.
+ * [AlarmSettingsSharedViewModel.currentAlarmNumber] is used to define the tvAlarmHour text displayed to the user,
+ * indicating which alarm the user is currently setting.
+ */
 class AlarmHourFragment : Fragment() {
     private lateinit var binding: FragmentAlarmHourBinding
     private val sharedViewModel: AlarmSettingsSharedViewModel by activityViewModels()
@@ -83,14 +92,16 @@ class AlarmHourFragment : Fragment() {
             sharedViewModel.apply {
                 toolbar.setupWithNavController(navController, appBarConfiguration)
 
+                // Checks the user's phone hour format and sets the TimePicker
                 tpAlarm.setIs24HourView(hourFormat)
 
+                // Saves the alarm hour if user does not change the time on TimePicker
                 alarmHourViewModel.apply{
-                    saveAlarmHour(position, getCurrentHour(), getCurrentMinute())
+                    saveAlarmHour(alarmIndex, getCurrentHour(), getCurrentMinute())
                 }
 
                 tpAlarm.setOnTimeChangedListener { _, hourOfDay, minute ->
-                    saveAlarmHour(position, hourOfDay, minute)
+                    saveAlarmHour(alarmIndex, hourOfDay, minute)
                 }
 
                 // Asks the user the next alarm hour. The custom click listener is used to prevent fast tapping.
@@ -98,7 +109,7 @@ class AlarmHourFragment : Fragment() {
                 fabNext.setOnClickListener(object: OnOneOffClickListener() {
 
                     override fun onSingleClick(fab: FloatingActionButton) {
-                        sharedViewModel.position++
+                        sharedViewModel.alarmIndex++
                         updateCurrentAlarmNumber()
 
                         if (currentAlarmNumber.value!! > getAlarmsPerDay()) {
@@ -112,13 +123,15 @@ class AlarmHourFragment : Fragment() {
         }
     }
 
+    // Allow users to navigate back to the previous alarm setting or to the previous fragment.
     private fun handleBackPressed() {
         if (sharedViewModel.currentAlarmNumber.value == 1) {
             sharedViewModel.setNumberOfAlarms(1)
             findNavController().popBackStack()
         } else {
-            //If the user goes back to the previous alarm, the position is decreased by 1
-            sharedViewModel.position--
+            // If the user goes back to the previous alarm, the position is decreased by 1
+            // and the tvAlarmHour text changes.
+            sharedViewModel.alarmIndex--
             sharedViewModel.decreaseCurrentAlarmNumber()
         }
     }
@@ -176,6 +189,7 @@ class AlarmHourFragment : Fragment() {
     }
 }
 
+    // Resets the TimePicker after setting each alarm
     private fun resetTimePicker(timePicker: TimePicker) {
         timePicker.hour = currentHour
         timePicker.minute = currentMinute

@@ -79,7 +79,7 @@ class AlarmSettingsSharedViewModel @Inject constructor(
 
     private var interval: Int = 0
 
-    var position = 0
+    var alarmIndex = 0
 
     private lateinit var workRequestID: UUID
 
@@ -521,6 +521,12 @@ class AlarmSettingsSharedViewModel @Inject constructor(
         _currentAlarmNumber.value = (_currentAlarmNumber.value)?.minus(1)
     }
 
+    /**
+     * Saves the alarm hour on it's respective position in the array.
+     * @param position the position in the array where the alarm hour will be saved
+     * @param hourOfDay the hour of the day for the alarm
+     * @param minute the minute of the hour for the alarm
+     */
     fun saveAlarmHour(position: Int, hourOfDay: Int, minute :Int){
         alarmHour[position] = hourOfDay
         alarmMinute[position] = minute

@@ -10,6 +10,7 @@ import androidx.work.WorkManager
 import com.phoenix.remedi.feature_alarms.data.worker.RescheduleWorker
 import com.phoenix.remedi.feature_alarms.domain.model.AlarmHour
 import com.phoenix.remedi.feature_alarms.domain.model.AlarmItem
+import com.phoenix.remedi.feature_alarms.domain.model.Animation
 import com.phoenix.remedi.feature_alarms.domain.model.ExpiredMedicinesInfo
 import com.phoenix.remedi.feature_alarms.domain.model.Medicine
 import com.phoenix.remedi.feature_alarms.domain.repository.MedicineRepository
@@ -18,6 +19,7 @@ import com.phoenix.remedi.feature_alarms.presentation.AlarmScheduler
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import java.time.Instant
@@ -52,6 +54,9 @@ class AlarmSettingsSharedViewModel @Inject constructor(
 
     private var _medicineForm = MutableLiveData("")
     val medicineForm: LiveData<String> = _medicineForm
+
+    private val _animation = MutableStateFlow(Animation.DISABLED)
+    val animation = _animation.asStateFlow()
 
     private lateinit var doseUnit: String
 
@@ -867,5 +872,9 @@ class AlarmSettingsSharedViewModel @Inject constructor(
 
     fun getPermissionDialogExhibition(): Boolean {
         return _permissionDialogShown.value
+    }
+
+    fun setAnimation(order: Animation) {
+        _animation.value = order
     }
 }

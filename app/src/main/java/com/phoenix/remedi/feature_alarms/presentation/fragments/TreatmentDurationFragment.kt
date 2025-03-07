@@ -28,6 +28,7 @@ import com.phoenix.remedi.feature_alarms.presentation.viewmodels.AlarmSettingsSh
 import com.phoenix.remedi.feature_alarms.presentation.viewmodels.MedicinesViewModel
 import dagger.hilt.android.AndroidEntryPoint
 import com.phoenix.remedi.feature_alarms.data.worker.RescheduleWorker
+import com.phoenix.remedi.feature_alarms.domain.model.Animation
 
 /**
  * Allow users to set the medicine treatment period.
@@ -45,6 +46,7 @@ class TreatmentDurationFragment : Fragment(), ActivityCompat.OnRequestPermission
         super.onCreate(savedInstanceState)
 
         requireActivity().onBackPressedDispatcher.addCallback(this) {
+            sharedViewModel.setAnimation(Animation.DISABLED)
             sharedViewModel.alarmIndex--
             sharedViewModel.decreaseCurrentAlarmNumber()
             findNavController().popBackStack()
@@ -85,6 +87,12 @@ class TreatmentDurationFragment : Fragment(), ActivityCompat.OnRequestPermission
             sharedViewModel.apply{
 
                 toolbar.setupWithNavController(navController, appBarConfiguration)
+                toolbar.setNavigationOnClickListener {
+                    sharedViewModel.setAnimation(Animation.DISABLED)
+                    sharedViewModel.alarmIndex--
+                    sharedViewModel.decreaseCurrentAlarmNumber()
+                    findNavController().popBackStack()
+                }
 
                 // Med forms list. User must select the desired type of med
                 val list: MutableList<String> = mutableListOf(getString(R.string.yes_i_do),

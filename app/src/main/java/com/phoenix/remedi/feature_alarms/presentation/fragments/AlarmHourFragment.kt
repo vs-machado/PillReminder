@@ -11,6 +11,9 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.viewModels
+import androidx.lifecycle.Lifecycle
+import androidx.lifecycle.lifecycleScope
+import androidx.lifecycle.repeatOnLifecycle
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.ui.AppBarConfiguration
 import androidx.navigation.ui.setupWithNavController
@@ -18,10 +21,12 @@ import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.google.android.material.floatingactionbutton.FloatingActionButton
 import com.phoenix.remedi.R
 import com.phoenix.remedi.databinding.FragmentAlarmHourBinding
+import com.phoenix.remedi.feature_alarms.domain.model.Animation
 import com.phoenix.remedi.feature_alarms.presentation.OnOneOffClickListener
 import com.phoenix.remedi.feature_alarms.presentation.utils.ThemeUtils
 import com.phoenix.remedi.feature_alarms.presentation.viewmodels.AlarmHourViewModel
 import com.phoenix.remedi.feature_alarms.presentation.viewmodels.AlarmSettingsSharedViewModel
+import kotlinx.coroutines.launch
 import java.util.Calendar
 
 /**
@@ -91,6 +96,9 @@ class AlarmHourFragment : Fragment() {
         binding.apply {
             sharedViewModel.apply {
                 toolbar.setupWithNavController(navController, appBarConfiguration)
+                toolbar.setNavigationOnClickListener {
+                    handleBackPressed()
+                }
 
                 // Checks the user's phone hour format and sets the TimePicker
                 tpAlarm.setIs24HourView(hourFormat)
@@ -109,6 +117,10 @@ class AlarmHourFragment : Fragment() {
                 fabNext.setOnClickListener(object: OnOneOffClickListener() {
 
                     override fun onSingleClick(fab: FloatingActionButton) {
+                        // Add touch feedback
+                        fab.performHapticFeedback(android.view.HapticFeedbackConstants.VIRTUAL_KEY)
+
+                        sharedViewModel.setAnimation(Animation.ENABLED)
                         sharedViewModel.alarmIndex++
                         updateCurrentAlarmNumber()
 
@@ -126,6 +138,7 @@ class AlarmHourFragment : Fragment() {
     // Allow users to navigate back to the previous alarm setting or to the previous fragment.
     private fun handleBackPressed() {
         if (sharedViewModel.currentAlarmNumber.value == 1) {
+            sharedViewModel.setAnimation(Animation.DISABLED)
             sharedViewModel.setNumberOfAlarms(1)
             findNavController().popBackStack()
         } else {
@@ -133,15 +146,47 @@ class AlarmHourFragment : Fragment() {
             // and the tvAlarmHour text changes.
             sharedViewModel.alarmIndex--
             sharedViewModel.decreaseCurrentAlarmNumber()
+
+            if(sharedViewModel.animation.value == Animation.DISABLED) {
+                sharedViewModel.setAnimation(Animation.ENABLED)
+            }
         }
     }
 
     private fun setTvAlarmHourAndPosition(currentAlarmNumber: Int) {
+        viewLifecycleOwner.lifecycleScope.launch {
+            viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED) {
+
+                sharedViewModel.animation.collect { animation ->
+                    // Skip animation only when it's the first alarm AND we're moving forward (initial setup)
+                    if (animation == Animation.DISABLED) {
+                        setAlarmText(currentAlarmNumber)
+                    } else {
+                        if(animation == Animation.ENABLED) {
+                            binding.tvAlarmHour.animate()
+                                .alpha(0f)
+                                .setDuration(200)
+                                .withEndAction {
+                                    setAlarmText(currentAlarmNumber)
+
+                                    binding.tvAlarmHour.animate()
+                                        .alpha(1f)
+                                        .setDuration(200)
+                                        .start()
+                                }
+                                .start()
+                      }
+                    }
+                }
+            }
+        }
+    }
+
+    private fun setAlarmText(currentAlarmNumber: Int) {
         when (currentAlarmNumber) {
             1 -> {
                 binding.tvAlarmHour.text = getString(R.string.please_set_the_medicine_alarm_hour)
             }
-
             2 -> {
                 binding.tvAlarmHour.text = getString(R.string.please_set_the_second_medicine_alarm)
                 resetTimePicker(binding.tpAlarm)
@@ -186,8 +231,8 @@ class AlarmHourFragment : Fragment() {
                 binding.tvAlarmHour.text = getString(R.string.please_set_the_tenth_medicine_alarm)
                 resetTimePicker(binding.tpAlarm)
             }
+        }
     }
-}
 
     // Resets the TimePicker after setting each alarm
     private fun resetTimePicker(timePicker: TimePicker) {

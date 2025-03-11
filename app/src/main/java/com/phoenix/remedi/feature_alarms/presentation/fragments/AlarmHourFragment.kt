@@ -2,6 +2,7 @@ package com.phoenix.remedi.feature_alarms.presentation.fragments
 
 import android.os.Bundle
 import android.text.format.DateFormat.is24HourFormat
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -109,7 +110,9 @@ class AlarmHourFragment : Fragment() {
                 }
 
                 tpAlarm.setOnTimeChangedListener { _, hourOfDay, minute ->
-                    saveAlarmHour(alarmIndex, hourOfDay, minute)
+                    if (alarmIndex < getAlarmsPerDay()) {
+                        saveAlarmHour(alarmIndex, hourOfDay, minute)
+                    }
                 }
 
                 // Asks the user the next alarm hour. The custom click listener is used to prevent fast tapping.

@@ -196,8 +196,8 @@
     <string name="alarms_per_day">Alarmas por día</string>
     <string name="alarms_hour">Hora de las alarmas</string>
     <string name="Hour">Hora</string>
-    <string name="treatment_start_date">Fecha de inicio del tratamiento</string>
-    <string name="treatment_end_date">Fecha de finalización del tratamiento</string>
+    <string name="treatment_start_date">Inicio del tratamiento</string>
+    <string name="treatment_end_date">Finalización del tratamiento</string>
     <string name="treatment_status">Estado del tratamiento</string>
     <string name="medicine_icon">Icono del medicamento</string>
     <string name="pill_quantity">%1$s pastilla(s)</string>

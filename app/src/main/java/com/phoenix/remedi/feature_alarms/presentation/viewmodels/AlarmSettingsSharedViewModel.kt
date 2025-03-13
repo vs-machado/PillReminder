@@ -19,6 +19,7 @@ import com.phoenix.remedi.feature_alarms.presentation.AlarmScheduler
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
@@ -91,6 +92,14 @@ class AlarmSettingsSharedViewModel @Inject constructor(
     // Used to track if the permission dialog was shown in the app session. If user marks the checkbox "don't show again",
     // this value is ignored.
     private val _permissionDialogShown = MutableStateFlow(false)
+
+    // Used to initialize sharedViewModel data related to medicine data changes
+    private val _isInitialized = MutableStateFlow(false)
+    val isInitialized: StateFlow<Boolean> = _isInitialized.asStateFlow()
+
+    fun setInitialized(bool: Boolean) {
+        _isInitialized.value = bool
+    }
 
     init{
         _currentAlarmNumber.postValue(1)

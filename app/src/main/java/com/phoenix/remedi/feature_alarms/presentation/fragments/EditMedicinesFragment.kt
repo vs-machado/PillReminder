@@ -127,9 +127,9 @@ class EditMedicinesFragment: Fragment() {
                 }
 
                 // Initializes the viewmodel data only once
-                if(!editMedicinesViewModel.isInitialized.value) {
+                if(!alarmSettingsSharedViewModel.isInitialized.value) {
                     initializeViewModelData(medicine)
-                    editMedicinesViewModel.setInitialized(true)
+                    alarmSettingsSharedViewModel.setInitialized(true)
                 }
 
                 // Fill the text inputs with the medicine data
@@ -302,7 +302,7 @@ class EditMedicinesFragment: Fragment() {
                 setTreatmentID(medicine.treatmentID)
 
                 // After saving the medicine changes, setInitialized is set to false, requiring the fragment to set the viewmodel updated data
-                editMedicinesViewModel.setInitialized(false)
+                alarmSettingsSharedViewModel.setInitialized(false)
 
                 // When user does not select the days of week in EditMedicinesFragment the days of week must be queried from the database
                 if(medicine.selectedDaysOfWeek != null && !userSelectedDaysOfWeek) {

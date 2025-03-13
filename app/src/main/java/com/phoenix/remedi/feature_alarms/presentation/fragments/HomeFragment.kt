@@ -67,6 +67,24 @@ import java.util.Date
 import javax.inject.Inject
 import kotlin.math.abs
 
+/**
+ * Main fragment for displaying and managing medication alarms.
+ *
+ * This fragment handles:
+ * - Displaying a list of medication alarms
+ * - Adding new medication alarms via FAB
+ * - Managing daily pillbox reminders
+ * - Handling user permissions (notifications and overlay)
+ * - Date navigation for viewing alarms on different days
+ * - Backup alarm rescheduling after app reinstallation
+ *
+ * Key features:
+ * - Swipe gestures for date navigation
+ * - Permission request dialogs
+ * - Pillbox reminder configuration
+ * - Medicine usage tracking
+ * - Treatment management (end/edit/delete)
+ */
 @AndroidEntryPoint
 class HomeFragment: Fragment() {
 
@@ -154,6 +172,14 @@ class HomeFragment: Fragment() {
 
     }
 
+    /**
+     * Displays a dialog allowing users to set a daily reminder time for pillbox refills.
+     *
+     * When saved:
+     * - Stores the time in SharedPreferences
+     * - Schedules the daily reminder
+     * - Updates the pillbox reminder preferences
+     */
     private fun showPillboxReminderDialog(){
         val hourFormat = is24HourFormat(requireContext())
 
@@ -179,7 +205,6 @@ class HomeFragment: Fragment() {
 
         binding.btnSaveDialogPillbox.setOnClickListener {
             if(hours != null && minutes != null){
-//                hfViewModel.schedulePillboxReminder(hours!!, minutes!!)
                 sharedPreferencesRepository.setPillboxReminderHour(hours!!, minutes!!)
                 hfViewModel.schedulePillboxReminder(hours!!, minutes!!)
                 hfViewModel.setPillboxPreferences(true)
@@ -197,6 +222,22 @@ class HomeFragment: Fragment() {
         dialog.show()
     }
 
+    /**
+     * Configures the date picker calendar and pillbox reminder switch.
+     *
+     * This function:
+     * - Initializes the pillbox reminder switch state based on saved preferences
+     * - Sets up date selection handling to update medicine list
+     * - Manages pillbox reminder enabling/disabling
+     *
+     * Date selection triggers:
+     * - FAB visibility update
+     * - Date update in view model
+     * - Medicine list refresh for selected date
+     *
+     * @param fab The FloatingActionButton to show/hide during date changes
+     * @param pillboxPreference The current state of pillbox reminder preference
+     */
     private fun setupDatePicker(fab: FloatingActionButton, pillboxPreference: Boolean){
         val pillboxSwitch = binding.datePicker.findViewById<SwitchMaterial>(R.id.switchPillbox)
 
@@ -220,13 +261,21 @@ class HomeFragment: Fragment() {
                 showPillboxReminderDialog()
             } else {
                 hfViewModel.setPillboxPreferences(false)
-                sharedPreferencesRepository.setPillboxReminderHour(-1, -1) // -1 == null
+                sharedPreferencesRepository.setPillboxReminderHour(-1, -1) // -1 == null, SharedPreferences only supports primitive types
                 hfViewModel.cancelReminderNotifications(requireContext().applicationContext)
             }
         }
     }
 
-    //If user has a app backup and reinstalls the app the alarms will be rescheduled at startup
+    /**
+     * Reschedules alarms from backup data when the app is reinstalled.
+     *
+     * This function broadcasts an intent to reschedule all alarms if they haven't
+     * been rescheduled yet. After rescheduling, it sets a flag to prevent
+     * duplicate rescheduling.
+     *
+     * @param alarmsRescheduled Flag indicating if alarms have already been rescheduled
+     */
     private fun checkAndRescheduleAlarms(alarmsRescheduled: Boolean) {
         if (!alarmsRescheduled) {
             val intent = Intent(requireContext(), AlarmReceiver::class.java)
@@ -301,7 +350,6 @@ class HomeFragment: Fragment() {
     private fun displayMedicinesList(dateToFilter: Date){
         medicinesViewModel.medicines.observe(viewLifecycleOwner) {
             adapter.setList(it, dateToFilter)
-            //setCreditsVisibility()
         }
     }
 
@@ -321,6 +369,13 @@ class HomeFragment: Fragment() {
             })
     }
 
+    /**
+     * Shows a dialog requesting notification and overlay permissions from the user.
+     * *
+     * The dialog won't be shown if:
+     * - User has previously selected "don't show again"
+     * - The dialog has already been shown in the current session
+     */
     private fun showRequestPermissionsDialog(){
         if (isPermissionDialogDisabled || sharedViewModel.getPermissionDialogExhibition()){
             return
@@ -358,7 +413,24 @@ class HomeFragment: Fragment() {
 
         dialog.show()
     }
-
+    
+    
+    /**
+     * Shows a dialog to confirm deletion of a single medicine alarm
+     * 
+     * @param medicine The medicine object containing alarm details to be deleted
+     *
+     * This dialog allows users to:
+     * - View the medicine name and scheduled alarm time
+     * - Delete the specific alarm instance
+     * - Cancel the deletion operation
+     *
+     * When deleted:
+     * 1. Cancels the scheduled alarm
+     * 2. Cancels associated background work (if exists)
+     * 3. Removes the medicine from database
+     * 4. Updates the UI and shows confirmation toast
+     */
     private fun showDeleteAlarmDialog(medicine: Medicine){
         dialog = Dialog(this.requireContext())
         dialog.requestWindowFeature(Window.FEATURE_NO_TITLE)
@@ -401,6 +473,23 @@ class HomeFragment: Fragment() {
         dialog.show()
     }
 
+    /**
+     * Shows a confirmation dialog for deleting all alarms associated with a medicine.
+     *
+     * This dialog allows users to:
+     * - View the medicine name to be deleted
+     * - Confirm deletion of all associated alarms
+     * - Cancel the deletion operation
+     *
+     * When deletion is confirmed:
+     * 1. Cancels all scheduled alarms for the medicine
+     * 2. Cancels associated background work
+     * 3. Deletes all medicine records with the same name
+     * 4. Updates the UI and displays an ad
+     * 5. Shows confirmation toast
+     *
+     * @param medicine The medicine object containing details of alarms to be deleted
+     */
     private fun showDeleteAllAlarmsDialog(medicine: Medicine){
         dialog = Dialog(this.requireContext())
         dialog.requestWindowFeature(Window.FEATURE_NO_TITLE)
@@ -438,6 +527,21 @@ class HomeFragment: Fragment() {
         dialog.show()
     }
 
+    /**
+     * Shows a warning dialog when attempting to mark medicine usage near another dose time.
+     *
+     * This dialog appears when a user tries to mark a medicine as taken at a time
+     * that's close to another scheduled dose. It provides two options:
+     * - Mark the medicine as taken anyway
+     * - Skip the dose instead
+     *
+     * Both actions will:
+     * - Update the medicine status in the database
+     * - Refresh the medicines list display
+     * - Dismiss the dialog
+     *
+     * @param medicine The medicine being marked as taken or skipped
+     */
     private fun showWarningMedicineUsageDialog(
         medicine: Medicine
     ){
@@ -466,6 +570,26 @@ class HomeFragment: Fragment() {
         dialog.show()
     }
 
+    /**
+     * Shows a confirmation dialog for ending a medicine treatment.
+     *
+     * This dialog:
+     * - Displays a confirmation message with the medicine name
+     * - Provides options to end treatment or cancel
+     * - Handles errors during treatment termination
+     *
+     * When treatment is ended:
+     * 1. Updates the treatment status in the database
+     * 2. Cancels any associated background work
+     * 3. Refreshes the medicines list
+     * 4. Shows an interstitial ad
+     *
+     * Error handling:
+     * - Logs errors to LogCat with "EndTreatmentDialog" tag
+     * - Shows error toast message to user
+     *
+     * @param medicine The medicine treatment to be ended
+     */
     private fun showEndTreatmentDialog(medicine: Medicine){
         dialog = Dialog(this.requireContext())
         dialog.requestWindowFeature(Window.FEATURE_NO_TITLE)
@@ -501,6 +625,8 @@ class HomeFragment: Fragment() {
                             requireContext().getString(R.string.error_treatment_termination),
                             Toast.LENGTH_SHORT
                         ).show()
+
+                        dialog.dismiss()
                     }
                 }
             }
@@ -514,10 +640,27 @@ class HomeFragment: Fragment() {
         dialog.show()
     }
 
+    /**
+     * Checks if the current medicine is next to another dose hour to prevent accidental overlaps or scheduling issues.
+     * When it's next to another dose, returns a boolean callback used to show a warning.
+     *
+     * @param selectedMedicine the medicine object to check for adjacent dose hours
+     * @param callback a boolean callback to indicate whether the medicine is next to another dose hour
+     */
     private fun isNextToAnotherDoseHour(selectedMedicine: Medicine, callback: (Boolean) -> Unit){
         hfViewModel.isNextToAnotherDoseHour(selectedMedicine, callback)
     }
 
+    /**
+     * Shows a toast message confirming alarm deletion.
+     *
+     * This function:
+     * 1. Cancels any existing toast to prevent stacking
+     * 2. Creates and shows a new toast with the deletion confirmation message
+     *
+     * The toast reference is stored in a class-level variable to allow
+     * proper cancellation of previous toasts.
+     */
     private fun showToastAlarmDeleted(){
         //Checks if a Toast is currently being displayed
         if (toast != null){
@@ -528,6 +671,14 @@ class HomeFragment: Fragment() {
         toast?.show()
     }
 
+    /**
+     * Formats the alarm hour textview based on system's time format (12-hour or 24-hour)
+     *
+     * @param alarmHour the hour of the alarm
+     * @param alarmMinute the minute of the alarm
+     *
+     * @return a formatted string representing the alarm time
+     */
     private fun showTvAlarm(alarmHour: Int, alarmMinute: Int): String{
         val context = requireContext()
         when {
@@ -541,14 +692,7 @@ class HomeFragment: Fragment() {
         return ""
     }
 
-//    private fun setCreditsVisibility(){
-//        if(binding.rvMedicinesList.adapter?.itemCount!! > 0){
-//            binding.tvCredits.isVisible = true
-//            return
-//        }
-//        binding.tvCredits.isVisible = false
-//    }
-
+    // Used to request post notifications permissions and then ask for overlay permission.
     private val requestPermissionLauncher = registerForActivityResult(ActivityResultContracts.RequestPermission()){ permissionGranted: Boolean ->
         if(permissionGranted){
             val fab = requireActivity().findViewById<FloatingActionButton>(R.id.fabAddMedicine)
@@ -568,6 +712,20 @@ class HomeFragment: Fragment() {
 
     private val requestOverlayPermissionLauncher = registerForActivityResult(ActivityResultContracts.StartActivityForResult()){}
 
+    /**
+     * Configures gesture detection for swipe navigation between dates.
+     *
+     * Sets up a [GestureDetector] to handle horizontal swipe gestures that:
+     * - Detects left/right swipes based on defined thresholds
+     * - Ignores vertical swipes
+     * - Updates the date and medicine list accordingly
+     *
+     * Swipe behavior:
+     * - Right swipe -> Previous day (date - 1)
+     * - Left swipe -> Next day (date + 1)
+     *
+     * Note: The gesture detector is attached to the RecyclerView through [setupSwipeListener]
+     */
     private fun setupGestureDetector() {
         gestureDetector = GestureDetector(requireContext(), object : GestureDetector.SimpleOnGestureListener() {
             private val SWIPE_THRESHOLD = 100
@@ -593,6 +751,22 @@ class HomeFragment: Fragment() {
         })
     }
 
+    /**
+     * Configures touch event handling for the medicine list's swipe functionality.
+     *
+     * This function:
+     * - Disables the SwipeRefreshLayout's default refresh behavior
+     * - Sets up touch event forwarding to the [gestureDetector]
+     * - Enables horizontal swipe navigation while maintaining vertical scrolling
+     *
+     * Implementation details:
+     * - Disables pull-to-refresh to prevent conflicts with swipe gestures
+     * - Forwards all touch events to the gesture detector for processing
+     * - Returns false to allow the RecyclerView to handle other touch events
+     *   (like scrolling) normally
+     *
+     * Note: Works in conjunction with [setupGestureDetector] to handle date navigation
+     */
     private fun setupSwipeListener() {
         binding.swipeRefreshLayout.isRefreshing = false
         binding.swipeRefreshLayout.isEnabled = false
@@ -602,6 +776,20 @@ class HomeFragment: Fragment() {
         }
     }
 
+    /**
+     * Updates the displayed date and medicine list with an animated transition.
+     *
+     * This coroutine-based function:
+     * 1. Calculates and sets the new date based on day offset
+     * 2. Updates the date picker UI
+     * 3. Fetches updated medicine list on IO dispatcher
+     * 4. Applies a slide animation based on navigation direction
+     * 5. Updates the RecyclerView with new data
+     *
+     * @param days Integer offset for date navigation:
+     *             Positive values make list swipe to left
+     *             Negative values make list swipe to right
+     */
     private fun updateDateAndMedicines(days: Int) {
         viewLifecycleOwner.lifecycleScope.launch {
             val newDate = Calendar.getInstance().apply {
@@ -630,6 +818,11 @@ class HomeFragment: Fragment() {
         }
     }
 
+    /**
+     *  Change views visibility to View.VISIBLE when POST_NOTIFICATIONS permission is granted
+     *
+     *  @param fab The MainActivity FloatingActionButton that will be made visible
+     */
     private fun makeFabAndRecyclerViewVisible(fab: FloatingActionButton) {
         if(ContextCompat.checkSelfPermission(requireContext(), Manifest.permission.POST_NOTIFICATIONS) == PackageManager.PERMISSION_GRANTED){
             binding.rvMedicinesList.visibility = View.VISIBLE
@@ -644,6 +837,7 @@ class HomeFragment: Fragment() {
         val toolbar = requireActivity().findViewById<androidx.appcompat.widget.Toolbar>(R.id.toolbarHome)
         toolbar.visibility = View.GONE
 
+        // Sets theme colors
         ThemeUtils.applyThemeBasedSystemColors(
             requireActivity(),
             R.color.white_ice,
@@ -681,7 +875,7 @@ class HomeFragment: Fragment() {
     override fun onPause() {
         super.onPause()
 
-        //Dismiss the dialog to avoid window leakage
+        // Dismiss the pillbox reminder dialog to avoid window leakage
         if(::dialog.isInitialized && dialog.isShowing && !sharedPreferencesRepository.getPillboxPreferences()){
             dialog.dismiss()
             uncheckSwitch()

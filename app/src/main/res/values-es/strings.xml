@@ -239,6 +239,7 @@
     <string name="request_permissions">Solicitar permisos de la aplicación</string>
     <string name="disable_battery_optimizations">Desactivar optimizaciones de batería</string>
     <string name="optimizations_already_disabled">Las optimizaciones de batería ya están desactivadas</string>
+    <string name="notification_sound">Cambiar sonido de notificación</string>
     <string name="arrow_down_icon">Haz clic para ver la respuesta a la pregunta</string>
     <string name="snooze_alarm">Posponer alarma</string>
     <string name="change_alarm_snooze_interval">Intervalo de repetición de alarma</string>
@@ -390,6 +391,16 @@
         <item>pt-BR</item>
         <item>es</item>
         <item>it</item>
+    </string-array>
+
+    <string-array name="notification_entries">
+        <item>Opción 1</item>
+        <item>Opción 2</item>
+    </string-array>
+
+    <string-array name="notification_values">
+        <item>option1</item>
+        <item>option2</item>
     </string-array>
 
     <string name="ad_inspector" translatable="false">Ad Inspector</string>

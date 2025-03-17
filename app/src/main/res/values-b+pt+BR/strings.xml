@@ -248,6 +248,7 @@
     <string name="change_alarm_snooze_interval">Intervalo de adiamento do alarme</string>
     <string name="time_to_refill_your_pillbox">Hora de reabastecer seu porta comprimidos.</string>
     <string name="com.crashlytics.android.build_id">1</string>
+    <string name="notification_sound">Alterar som da notificação</string>
 
     <string-array name="snooze_interval_entries">
         <item>5 minutos</item>
@@ -424,5 +425,14 @@
     <string name="did_you_forget_to_use_your_medicines">Você esqueceu de tomar seus medicamentos?</string>
     <string name="open_app_pending_medicines">Abra o aplicativo para ver seus medicamentos pendentes.</string>
     <string name="all_permissions_granted">Todas as permissões já foram concedidas.</string>
+    <string-array name="notification_entries">
+        <item>Opção 1</item>
+        <item>Opção 2</item>
+    </string-array>
+
+    <string-array name="notification_values">
+        <item>option1</item>
+        <item>option2</item>
+    </string-array>
     <string name="date_picker_today">Hoje</string>
 </resources>

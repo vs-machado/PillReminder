@@ -239,6 +239,7 @@
     <string name="request_permissions">Request app permissions</string>
     <string name="disable_battery_optimizations">Disable battery optimizations</string>
     <string name="optimizations_already_disabled">Battery optimizations are already disabled</string>
+    <string name="notification_sound">Change notification sound</string>
     <string name="arrow_down_icon">Click to see the question answer</string>
     <string name="snooze_alarm">Snooze alarm</string>
     <string name="change_alarm_snooze_interval">Alarm snooze interval</string>
@@ -390,6 +391,16 @@
         <item>5</item>
         <item>10</item>
         <item>15</item>
+    </string-array>
+
+    <string-array name="notification_entries">
+        <item>Option 1</item>
+        <item>Option 2</item>
+    </string-array>
+
+    <string-array name="notification_values">
+        <item>option1</item>
+        <item>option2</item>
     </string-array>
 
     <string name="ad_inspector" translatable="false">Ad Inspector</string>

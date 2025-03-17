@@ -1,10 +1,12 @@
 package com.phoenix.remedi.feature_alarms.presentation.fragments
 
 import android.Manifest
+import android.app.NotificationManager
 import android.content.ActivityNotFoundException
 import android.content.Context
 import android.content.Intent
 import android.content.pm.PackageManager
+import android.media.MediaPlayer
 import android.net.Uri
 import android.os.Build
 import android.os.Bundle
@@ -31,14 +33,24 @@ import com.phoenix.remedi.feature_alarms.presentation.PermissionManager
 import com.phoenix.remedi.feature_alarms.presentation.utils.LanguageConfig
 import com.phoenix.remedi.feature_alarms.presentation.utils.ThemeUtils
 import dagger.hilt.android.AndroidEntryPoint
+import java.util.UUID
 import javax.inject.Inject
 
-// User can change the app language, disable battery optimizations and request app permissions
+/**
+ * Settings fragment that allows users to:
+ * - Change the application language
+ * - Manage notification and overlay permissions
+ * - Disable battery optimizations for reliable notifications
+ * - Configure notification sounds
+ * - Adjust snooze interval settings
+ * - Manage privacy consent options (for EU/US users)
+ */
 @AndroidEntryPoint
 class MySettingsFragment: PreferenceFragmentCompat() {
 
     @Inject lateinit var sharedPreferencesRepository: SharedPreferencesRepository
     private lateinit var googleMobileAdsConsentManager: GoogleMobileAdsConsentManager
+    private var mediaPlayer: MediaPlayer? = null
 
     override fun onCreatePreferences(savedInstanceState: Bundle?, rootKey: String?) {
         setPreferencesFromResource(R.xml.preferences, rootKey)
@@ -104,7 +116,6 @@ class MySettingsFragment: PreferenceFragmentCompat() {
     private fun setupPreferenceListeners() {
         val languagePreference = findPreference<ListPreference>("language")
         val appLanguage = sharedPreferencesRepository.getAppLanguage()
-
         val snoozeIntervalPreference = findPreference<ListPreference>("snooze_interval")
 
         languagePreference?.apply {
@@ -122,6 +133,27 @@ class MySettingsFragment: PreferenceFragmentCompat() {
                 requestAppPermissions()
                 true
             }
+
+        // Changes notification sound
+        findPreference<ListPreference>("notification_sound")?.setOnPreferenceChangeListener { _, newValue ->
+            val notificationManager = activity?.getSystemService(NotificationManager::class.java)
+            val channelId = sharedPreferencesRepository.getChannelId()
+
+            // Users can listen the selected option sound when clicking on an option
+            playNotificationSound(newValue as String)
+
+            // Notification channel needs to be destroyed for updating the notification sound
+            notificationManager?.let {
+                notificationManager.deleteNotificationChannel("AlarmChannel-$channelId")
+                notificationManager.deleteNotificationChannel("FollowUpAlarmChannel-$channelId")
+                notificationManager.deleteNotificationChannel("PillboxReminderChannel-$channelId")
+            }
+
+            // Generates a new channelId for a channel to be instanced in NotificationUtils
+            sharedPreferencesRepository.setChannelId(UUID.randomUUID().toString())
+            sharedPreferencesRepository.setAlarmSound(newValue as String)
+            true
+        }
 
         // Disabling battery optimizations ensure that notifications will be delivered on time
         findPreference<Preference>("battery_optimizations")
@@ -192,5 +224,26 @@ class MySettingsFragment: PreferenceFragmentCompat() {
                 startActivity(fallbackIntent)
             }
         }
+    }
+
+    private fun playNotificationSound(option: String) {
+        mediaPlayer?.release()
+
+        val soundResId = when(option) {
+            "option1"  -> R.raw.alarm_2
+            "option2" -> R.raw.alarm_sound
+            else -> R.raw.alarm_2
+        }
+
+        mediaPlayer = MediaPlayer.create(requireContext(), soundResId).apply{
+            setOnCompletionListener { release() }
+            start()
+        }
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
+        mediaPlayer?.release()
+        mediaPlayer = null
     }
 }

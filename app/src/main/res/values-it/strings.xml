@@ -425,6 +425,7 @@ se l\'utente non segna un medicinale come assunto nell\'applicazione.\n• Perme
     <string name="privacy_settings" translatable="false">Privacy Settings</string>
     <string name="privacy_setting">Impostazioni privacy</string>
     <string name="manage_data_consent_options">Consenso sulla protezione dei dati</string>
+    <string name="turn_up_volume">Alza il volume per ascoltare l\'audio.</string>
     <string name="mark_all_as_used">Contrassegnare tutti come usati</string>
     <string name="time_to_use_your_medicines">È ora di usare i rimedi!</string>
     <string name="check_the_app">Abre la aplicación para ver los medicamentos que debes tomar.</string>

@@ -6,6 +6,7 @@ import android.content.ActivityNotFoundException
 import android.content.Context
 import android.content.Intent
 import android.content.pm.PackageManager
+import android.media.AudioManager
 import android.media.MediaPlayer
 import android.net.Uri
 import android.os.Build
@@ -228,6 +229,14 @@ class MySettingsFragment: PreferenceFragmentCompat() {
 
     private fun playNotificationSound(option: String) {
         mediaPlayer?.release()
+
+        // Check if device is muted and warn the user
+        val audioManager = requireContext().getSystemService(Context.AUDIO_SERVICE) as AudioManager
+        val currentVolume = audioManager.getStreamVolume(AudioManager.STREAM_MUSIC)
+
+        if (currentVolume == 0) {
+            Toast.makeText(requireContext(), getString(R.string.turn_up_volume), Toast.LENGTH_LONG).show()
+        }
 
         val soundResId = when(option) {
             "option1"  -> R.raw.alarm_2

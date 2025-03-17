@@ -408,6 +408,7 @@
     <string name="privacy_settings" translatable="false">Privacy Settings</string>
     <string name="privacy_setting">Ajustes de privacidad</string>
     <string name="manage_data_consent_options">Consentimiento de protección de datos</string>
+    <string name="turn_up_volume">Sube el volumen para escuchar el audio.</string>
     <string name="mark_all_as_used">Marcar todos como usados</string>
     <string name="time_to_use_your_medicines">¡Es hora de usar sus medicamentos!</string>
     <string name="check_the_app">Abre la aplicación para ver los medicamentos que debes tomar.</string>

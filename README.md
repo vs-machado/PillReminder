@@ -39,7 +39,9 @@
         <img alt="GitHub installation" width="220px" src="https://github.com/user-attachments/assets/53aae1f9-a9f7-4882-88c8-315351942a0a" />
     </a>
     &nbsp;&nbsp;&nbsp;
-    <img alt="Coming Soon" width="220px" height="67px" src="https://github.com/user-attachments/assets/726b9cc1-a75b-4fc7-b21b-2bd02f211cc1" />
+    <a href="https://play.google.com/store/apps/details?id=com.phoenix.remedi">
+      <img alt="Google Play Store link" width="220px" height="67px" src="https://github.com/user-attachments/assets/fb880a67-0fce-4029-9b13-8a20637d0399" />
+    </a>
 </div>
 
 

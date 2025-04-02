@@ -15,6 +15,15 @@
         app:title="@string/app_language"
         app:useSimpleSummaryProvider="true" />
 
+    <ListPreference
+        app:isPreferenceVisible="true"
+        app:entries="@array/notification_entries"
+        app:entryValues="@array/notification_values"
+        app:icon="@drawable/baseline_notifications_active_24"
+        app:key="notification_sound"
+        app:title="@string/notification_sound"
+        app:useSimpleSummaryProvider="false" />
+
     <Preference
         app:icon="@drawable/baseline_key_24"
         app:key="permissions"

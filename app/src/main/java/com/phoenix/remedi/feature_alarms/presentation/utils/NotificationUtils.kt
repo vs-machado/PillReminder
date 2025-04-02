@@ -13,11 +13,10 @@ import android.net.Uri
 import android.os.Build
 import android.os.LocaleList
 import android.provider.Settings
-import android.util.Log
 import androidx.appcompat.app.AppCompatDelegate
 import androidx.core.app.NotificationCompat
-import androidx.core.os.ConfigurationCompat.setLocales
 import com.phoenix.remedi.R
+import com.phoenix.remedi.feature_alarms.data.repository.SharedPreferencesRepositoryImpl
 import com.phoenix.remedi.feature_alarms.domain.model.AlarmItem
 import com.phoenix.remedi.feature_alarms.presentation.AlarmReceiver
 import com.phoenix.remedi.feature_alarms.presentation.AlarmService
@@ -25,10 +24,7 @@ import com.phoenix.remedi.feature_alarms.presentation.activities.MainActivity
 import java.util.Locale
 
 object NotificationUtils {
-    private val channelId = "AlarmChannel"
-    private val followUpChannelId = "FollowUpAlarmChannel"
-    private val pillboxReminderChannelId = "PillboxReminderChannel"
-    private val simpleNotificationChannelId = "SimpleNotificationChannel"
+    private var simpleNotificationChannelId = "SimpleNotificationChannel"
 
     // Used for changing the notification text language.
     // This setting is only used in phones with SDK lower than 33,
@@ -70,7 +66,16 @@ object NotificationUtils {
      */
     fun createNotification(context: Context, item: AlarmItem, hasMultipleAlarmsAtSameTime: Boolean): Notification {
         val localContext = getLocalizedContext(context)
-        val alarmUri = Uri.parse("android.resource://" + localContext.packageName + "/" + R.raw.alarm_sound)
+        val sharedPreferencesRepository = SharedPreferencesRepositoryImpl(context)
+        val channelId = "AlarmChannel-${sharedPreferencesRepository.getChannelId()}"
+
+        val alarmUri = Uri.parse(
+            when(sharedPreferencesRepository.getAlarmSound()) {
+                "option1" -> "android.resource://" + localContext.packageName + "/" + R.raw.alarm_2
+                "option2" -> "android.resource://" + localContext.packageName + "/" + R.raw.alarm_sound
+                else ->  "android.resource://" + localContext.packageName + "/" + R.raw.alarm_2
+            }
+        )
 
         when(Settings.canDrawOverlays(localContext)){
             true -> {
@@ -85,7 +90,7 @@ object NotificationUtils {
                 )
 
                 if(hasMultipleAlarmsAtSameTime) {
-                    createNotificationChannel(localContext, alarmUri)
+                    createNotificationChannel(localContext, alarmUri, channelId)
 
                     val title = localContext.getString(R.string.time_to_use_your_medicines)
                     val text = localContext.getString(R.string.check_the_app)
@@ -93,7 +98,7 @@ object NotificationUtils {
                     return notificationBuilder(localContext, channelId, pendingIntent, title, text)
                 }
                 else {
-                    createNotificationChannel(localContext, alarmUri)
+                    createNotificationChannel(localContext, alarmUri, channelId)
 
                     return notificationBuilder(localContext, channelId, pendingIntent,
                         localContext.getString(R.string.time_to_use_your_medicine),
@@ -141,7 +146,7 @@ object NotificationUtils {
                         skipMedicineIntent, PendingIntent.FLAG_IMMUTABLE
                     )
 
-                    createNotificationChannel(localContext, alarmUri)
+                    createNotificationChannel(localContext, alarmUri, channelId)
 
                     val title = localContext.getString(R.string.time_to_use_your_medicines)
                     val text = localContext.getString(R.string.more_than_one_medicine_to_be_used)
@@ -183,7 +188,7 @@ object NotificationUtils {
                         skipMedicineIntent, PendingIntent.FLAG_IMMUTABLE
                     )
 
-                    createNotificationChannel(localContext, alarmUri)
+                    createNotificationChannel(localContext, alarmUri, channelId)
 
                     val title = localContext.getString(R.string.time_to_use_your_medicine)
                     val text = localContext.getString(R.string.do_not_forget_to_mark_the_medicine_as_taken, item.medicineName, checkMedicineForm(item.medicineForm,
@@ -202,9 +207,18 @@ object NotificationUtils {
 
      fun createFollowUpNotification(context: Context, item: AlarmItem,
          medicineHashCode: String, hasMultipleAlarmsAtSameTime: Boolean): Notification {
-         
+
          val localContext = getLocalizedContext(context)
-         val alarmUri = Uri.parse("android.resource://" + localContext.packageName + "/" + R.raw.alarm_sound)
+         val sharedPreferencesRepository = SharedPreferencesRepositoryImpl(context)
+         
+         val followUpChannelId = "FollowUpAlarmChannel-${sharedPreferencesRepository.getChannelId()}"
+         val alarmUri = Uri.parse(
+             when(sharedPreferencesRepository.getAlarmSound()) {
+                 "option1" -> "android.resource://" + localContext.packageName + "/" + R.raw.alarm_2
+                 "option2" -> "android.resource://" + localContext.packageName + "/" + R.raw.alarm_sound
+                 else ->  "android.resource://" + localContext.packageName + "/" + R.raw.alarm_2
+             }
+         )
 
          val notificationIntent = Intent(localContext, MainActivity::class.java)
 
@@ -216,7 +230,7 @@ object NotificationUtils {
          when(Settings.canDrawOverlays(localContext)){
              true -> {
                  if (hasMultipleAlarmsAtSameTime) {
-                     createFollowUpNotificationChannel(localContext, alarmUri)
+                     createFollowUpNotificationChannel(localContext, alarmUri, followUpChannelId)
 
                      val title = localContext.getString(R.string.did_you_forget_to_use_your_medicines)
                      val text = localContext.getString(R.string.open_app_pending_medicines)
@@ -224,7 +238,7 @@ object NotificationUtils {
                      return notificationBuilder(localContext, followUpChannelId, pendingIntent, title, text)
                  }
                  else {
-                     createFollowUpNotificationChannel(localContext, alarmUri)
+                     createFollowUpNotificationChannel(localContext, alarmUri, followUpChannelId)
 
                      val title = localContext.getString(R.string.did_you_forget_to_use_your_medicine, item.medicineName)
                      val text = localContext.getString(R.string.do_not_forget_to_mark_the_medicine_as_used, checkMedicineForm(item.medicineForm,
@@ -252,7 +266,7 @@ object NotificationUtils {
                          localContext, item.hashCode(),
                          skipMedicineIntent, PendingIntent.FLAG_IMMUTABLE
                      )
-                     createFollowUpNotificationChannel(localContext, alarmUri)
+                     createFollowUpNotificationChannel(localContext, alarmUri, followUpChannelId)
 
                      val title = localContext.getString(R.string.did_you_forget_to_use_your_medicines)
                      val text = localContext.getString(R.string.open_app_pending_medicines)
@@ -283,7 +297,7 @@ object NotificationUtils {
                          skipMedicineIntent, PendingIntent.FLAG_IMMUTABLE
                      )
 
-                     createFollowUpNotificationChannel(localContext, alarmUri)
+                     createFollowUpNotificationChannel(localContext, alarmUri, followUpChannelId)
 
                      val title = localContext.getString(R.string.did_you_forget_to_use_your_medicine, item.medicineName)
                      val text = localContext.getString(R.string.do_not_forget_to_mark_the_medicine_as_used, checkMedicineForm(item.medicineForm,
@@ -301,14 +315,23 @@ object NotificationUtils {
 
     fun schedulePillboxDailyReminder(context: Context): Notification {
         val localContext = getLocalizedContext(context)
+        val sharedPreferencesRepository = SharedPreferencesRepositoryImpl(context)
         val notificationIntent = Intent(localContext, MainActivity::class.java)
         val pendingIntent = PendingIntent.getActivity(
             localContext, 999, notificationIntent,
             PendingIntent.FLAG_IMMUTABLE or PendingIntent.FLAG_UPDATE_CURRENT
         )
-        val alarmUri = Uri.parse("android.resource://" + localContext.packageName + "/" + R.raw.alarm_sound)
+        
+        val alarmUri = Uri.parse(
+            when(sharedPreferencesRepository.getAlarmSound()) {
+                "option1" -> "android.resource://" + localContext.packageName + "/" + R.raw.alarm_2
+                "option2" -> "android.resource://" + localContext.packageName + "/" + R.raw.alarm_sound
+                else ->  "android.resource://" + localContext.packageName + "/" + R.raw.alarm_2
+            }
+        )
+        val pillboxReminderChannelId = "PillboxReminderChannel-${sharedPreferencesRepository.getChannelId()}"
 
-        createPillboxNotificationChannel(localContext, alarmUri)
+        createPillboxNotificationChannel(localContext, alarmUri, pillboxReminderChannelId)
 
         val title = localContext.getString(R.string.it_s_time_to_refill_your_pillbox)
         val text =
@@ -343,7 +366,7 @@ object NotificationUtils {
             .build()
     }
 
-    private fun createNotificationChannel(context: Context, alarmUri: Uri){
+    private fun createNotificationChannel(context: Context, alarmUri: Uri, channelId: String){
         val localContext = getLocalizedContext(context)
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
             val name = "PillReminderChannel"
@@ -361,7 +384,7 @@ object NotificationUtils {
             notificationManager.createNotificationChannel(channel)
         }
     }
-    private fun createFollowUpNotificationChannel(context: Context, alarmUri: Uri){
+    private fun createFollowUpNotificationChannel(context: Context, alarmUri: Uri, followUpChannelId: String){
         val localContext = getLocalizedContext(context)
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
             val name = "PillReminderFollowUpChannel"
@@ -380,7 +403,7 @@ object NotificationUtils {
         }
     }
 
-    private fun createPillboxNotificationChannel(context: Context, alarmUri: Uri){
+    private fun createPillboxNotificationChannel(context: Context, alarmUri: Uri, channelId: String){
         val localContext = getLocalizedContext(context)
         if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.O){
             val name = "PillboxReminderChannel"
@@ -389,7 +412,7 @@ object NotificationUtils {
             val audioAttributes = AudioAttributes.Builder()
                 .setUsage(AudioAttributes.USAGE_ALARM)
                 .build()
-            val channel = NotificationChannel(pillboxReminderChannelId, name, importance).apply{
+            val channel = NotificationChannel(channelId, name, importance).apply{
                 description = descriptionText
                 setSound(alarmUri, audioAttributes)
             }

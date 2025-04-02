@@ -196,8 +196,8 @@
     <string name="alarms_per_day">Alarmas por día</string>
     <string name="alarms_hour">Hora de las alarmas</string>
     <string name="Hour">Hora</string>
-    <string name="treatment_start_date">Fecha de inicio del tratamiento</string>
-    <string name="treatment_end_date">Fecha de finalización del tratamiento</string>
+    <string name="treatment_start_date">Inicio del tratamiento</string>
+    <string name="treatment_end_date">Finalización del tratamiento</string>
     <string name="treatment_status">Estado del tratamiento</string>
     <string name="medicine_icon">Icono del medicamento</string>
     <string name="pill_quantity">%1$s pastilla(s)</string>
@@ -239,6 +239,7 @@
     <string name="request_permissions">Solicitar permisos de la aplicación</string>
     <string name="disable_battery_optimizations">Desactivar optimizaciones de batería</string>
     <string name="optimizations_already_disabled">Las optimizaciones de batería ya están desactivadas</string>
+    <string name="notification_sound">Cambiar sonido de notificación</string>
     <string name="arrow_down_icon">Haz clic para ver la respuesta a la pregunta</string>
     <string name="snooze_alarm">Posponer alarma</string>
     <string name="change_alarm_snooze_interval">Intervalo de repetición de alarma</string>
@@ -392,11 +393,22 @@
         <item>it</item>
     </string-array>
 
+    <string-array name="notification_entries">
+        <item>Opción 1</item>
+        <item>Opción 2</item>
+    </string-array>
+
+    <string-array name="notification_values">
+        <item>option1</item>
+        <item>option2</item>
+    </string-array>
+
     <string name="ad_inspector" translatable="false">Ad Inspector</string>
     <string name="more_menu" translatable="false">More</string>
     <string name="privacy_settings" translatable="false">Privacy Settings</string>
     <string name="privacy_setting">Ajustes de privacidad</string>
     <string name="manage_data_consent_options">Consentimiento de protección de datos</string>
+    <string name="turn_up_volume">Sube el volumen para escuchar el audio.</string>
     <string name="mark_all_as_used">Marcar todos como usados</string>
     <string name="time_to_use_your_medicines">¡Es hora de usar sus medicamentos!</string>
     <string name="check_the_app">Abre la aplicación para ver los medicamentos que debes tomar.</string>

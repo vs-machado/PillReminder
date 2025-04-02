@@ -2,6 +2,17 @@
 <resources>
     <string name="app_name">Remedi</string>
     <string name="hello_blank_fragment">Ciao blank fragment</string>
+
+    <string-array name="notification_entries">
+        <item>Opzione 1</item>
+        <item>Opzione 2</item>
+    </string-array>
+
+    <string-array name="notification_values">
+        <item>option1</item>
+        <item>option2</item>
+    </string-array>
+
     <string name="hour">08:00</string>
     <string name="strength">Dosaggio</string>
     <string name="take_2_pill_s">Prendi 2 pillole</string>
@@ -414,6 +425,7 @@ se l\'utente non segna un medicinale come assunto nell\'applicazione.\n• Perme
     <string name="privacy_settings" translatable="false">Privacy Settings</string>
     <string name="privacy_setting">Impostazioni privacy</string>
     <string name="manage_data_consent_options">Consenso sulla protezione dei dati</string>
+    <string name="turn_up_volume">Alza il volume per ascoltare l\'audio.</string>
     <string name="mark_all_as_used">Contrassegnare tutti come usati</string>
     <string name="time_to_use_your_medicines">È ora di usare i rimedi!</string>
     <string name="check_the_app">Abre la aplicación para ver los medicamentos que debes tomar.</string>
@@ -422,5 +434,5 @@ se l\'utente non segna un medicinale come assunto nell\'applicazione.\n• Perme
     <string name="open_app_pending_medicines">Aprire l\'app per visualizzare i farmaci in attesa</string>
     <string name="opening_app">Apertura dell\'applicazione…</string>
     <string name="date_picker_today">Oggi</string>
-
+    <string name="notification_sound">Cambia suono di notifica</string>
 </resources>

@@ -1,6 +1,7 @@
 package com.phoenix.remedi.feature_alarms.data.repository
 
 import android.content.Context
+import com.phoenix.remedi.R
 import com.phoenix.remedi.feature_alarms.domain.repository.SharedPreferencesRepository
 import java.util.Locale
 
@@ -15,6 +16,7 @@ class SharedPreferencesRepositoryImpl(
     private val sharedPreferencesSnoozeInterval = context.getSharedPreferences("snooze_interval", Context.MODE_PRIVATE)
     private val sharedPreferencesPillboxReminderHour = context.getSharedPreferences("pillbox_reminder_hour", Context.MODE_PRIVATE)
     private val sharedPreferencesFirstRun = context.getSharedPreferences("first_run", Context.MODE_PRIVATE)
+    private val sharedPreferencesAlarmSound = context.getSharedPreferences("alarm_sound", Context.MODE_PRIVATE)
 
     override fun setPermissionRequestPreferences(boolean: Boolean) {
         sharedPreferencesPermissionRequest.edit().putBoolean("dont_show_again", boolean).apply()
@@ -76,5 +78,21 @@ class SharedPreferencesRepositoryImpl(
 
     override suspend fun setFirstRunComplete() {
         sharedPreferencesFirstRun.edit().putBoolean("first_run_complete", true).apply()
+    }
+
+    override fun setAlarmSound(uri: String) {
+        sharedPreferencesAlarmSound.edit().putString("alarm_sound", uri).apply()
+    }
+
+    override fun getAlarmSound(): String {
+        return sharedPreferencesAlarmSound.getString("alarm_sound", "android.resource://" + context.packageName + "/" + R.raw.alarm_sound)!!
+    }
+
+    override fun getChannelId(): String {
+        return sharedPreferencesAlarmSound.getString("channel_id", "ChannelId")!!
+    }
+
+    override fun setChannelId(channelId: String) {
+        sharedPreferencesAlarmSound.edit().putString("channel_id", channelId).apply()
     }
 }

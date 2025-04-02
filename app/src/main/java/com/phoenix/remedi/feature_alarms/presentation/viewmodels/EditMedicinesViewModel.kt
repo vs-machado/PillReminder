@@ -11,9 +11,6 @@ import com.phoenix.remedi.feature_alarms.presentation.AndroidAlarmScheduler
 import com.phoenix.remedi.feature_alarms.presentation.utils.CalendarUtils
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.StateFlow
-import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
 import java.text.SimpleDateFormat
 import java.time.Instant
@@ -29,12 +26,6 @@ import javax.inject.Inject
 class EditMedicinesViewModel @Inject constructor(
     private val alarmScheduler: AndroidAlarmScheduler
 ): ViewModel() {
-    private val _isInitialized = MutableStateFlow(false)
-    val isInitialized: StateFlow<Boolean> = _isInitialized.asStateFlow()
-
-    fun setInitialized(bool: Boolean) {
-        _isInitialized.value = bool
-    }
 
     fun convertMillisToAlarmHourList(context: Context, alarmHourList: List<Pair<Int, Int>>): List<AlarmHour>{
         val is24HourFormat = DateFormat.is24HourFormat(context)

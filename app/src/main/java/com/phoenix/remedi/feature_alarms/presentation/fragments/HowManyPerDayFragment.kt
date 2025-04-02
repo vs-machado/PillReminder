@@ -18,6 +18,10 @@ import com.phoenix.remedi.feature_alarms.presentation.OnOneOffClickListener
 import com.phoenix.remedi.feature_alarms.presentation.utils.ThemeUtils
 import com.phoenix.remedi.feature_alarms.presentation.viewmodels.AlarmSettingsSharedViewModel
 
+/**
+ * Allow users to configure the number of reminders they will receive per day for the respective medication
+ * that is being registered. The value is defined using a NumberPicker.
+ */
 class HowManyPerDayFragment : Fragment() {
     private lateinit var binding: FragmentHowManyPerDayBinding
     override fun onCreateView(
@@ -64,7 +68,10 @@ class HowManyPerDayFragment : Fragment() {
 
             fabNext.setOnClickListener(object: OnOneOffClickListener() {
                 override fun onSingleClick(fab: FloatingActionButton) {
-                    sharedViewModel.position = 0
+                    // Resets the index of the alarm variable that will store it's respective hour
+                    // See AlarmHourFragment.kt for more details.
+                    sharedViewModel.alarmIndex = 0
+
                     sharedViewModel.resetCurrentAlarmNumber()
                     findNavController().navigate(R.id.action_howManyPerDayFragment_to_alarmHourFragment)
                 }

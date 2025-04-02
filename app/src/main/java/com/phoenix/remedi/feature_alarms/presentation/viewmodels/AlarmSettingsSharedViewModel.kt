@@ -10,6 +10,7 @@ import androidx.work.WorkManager
 import com.phoenix.remedi.feature_alarms.data.worker.RescheduleWorker
 import com.phoenix.remedi.feature_alarms.domain.model.AlarmHour
 import com.phoenix.remedi.feature_alarms.domain.model.AlarmItem
+import com.phoenix.remedi.feature_alarms.domain.model.Animation
 import com.phoenix.remedi.feature_alarms.domain.model.ExpiredMedicinesInfo
 import com.phoenix.remedi.feature_alarms.domain.model.Medicine
 import com.phoenix.remedi.feature_alarms.domain.repository.MedicineRepository
@@ -18,6 +19,8 @@ import com.phoenix.remedi.feature_alarms.presentation.AlarmScheduler
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import java.time.Instant
@@ -53,6 +56,9 @@ class AlarmSettingsSharedViewModel @Inject constructor(
     private var _medicineForm = MutableLiveData("")
     val medicineForm: LiveData<String> = _medicineForm
 
+    private val _animation = MutableStateFlow(Animation.DISABLED)
+    val animation = _animation.asStateFlow()
+
     private lateinit var doseUnit: String
 
     private var medicineQuantity = 0F
@@ -79,13 +85,21 @@ class AlarmSettingsSharedViewModel @Inject constructor(
 
     private var interval: Int = 0
 
-    var position = 0
+    var alarmIndex = 0
 
     private lateinit var workRequestID: UUID
 
     // Used to track if the permission dialog was shown in the app session. If user marks the checkbox "don't show again",
     // this value is ignored.
     private val _permissionDialogShown = MutableStateFlow(false)
+
+    // Used to initialize sharedViewModel data related to medicine data changes
+    private val _isInitialized = MutableStateFlow(false)
+    val isInitialized: StateFlow<Boolean> = _isInitialized.asStateFlow()
+
+    fun setInitialized(bool: Boolean) {
+        _isInitialized.value = bool
+    }
 
     init{
         _currentAlarmNumber.postValue(1)
@@ -521,6 +535,12 @@ class AlarmSettingsSharedViewModel @Inject constructor(
         _currentAlarmNumber.value = (_currentAlarmNumber.value)?.minus(1)
     }
 
+    /**
+     * Saves the alarm hour on it's respective position in the array.
+     * @param position the position in the array where the alarm hour will be saved
+     * @param hourOfDay the hour of the day for the alarm
+     * @param minute the minute of the hour for the alarm
+     */
     fun saveAlarmHour(position: Int, hourOfDay: Int, minute :Int){
         alarmHour[position] = hourOfDay
         alarmMinute[position] = minute
@@ -861,5 +881,9 @@ class AlarmSettingsSharedViewModel @Inject constructor(
 
     fun getPermissionDialogExhibition(): Boolean {
         return _permissionDialogShown.value
+    }
+
+    fun setAnimation(order: Animation) {
+        _animation.value = order
     }
 }

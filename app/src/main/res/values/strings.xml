@@ -239,6 +239,7 @@
     <string name="request_permissions">Request app permissions</string>
     <string name="disable_battery_optimizations">Disable battery optimizations</string>
     <string name="optimizations_already_disabled">Battery optimizations are already disabled</string>
+    <string name="notification_sound">Change notification sound</string>
     <string name="arrow_down_icon">Click to see the question answer</string>
     <string name="snooze_alarm">Snooze alarm</string>
     <string name="change_alarm_snooze_interval">Alarm snooze interval</string>
@@ -392,11 +393,22 @@
         <item>15</item>
     </string-array>
 
+    <string-array name="notification_entries">
+        <item>Option 1</item>
+        <item>Option 2</item>
+    </string-array>
+
+    <string-array name="notification_values">
+        <item>option1</item>
+        <item>option2</item>
+    </string-array>
+
     <string name="ad_inspector" translatable="false">Ad Inspector</string>
     <string name="more_menu" translatable="false">More</string>
     <string name="privacy_settings" translatable="false">Privacy Settings</string>
     <string name="privacy_setting">Privacy Settings</string>
     <string name="manage_data_consent_options">Data protection consent</string>
+    <string name="turn_up_volume">Turn up the volume to hear the audio.</string>
     <string name="mark_all_as_used">Mark all as used</string>
     <string name="time_to_use_your_medicines">Time to use your medicines!</string>
     <string name="check_the_app">Open the app to see the medicines that need to be used.</string>

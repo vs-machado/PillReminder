@@ -22,7 +22,7 @@ interface MedicineDao {
     suspend fun updateMedicinesActiveStatus(medicineName: String, currentTimeMillis: Long, isActive: Boolean)
 
     @Query("UPDATE medicines_data_table SET name = :name, quantity = :quantity, form = :form, end_date = :endDate, " +
-            "frequency = :frequency, is_active = false " +
+            "frequency = :frequency, is_active = 0 " +
             "WHERE treatment_id = :treatmentID AND name = :name AND alarm_in_millis < :currentTime")
     suspend fun updateExpiredMedicines(treatmentID: String, name: String, quantity: Float, form: String,
                                        endDate: Long, frequency: String, currentTime: Long)
@@ -54,7 +54,7 @@ interface MedicineDao {
             "name = :medicineName AND last_edited = (" +
             "    SELECT MAX(last_edited) FROM medicines_data_table " +
             "    WHERE name = :medicineName AND treatment_id = :treatmentID" +
-            ") AND is_active = true " +
+            ") AND is_active = 1 " +
             "ORDER BY alarm_in_millis ASC " +
             "LIMIT :alarmsPerDay")
     suspend fun getDailyAlarms(medicineName: String, alarmsPerDay: Int, treatmentID: String): List<AlarmTimeData>

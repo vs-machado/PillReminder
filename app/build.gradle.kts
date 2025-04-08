@@ -19,7 +19,7 @@ android {
         minSdk = 30
         //noinspection EditedTargetSdkVersion
         targetSdk = 35
-        versionCode = 8
+        versionCode = 9
         versionName = "1.5.4"
 
         testInstrumentationRunner = "com.phoenix.remedi.CustomTestRunner"

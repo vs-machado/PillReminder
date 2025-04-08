@@ -30,9 +30,11 @@ class AndroidAlarmScheduler @Inject constructor(
         }
 
         // Checks if is possible to schedule exact alarms before calling the schedule method
-        if(!alarmManager.canScheduleExactAlarms()){
-            Log.e("AlarmScheduler", "Cannot schedule exact alarms")
-            return
+        if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.S) {
+            if (!alarmManager.canScheduleExactAlarms()) {
+                Log.e("AlarmScheduler", "Cannot schedule exact alarms")
+                return
+            }
         }
 
         val alarmTime = item.time.atZone(ZoneId.systemDefault()).toEpochSecond() * 1000

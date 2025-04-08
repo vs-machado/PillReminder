@@ -22,6 +22,7 @@ import com.phoenix.remedi.feature_alarms.presentation.AlarmReceiver
 import com.phoenix.remedi.feature_alarms.presentation.AlarmService
 import com.phoenix.remedi.feature_alarms.presentation.activities.MainActivity
 import java.util.Locale
+import androidx.core.net.toUri
 
 object NotificationUtils {
     private var simpleNotificationChannelId = "SimpleNotificationChannel"
@@ -69,13 +70,11 @@ object NotificationUtils {
         val sharedPreferencesRepository = SharedPreferencesRepositoryImpl(context)
         val channelId = "AlarmChannel-${sharedPreferencesRepository.getChannelId()}"
 
-        val alarmUri = Uri.parse(
-            when(sharedPreferencesRepository.getAlarmSound()) {
-                "option1" -> "android.resource://" + localContext.packageName + "/" + R.raw.alarm_2
-                "option2" -> "android.resource://" + localContext.packageName + "/" + R.raw.alarm_sound
-                else ->  "android.resource://" + localContext.packageName + "/" + R.raw.alarm_2
-            }
-        )
+        val alarmUri = when (sharedPreferencesRepository.getAlarmSound()) {
+            "option1" -> "android.resource://" + localContext.packageName + "/" + R.raw.alarm_2
+            "option2" -> "android.resource://" + localContext.packageName + "/" + R.raw.alarm_sound
+            else -> "android.resource://" + localContext.packageName + "/" + R.raw.alarm_2
+        }.toUri()
 
         when(Settings.canDrawOverlays(localContext)){
             true -> {
@@ -212,13 +211,11 @@ object NotificationUtils {
          val sharedPreferencesRepository = SharedPreferencesRepositoryImpl(context)
          
          val followUpChannelId = "FollowUpAlarmChannel-${sharedPreferencesRepository.getChannelId()}"
-         val alarmUri = Uri.parse(
-             when(sharedPreferencesRepository.getAlarmSound()) {
-                 "option1" -> "android.resource://" + localContext.packageName + "/" + R.raw.alarm_2
-                 "option2" -> "android.resource://" + localContext.packageName + "/" + R.raw.alarm_sound
-                 else ->  "android.resource://" + localContext.packageName + "/" + R.raw.alarm_2
-             }
-         )
+         val alarmUri = when (sharedPreferencesRepository.getAlarmSound()) {
+             "option1" -> "android.resource://" + localContext.packageName + "/" + R.raw.alarm_2
+             "option2" -> "android.resource://" + localContext.packageName + "/" + R.raw.alarm_sound
+             else -> "android.resource://" + localContext.packageName + "/" + R.raw.alarm_2
+         }.toUri()
 
          val notificationIntent = Intent(localContext, MainActivity::class.java)
 
@@ -322,13 +319,11 @@ object NotificationUtils {
             PendingIntent.FLAG_IMMUTABLE or PendingIntent.FLAG_UPDATE_CURRENT
         )
         
-        val alarmUri = Uri.parse(
-            when(sharedPreferencesRepository.getAlarmSound()) {
-                "option1" -> "android.resource://" + localContext.packageName + "/" + R.raw.alarm_2
-                "option2" -> "android.resource://" + localContext.packageName + "/" + R.raw.alarm_sound
-                else ->  "android.resource://" + localContext.packageName + "/" + R.raw.alarm_2
-            }
-        )
+        val alarmUri = when (sharedPreferencesRepository.getAlarmSound()) {
+            "option1" -> "android.resource://" + localContext.packageName + "/" + R.raw.alarm_2
+            "option2" -> "android.resource://" + localContext.packageName + "/" + R.raw.alarm_sound
+            else -> "android.resource://" + localContext.packageName + "/" + R.raw.alarm_2
+        }.toUri()
         val pillboxReminderChannelId = "PillboxReminderChannel-${sharedPreferencesRepository.getChannelId()}"
 
         createPillboxNotificationChannel(localContext, alarmUri, pillboxReminderChannelId)
@@ -374,11 +369,14 @@ object NotificationUtils {
                 localContext.getString(R.string.channel_for_reminding_users_to_take_their_medicines)
             val importance = NotificationManager.IMPORTANCE_HIGH
             val audioAttributes = AudioAttributes.Builder()
+                .setContentType(AudioAttributes.CONTENT_TYPE_SONIFICATION)
                 .setUsage(AudioAttributes.USAGE_ALARM)
                 .build()
             val channel = NotificationChannel(channelId, name, importance).apply {
                 description = descriptionText
                 setSound(alarmUri, audioAttributes)
+                enableLights(true)
+                enableVibration(true)
             }
             val notificationManager = localContext.getSystemService(NotificationManager::class.java)
             notificationManager.createNotificationChannel(channel)

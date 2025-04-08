@@ -16,11 +16,11 @@ android {
 
     defaultConfig {
         applicationId = "com.phoenix.remedi"
-        minSdk = 32
+        minSdk = 30
         //noinspection EditedTargetSdkVersion
         targetSdk = 35
         versionCode = 8
-        versionName = "1.5.3"
+        versionName = "1.5.4"
 
         testInstrumentationRunner = "com.phoenix.remedi.CustomTestRunner"
     }

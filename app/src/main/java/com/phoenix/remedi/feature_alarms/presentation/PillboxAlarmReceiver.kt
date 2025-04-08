@@ -27,7 +27,8 @@ class PillboxAlarmReceiver: BroadcastReceiver() {
         val isPillboxReminderEnabled = sharedPreferencesRepository.getPillboxPreferences()
 
         // If user reboots the phone or install an app update the alarm will be rescheduled.
-        if(intent?.action == Intent.ACTION_BOOT_COMPLETED || intent?.action == Intent.ACTION_MY_PACKAGE_REPLACED) {
+        if(intent?.action == Intent.ACTION_BOOT_COMPLETED || intent?.action == Intent.ACTION_MY_PACKAGE_REPLACED ||
+            intent?.action == Intent.ACTION_REBOOT) {
 
             if(isPillboxReminderEnabled && hours != null && minutes != null) {
                 alarmScheduler.schedulePillboxReminder(hours, minutes)

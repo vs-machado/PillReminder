@@ -85,7 +85,10 @@ class HowManyPerDayFragment : Fragment() {
             // Sets doses options
             npHowOften.minValue = 0
             npHowOften.maxValue = 9
-            npHowOften.textSize = 100F
+
+            if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.Q) {
+                npHowOften.textSize = 100F
+            }
 
             val pickerVals = intArrayOf(1,2,3,4,5,6,7,8,9,10)
             val stringPickerVals = pickerVals.map{it.toString()}.toTypedArray()

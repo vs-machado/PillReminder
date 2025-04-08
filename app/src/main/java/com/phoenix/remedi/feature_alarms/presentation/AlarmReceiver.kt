@@ -59,12 +59,8 @@ class AlarmReceiver: BroadcastReceiver(), ActivityCompat.OnRequestPermissionsRes
         job = Job()
 
         // Automatically reschedule alarms if user reboots the device or install an app update
-        if(intent?.action == Intent.ACTION_BOOT_COMPLETED || intent?.action == Intent.ACTION_MY_PACKAGE_REPLACED || intent?.action == "com.phoenix.remedi.RESCHEDULEBACKUPALARMS"){
-            if (context != null) {
-                rescheduleAlarms()
-            }
-            return
-        }
+        rescheduleAlarms()
+
         if(intent?.action == actionMarkAsUsed && alarmItemAction != null){
             markMedicineAsTaken(alarmItemAction, repository)
             dismissNotification(context, alarmItemAction.hashCode())

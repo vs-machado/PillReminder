@@ -16,7 +16,7 @@ android {
 
     defaultConfig {
         applicationId = "com.phoenix.remedi"
-        minSdk = 32
+        minSdk = 26
         //noinspection EditedTargetSdkVersion
         targetSdk = 35
         versionCode = 8

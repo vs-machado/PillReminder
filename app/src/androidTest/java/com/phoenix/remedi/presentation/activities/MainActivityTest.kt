@@ -35,7 +35,7 @@ class MainActivityTest {
     }
 
     @Test
-    fun `ensure that language is set correctly in shared preferences`() {
+    fun `ensure_that_language_is_set_correctly_in_shared_preferences`() {
         val phoneLanguage = Locale.getDefault().toLanguageTag()
         val language = languageMapping[phoneLanguage]
         val chosenLanguage = "pt-BR"

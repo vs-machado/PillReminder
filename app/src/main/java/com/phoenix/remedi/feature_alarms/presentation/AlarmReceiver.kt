@@ -127,7 +127,11 @@ class AlarmReceiver: BroadcastReceiver(), ActivityCompat.OnRequestPermissionsRes
                     }
 
                     // When there's no remaining alarms to be scheduled the treatment period has ended
-                    repository.updateMedicinesActiveStatus(medicine.name, System.currentTimeMillis(), false)
+                    repository.updateMedicinesActiveStatus(
+                        medicineName = medicine.name,
+                        currentTimeMillis = System.currentTimeMillis(),
+                        isActive = false
+                    )
                 }
             }
         }

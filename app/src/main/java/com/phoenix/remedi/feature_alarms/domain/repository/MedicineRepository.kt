@@ -9,6 +9,13 @@ interface MedicineRepository {
 
     suspend fun updateMedicine(medicine: Medicine)
 
+    /**
+     * Updates a medication treatment as not active and updates the treatment end date.
+     *
+     * @param medicineName the name of the medication
+     * @param currentTimeMillis the current time in milliseconds
+     * @param isActive a boolean used to deactivate the medication treatment
+     */
     suspend fun updateMedicinesActiveStatus(medicineName: String, currentTimeMillis: Long, isActive: Boolean)
 
     suspend fun updateExpiredMedicines(treatmentID: String, name: String, quantity: Float, form: String, endDate: Long, frequency: String,

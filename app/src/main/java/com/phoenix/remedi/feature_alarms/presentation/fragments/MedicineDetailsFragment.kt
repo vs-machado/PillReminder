@@ -112,7 +112,12 @@ class MedicineDetailsFragment: Fragment() {
 
             if(medicine != null) {
                 tvTreatmentStartDate.text = DateUtil.millisToDateString("", medicine.startDate)
-                tvTreatmentEndDate.text = DateUtil.millisToDateString("", medicine.endDate)
+                tvTreatmentEndDate.text = if(medicine.medicinePeriodSet) DateUtil.millisToDateString("", medicine.endDate) else ""
+
+                if(!medicine.medicinePeriodSet) {
+                    tvTreatmentEndDate.visibility = View.GONE
+                    tvTreatmentEndDateTitle.visibility = View.GONE
+                }
 
                 tvTreatmentStatus.text = when {
                     System.currentTimeMillis() < medicine.startDate && medicine.isActive -> context?.getString(R.string.hasn_started)

@@ -19,7 +19,7 @@ interface MedicineDao {
     @Update
     suspend fun updateMedicine(medicine: Medicine)
 
-    @Query("UPDATE medicines_data_table SET is_active = :isActive, end_date = :currentTimeMillis WHERE name = :medicineName AND alarm_in_millis <= :currentTimeMillis")
+    @Query("UPDATE medicines_data_table SET is_active = :isActive, end_date = :currentTimeMillis, treatment_period_set = 1  WHERE name = :medicineName AND alarm_in_millis <= :currentTimeMillis")
     suspend fun updateMedicinesActiveStatus(
         medicineName: String,
         currentTimeMillis: Long,

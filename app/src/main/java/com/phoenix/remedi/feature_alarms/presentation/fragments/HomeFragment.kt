@@ -450,11 +450,11 @@ class HomeFragment: Fragment() {
                     //Cancel alarms if needed
                     hfViewModel.cancelAlarm(medicine, false)
 
+                    //Database medicine deletion
+                    deleteMedicines(medicine).join()
+
                     //Work cancel
                     sharedViewModel.cancelWork(medicine)
-
-                    //Database medicine deletion
-                    deleteMedicines(medicine)
 
                     withContext(Dispatchers.Main){
                         displayMedicinesList(hfViewModel.getDate())
@@ -507,8 +507,8 @@ class HomeFragment: Fragment() {
             hfViewModel.apply{
                 viewLifecycleOwner.lifecycleScope.launch{
                     cancelAlarm(medicine, true)
-                    sharedViewModel.cancelWork(medicine)
                     deleteAllMedicinesWithSameName(medicine.name).join()
+                    sharedViewModel.cancelWork(medicine)
 
                     withContext(Dispatchers.Main){
                         displayMedicinesList(getDate())

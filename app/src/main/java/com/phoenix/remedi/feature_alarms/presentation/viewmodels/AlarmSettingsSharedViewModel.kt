@@ -1,10 +1,10 @@
 package com.phoenix.remedi.feature_alarms.presentation.viewmodels
 
 import android.content.Context
+import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
-import androidx.lifecycle.viewModelScope
 import androidx.work.PeriodicWorkRequestBuilder
 import androidx.work.WorkManager
 import com.phoenix.remedi.feature_alarms.data.worker.RescheduleWorker
@@ -21,7 +21,6 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
-import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import java.time.Instant
 import java.time.LocalDateTime
@@ -86,8 +85,6 @@ class AlarmSettingsSharedViewModel @Inject constructor(
     private var interval: Int = 0
 
     var alarmIndex = 0
-
-    private lateinit var workRequestID: UUID
 
     // Used to track if the permission dialog was shown in the app session. If user marks the checkbox "don't show again",
     // this value is ignored.
@@ -693,21 +690,30 @@ class AlarmSettingsSharedViewModel @Inject constructor(
         return rescheduleRequest.id
     }
 
-    fun cancelWork(medicine: Medicine){
+    /**
+     *  Cancels the reschedule worker for a medicine if it has no upcoming alarms.
+     *
+     *  @param medicine Medication alarm reschedule to be cancelled.
+     */
+    suspend fun cancelWork(medicine: Medicine){
         val workerID = medicine.rescheduleWorkerID
+        var workRequestID: UUID? = null
 
-        if(workerID != "noID"){
-            workRequestID = UUID.fromString(workerID)
+        if(workerID != "noID") {
+            try {
+                workRequestID = UUID.fromString(workerID)
+            } catch (e: IllegalArgumentException) {
+                Log.e("CancelWork", "Invalid UUID string stored: $workerID \n error: $e")
+                return
+            }
         }
 
-        viewModelScope.launch(Dispatchers.IO) {
-            val hasNextAlarm = repository.hasNextAlarmData(medicine.name, System.currentTimeMillis())
+        val hasNextAlarm = withContext(Dispatchers.IO) {
+            repository.hasNextAlarmData(medicine.name, System.currentTimeMillis())
+        }
 
-            withContext(Dispatchers.Default){
-                if(!hasNextAlarm && workerID != "noID"){
-                    workManager.cancelWorkById(workRequestID)
-                }
-            }
+        if(!hasNextAlarm && workRequestID != null) {
+            workManager.cancelWorkById(workRequestID)
         }
     }
 

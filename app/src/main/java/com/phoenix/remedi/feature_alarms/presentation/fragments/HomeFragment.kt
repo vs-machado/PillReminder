@@ -606,7 +606,7 @@ class HomeFragment: Fragment() {
         binding.btnEndTreatment.setOnClickListener {
             viewLifecycleOwner.lifecycleScope.launch {
                 try {
-                    withContext(Dispatchers.Default) {
+                    withContext(Dispatchers.IO) {
                         medicinesViewModel.endTreatment(medicine).join()
                         sharedViewModel.cancelWork(medicine)
                     }

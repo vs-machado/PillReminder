@@ -5,6 +5,7 @@ import androidx.room.Dao
 import androidx.room.Delete
 import androidx.room.Insert
 import androidx.room.Query
+import androidx.room.Transaction
 import androidx.room.Update
 import com.phoenix.remedi.feature_alarms.domain.model.AlarmTimeData
 import com.phoenix.remedi.feature_alarms.domain.model.Medicine
@@ -159,5 +160,11 @@ interface MedicineDao {
 
     @Query("SELECT * FROM medicines_data_table WHERE alarm_in_millis = :timeInMillis")
     suspend fun getMedicinesScheduledForTime(timeInMillis: Long): List<Medicine>
+
+    @Transaction
+    suspend fun endTreatment(medicineName: String, currentTimeMillis: Long) {
+        updateMedicinesActiveStatus(medicineName, currentTimeMillis, false)    // Marks treatment as inactive
+        deleteUpcomingAlarms(medicineName, currentTimeMillis)
+    }
 
 }

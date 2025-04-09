@@ -155,4 +155,8 @@ class MedicineRepositoryImpl (
     override suspend fun getMedicinesScheduledForTime(timeInMillis: Long): List<Medicine> {
         return dao.getMedicinesScheduledForTime(timeInMillis)
     }
+
+    override suspend fun endTreatment(medicineName: String, currentTimeMillis: Long) {
+        return dao.endTreatment(medicineName, currentTimeMillis)
+    }
 }

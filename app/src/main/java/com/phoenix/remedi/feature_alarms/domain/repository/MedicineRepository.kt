@@ -22,6 +22,14 @@ interface MedicineRepository {
 
     suspend fun deleteUpcomingAlarms(medicineName: String, currentTimeMillis: Long)
 
+    /**
+     * Updates the medication treatment as not active and deletes the upcoming alarms for the specified medicine.
+     *
+     * @param medicineName the name of the medicine to end treatment for
+     * @param currentTimeMillis the current time in milliseconds
+     */
+    suspend fun endTreatment(medicineName: String, currentTimeMillis: Long)
+
     suspend fun getAlarmsAfterProvidedMillis(medicineName: String, millis: Long): List<Medicine>
 
     suspend fun getAlarmTimeSinceMidnight(medicineName: String): Long

@@ -156,7 +156,7 @@ class MedicinesViewModel @Inject constructor(
         }
     }
 
-    suspend fun endTreatment(medicine: Medicine) = viewModelScope.launch {
+     fun endTreatment(medicine: Medicine) = viewModelScope.launch {
         val alarmTime = Instant.ofEpochMilli(medicine.alarmInMillis).atZone(ZoneId.systemDefault()).toLocalDateTime()
 
         val alarmItem = AlarmItem(
@@ -172,8 +172,7 @@ class MedicinesViewModel @Inject constructor(
         alarmScheduler.cancelAlarm(alarmItem, true)
 
         withContext(Dispatchers.IO){
-            medicineRepository.updateMedicinesActiveStatus(medicine.name, System.currentTimeMillis(), false)
-            medicineRepository.deleteUpcomingAlarms(medicine.name, System.currentTimeMillis())
+            medicineRepository.endTreatment(medicine.name, System.currentTimeMillis())
         }
     }
 

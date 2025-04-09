@@ -123,8 +123,8 @@
                 android:textColor="?android:attr/textColorPrimary"
                 android:textSize="24sp"
                 android:textStyle="bold"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="@+id/tvTreatmentEndDate"
+                app:layout_constraintEnd_toEndOf="@+id/tvTreatmentStartDateTitle"
+                app:layout_constraintStart_toStartOf="@+id/tvTreatmentStartDateTitle"
                 app:layout_constraintTop_toBottomOf="@+id/tvTreatmentEndDate" />
 
             <ImageView

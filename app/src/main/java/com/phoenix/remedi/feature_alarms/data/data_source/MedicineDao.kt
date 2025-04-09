@@ -19,8 +19,12 @@ interface MedicineDao {
     @Update
     suspend fun updateMedicine(medicine: Medicine)
 
-    @Query("UPDATE medicines_data_table SET is_active = :isActive WHERE name = :medicineName AND alarm_in_millis <= :currentTimeMillis")
-    suspend fun updateMedicinesActiveStatus(medicineName: String, currentTimeMillis: Long, isActive: Boolean)
+    @Query("UPDATE medicines_data_table SET is_active = :isActive, end_date = :currentTimeMillis WHERE name = :medicineName AND alarm_in_millis <= :currentTimeMillis")
+    suspend fun updateMedicinesActiveStatus(
+        medicineName: String,
+        currentTimeMillis: Long,
+        isActive: Boolean
+    )
 
     @Query("UPDATE medicines_data_table SET name = :name, quantity = :quantity, form = :form, end_date = :endDate, " +
             "frequency = :frequency, is_active = 0 " +

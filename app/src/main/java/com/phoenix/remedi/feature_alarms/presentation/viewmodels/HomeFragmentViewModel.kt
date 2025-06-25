@@ -99,18 +99,6 @@ class HomeFragmentViewModel @Inject constructor(
                     alarmScheduler.cancelAlarm(alarmItem, false)
                 }
             }
-
-            val hasNextAlarm = repository.hasNextAlarmData(medicine.name, System.currentTimeMillis())
-
-            withContext(Dispatchers.IO){
-                if(!hasNextAlarm){
-                    val workRequestID = UUID.fromString(repository.getWorkerID(medicine.name, medicine.treatmentID))
-
-                    withContext(Dispatchers.Main){
-                        WorkManager.getInstance(appContext).cancelWorkById(workRequestID)
-                    }
-                }
-            }
         }
     }
 

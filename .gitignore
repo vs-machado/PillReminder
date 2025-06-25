@@ -21,3 +21,6 @@ key.jks
 /app/release/app-release.aab
 app/release/**
 .idea/**
+/fastlane/
+Gemfile
+Gemfile.lock

@@ -253,9 +253,6 @@ class MySettingsFragment: PreferenceFragmentCompat() {
     override fun onPause() {
         super.onPause()
         mediaPlayer?.apply {
-            if (isPlaying) {
-                stop()
-            }
             release()
         }
     }

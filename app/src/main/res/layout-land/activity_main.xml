@@ -25,11 +25,10 @@
         android:contentDescription="@string/setup_alarm"
         android:visibility="visible"
         app:backgroundTint="@color/fab"
-        app:layout_constraintBottom_toTopOf="@+id/divider"
+        app:layout_constraintBottom_toTopOf="@+id/bottom_navigation"
         app:layout_constraintEnd_toEndOf="parent"
         app:srcCompat="@drawable/baseline_add_24"
         app:tint="@color/white" />
-    <!--        app:shapeAppearanceOverlay="@style/FabShapeStyle"-->
 
     <View
         android:id="@+id/divider"

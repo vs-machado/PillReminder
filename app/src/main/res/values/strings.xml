@@ -372,6 +372,7 @@
         <item>Português (Brasil)</item>
         <item>Español</item>
         <item>Italiano</item>
+        <item>हिन्दी</item>
     </string-array>
 
     <string-array name="language_values">
@@ -379,6 +380,7 @@
         <item>pt-BR</item>
         <item>es</item>
         <item>it</item>
+        <item>hi</item>
     </string-array>
 
     <string-array name="snooze_interval_entries">

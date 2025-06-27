@@ -1,0 +1,451 @@
+<resources>
+    <string name="app_name">रेमेडी</string>
+    <string name="hello_blank_fragment">नमस्ते खाली टुकड़ा</string>
+    <string name="hour">08:00</string>
+    <string name="strength">शक्ति</string>
+    <string name="take_2_pill_s">2 गोलियां लें</string>
+    <string name="name_of_the_medicine">दवा का नाम</string>
+    <string name="setup_alarm">दवा का अलार्म सेट करें</string>
+    <string name="go_back_to_previous_page">पिछले पृष्ठ पर वापस जाएं</string>
+    <string name="medicine">दवा</string>
+    <string name="what_medicine_would_you_like_to_add">आप कौन सी दवा जोड़ना चाहेंगे?</string>
+    <string name="goes_back_to_previous_page">पिछले पृष्ठ पर वापस जाता है</string>
+    <string name="goes_to_the_next_page">अगले पृष्ठ पर जाता है</string>
+    <string name="what_form_is_the_med">दवा का रूप क्या है?</string>
+    <string name="how_often_do_you_take_it">आप इसे कितनी बार इस्तेमाल करते हैं?</string>
+    <string name="clock_icon">घड़ी का आइकन</string>
+    <string name="how_many_do_you_take_per_day">आप इसे प्रति दिन कितनी बार इस्तेमाल करते हैं?</string>
+    <string name="time">समय</string>
+    <string name="do_you_want_to_set_a_treatment_duration">क्या आप उपचार की अवधि निर्धारित करना चाहते हैं?</string>
+    <string name="please_insert_the_medicine_alarm_hour">कृपया, दवा अलार्म का समय डालें:</string>
+
+    <string name="to_see_your_medicine_details">अपनी दवा का विवरण देखने के लिए:</string>
+    <string name="click_on_my_medicines">मेरी दवाएं पर क्लिक करें और फिर सूची आइकन पर क्लिक करें।</string>
+    <string name="marking_the_medicine_usage">दवा के उपयोग को चिह्नित करना:</string>
+    <string name="click_on_mark_medicine">दवा उपयोग को चिह्नित करें बटन पर क्लिक करें। यदि ओवरले अनुमतियाँ अक्षम हैं, तो अधिसूचना में दवा उपयोग को चिह्नित करें बटन दिखाई देगा।</string>
+
+    <string name="hour_minute_format">0%1$s</string>
+    <string name="tv_hour">%1$s:%2$s</string>
+    <string name="tv_alarm_and_hour">%1$s
+%2$s</string>
+    <string name="tv_medicine">दवा: %1$s</string>
+    <string name="delete_all_alarms_question">क्या आप वाकई सभी अलार्म हटाना चाहते हैं?</string>
+    <string name="delete_all">सभी हटाएं</string>
+
+    <string name="take_pill">%1$s गोली(याँ) लें</string>
+    <string name="take_injection_ml">%1$s एमएल इंजेक्ट करें</string>
+    <string name="take_injection_syringe">%1$s सिरिंज इंजेक्ट करें</string>
+    <string name="take_liquid">%1$s एमएल का प्रयोग करें</string>
+    <string name="take_drops">%1$s बूँद(एँ) लें</string>
+    <string name="inhale_mg">%1$s मिलीग्राम श्वास लें</string>
+    <string name="inhale_puff">%1$s पफ लें</string>
+    <string name="inhale_mL">%1$s एमएल श्वास लें</string>
+    <string name="apply_pomade">1 आवेदन</string>
+    <string name="delete_alarm">अलार्म हटाएं?</string>
+    <string name="medicine_name_n_hh_mm">[दवा का नाम] 
+ [HH:MM]</string>
+    <string name="are_you_sure_you_want_to_delete_n_the_following_alarm">क्या आप वाकई निम्नलिखित अलार्म को हटाना चाहते हैं?</string>
+    <string name="delete">हटाएं</string>
+    <string name="cancel">रद्द करें</string>
+    <string name="delete_all_alarms">सभी अलार्म हटाएं</string>
+    <string name="skip_dose">खुराक छोड़ें</string>
+    <string name="pills">गोली(याँ)</string>
+    <string name="drops">बूँद(एँ)</string>
+    <string name="grams">ग्राम</string>
+    <string name="mls">एमएल</string>
+    <string name="mgs">मिलीग्राम</string>
+    <string name="required">*आवश्यक</string>
+    <string name="please_set_the_medicine_alarm_hour">कृपया, दवा अलार्म का समय निर्धारित करें:</string>
+    <string name="please_set_the_second_medicine_alarm">कृपया, दूसरा दवा अलार्म सेट करें:</string>
+    <string name="please_set_the_third_medicine_alarm">कृपया, तीसरा दवा अलार्म सेट करें:</string>
+    <string name="please_set_the_fourth_medicine_alarm">कृपया, चौथा दवा अलार्म सेट करें:</string>
+    <string name="please_set_the_fifth_medicine_alarm">कृपया, पाँचवाँ दवा अलार्म सेट करें:</string>
+    <string name="please_set_the_sixth_medicine_alarm">कृपया, छठा दवा अलार्म सेट करें:</string>
+    <string name="please_set_the_seventh_medicine_alarm">कृपया, सातवाँ दवा अलार्म सेट करें:</string>
+    <string name="please_set_the_eighth_medicine_alarm">कृपया, आठवाँ दवा अलार्म सेट करें:</string>
+    <string name="please_set_the_ninth_medicine_alarm">कृपया, नौवाँ दवा अलार्म सेट करें:</string>
+    <string name="please_set_the_tenth_medicine_alarm">कृपया, दसवाँ दवा अलार्म सेट करें:</string>
+    <string name="every_day">हर दिन</string>
+    <string name="every_other_day">हर दूसरे दिन</string>
+    <string name="specific_days_of_the_week">सप्ताह के विशिष्ट दिन</string>
+    <string name="every_x_days">हर X दिन</string>
+    <string name="every_x_weeks">हर X सप्ताह</string>
+    <string name="every_x_months">हर X महीने</string>
+    <string name="alarm_successfully_deleted">अलार्म सफलतापूर्वक हटा दिया गया!</string>
+    <string name="pill">गोली</string>
+    <string name="injection">इंजेक्शन</string>
+    <string name="liquid">तरल</string>
+    <string name="Drops">बूँदें</string>
+    <string name="inhaler">इन्हेलर</string>
+    <string name="pomade">मरहम</string>
+    <string name="channel_for_reminding_users_to_take_their_medicines">उपयोगकर्ताओं को उनकी दवाएं लेने के लिए याद दिलाने के लिए चैनल</string>
+    <string name="time_to_use_your_medicine">अपनी दवा का उपयोग करने का समय!</string>
+    <string name="did_you_forget_to_use_your_medicine">क्या आप %1$s का उपयोग करना भूल गए?</string>
+    <string name="do_not_forget_to_mark_the_medicine_as_used">दवा को उपयोग के रूप में चिह्नित करना न भूलें।
+%1$s</string>
+    <string name="do_not_forget_to_mark_the_medicine_as_taken">दवा: %1$s
+%2$s</string>
+    <string name="yes_i_do">हाँ, मैं करता हूँ</string>
+    <string name="no_i_don_t">नहीं, मैं नहीं करता</string>
+    <string name="alarms_successfully_created">अलार्म सफलतापूर्वक बनाए गए!</string>
+    <string name="select_the_treatment_duration">उपचार की अवधि चुनें:</string>
+    <string name="medicine_already_taken">दवा पहले ही ले ली गई &#9989;</string>
+    <string name="medicine_not_taken_yet">दवा अभी तक नहीं ली गई</string>
+    <string name="medicine_skipped">खुराक छोड़ दी गई &#10060;</string>
+    <string name="quantity">मात्रा</string>
+    <string name="dose_quantity">खुराक की मात्रा</string>
+    <string name="set_the_quantity_per_dosage">प्रति खुराक मात्रा निर्धारित करें:</string>
+    <string name="this_app_heavily_depends_on_user_overlay_and_notification_permissions_to_properly_work">यह ऐप ठीक से काम करने के लिए उपयोगकर्ता ओवरले और अधिसूचना अनुमतियों पर बहुत अधिक निर्भर करता है।</string>
+    <string name="the_app_must_not_be_used_without_these_permissions">एप्लिकेशन के उचित कामकाज के लिए उपयोगकर्ता की अधिसूचना अनुमति अनिवार्य है।
+
+ उपयोगकर्ता की ओवरले अनुमति देना वैकल्पिक है।</string>
+    <string name="go_to_permissions">अनुमतियों पर जाएं</string>
+    <string name="dismiss">खारिज करें</string>
+    <string name="permission_required">अनुमति आवश्यक है</string>
+    <string name="alarm">अलार्म</string>
+    <string name="clock_icon_designed_by_bukeicon_assets_source_from_freepik">बुकेइकॉन द्वारा डिजाइन किया गया घड़ी आइकन। फ्रीपिक से संपत्ति स्रोत।</string>
+    <string name="_00_00">00:00</string>
+    <string name="medicine_name">दवा का नाम</string>
+    <string name="mark_as_used">उपयोग के रूप में चिह्नित करें</string>
+    <string name="mute_sound">ध्वनि म्यूट करें</string>
+    <string name="dont_show_again">दोबारा न दिखाएं</string>
+    <string name="medicine_type_icon">दवा प्रकार का आइकन</string>
+    <string name="close_to_the_next_dosage">अगली खुराक के करीब</string>
+    <string name="mark_medicine_usage">दवा उपयोग को चिह्नित करें</string>
+    <string name="are_you_sure_about_using_the_medicine_at_this_hour_n_nask_your_doctor_what_to_do_if_you_miss_a_dose_n_nit_is_usually_advisable_to_skip_the_dose_and_use_the_medicine_at_the_next_scheduled_time">क्या आप इस समय दवा का उपयोग करने के बारे में सुनिश्चित हैं?
+
+यदि आप एक खुराक लेना भूल जाते हैं तो अपने डॉक्टर से पूछें कि क्या करना है।
+
+आमतौर पर यह सलाह दी जाती है कि खुराक छोड़ दें और अगली निर्धारित समय पर दवा का उपयोग करें।</string>
+    <string name="medicine_not_taken">दवा नहीं ली गई</string>
+    <string name="menu_with_medicine_options">दवा विकल्पों के साथ मेनू</string>
+    <string name="welcome">स्वागत है!</string>
+    <string name="app_explanation">रेमेडी आपकी दवा की खुराक पर नज़र रखने में आपकी मदद करने के लिए एक ऐप है।</string>
+    <string name="app_needs_permissions">…लेकिन पहले हमें आपकी अनुमति चाहिए।</string>
+    <string name="notification_mandatory">"एप्लिकेशन के उचित कामकाज के लिए सूचनाएं भेजना अनिवार्य है।"</string>
+    <string name="pillbox_reminders">पिलबॉक्स अनुस्मारक</string>
+    <string name="click_on_pillbox">पिलबॉक्स रिफिल रिमाइंडर बटन पर क्लिक करें और दैनिक रिमाइंडर प्राप्त करने के लिए एक समय निर्धारित करें।</string>
+    <string name="app_usage">ऐप का उपयोग सरल है:</string>
+    <string name="just_click_on_plus_btn">बस + बटन पर क्लिक करें और दवा की जानकारी भरें।</string>
+    <string name="open">खोलें</string>
+    <string name="close">बंद करें</string>
+    <string name="granting_screen_overlay_permission_is_optional">स्क्रीन ओवरले अनुमति देना वैकल्पिक है।
+
+यदि आप अक्सर अपनी सूचनाएं नहीं देखते हैं तो इसकी अनुशंसा की जाती है।</string>
+    <string name="permission_request">अनुमति अनुरोध</string>
+    <string name="features_text">• उपयोगकर्ताओं को उनकी दवाओं के बारे में याद दिलाने के लिए अलार्म शेड्यूल करें।
+• यदि उपयोगकर्ता एप्लिकेशन में किसी दवा को उपयोग के रूप में चिह्नित नहीं करता है तो सूचनाएं प्राप्त करें।
+• उपयोगकर्ताओं को उपचार अवधि निर्धारित करने या दवा हटाए जाने तक अलार्म प्राप्त करने की अनुमति दें।
+• दैनिक पिलबॉक्स रिफिल रिमाइंडर सेट करने के बाद सूचनाएं प्राप्त करें।
+• यदि उपयोगकर्ता अगली खुराक के समय के करीब किसी दवा को उपयोग के रूप में चिह्नित करने का प्रयास करते हैं तो उन्हें चेतावनी दें।</string>
+    <string name="about_us_text">विनीसियस सैंटोस द्वारा कंप्यूटर इंजीनियरिंग में अपनी स्नातक की डिग्री के लिए अपनी अंतिम परियोजना के रूप में विकसित किया गया एप्लिकेशन।</string>
+    <string name="contact_me">मुझसे संपर्क करें</string>
+    <string name="pill_reminder">रेमेडी</string>
+    <string name="app_description">उपयोगकर्ताओं को उनकी दवाओं की खुराक को ट्रैक करने में मदद करने के लिए एक एंड्रॉइड ओपन सोर्स एप्लिकेशन।</string>
+    <string name="features">विशेषताएँ</string>
+    <string name="about_me">मेरे बारे में</string>
+    <string name="email">ईमेल: vinicius.s.machado@protonmail.com</string>
+    <string name="frequent_questions">अक्सर पूछे जाने वाले प्रश्न</string>
+    <string name="how_do_i_delete_a_medicine">मैं एक दवा कैसे हटाऊं?</string>
+    <string name="answer_how_do_i_delete_a_medicine">जिस दवा को आप हटाना चाहते हैं, उसके दाहिने कोने में ⋮ आइकन पर क्लिक करें, फिर हटाएं या सभी हटाएं चुनें।</string>
+    <string name="how_do_i_skip_a_dose">मैं एक खुराक कैसे छोड़ूं?</string>
+    <string name="answer_how_do_i_skip_a_dose">जिस दवा की आप खुराक छोड़ना चाहते हैं, उसके दाहिने कोने में ⋮ आइकन पर क्लिक करें, फिर खुराक छोड़ें विकल्प चुनें।</string>
+    <string name="i_m_not_receiving_alarms">मुझे अलार्म नहीं मिल रहे हैं।</string>
+    <string name="answer_i_m_not_receiving_alarms"><![CDATA[यह जांचना आवश्यक है कि सूचनाएं भेजने के लिए ऐप की अनुमतियां दी गई थीं या नहीं। कभी-कभी जब आप थोड़ी देर में कोई ऐप नहीं खोलते हैं, तो फ़ोन स्वचालित रूप से सूचनाओं की अनुमतियों को हटा देता है।
+
+सेटिंग्स > ऐप्स > पिल रिमाइंडर > अनुमतियां पर जाएं और इसे देने के लिए किसी भी अनुमति न दी गई अनुमति पर क्लिक करें।]]></string>
+    <string name="medicine_not_appearing_everyday_even_if_i_don_t_set_a_treatment_period">दवा हर रोज दिखाई नहीं दे रही है, भले ही मैं उपचार की अवधि निर्धारित न करूं</string>
+    <string name="answer_medicine_not_appearing_everyday_even_if_i_don_t_set_a_treatment_period">यह सामान्य है। उपचार अवधि के बिना एक दवा अंततः एक महीने के बाद ऐप में फिर से डाली जाएगी।</string>
+    <string name="dashboard">डैशबोर्ड</string>
+    <string name="home">होम</string>
+    <string name="my_medicines">मेरी दवाएं</string>
+    <string name="info">जानकारी</string>
+    <string name="about">के बारे में</string>
+    <string name="help">मदद</string>
+    <string name="set_pillbox_daily_refill_reminders">पिलबॉक्स दैनिक रिफिल अनुस्मारक सेट करें</string>
+    <string name="set_the_hour_that_you_wish_to_receive_n_daily_reminders">वह समय निर्धारित करें जिस पर आप दैनिक अनुस्मारक प्राप्त करना चाहते हैं:</string>
+    <string name="save">सहेजें</string>
+    <string name="select_medicine_usage_days">दवा उपयोग के दिन चुनें:</string>
+    <string name="Sunday">रविवार</string>
+    <string name="Monday">सोमवार</string>
+    <string name="Tuesday">मंगलवार</string>
+    <string name="Wednesday">बुधवार</string>
+    <string name="Thursday">गुरुवार</string>
+    <string name="Friday">शुक्रवार</string>
+    <string name="Saturday">शनिवार</string>
+    <string name="select_the_medicine_interval">दवा का अंतराल चुनें:</string>
+    <string name="days">दिन</string>
+    <string name="weeks">सप्ताह</string>
+    <string name="months">महीने</string>
+    <string name="every">हर</string>
+    <string name="interval">अंतराल</string>
+    <string name="it_s_time_to_refill_your_pillbox">अपना पिलबॉक्स फिर से भरें</string>
+    <string name="refill_your_pillbox_and_avoid_forgetting_to_use_your_medicine">फिर से भरें और अपनी दवा का उपयोग करना भूलने से बचें।</string>
+    <string name="search_hint">पंजीकृत दवाएं खोजें</string>
+    <string name="see_medicine_details">दवा का विवरण देखें</string>
+    <string name="details">विवरण</string>
+    <string name="number_pills">%1$d गोली(याँ)</string>
+    <string name="number_drops">%1$d बूँद(एँ)</string>
+    <string name="number_ml">%.2f एमएल</string>
+    <string name="number_application">1 आवेदन</string>
+    <string name="number_inhalator">%.2f मिलीग्राम</string>
+    <string name="every_interval_days">हर %1$d दिन</string>
+    <string name="every_interval_weeks">हर %1$d सप्ताह</string>
+    <string name="every_interval_months">हर %1$d महीने</string>
+    <string name="quantity_alarms">%1$d अलार्म</string>
+    <string name="ongoing">चल रहा है</string>
+    <string name="hasn_started">यह अभी शुरू नहीं हुआ है</string>
+    <string name="ended">समाप्त</string>
+    <string name="quantity_pills">मात्रा: %1$d गोली(याँ)</string>
+    <string name="quantity_drops">मात्रा: %1$d बूँद(एँ)</string>
+    <string name="quantity_ml">मात्रा: %.2f एमएल</string>
+    <string name="quantity_application">मात्रा: 1 आवेदन</string>
+    <string name="quantity_inhalator">मात्रा: %.2f मिलीग्राम</string>
+    <string name="ongoing_treatment">चल रहा उपचार</string>
+    <string name="treatment_ended">उपचार समाप्त</string>
+    <string name="treatment_hasnt_started_yet">उपचार अभी शुरू नहीं हुआ है</string>
+    <string name="medicine_already_used">दवा पहले ही इस्तेमाल हो चुकी है &#x2705;</string>
+    <string name="medicine_not_used_yet">अभी तक इस्तेमाल नहीं किया गया</string>
+    <string name="frequency">आवृत्ति</string>
+    <string name="alarms_per_day">प्रति दिन अलार्म</string>
+    <string name="alarms_hour">अलार्म का समय</string>
+    <string name="Hour">घंटा</string>
+    <string name="treatment_start_date">उपचार शुरू होने की तारीख</string>
+    <string name="treatment_end_date">उपचार समाप्ति तिथि</string>
+    <string name="treatment_status">उपचार की स्थिति</string>
+    <string name="medicine_icon">दवा का आइकन</string>
+    <string name="pill_quantity">%1$s गोली(याँ)</string>
+    <string name="ml_quantity">%1$s एमएल</string>
+    <string name="inhale_quantity">%1$s मिलीग्राम</string>
+    <string name="pomade_quantity">1 आवेदन</string>
+    <string name="medicine_time">दवा का समय!</string>
+    <string name="specific_days_of_week">सप्ताह के विशिष्ट दिन:
+
+%1$s</string>
+    <string name="edit">दवा संपादित करें</string>
+    <string name="alarms_per_day_details">प्रति दिन अलार्म:
+
+%1$d अलार्म</string>
+    <string name="undefined">अपरिभाषित</string>
+    <string name="select_at_least_1_day">आपको सप्ताह का कम से कम 1 दिन चुनना होगा।</string>
+    <string name="treatment_end_date_error">उपचार की समाप्ति तिथि प्रारंभ तिथि के बाद होनी चाहिए। पुनः प्रयास करें।</string>
+    <string name="changes_saved">परिवर्तन सहेजे गए</string>
+    <string name="medicine_form">दवा का रूप</string>
+    <string name="medicine_frequency">दवा की आवृत्ति</string>
+    <string name="select_treatment_end_date">उपचार की समाप्ति तिथि चुनें:</string>
+    <string name="select_usage_days">दवा उपयोग के दिन चुनें:</string>
+    <string name="select_alarm_hour">अलार्म का समय चुनें:</string>
+    <string name="Every">हर</string>
+    <string name="edit_medicine">दवा संपादित करें</string>
+    <string name="end_treatment">उपचार समाप्त करें</string>
+    <string name="are_you_sure_end_treatment">क्या आप वाकई निम्नलिखित दवा के लिए उपचार बंद करना चाहते हैं?
+
+आगामी अलार्म हटा दिए जाएंगे।
+
+दवा: %1$s</string>
+    <string name="mL">एमएल</string>
+    <string name="syringe">सिरिंज</string>
+    <string name="puff">पफ</string>
+    <string name="mg">मिलीग्राम</string>
+    <string name="pill_unit">गोली</string>
+    <string name="drop">बूँद</string>
+    <string name="application">आवेदन</string>
+    <string name="ongoing_treatments">चल रहे उपचार</string>
+    <string name="ended_treatments">समाप्त उपचार</string>
+    <string name="filter">फ़िल्टर</string>
+    <string name="cannot_edit_finished_treatment">आप एक समाप्त उपचार को संपादित नहीं कर सकते</string>
+    <string name="error_treatment_termination">उपचार समाप्ति के दौरान त्रुटि</string>
+    <string name="you_must_provide_a_interval">आपको एक अंतराल प्रदान करना होगा। पुनः प्रयास करें।</string>
+    <string name="settings">सेटिंग्स</string>
+    <string name="app_language">ऐप की भाषा</string>
+    <string name="request_permissions">ऐप अनुमतियों का अनुरोध करें</string>
+    <string name="disable_battery_optimizations">बैटरी अनुकूलन अक्षम करें</string>
+    <string name="optimizations_already_disabled">बैटरी अनुकूलन पहले से ही अक्षम हैं</string>
+    <string name="notification_sound">अधिसूचना ध्वनि बदलें</string>
+    <string name="arrow_down_icon">प्रश्न का उत्तर देखने के लिए क्लिक करें</string>
+    <string name="snooze_alarm">अलार्म स्नूज़ करें</string>
+    <string name="change_alarm_snooze_interval">अलार्म स्नूज़ अंतराल</string>
+    <string name="time_to_refill_your_pillbox">अपना पिलबॉक्स फिर से भरने का समय।</string>
+    <string name="com.crashlytics.android.build_id">1</string>
+
+    <string name="quantity_syringe">मात्रा: %1$d सिरिंज</string>
+
+    <plurals name="take_pill">
+        <item quantity="one">%1$d गोली लें</item>
+        <item quantity="other">%1$d गोलियां लें</item>
+    </plurals>
+
+    <plurals name="take_injection_syringe">
+        <item quantity="one">%1$d सिरिंज इंजेक्ट करें</item>
+        <item quantity="other">%1$d सिरिंज इंजेक्ट करें</item>
+    </plurals>
+
+    <plurals name="take_drops">
+        <item quantity="one">%1$d बूँद का प्रयोग करें</item>
+        <item quantity="other">%1$d बूँदें का प्रयोग करें</item>
+    </plurals>
+
+    <plurals name="inhale_puff">
+        <item quantity="one">%1$d पफ लें</item>
+        <item quantity="other">%1$d पफ लें</item>
+    </plurals>
+
+    <plurals name="pills">
+        <item quantity="one">गोली</item>
+        <item quantity="other">गोलियां</item>
+    </plurals>
+
+    <plurals name="drops">
+        <item quantity="one">बूँद</item>
+        <item quantity="other">बूँदें</item>
+    </plurals>
+
+    <plurals name="puffs">
+        <item quantity="one">पफ</item>
+        <item quantity="other">पफ</item>
+    </plurals>
+
+    <plurals name="pills_quantity">
+        <item quantity="one">%1$d गोली</item>
+        <item quantity="other">%1$d गोलियां</item>
+    </plurals>
+
+    <plurals name="drops_quantity">
+        <item quantity="one">%1$d बूँद</item>
+        <item quantity="other">%1$d बूँदें</item>
+    </plurals>
+
+    <plurals name="syringe_quantity">
+        <item quantity="one">%1$d सिरिंज</item>
+        <item quantity="other">%1$d सिरिंज</item>
+    </plurals>
+
+    <plurals name="pill_quantity">
+        <item quantity="one">%1$s गोली</item>
+        <item quantity="other">%1$s गोलियां</item>
+    </plurals>
+
+    <plurals name="puffs_quantity">
+        <item quantity="one">%1$d पफ</item>
+        <item quantity="other">%1$d पफ</item>
+    </plurals>
+
+    <plurals name="quantity_pills">
+        <item quantity="one">मात्रा: %1$d गोली</item>
+        <item quantity="other">मात्रा: %1$d गोलियां</item>
+    </plurals>
+
+    <plurals name="quantity_drops">
+        <item quantity="one">मात्रा: %1$d बूँद</item>
+        <item quantity="other">मात्रा: %1$d बूँदें</item>
+    </plurals>
+
+    <plurals name="quantity_syringe">
+        <item quantity="one">मात्रा: %1$d सिरिंज</item>
+        <item quantity="other">मात्रा: %1$d सिरिंज</item>
+    </plurals>
+
+    <plurals name="quantity_pill">
+        <item quantity="one">मात्रा: %1$s गोली</item>
+        <item quantity="other">मात्रा: %1$s गोलियां</item>
+    </plurals>
+
+    <plurals name="quantity_puffs">
+        <item quantity="one">मात्रा: %1$d पफ</item>
+        <item quantity="other">मात्रा: %1$d पफ</item>
+    </plurals>
+
+    <plurals name="alarms_per_day_details">
+        <item quantity="one">प्रति दिन अलार्म:
+
+%1$d अलार्म</item>
+        <item quantity="other">प्रति दिन अलार्म:
+
+%1$d अलार्म</item>
+    </plurals>
+
+    <string-array name="medicine_forms">
+        <item>गोली</item>
+        <item>इंजेक्शन</item>
+        <item>तरल</item>
+        <item>बूँदें</item>
+        <item>इन्हेलर</item>
+        <item>मरहम</item>
+    </string-array>
+
+    <string-array name="units_injection">
+        <item>एमएल</item>
+        <item>सिरिंज</item>
+    </string-array>
+
+    <string-array name="units_inhaler">
+        <item>एमएल</item>
+        <item>मिलीग्राम</item>
+        <item>पफ</item>
+    </string-array>
+
+    <string-array name="medicine_frequency">
+        <item>हर दिन</item>
+        <item>हर दूसरे दिन</item>
+        <item>सप्ताह के विशिष्ट दिन</item>
+        <item>हर X दिन</item>
+        <item>हर X सप्ताह</item>
+        <item>हर X महीने</item>
+    </string-array>
+
+    <string-array name="language_entries">
+        <item>English</item>
+        <item>Português (Brasil)</item>
+        <item>Español</item>
+        <item>Italiano</item>
+        <item>हिन्दी</item>
+    </string-array>
+
+    <string-array name="language_values">
+        <item>en</item>
+        <item>pt-BR</item>
+        <item>es</item>
+        <item>it</item>
+        <item>hi</item>
+    </string-array>
+
+    <string-array name="snooze_interval_entries">
+        <item>5 मिनट</item>
+        <item>10 मिनट</item>
+        <item>15 मिनट</item>
+    </string-array>
+
+    <string-array name="snooze_interval_values">
+        <item>5</item>
+        <item>10</item>
+        <item>15</item>
+    </string-array>
+
+    <string-array name="notification_entries">
+        <item>विकल्प 1</item>
+        <item>विकल्प 2</item>
+    </string-array>
+
+    <string-array name="notification_values">
+        <item>option1</item>
+        <item>option2</item>
+    </string-array>
+
+    <string name="ad_inspector" translatable="false">विज्ञापन निरीक्षक</string>
+    <string name="more_menu" translatable="false">अधिक</string>
+    <string name="privacy_settings" translatable="false">गोपनीयता सेटिंग्स</string>
+    <string name="privacy_setting">गोपनीयता सेटिंग्स</string>
+    <string name="manage_data_consent_options">डेटा सुरक्षा सहमति</string>
+    <string name="turn_up_volume">ऑडियो सुनने के लिए वॉल्यूम बढ़ाएं।</string>
+    <string name="mark_all_as_used">सभी को उपयोग के रूप में चिह्नित करें</string>
+    <string name="time_to_use_your_medicines">अपनी दवाओं का उपयोग करने का समय!</string>
+    <string name="check_the_app">उपयोग की जाने वाली दवाओं को देखने के लिए ऐप खोलें।</string>
+    <string name="more_than_one_medicine_to_be_used">आपके पास उपयोग करने के लिए एक से अधिक दवाएं हैं।
+
+कृपया ऐप खोलें।</string>
+    <string name="did_you_forget_to_use_your_medicines">क्या आप अपनी दवाएं लेना भूल गए?</string>
+    <string name="open_app_pending_medicines">अपनी लंबित दवाओं को देखने के लिए ऐप खोलें।</string>
+    <string name="all_permissions_granted">सभी अनुमतियां पहले ही दी जा चुकी हैं।</string>
+    <string name="opening_app">ऐप खुल रहा है…</string>
+    <string name="date_picker_today">आज</string>
+</resources>

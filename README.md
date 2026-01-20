@@ -35,7 +35,7 @@
 
 <h2>Installation</h2>
 <div>
-    <a href="https://github.com/vs-machado/PillReminder/releases/tag/1.0.0">
+    <a href="https://github.com/vs-machado/PillReminder/releases/tag/1.5.3">
         <img alt="GitHub installation" width="220px" src="https://github.com/user-attachments/assets/53aae1f9-a9f7-4882-88c8-315351942a0a" />
     </a>
     &nbsp;&nbsp;&nbsp;
